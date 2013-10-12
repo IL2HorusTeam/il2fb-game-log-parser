@@ -30,9 +30,11 @@ def main():
     else:
         missions, unparsed = parse_log(lines)
 
-        print "First 30 skipped lines:"
-        for line in unparsed[:30]:
-            print line
+        count = min(30, len(unparsed))
+        if count:
+            print "First {count} skipped lines:".format(count=count)
+            for line in unparsed[:count]:
+                print line
         total = len(lines)
         skipped = len(unparsed)
         print "Total: {total}.\nDone: {done}.\nSkipped: {skipped}.".format(

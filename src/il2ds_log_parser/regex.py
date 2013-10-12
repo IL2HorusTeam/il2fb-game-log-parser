@@ -39,6 +39,23 @@ Output group:
 """
 RX_DATE_TIME = r"^\[(?P<date>\D{3} \d{1,2}, \d{4}) " + RX_TIME_BASE + r"\]"
 
+
+RX_POS = r" at (?P<pos_x>\d+.\d+) (?P<pos_y>\d+.\d+)$"
+RX_CALLSIGN = r"(?P<callsign>.+)"
+RX_SEAT = r"\((?P<seat>\d+)\)"
+
+RX_AIRCRAFT = r":(?P<aircraft>.+)"
+RX_CALLSIGN_AIRCRAFT = RX_CALLSIGN + RX_AIRCRAFT
+RX_CALLSIGN_AIRCRAFT_POS = RX_CALLSIGN_AIRCRAFT + RX_POS
+
+RX_ENEMY_CALLSIGN_AIRCRAFT = r"(?P<e_callsign>.+):(?P<e_aircraft>.+)"
+
+RX_TIME_CALLSIGN = RX_TIME + " " + RX_CALLSIGN
+RX_TIME_CALLSIGN_AIRCRAFT = RX_TIME + " " + RX_CALLSIGN_AIRCRAFT
+RX_TIME_SEAT = RX_TIME_CALLSIGN_AIRCRAFT + RX_SEAT
+
+RX_STATIC = r"(?P<static>\d+_Static)"
+
 #------------------------------------------------------------------------------
 # Mission flow
 #------------------------------------------------------------------------------
@@ -83,18 +100,6 @@ RX_MISSION_END = RX_TIME + r" Mission END$"
 # Actor events
 #------------------------------------------------------------------------------
 
-RX_POS = r" at (?P<pos_x>\d+.\d+) (?P<pos_y>\d+.\d+)$"
-RX_CALLSIGN = r"(?P<callsign>.+)"
-RX_SEAT = r"\((?P<seat>\d+)\)"
-
-RX_AIRCRAFT = r":(?P<aircraft>.+)"
-RX_CALLSIGN_AIRCRAFT = RX_CALLSIGN + RX_AIRCRAFT
-RX_CALLSIGN_AIRCRAFT_POS = RX_CALLSIGN_AIRCRAFT + RX_POS
-
-RX_TIME_CALLSIGN = RX_TIME + " " + RX_CALLSIGN
-RX_TIME_CALLSIGN_AIRCRAFT = RX_TIME + " " + RX_CALLSIGN_AIRCRAFT
-RX_TIME_SEAT = RX_TIME_CALLSIGN_AIRCRAFT + RX_SEAT
-
 RX_CONNECTED = RX_TIME_CALLSIGN + r" has connected$"
 RX_DISCONNECTED = RX_TIME_CALLSIGN + r" has disconnected$"
 RX_WENT_TO_MENU = RX_TIME_CALLSIGN + r" entered refly menu$"
@@ -110,10 +115,15 @@ RX_IN_FLIGHT = RX_TIME_CALLSIGN_AIRCRAFT + r" in flight" + RX_POS
 RX_WOUNDED = RX_TIME_SEAT + r" was wounded" + RX_POS
 RX_HEAVILY_WOUNDED = RX_TIME_SEAT + r" was heavily wounded" + RX_POS
 RX_KILLED = RX_TIME_SEAT + r" was killed" + RX_POS
+RX_KILLED_BY_EAIR = RX_TIME_SEAT + r" was killed by" + RX_ENEMY_CALLSIGN_AIRCRAFT + RX_POS
 RX_CAPTURED = RX_TIME_SEAT + r" was captured" + RX_POS
 RX_DESTROYED_BLD = RX_TIME + r" 3do/Buildings/.+/(?P<building>.+)/.+\.sim destroyed by " + RX_CALLSIGN_AIRCRAFT_POS
-RX_DESTROYED_STATIC = RX_TIME + r"(?P<static>.+) destroyed by " + RX_CALLSIGN_AIRCRAFT_POS
+RX_DESTROYED_STATIC = RX_TIME + r" " + RX_STATIC + r" destroyed by " + RX_CALLSIGN_AIRCRAFT_POS
 RX_CRASHED = RX_TIME_CALLSIGN_AIRCRAFT + r" crashed" + RX_POS
 RX_LANDED = RX_TIME_CALLSIGN_AIRCRAFT + r" landed" + RX_POS
 RX_DAMAGED_ON_GROUND = RX_TIME_CALLSIGN_AIRCRAFT + r" damaged on the ground" + RX_POS
 RX_DAMAGED_SELF = RX_TIME_CALLSIGN_AIRCRAFT + r" damaged by landscape" + RX_POS
+RX_DAMAGED_BY_EAIR = RX_TIME_CALLSIGN_AIRCRAFT + r" damaged by " + RX_ENEMY_CALLSIGN_AIRCRAFT + RX_POS
+RX_SHOT_DOWN_SELF = RX_TIME_CALLSIGN_AIRCRAFT + r" shot down by landscape" + RX_POS
+RX_SHOT_DOWN_BY_EAIR = RX_TIME_CALLSIGN_AIRCRAFT + r" shot down by " + RX_ENEMY_CALLSIGN_AIRCRAFT + RX_POS
+RX_SHOT_DOWN_BY_ESTC = RX_TIME_CALLSIGN_AIRCRAFT + r" shot down by " + RX_STATIC + RX_POS

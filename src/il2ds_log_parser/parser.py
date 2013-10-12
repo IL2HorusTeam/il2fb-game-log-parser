@@ -21,57 +21,116 @@ def parse_date(value):
 
 class RegexParser(object):
 
-    def __init__(self, regex, evt_type):
+    def __init__(self, regex, evt_type=None):
         self.rx = re.compile(regex)
         self.evt_type = evt_type
 
     def __call__(self, value):
         m = self.rx.match(value)
         if m:
-            result = m.groupdict()
-            result['type'] = self.evt_type
-            result['time'] = parse_time(result['time'])
-            return result
+            evt = m.groupdict()
+            if self.evt_type:
+                evt['type'] = self.evt_type
+            RegexParser.update_time(evt)
+            return evt
         return None
 
     def __str__(self):
-        return "{type}: {regex}".format(
-            type=self.evt_type, regex=self.rx)
+        return "%s: %s" % (self.evt_type, self.rx.pattern) \
+            if self.evt_type else self.rx.pattern
 
     def __unicode__(self):
         return unicode(self.__str__())
+
+    @staticmethod
+    def update_time(evt):
+        evt['time'] = parse_time(evt['time'])
 
 
 class DateStampedRegexParser(RegexParser):
 
     def __call__(self, value):
-        result = super(DateStampedRegexParser, self).__call__(value)
-        if result:
-            result['date'] = parse_date(result['date'])
-        return result
+        evt = super(DateStampedRegexParser, self).__call__(value)
+        if evt:
+            DateStampedRegexParser.update_date(evt)
+        return evt
+
+    @staticmethod
+    def update_date(evt):
+        evt['date'] = parse_date(evt['date'])
 
 
 class PositionedRegexParser(RegexParser):
 
     def __call__(self, value):
-        result = super(PositionedRegexParser, self).__call__(value)
-        if result and 'pos_x' in result and 'pos_y' in result:
-            x = result.pop('pos_x')
-            y = result.pop('pos_y')
-            result['pos'] = {
-                'x': float(x),
-                'y': float(y),
-            }
-        return result
+        evt = super(PositionedRegexParser, self).__call__(value)
+        if evt:
+            PositionedRegexParser.update_pos(evt)
+        return evt
+
+    @staticmethod
+    def update_pos(evt):
+        x = evt.pop('pos_x')
+        y = evt.pop('pos_y')
+        evt['pos'] = {
+            'x': float(x),
+            'y': float(y),
+        }
 
 
 class SeatRegexParser(PositionedRegexParser):
 
     def __call__(self, value):
-        result = super(SeatRegexParser, self).__call__(value)
-        if result:
-            result['seat'] = int(result['seat'])
-        return result
+        evt = super(SeatRegexParser, self).__call__(value)
+        if evt:
+            SeatRegexParser.update_seat(evt)
+        return evt
+
+    @staticmethod
+    def update_seat(evt):
+        evt['seat'] = int(evt['seat'])
+
+
+class VictimOfUserRegexParser(PositionedRegexParser):
+
+    def __call__(self, value):
+        evt = super(VictimOfUserRegexParser, self).__call__(value)
+        if evt:
+            VictimOfUserRegexParser.update_attacker(evt)
+        return evt
+
+    @staticmethod
+    def update_attacker(evt):
+        callsign = evt.pop('e_callsign')
+        aircraft = evt.pop('e_aircraft')
+        evt['attacker'] = {
+            'callsign': callsign,
+            'aircraft': aircraft,
+        }
+
+
+class VictimOfStaticRegexParser(PositionedRegexParser):
+
+    def __call__(self, value):
+        evt = super(VictimOfStaticRegexParser, self).__call__(value)
+        if evt:
+            VictimOfStaticRegexParser.update_attacker(evt)
+        return evt
+
+    @staticmethod
+    def update_attacker(evt):
+        attacker = evt.pop('static')
+        evt['attacker'] = attacker
+
+
+class SeatVictimOfUserRegexParser(PositionedRegexParser):
+
+    def __call__(self, value):
+        evt = super(SeatVictimOfUserRegexParser, self).__call__(value)
+        if evt:
+            SeatRegexParser.update_seat(evt)
+            VictimOfUserRegexParser.update_attacker(evt)
+        return evt
 
 
 class RegistrationError(Exception):
@@ -129,14 +188,22 @@ class DefaultMultipleParser(MultipleParser):
         self.register(PositionedRegexParser(RX_IN_FLIGHT, EVT_IN_FLIGHT))
         self.register(PositionedRegexParser(RX_CRASHED, EVT_CRASHED))
         self.register(PositionedRegexParser(RX_LANDED, EVT_LANDED))
+
         self.register(PositionedRegexParser(RX_DAMAGED_ON_GROUND, EVT_DAMAGED_ON_GROUND))
         self.register(PositionedRegexParser(RX_DAMAGED_SELF, EVT_DAMAGED_SELF))
+        self.register(VictimOfUserRegexParser(RX_DAMAGED_BY_EAIR, EVT_DAMAGED_BY_EAIR))
+
+        self.register(PositionedRegexParser(RX_SHOT_DOWN_SELF, EVT_SHOT_DOWN_SELF))
+        self.register(VictimOfUserRegexParser(RX_SHOT_DOWN_BY_EAIR, EVT_SHOT_DOWN_BY_EAIR))
+        self.register(VictimOfStaticRegexParser(RX_SHOT_DOWN_BY_ESTC, EVT_SHOT_DOWN_BY_ESTC))
+
+        self.register(SeatRegexParser(RX_KILLED, EVT_KILLED))
+        self.register(SeatVictimOfUserRegexParser(RX_KILLED_BY_EAIR, EVT_KILLED_BY_EAIR))
 
         self.register(SeatRegexParser(RX_BAILED_OUT, EVT_BAILED_OUT))
         self.register(SeatRegexParser(RX_SUCCESSFULLY_BAILED_OUT, EVT_SUCCESSFULLY_BAILED_OUT))
         self.register(SeatRegexParser(RX_WOUNDED, EVT_WOUNDED))
         self.register(SeatRegexParser(RX_HEAVILY_WOUNDED, EVT_HEAVILY_WOUNDED))
-        self.register(SeatRegexParser(RX_KILLED, EVT_KILLED))
         self.register(SeatRegexParser(RX_CAPTURED, EVT_CAPTURED))
 
 
