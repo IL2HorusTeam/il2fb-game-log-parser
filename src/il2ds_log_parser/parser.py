@@ -142,25 +142,32 @@ class MultipleParser(object):
     def __init__(self):
         self._registered_parsers = []
 
-    def is_registered(self, parser):
-        return parser in self._registered_parsers
+    def _is_registered(self, (parser, callback)):
+        return (parser, callback) in self._registered_parsers
 
-    def register(self, parser):
-        if self.is_registered(parser):
+    def is_registered(self, parser, callback=None):
+        return self._is_registered((parser, callback))
+
+    def register(self, parser, callback=None):
+        p_cb = (parser, callback)
+        if self._is_registered(p_cb):
             raise RegistrationError(
                 "Parser is already registered: {parser}".format(parser=parser))
-        self._registered_parsers.append(parser)
+        self._registered_parsers.append(p_cb)
 
-    def unregister(self, parser):
-        if not self.is_registered(parser):
+    def unregister(self, parser, callback=None):
+        p_cb = (parser, callback)
+        if not self._is_registered(p_cb):
             raise RegistrationError(
                 "Parser is not registered yet: {parser}".format(parser=parser))
-        self._registered_parsers.remove(parser)
+        self._registered_parsers.remove(p_cb)
 
     def __call__(self, value):
-        for parser in self._registered_parsers:
+        for parser, callback in self._registered_parsers:
             result = parser(value)
             if result:
+                if callback:
+                    return callback(result) or True
                 return result
         return None
 
