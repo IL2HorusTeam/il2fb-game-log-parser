@@ -3,8 +3,7 @@
 import unittest2 as unittest
 
 from il2ds_log_parser import parse_evt
-from il2ds_log_parser.constants import (EVT_MISSION_PLAYING, EVT_MISSION_BEGIN,
-    EVT_MISSION_END, )
+from il2ds_log_parser.events import *
 from il2ds_log_parser.parser import parse_time, parse_date
 
 

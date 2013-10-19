@@ -3,7 +3,8 @@
 import datetime
 import re
 
-from il2ds_log_parser.constants import *
+from il2ds_log_parser.constants import LOG_TIME_FORMAT, LOG_DATE_FORMAT
+from il2ds_log_parser.events import *
 from il2ds_log_parser.regex import *
 
 
@@ -181,8 +182,8 @@ class DefaultMultipleParser(MultipleParser):
     def __init__(self):
         super(DefaultMultipleParser, self).__init__()
         self.register(SeatRegexParser(RX_SEAT_OCCUPIED, EVT_SEAT_OCCUPIED))
-        self.register(PositionedRegexParser(RX_DESTROYED_BLD, EVT_DESTROYED))
-        self.register(PositionedRegexParser(RX_DESTROYED_STATIC, EVT_DESTROYED))
+        self.register(PositionedRegexParser(RX_DESTROYED_BLD, EVT_DESTROYED_BLD))
+        self.register(PositionedRegexParser(RX_DESTROYED_STATIC, EVT_DESTROYED_STATIC))
         self.register(PositionedRegexParser(RX_TOGGLE_LANDING_LIGHTS, EVT_TOGGLE_LANDING_LIGHTS))
         self.register(PositionedRegexParser(RX_TOGGLE_WINGTIP_SMOKES, EVT_TOGGLE_WINGTIP_SMOKES))
 
