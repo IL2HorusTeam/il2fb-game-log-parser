@@ -172,7 +172,7 @@ class MultipleParser(object):
             result = parser(value)
             if result:
                 if callback:
-                    return callback(result) or True
+                    return callback(result) or result
                 return result
         return None
 
