@@ -22,7 +22,11 @@ def parse_date(value):
 class RegexParser(object):
 
     def __init__(self, regex, evt_type=None):
-        self.rx = re.compile(regex)
+        """Params:
+           regex: verbose regular expression,
+           evt_type: type which matched event will be marked with.
+        """
+        self.rx = re.compile(regex, RX_FLAGS)
         self.evt_type = evt_type
 
     def __call__(self, value):
@@ -179,8 +183,8 @@ class DefaultMultipleParser(MultipleParser):
         self.register(SeatRegexParser(RX_SEAT_OCCUPIED, EVT_SEAT_OCCUPIED))
         self.register(PositionedRegexParser(RX_DESTROYED_BLD, EVT_DESTROYED))
         self.register(PositionedRegexParser(RX_DESTROYED_STATIC, EVT_DESTROYED))
-        self.register(PositionedRegexParser(RX_LANDING_LIGHTS, EVT_LANDING_LIGHTS))
-        self.register(PositionedRegexParser(RX_WINGTIP_SMOKES, EVT_WINGTIP_SMOKES))
+        self.register(PositionedRegexParser(RX_TOGGLE_LANDING_LIGHTS, EVT_TOGGLE_LANDING_LIGHTS))
+        self.register(PositionedRegexParser(RX_TOGGLE_WINGTIP_SMOKES, EVT_TOGGLE_WINGTIP_SMOKES))
 
         self.register(DateStampedRegexParser(RX_MISSION_PLAYING, EVT_MISSION_PLAYING))
         self.register(RegexParser(RX_MISSION_BEGIN, EVT_MISSION_BEGIN))
@@ -202,13 +206,13 @@ class DefaultMultipleParser(MultipleParser):
 
         self.register(PositionedRegexParser(RX_SHOT_DOWN_SELF, EVT_SHOT_DOWN_SELF))
         self.register(VictimOfUserRegexParser(RX_SHOT_DOWN_BY_EAIR, EVT_SHOT_DOWN_BY_EAIR))
-        self.register(VictimOfStaticRegexParser(RX_SHOT_DOWN_BY_ESTC, EVT_SHOT_DOWN_BY_ESTC))
+        self.register(VictimOfStaticRegexParser(RX_SHOT_DOWN_BY_STATIC, EVT_SHOT_DOWN_BY_STATIC))
 
         self.register(SeatRegexParser(RX_KILLED, EVT_KILLED))
         self.register(SeatVictimOfUserRegexParser(RX_KILLED_BY_EAIR, EVT_KILLED_BY_EAIR))
 
         self.register(SeatRegexParser(RX_BAILED_OUT, EVT_BAILED_OUT))
-        self.register(SeatRegexParser(RX_SUCCESSFULLY_BAILED_OUT, EVT_SUCCESSFULLY_BAILED_OUT))
+        self.register(SeatRegexParser(RX_PARACHUTE_OPENED, EVT_PARACHUTE_OPENED))
         self.register(SeatRegexParser(RX_WOUNDED, EVT_WOUNDED))
         self.register(SeatRegexParser(RX_HEAVILY_WOUNDED, EVT_HEAVILY_WOUNDED))
         self.register(SeatRegexParser(RX_CAPTURED, EVT_CAPTURED))
@@ -241,7 +245,7 @@ def parse_log_lines(lines, evt_parser=default_evt_parser):
         return None
 
     for line in lines:
-        if "3do/Tree/Line_W" in line:
+        if "3do/Tree/Line" in line:
             continue
         evt = evt_parser(line)
         if evt is None:
