@@ -182,8 +182,11 @@ class DefaultMultipleParser(MultipleParser):
     def __init__(self):
         super(DefaultMultipleParser, self).__init__()
         self.register(SeatRegexParser(RX_SEAT_OCCUPIED, EVT_SEAT_OCCUPIED))
+
         self.register(PositionedRegexParser(RX_DESTROYED_BLD, EVT_DESTROYED_BLD))
         self.register(PositionedRegexParser(RX_DESTROYED_STATIC, EVT_DESTROYED_STATIC))
+        self.register(PositionedRegexParser(RX_DESTROYED_BRIDGE, EVT_DESTROYED_BRIDGE))
+
         self.register(PositionedRegexParser(RX_TOGGLE_LANDING_LIGHTS, EVT_TOGGLE_LANDING_LIGHTS))
         self.register(PositionedRegexParser(RX_TOGGLE_WINGTIP_SMOKES, EVT_TOGGLE_WINGTIP_SMOKES))
 
@@ -216,6 +219,7 @@ class DefaultMultipleParser(MultipleParser):
         self.register(SeatRegexParser(RX_PARACHUTE_OPENED, EVT_PARACHUTE_OPENED))
         self.register(SeatRegexParser(RX_WOUNDED, EVT_WOUNDED))
         self.register(SeatRegexParser(RX_HEAVILY_WOUNDED, EVT_HEAVILY_WOUNDED))
+
         self.register(SeatRegexParser(RX_CAPTURED, EVT_CAPTURED))
 
 
@@ -246,6 +250,8 @@ def parse_log_lines(lines, evt_parser=default_evt_parser):
         return None
 
     for line in lines:
+        if not line:
+            continue
         if "3do/Tree/Line" in line:
             continue
         evt = evt_parser(line)

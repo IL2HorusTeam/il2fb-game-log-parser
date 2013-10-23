@@ -128,6 +128,13 @@ class CommonsTestCase(BaseTestCase):
         d = m.groupdict()
         self.assertEqual(d.get('static'), "200_Static")
 
+    def test_bridge(self):
+        rx = self._compile_re(RX_BRIDGE)
+        m = rx.search(" Bridge0 destroyed")
+        self.assertIsNotNone(m)
+        d = m.groupdict()
+        self.assertEqual(d.get('bridge'), "Bridge0")
+
     def test_toggle_value(self):
         rx = self._compile_re(RX_TOGGLE_VALUE)
 
@@ -433,3 +440,11 @@ class ActionsTestCase(BaseTestCase):
         d = m.groupdict()
         self._assert_time_aircraft_pos(d)
         self.assertEqual(d.get('static'), "0_Static")
+
+    def test_destroyed_bridge(self):
+        rx = self._compile_re(RX_DESTROYED_BRIDGE)
+        m = rx.match("[8:49:39 PM]  Bridge0 destroyed by User:Pe-8 at 100.0 200.99")
+        self.assertIsNotNone(m)
+        d = m.groupdict()
+        self._assert_time_aircraft_pos(d)
+        self.assertEqual(d.get('bridge'), "Bridge0")
