@@ -38,6 +38,7 @@ RX_TIME = """
 \[              # left time wrapper
 {time}          # time regex placeholder
 \]              # right time wrapper
+\s+             # one or more whitespaces
                 # any ending of the string
 """.format(time=RX_TIME_BASE)
 
@@ -61,6 +62,7 @@ RX_DATE_TIME = """
 \s              # single whitespace
 {time}          # time regex placeholder
 \]              # closing brackets
+\s+             # one or more whitespaces
                 # any ending of the string
 """.format(time=RX_TIME_BASE)
 
@@ -197,7 +199,6 @@ RX_TIME_CALLSIGN = """
 # "8:33:05 PM" will be captured into 'time' group,
 # "User" will be captured into 'callsign' group.
 {time}          # time regex placeholder
-\s              # single whitespace
 {callsign}      # callsign regex placeholder
                 # any ending of the string
 """.format(time=RX_TIME, callsign=RX_CALLSIGN)
@@ -211,7 +212,6 @@ RX_TIME_AIRCRAFT = """
 # "User" will be captured into 'callsign' group,
 # "Pe-8" will be captured into 'aircraft' group.
 {time}              # time regex placeholder
-\s                  # single whitespace
 {callsign_aircraft} # callsign with aircraft regex placeholder
                     # any ending of the string
 """.format(time=RX_TIME, callsign_aircraft=RX_CALLSIGN_AIRCRAFT)
@@ -261,7 +261,6 @@ RX_MISSION_PLAYING = """
 # "8:33:05 PM" will be captured into 'time' group,
 # "PH.mis" will be captured into 'mission' group.
 {datetime}      # datetime regex placeholder
-\s              # single whitespace
 Mission:        #
 \s              # single whitespace
 (?P<mission>    # 'mission' group start
@@ -282,7 +281,6 @@ RX_MISSION_BEGIN = """
 #
 # "8:33:05 PM" will be captured into 'time' group.
 {time}          # time regex placeholder
-\s              # single whitespace
 Mission         #
 \s              # single whitespace
 BEGIN           #
@@ -296,7 +294,6 @@ RX_MISSION_END = """
 #
 # "8:33:05 PM" will be captured into 'time' group.
 {time}          # time regex placeholder
-\s              # single whitespace
 Mission         #
 \s              # single whitespace
 END             #
@@ -812,7 +809,6 @@ RX_DESTROYED_BLD = """
 # "100.0" will be captured into 'pos_x' group,
 # "200.99" will be captured into 'pos_y' group.
 {time}          # time regex placeholder
-\s              # single whitespace
 3do/Buildings/  #
 \S+             # one or more non-whitespace characters
 /               # single slash
@@ -837,7 +833,6 @@ RX_DESTROYED_TREE = """
 # "100.0" will be captured into 'pos_x' group,
 # "200.99" will be captured into 'pos_y' group.
 {time}          # time regex placeholder
-\s              # single whitespace
 3do/Tree/       #
 (?P<tree>       # 'tree' group start
     \S+         # one or more non-whitespace characters
@@ -860,7 +855,6 @@ RX_DESTROYED_STATIC = """
 # "100.0" will be captured into 'pos_x' group,
 # "200.99" will be captured into 'pos_y' group.
 {time}          # time regex placeholder
-\s              # single whitespace
 {static}        # static regex placeholder
 {destroyed_by}  # destroyed by regex placeholder
 """.format(time=RX_TIME, static=RX_STATIC, destroyed_by=RX_DESTROYED_BY)
