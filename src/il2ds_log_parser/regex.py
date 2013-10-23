@@ -78,13 +78,13 @@ at              #
 (?P<pos_x>      # 'pos_x' group start
     \d+         # 1 or more digits for integer part
     .           # decimal separator
-    \d{1,3}     # 1 to 3 digits for real part
+    \d+         # 1 or more digits for real part
 )               # 'pos_x' group end
 \s              # single whitespace
 (?P<pos_y>      # 'pos_y' group start
     \d+         # 1 or more digits for integer part
     .           # decimal separator
-    \d{1,3}     # 1 to 3 digits for real part
+    \d+         # 1 or more digits for real part
 )               # 'pos_y' group end
 $               # end of the string
 """
