@@ -194,6 +194,7 @@ class DefaultMultipleParser(MultipleParser):
         self.register(DateStampedRegexParser(RX_MISSION_WON, EVT_MISSION_WON))
         self.register(RegexParser(RX_MISSION_BEGIN, EVT_MISSION_BEGIN))
         self.register(RegexParser(RX_MISSION_END, EVT_MISSION_END))
+        self.register(RegexParser(RX_TARGET_END, EVT_TARGET_END))
 
         self.register(RegexParser(RX_CONNECTED, EVT_CONNECTED))
         self.register(RegexParser(RX_DISCONNECTED, EVT_DISCONNECTED))

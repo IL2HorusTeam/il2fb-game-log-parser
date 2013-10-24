@@ -208,6 +208,23 @@ class MissionFlowTestCase(BaseTestCase):
         self.assertEqual(d.get('time'), "5:19:49 PM")
         self.assertEqual(d.get('army'), "RED")
 
+    def test_target_end(self):
+        rx = self._compile_re(RX_TARGET_END)
+
+        m = rx.match("[5:15:22 PM] Target 3 Complete")
+        self.assertIsNotNone(m)
+        d = m.groupdict()
+        self.assertEqual(d.get('time'), "5:15:22 PM")
+        self.assertEqual(d.get('number'), "3")
+        self.assertEqual(d.get('result'), "Complete")
+
+        m = rx.match("[5:19:49 PM] Target 5 Failed")
+        self.assertIsNotNone(m)
+        d = m.groupdict()
+        self.assertEqual(d.get('time'), "5:19:49 PM")
+        self.assertEqual(d.get('number'), "5")
+        self.assertEqual(d.get('result'), "Failed")
+
 
 class ActionsTestCase(BaseTestCase):
 

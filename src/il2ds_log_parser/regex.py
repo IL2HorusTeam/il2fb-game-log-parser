@@ -344,6 +344,29 @@ WON             #
 $               # end of the string
 """.format(datetime=RX_DATE_TIME, army=RX_ARMY)
 
+RX_TARGET_END = """
+# Capture 'target end' event. E.g.:
+#
+# "[8:33:05 PM] Target 3 Complete"
+#
+# "8:33:05 PM" will be captured into 'time' group,
+# "3" will be captured into 'number' group,
+# "Complete" will be captured into 'result' group.
+{time}          # 'time' regex placeholder
+Target          #
+\s              # single whitespace
+(?P<number>     # 'number' group start
+    \d+         # one or more digits
+)               # 'number' group end
+\s              # single whitespace
+(?P<result>     # 'result' group start
+    Complete    #
+    |           # or
+    Failed      #
+)               # 'result' group end
+$               # end of the string
+""".format(time=RX_TIME)
+
 #------------------------------------------------------------------------------
 # Action events
 #------------------------------------------------------------------------------
