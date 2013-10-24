@@ -79,8 +79,7 @@ class CommonsTestCase(BaseTestCase):
         rx = self._compile_re(RX_CALLSIGN)
         m = rx.search("    User   ")
         self.assertIsNotNone(m)
-        d = m.groupdict()
-        self.assertEqual(d.get('callsign'), "User")
+        self.assertEqual(m.groupdict().get('callsign'), "User")
 
     def test_time_callsign(self):
         rx = self._compile_re(RX_TIME_CALLSIGN)
@@ -103,15 +102,13 @@ class CommonsTestCase(BaseTestCase):
         rx = self._compile_re(RX_SEAT)
         m = rx.search("User(0) bailed out")
         self.assertIsNotNone(m)
-        d = m.groupdict()
-        self.assertEqual(d.get('seat'), "0")
+        self.assertEqual(m.groupdict().get('seat'), "0")
 
     def test_aircraft(self):
         rx = self._compile_re(RX_AIRCRAFT)
         m = rx.search("User:Pe-8")
         self.assertIsNotNone(m)
-        d = m.groupdict()
-        self.assertEqual(d.get('aircraft'), "Pe-8")
+        self.assertEqual(m.groupdict().get('aircraft'), "Pe-8")
 
     def test_enemy_callsign_aircraft(self):
         rx = self._compile_re(RX_ENEMY_CALLSIGN_AIRCRAFT)
@@ -125,28 +122,42 @@ class CommonsTestCase(BaseTestCase):
         rx = self._compile_re(RX_STATIC)
         m = rx.search(" 200_Static destroyed")
         self.assertIsNotNone(m)
-        d = m.groupdict()
-        self.assertEqual(d.get('static'), "200_Static")
+        self.assertEqual(m.groupdict().get('static'), "200_Static")
 
     def test_bridge(self):
         rx = self._compile_re(RX_BRIDGE)
         m = rx.search(" Bridge0 destroyed")
         self.assertIsNotNone(m)
-        d = m.groupdict()
-        self.assertEqual(d.get('bridge'), "Bridge0")
+        self.assertEqual(m.groupdict().get('bridge'), "Bridge0")
+
+    def test_army(self):
+        rx = self._compile_re(RX_ARMY)
+        m = rx.search(" Red ")
+        self.assertIsNotNone(m)
+        self.assertEqual(m.groupdict().get('army'), "Red")
+
+        m = rx.search(" RED ")
+        self.assertIsNotNone(m)
+        self.assertEqual(m.groupdict().get('army'), "RED")
+
+        m = rx.search(" Blue ")
+        self.assertIsNotNone(m)
+        self.assertEqual(m.groupdict().get('army'), "Blue")
+
+        m = rx.search(" BLUE ")
+        self.assertIsNotNone(m)
+        self.assertEqual(m.groupdict().get('army'), "BLUE")
 
     def test_toggle_value(self):
         rx = self._compile_re(RX_TOGGLE_VALUE)
 
         m = rx.search("turned landing lights on at ")
         self.assertIsNotNone(m)
-        d = m.groupdict()
-        self.assertEqual(d.get('value'), "on")
+        self.assertEqual(m.groupdict().get('value'), "on")
 
         m = rx.search("turned landing lights off at ")
         self.assertIsNotNone(m)
-        d = m.groupdict()
-        self.assertEqual(d.get('value'), "off")
+        self.assertEqual(m.groupdict().get('value'), "off")
 
     def test_destroyed_by(self):
         rx = self._compile_re(RX_DESTROYED_BY)
@@ -186,6 +197,16 @@ class MissionFlowTestCase(BaseTestCase):
         m = rx.match("[8:33:05 AM] Mission END")
         self.assertIsNotNone(m)
         self._assert_time_only(m.groupdict(), "8:33:05 AM")
+
+    def test_mission_won(self):
+        rx = self._compile_re(RX_MISSION_WON)
+
+        m = rx.match("[Dec 29, 2012 5:19:49 PM] Mission: RED WON")
+        self.assertIsNotNone(m)
+        d = m.groupdict()
+        self.assertEqual(d.get('date'), "Dec 29, 2012")
+        self.assertEqual(d.get('time'), "5:19:49 PM")
+        self.assertEqual(d.get('army'), "RED")
 
 
 class ActionsTestCase(BaseTestCase):

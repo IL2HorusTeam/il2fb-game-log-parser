@@ -192,6 +192,19 @@ RX_BRIDGE = """
                 # any ending of the string
 """
 
+RX_ARMY = """
+# Capturing army's name. E.g.:
+#
+# "  Red  "
+#
+# "Red" will be captured into 'army' group.
+                # any beginning of the string
+(?P<army>       # 'army' group start
+    \S+         # one or more non-whitespaces for army's name
+)               # 'army' group end
+                # any ending of the string
+"""
+
 RX_CALLSIGN_AIRCRAFT = """
 # Capturing pilot's callsign and aircraft. E.g.:
 #
@@ -313,6 +326,23 @@ Mission         #
 END             #
 $               # end of the string
 """.format(time=RX_TIME)
+
+RX_MISSION_WON = """
+# Capture 'mission was won' event. E.g.:
+#
+# "[Sep 15, 2013 8:33:05 PM] Mission: RED WON"
+#
+# "Sep 15, 2013" will be captured into 'date' group,
+# "8:33:05 PM" will be captured into 'time' group,
+# "Red" will be captured into 'army' group.
+{datetime}      # 'datetime' regex placeholder
+Mission:        #
+\s              # single whitespace
+{army}          # 'army' regex placeholder
+\s              # single whitespace
+WON             #
+$               # end of the string
+""".format(datetime=RX_DATE_TIME, army=RX_ARMY)
 
 #------------------------------------------------------------------------------
 # Action events

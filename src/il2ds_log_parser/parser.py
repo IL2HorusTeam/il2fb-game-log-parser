@@ -191,6 +191,7 @@ class DefaultMultipleParser(MultipleParser):
         self.register(PositionedRegexParser(RX_TOGGLE_WINGTIP_SMOKES, EVT_TOGGLE_WINGTIP_SMOKES))
 
         self.register(DateStampedRegexParser(RX_MISSION_PLAYING, EVT_MISSION_PLAYING))
+        self.register(DateStampedRegexParser(RX_MISSION_WON, EVT_MISSION_WON))
         self.register(RegexParser(RX_MISSION_BEGIN, EVT_MISSION_BEGIN))
         self.register(RegexParser(RX_MISSION_END, EVT_MISSION_END))
 
