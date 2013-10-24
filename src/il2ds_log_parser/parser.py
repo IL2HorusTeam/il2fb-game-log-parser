@@ -144,28 +144,33 @@ class RegistrationError(Exception):
 
 class MultipleParser(object):
 
-    def __init__(self):
+    def __init__(self, parsers=None):
         self._registered_parsers = []
+        if parsers:
+            for parser in parsers:
+                if isinstance(parser, RegexParser):
+                    parser = (parser, None)
+                self._registered_parsers.append(parser)
 
-    def _is_registered(self, (parser, callback)):
-        return (parser, callback) in self._registered_parsers
+    def _is_registered(self, parser_n_callback):
+        return parser_n_callback in self._registered_parsers
 
     def is_registered(self, parser, callback=None):
         return self._is_registered((parser, callback))
 
     def register(self, parser, callback=None):
-        p_cb = (parser, callback)
-        if self._is_registered(p_cb):
+        parser_n_callback = (parser, callback)
+        if self._is_registered(parser_n_callback):
             raise RegistrationError(
                 "Parser is already registered: {parser}".format(parser=parser))
-        self._registered_parsers.append(p_cb)
+        self._registered_parsers.append(parser_n_callback)
 
     def unregister(self, parser, callback=None):
-        p_cb = (parser, callback)
-        if not self._is_registered(p_cb):
+        parser_n_callback = (parser, callback)
+        if not self._is_registered(parser_n_callback):
             raise RegistrationError(
                 "Parser is not registered yet: {parser}".format(parser=parser))
-        self._registered_parsers.remove(p_cb)
+        self._registered_parsers.remove(parser_n_callback)
 
     def __call__(self, value):
         for parser, callback in self._registered_parsers:
@@ -177,55 +182,60 @@ class MultipleParser(object):
         return None
 
 
-class DefaultMultipleParser(MultipleParser):
+default_evt_parser = MultipleParser(parsers=[
+    # Events of destroying
+    PositionedRegexParser(RX_DESTROYED_BLD, EVT_DESTROYED_BLD),
+    PositionedRegexParser(RX_DESTROYED_STATIC, EVT_DESTROYED_STATIC),
+    PositionedRegexParser(RX_DESTROYED_BRIDGE, EVT_DESTROYED_BRIDGE),
 
-    def __init__(self):
-        super(DefaultMultipleParser, self).__init__()
-        self.register(SeatRegexParser(RX_SEAT_OCCUPIED, EVT_SEAT_OCCUPIED))
+    # Events of lightning effects
+    PositionedRegexParser(
+        RX_TOGGLE_LANDING_LIGHTS, EVT_TOGGLE_LANDING_LIGHTS),
+    PositionedRegexParser(
+        RX_TOGGLE_WINGTIP_SMOKES, EVT_TOGGLE_WINGTIP_SMOKES),
 
-        self.register(PositionedRegexParser(RX_DESTROYED_BLD, EVT_DESTROYED_BLD))
-        self.register(PositionedRegexParser(RX_DESTROYED_STATIC, EVT_DESTROYED_STATIC))
-        self.register(PositionedRegexParser(RX_DESTROYED_BRIDGE, EVT_DESTROYED_BRIDGE))
+    # Mission flow events
+    DateStampedRegexParser(RX_MISSION_PLAYING, EVT_MISSION_PLAYING),
+    DateStampedRegexParser(RX_MISSION_WON, EVT_MISSION_WON),
+    RegexParser(RX_MISSION_BEGIN, EVT_MISSION_BEGIN),
+    RegexParser(RX_MISSION_END, EVT_MISSION_END),
+    RegexParser(RX_TARGET_END, EVT_TARGET_END),
 
-        self.register(PositionedRegexParser(RX_TOGGLE_LANDING_LIGHTS, EVT_TOGGLE_LANDING_LIGHTS))
-        self.register(PositionedRegexParser(RX_TOGGLE_WINGTIP_SMOKES, EVT_TOGGLE_WINGTIP_SMOKES))
+    # User state events
+    RegexParser(RX_CONNECTED, EVT_CONNECTED),
+    RegexParser(RX_DISCONNECTED, EVT_DISCONNECTED),
+    RegexParser(RX_WENT_TO_MENU, EVT_WENT_TO_MENU),
+    PositionedRegexParser(RX_SELECTED_ARMY, EVT_SELECTED_ARMY),
 
-        self.register(DateStampedRegexParser(RX_MISSION_PLAYING, EVT_MISSION_PLAYING))
-        self.register(DateStampedRegexParser(RX_MISSION_WON, EVT_MISSION_WON))
-        self.register(RegexParser(RX_MISSION_BEGIN, EVT_MISSION_BEGIN))
-        self.register(RegexParser(RX_MISSION_END, EVT_MISSION_END))
-        self.register(RegexParser(RX_TARGET_END, EVT_TARGET_END))
+    # Aircraft events
+    RegexParser(RX_WEAPONS_LOADED, EVT_WEAPONS_LOADED),
+    PositionedRegexParser(RX_IN_FLIGHT, EVT_IN_FLIGHT),
+    PositionedRegexParser(RX_CRASHED, EVT_CRASHED),
+    PositionedRegexParser(RX_LANDED, EVT_LANDED),
 
-        self.register(RegexParser(RX_CONNECTED, EVT_CONNECTED))
-        self.register(RegexParser(RX_DISCONNECTED, EVT_DISCONNECTED))
-        self.register(RegexParser(RX_WENT_TO_MENU, EVT_WENT_TO_MENU))
+    PositionedRegexParser(RX_DAMAGED_ON_GROUND, EVT_DAMAGED_ON_GROUND),
+    PositionedRegexParser(RX_DAMAGED_SELF, EVT_DAMAGED_SELF),
+    VictimOfUserRegexParser(RX_DAMAGED_BY_EAIR, EVT_DAMAGED_BY_EAIR),
 
-        self.register(RegexParser(RX_WEAPONS_LOADED, EVT_WEAPONS_LOADED))
-        self.register(PositionedRegexParser(RX_SELECTED_ARMY, EVT_SELECTED_ARMY))
-        self.register(PositionedRegexParser(RX_IN_FLIGHT, EVT_IN_FLIGHT))
-        self.register(PositionedRegexParser(RX_CRASHED, EVT_CRASHED))
-        self.register(PositionedRegexParser(RX_LANDED, EVT_LANDED))
+    PositionedRegexParser(RX_SHOT_DOWN_SELF, EVT_SHOT_DOWN_SELF),
+    VictimOfUserRegexParser(
+        RX_SHOT_DOWN_BY_EAIR, EVT_SHOT_DOWN_BY_EAIR),
+    VictimOfStaticRegexParser(
+        RX_SHOT_DOWN_BY_STATIC, EVT_SHOT_DOWN_BY_STATIC),
 
-        self.register(PositionedRegexParser(RX_DAMAGED_ON_GROUND, EVT_DAMAGED_ON_GROUND))
-        self.register(PositionedRegexParser(RX_DAMAGED_SELF, EVT_DAMAGED_SELF))
-        self.register(VictimOfUserRegexParser(RX_DAMAGED_BY_EAIR, EVT_DAMAGED_BY_EAIR))
+    # Crew member events
+    SeatRegexParser(RX_SEAT_OCCUPIED, EVT_SEAT_OCCUPIED),
 
-        self.register(PositionedRegexParser(RX_SHOT_DOWN_SELF, EVT_SHOT_DOWN_SELF))
-        self.register(VictimOfUserRegexParser(RX_SHOT_DOWN_BY_EAIR, EVT_SHOT_DOWN_BY_EAIR))
-        self.register(VictimOfStaticRegexParser(RX_SHOT_DOWN_BY_STATIC, EVT_SHOT_DOWN_BY_STATIC))
+    SeatRegexParser(RX_KILLED, EVT_KILLED),
+    SeatVictimOfUserRegexParser(RX_KILLED_BY_EAIR, EVT_KILLED_BY_EAIR),
 
-        self.register(SeatRegexParser(RX_KILLED, EVT_KILLED))
-        self.register(SeatVictimOfUserRegexParser(RX_KILLED_BY_EAIR, EVT_KILLED_BY_EAIR))
+    SeatRegexParser(RX_BAILED_OUT, EVT_BAILED_OUT),
+    SeatRegexParser(RX_PARACHUTE_OPENED, EVT_PARACHUTE_OPENED),
+    SeatRegexParser(RX_WOUNDED, EVT_WOUNDED),
+    SeatRegexParser(RX_HEAVILY_WOUNDED, EVT_HEAVILY_WOUNDED),
 
-        self.register(SeatRegexParser(RX_BAILED_OUT, EVT_BAILED_OUT))
-        self.register(SeatRegexParser(RX_PARACHUTE_OPENED, EVT_PARACHUTE_OPENED))
-        self.register(SeatRegexParser(RX_WOUNDED, EVT_WOUNDED))
-        self.register(SeatRegexParser(RX_HEAVILY_WOUNDED, EVT_HEAVILY_WOUNDED))
-
-        self.register(SeatRegexParser(RX_CAPTURED, EVT_CAPTURED))
-
-
-default_evt_parser = DefaultMultipleParser()
+    SeatRegexParser(RX_CAPTURED, EVT_CAPTURED),
+])
 
 
 def parse_log_lines(lines, evt_parser=default_evt_parser):
