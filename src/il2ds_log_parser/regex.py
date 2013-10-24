@@ -36,11 +36,11 @@ RX_TIME = """
 # "8:33:05 PM" will be captured into 'time' group.
 ^               # beginning of the string
 \[              # left time wrapper
-{time}          # 'time' regex placeholder
+{time_base}     # 'time_base' regex placeholder
 \]              # right time wrapper
 \s+             # one or more whitespaces
                 # any ending of the string
-""".format(time=RX_TIME_BASE)
+""".format(time_base=RX_TIME_BASE)
 
 RX_DATE_TIME = """
 # Capturing regular event datetime stamp. E.g.:
@@ -60,11 +60,11 @@ RX_DATE_TIME = """
     \d{{4}}     # 4 digits for year (e.g. 2013)
 )               # 'date' group end
 \s              # single whitespace
-{time}          # 'time' regex placeholder
+{time_base}     # 'time_base' regex placeholder
 \]              # closing brackets
 \s+             # one or more whitespaces
                 # any ending of the string
-""".format(time=RX_TIME_BASE)
+""".format(time_base=RX_TIME_BASE)
 
 RX_POS = """
 # Capturing map position of the event. E.g.:
@@ -254,6 +254,7 @@ RX_TIME_SEAT = """
 # "0" will be captured into 'seat' group.
 {time_aircraft} # 'time with callsign and aircraft' regex placeholder
 {seat}          # 'seat' regex placeholder
+\s+             # one or more whitespaces
                 # any ending of the string
 """.format(time_aircraft=RX_TIME_AIRCRAFT, seat=RX_SEAT)
 
@@ -501,7 +502,6 @@ RX_SEAT_OCCUPIED = """
 # "100.0" will be captured into 'pos_x' group,
 # "200.99" will be captured into 'pos_y' group.
 {time_seat}     # 'time with pilot's callsign, aircraft and seat' regex placeholder
-\s              # single whitespace
 seat            #
 \s              # single whitespace
 occupied        #
@@ -522,7 +522,6 @@ RX_BAILED_OUT = """
 # "100.0" will be captured into 'pos_x' group,
 # "200.99" will be captured into 'pos_y' group.
 {time_seat}     # 'time with pilot's callsign, aircraft and seat' regex placeholder
-\s              # single whitespace
 bailed          #
 \s              # single whitespace
 out             #
@@ -541,7 +540,6 @@ RX_PARACHUTE_OPENED = """
 # "100.0" will be captured into 'pos_x' group,
 # "200.99" will be captured into 'pos_y' group.
 {time_seat}     # 'time with pilot's callsign, aircraft and seat' regex placeholder
-\s              # single whitespace
 successfully    #
 \s              # single whitespace
 bailed          #
@@ -608,7 +606,6 @@ RX_WOUNDED = """
 # "100.0" will be captured into 'pos_x' group,
 # "200.99" will be captured into 'pos_y' group.
 {time_seat}     # 'time with pilot's callsign, aircraft and seat' regex placeholder
-\s              # single whitespace
 was             #
 \s              # single whitespace
 wounded         #
@@ -627,7 +624,6 @@ RX_HEAVILY_WOUNDED = """
 # "100.0" will be captured into 'pos_x' group,
 # "200.99" will be captured into 'pos_y' group.
 {time_seat}     # 'time with pilot's callsign, aircraft and seat' regex placeholder
-\s              # single whitespace
 was             #
 \s              # single whitespace
 heavily         #
@@ -648,7 +644,6 @@ RX_KILLED = """
 # "100.0" will be captured into 'pos_x' group,
 # "200.99" will be captured into 'pos_y' group.
 {time_seat}     # 'time with pilot's callsign, aircraft and seat' regex placeholder
-\s              # single whitespace
 was             #
 \s              # single whitespace
 killed          #
@@ -669,7 +664,6 @@ RX_KILLED_BY_EAIR = """
 # "100.0" will be captured into 'pos_x' group,
 # "200.99" will be captured into 'pos_y' group.
 {time_seat}     # 'time with pilot's callsign, aircraft and seat' regex placeholder
-\s              # single whitespace
 was             #
 \s              # single whitespace
 killed          #
@@ -692,7 +686,6 @@ RX_CAPTURED = """
 # "100.0" will be captured into 'pos_x' group,
 # "200.99" will be captured into 'pos_y' group.
 {time_seat}     # 'time with pilot's callsign, aircraft and seat' regex placeholder
-\s              # single whitespace
 was             #
 \s              # single whitespace
 captured        #

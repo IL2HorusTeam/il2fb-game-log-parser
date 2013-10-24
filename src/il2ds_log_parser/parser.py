@@ -20,7 +20,7 @@ def parse_date(value):
     return dt.date().isoformat()
 
 
-class RegexParser(object):
+class TimeStampedRegexParser(object):
 
     def __init__(self, regex, evt_type=None):
         """Params:
@@ -36,7 +36,7 @@ class RegexParser(object):
             evt = m.groupdict()
             if self.evt_type:
                 evt['type'] = self.evt_type
-            RegexParser.update_time(evt)
+            TimeStampedRegexParser.update_time(evt)
             return evt
         return None
 
@@ -44,20 +44,19 @@ class RegexParser(object):
         return "%s: %s" % (self.evt_type, self.rx.pattern) \
             if self.evt_type else self.rx.pattern
 
-    def __unicode__(self):
-        return unicode(self.__str__())
-
     @staticmethod
     def update_time(evt):
-        evt['time'] = parse_time(evt['time'])
+        time = evt.get('time')
+        if time:
+            evt['time'] = parse_time(time)
 
 
-class DateStampedRegexParser(RegexParser):
+class DateTimeStampedRegexParser(TimeStampedRegexParser):
 
     def __call__(self, value):
-        evt = super(DateStampedRegexParser, self).__call__(value)
+        evt = super(DateTimeStampedRegexParser, self).__call__(value)
         if evt:
-            DateStampedRegexParser.update_date(evt)
+            DateTimeStampedRegexParser.update_date(evt)
         return evt
 
     @staticmethod
@@ -65,7 +64,7 @@ class DateStampedRegexParser(RegexParser):
         evt['date'] = parse_date(evt['date'])
 
 
-class PositionedRegexParser(RegexParser):
+class PositionedRegexParser(TimeStampedRegexParser):
 
     def __call__(self, value):
         evt = super(PositionedRegexParser, self).__call__(value)
@@ -139,7 +138,7 @@ class SeatVictimOfUserRegexParser(PositionedRegexParser):
 
 
 class RegistrationError(Exception):
-    """Thrown when registering or unregistering goes wrong."""
+    """Thrown when registering or unregistering parser goes wrong."""
 
 
 class MultipleParser(object):
@@ -148,12 +147,15 @@ class MultipleParser(object):
         self._registered_parsers = []
         if parsers:
             for parser in parsers:
-                if isinstance(parser, RegexParser):
+                if isinstance(parser, TimeStampedRegexParser):
                     parser = (parser, None)
                 self._registered_parsers.append(parser)
 
-    def _is_registered(self, parser_n_callback):
-        return parser_n_callback in self._registered_parsers
+    def _is_registered(self, (parser, callback)):
+        for (p, c) in self._registered_parsers:
+            if p.rx.pattern == parser.rx.pattern and c == callback:
+                return True
+        return False
 
     def is_registered(self, parser, callback=None):
         return self._is_registered((parser, callback))
@@ -195,20 +197,20 @@ default_evt_parser = MultipleParser(parsers=[
         RX_TOGGLE_WINGTIP_SMOKES, EVT_TOGGLE_WINGTIP_SMOKES),
 
     # Mission flow events
-    DateStampedRegexParser(RX_MISSION_PLAYING, EVT_MISSION_PLAYING),
-    DateStampedRegexParser(RX_MISSION_WON, EVT_MISSION_WON),
-    RegexParser(RX_MISSION_BEGIN, EVT_MISSION_BEGIN),
-    RegexParser(RX_MISSION_END, EVT_MISSION_END),
-    RegexParser(RX_TARGET_END, EVT_TARGET_END),
+    DateTimeStampedRegexParser(RX_MISSION_PLAYING, EVT_MISSION_PLAYING),
+    DateTimeStampedRegexParser(RX_MISSION_WON, EVT_MISSION_WON),
+    TimeStampedRegexParser(RX_MISSION_BEGIN, EVT_MISSION_BEGIN),
+    TimeStampedRegexParser(RX_MISSION_END, EVT_MISSION_END),
+    TimeStampedRegexParser(RX_TARGET_END, EVT_TARGET_END),
 
     # User state events
-    RegexParser(RX_CONNECTED, EVT_CONNECTED),
-    RegexParser(RX_DISCONNECTED, EVT_DISCONNECTED),
-    RegexParser(RX_WENT_TO_MENU, EVT_WENT_TO_MENU),
+    TimeStampedRegexParser(RX_CONNECTED, EVT_CONNECTED),
+    TimeStampedRegexParser(RX_DISCONNECTED, EVT_DISCONNECTED),
+    TimeStampedRegexParser(RX_WENT_TO_MENU, EVT_WENT_TO_MENU),
     PositionedRegexParser(RX_SELECTED_ARMY, EVT_SELECTED_ARMY),
 
     # Aircraft events
-    RegexParser(RX_WEAPONS_LOADED, EVT_WEAPONS_LOADED),
+    TimeStampedRegexParser(RX_WEAPONS_LOADED, EVT_WEAPONS_LOADED),
     PositionedRegexParser(RX_IN_FLIGHT, EVT_IN_FLIGHT),
     PositionedRegexParser(RX_CRASHED, EVT_CRASHED),
     PositionedRegexParser(RX_LANDED, EVT_LANDED),

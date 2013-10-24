@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 import re
-import unittest2 as unittest
+import unittest
 
 from il2ds_log_parser.regex import *
 
