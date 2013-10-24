@@ -9,28 +9,44 @@ from il2ds_log_parser.regex import *
 
 
 def parse_time(value):
-    """Take time in format of 'H:MM:SS AM/PM' and convert it to ISO format"""
+    """Take time in format of 'H:MM:SS AM/PM' and convert it to ISO format."""
     dt = datetime.datetime.strptime(value, LOG_TIME_FORMAT)
     return dt.time().isoformat()
 
 
 def parse_date(value):
-    """Take date in format of 'Mon DD, YYYY' and convert it to ISO format"""
+    """Take date in format of 'Mon DD, YYYY' and convert it to ISO format."""
     dt = datetime.datetime.strptime(value, LOG_DATE_FORMAT)
     return dt.date().isoformat()
 
 
 class TimeStampedRegexParser(object):
 
+    """Parse a line which can have a time stamp at the beginning."""
+
     def __init__(self, regex, evt_type=None):
-        """Params:
-           regex: verbose regular expression,
-           evt_type: type which matched event will be marked with.
+        """Input:
+           `regex` - verbose regular expression,
+           `evt_type` - type which matched event will be marked with.
         """
         self.rx = re.compile(regex, RX_FLAGS)
         self.evt_type = evt_type
 
     def __call__(self, value):
+        """Take a line, parse it with internal regex and return an event
+        dictionary. Regex can contain 'time' group. If so, then this group must
+        contain time in '[I%:M%:S%]' format. If parser has own type, it will be
+        added to the event.
+
+        Input:
+            value   # A string which can begin with time in '[I%:M%:S%]'
+                    # format
+        Output:
+            {                           # A dictionary which can contain:
+                'time': "TIME_VALUE",   # time value in 'H%:M%:S%' format;
+                'type': "TYPE_VALUE",   # type value specified by regex.
+            }                           #
+        """
         m = self.rx.match(value)
         if m:
             evt = m.groupdict()
@@ -41,11 +57,25 @@ class TimeStampedRegexParser(object):
         return None
 
     def __str__(self):
+        """String representation of parser.
+
+        Output:
+            a string in `type: regex_pattern` format if parser has own type or
+            internal regex pattern in the other case.
+        """
         return "%s: %s" % (self.evt_type, self.rx.pattern) \
             if self.evt_type else self.rx.pattern
 
     @staticmethod
     def update_time(evt):
+        """Convert event's time to ISO format if it is present.
+
+        Input:
+            evt # A dictionary with an optional 'time' key which stores time
+                # in 'I%:M%:S%' format.
+        Transformation:
+            Convert 'time' value of input dictionary to ISO format.
+        """
         time = evt.get('time')
         if time:
             evt['time'] = parse_time(time)
