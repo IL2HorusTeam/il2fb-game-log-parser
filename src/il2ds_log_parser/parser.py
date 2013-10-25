@@ -22,12 +22,13 @@ def parse_date(value):
 
 class TimeStampedRegexParser(object):
 
-    """Parse a line which can have a time stamp at the beginning."""
+    """Parse a line which has a time stamp at the beginning."""
 
     def __init__(self, regex, evt_type=None):
         """
         Input:
-        `regex`             # verbose regular expression;
+        `regex`             # verbose regular expression which contains
+                            # 'time' group;
 
         `evt_type`          # type which will be added to a matched event.
                             # Default value: `None`.
@@ -38,16 +39,16 @@ class TimeStampedRegexParser(object):
     def __call__(self, value):
         """
         Take a line, parse it with internal regex and return an event
-        dictionary. Regex can contain 'time' group. If so, then this group must
-        contain event's time in '%I:%M:%S %p' format. If parser has own type,
-        it will be added to the event.
+        dictionary. Regex must contain 'time' group capturing event's time in
+        '%I:%M:%S %p' format. If parser has own type, it will be added to the
+        event.
 
         Input:
-        `value`             # A string which can begin with event's time in
+        `value`             # A string which begins with event's time in
                             # '[%I:%M:%S %p]' format.
 
         Output:
-        {                   # A dictionary which can contain:
+        {                   # A dictionary which contains:
             'time': "TIME", # event's time value in '%H:%M:%S' format;
             'type': "TYPE", # an optional type value specified by parser.
         }                   #
@@ -90,18 +91,16 @@ class TimeStampedRegexParser(object):
     @staticmethod
     def update_time(evt):
         """
-        Convert event's time to ISO format if it is present.
+        Convert event's time to ISO format.
 
         Input:
-        `evt`               # A dictionary with an optional 'time' key which
-                            # stores event's time in '%I:%M:%S %p' format.
+        `evt`               # A dictionary with 'time' key which stores event's
+                            # time in '%I:%M:%S %p' format.
 
         Transformation:
         Convert 'time' value of input dictionary to ISO format.
         """
-        time = evt.get('time')
-        if time:
-            evt['time'] = parse_time(time)
+        evt['time'] = parse_time(evt.get('time'))
 
 
 class DateTimeStampedRegexParser(TimeStampedRegexParser):

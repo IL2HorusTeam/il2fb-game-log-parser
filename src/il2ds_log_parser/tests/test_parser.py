@@ -31,17 +31,6 @@ class DatetimeTestCase(unittest.TestCase):
 class TimeStampedRegexParserTestCase(unittest.TestCase):
 
     def test_call(self):
-        parser = TimeStampedRegexParser("^Hello,\s\S+!$")
-
-        result = parser("Hi, user!")
-        self.assertIsNone(result)
-
-        result = parser("Hello, user!")
-        self.assertIsNotNone(result)
-        self.assertIsNone(result.get('time'))
-        self.assertIsNone(result.get('type'))
-
-    def test_call_with_time(self):
         parser = TimeStampedRegexParser(
             "{time}Hello,\s\S+!$".format(time=RX_TIME))
 
@@ -54,11 +43,15 @@ class TimeStampedRegexParserTestCase(unittest.TestCase):
         self.assertIsNone(result.get('type'))
 
     def test_call_with_type(self):
-        parser = TimeStampedRegexParser("Hello,\s\S+!$", 'TYPE')
+        parser = TimeStampedRegexParser(
+            "{time}Hello,\s\S+!$".format(time=RX_TIME), 'TYPE')
 
         result = parser("Hello, user!")
+        self.assertIsNone(result)
+
+        result = parser("[1:00:00 AM] Hello, user!")
         self.assertIsNotNone(result)
-        self.assertIsNone(result.get('time'))
+        self.assertEqual(result.get('time'), "01:00:00")
         self.assertEqual(result.get('type'), 'TYPE')
 
     def test_str(self):
