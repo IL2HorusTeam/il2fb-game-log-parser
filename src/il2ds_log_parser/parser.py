@@ -9,13 +9,13 @@ from il2ds_log_parser.regex import *
 
 
 def parse_time(value):
-    """Take time in format of 'H:MM:SS AM/PM' and convert it to ISO format."""
+    """Take time in '%I:%M:%S %p' format and convert it to ISO format."""
     dt = datetime.datetime.strptime(value, LOG_TIME_FORMAT)
     return dt.time().isoformat()
 
 
 def parse_date(value):
-    """Take date in format of 'Mon DD, YYYY' and convert it to ISO format."""
+    """Take date in '%b %d, %Y' format and convert it to ISO format."""
     dt = datetime.datetime.strptime(value, LOG_DATE_FORMAT)
     return dt.date().isoformat()
 
@@ -25,27 +25,34 @@ class TimeStampedRegexParser(object):
     """Parse a line which can have a time stamp at the beginning."""
 
     def __init__(self, regex, evt_type=None):
-        """Input:
-           `regex` - verbose regular expression,
-           `evt_type` - type which matched event will be marked with.
+        """
+        Input:
+        `regex`             # verbose regular expression;
+
+        `evt_type`          # type which will be added to a matched event.
+                            # Default value: `None`.
         """
         self.rx = re.compile(regex, RX_FLAGS)
         self.evt_type = evt_type
 
     def __call__(self, value):
-        """Take a line, parse it with internal regex and return an event
+        """
+        Take a line, parse it with internal regex and return an event
         dictionary. Regex can contain 'time' group. If so, then this group must
-        contain time in '[I%:M%:S%]' format. If parser has own type, it will be
-        added to the event.
+        contain event's time in '%I:%M:%S %p' format. If parser has own type,
+        it will be added to the event.
 
         Input:
-            value   # A string which can begin with time in '[I%:M%:S%]'
-                    # format
+        `value`             # A string which can begin with event's time in
+                            # '[%I:%M:%S %p]' format.
+
         Output:
-            {                           # A dictionary which can contain:
-                'time': "TIME_VALUE",   # time value in 'H%:M%:S%' format;
-                'type': "TYPE_VALUE",   # type value specified by regex.
-            }                           #
+        {                   # A dictionary which can contain:
+            'time': "TIME", # event's time value in '%H:%M:%S' format;
+            'type': "TYPE", # an optional type value specified by parser.
+        }                   #
+                            # Output can contain another extra values provided
+                            # by groups of regex.
         """
         m = self.rx.match(value)
         if m:
@@ -56,25 +63,41 @@ class TimeStampedRegexParser(object):
             return evt
         return None
 
-    def __str__(self):
-        """String representation of parser.
+    def __eq__(self, other):
+        """
+        Compare self with another parser object. Parsers are considered to be
+        equal if their regular expressions have equal patterns.
+
+        Input:
+        `other`             # A parser object to compare with.
 
         Output:
-            a string in `type: regex_pattern` format if parser has own type or
-            internal regex pattern in the other case.
+        `True` if object is equal to other, `False` in another case.
+        """
+        return self.rx.pattern == other.rx.pattern
+
+    def __str__(self):
+        """
+        String representation of parser.
+
+        Output:
+        A string in `type: regex_pattern` format if parser has own type or
+        internal regex pattern in the other case.
         """
         return "%s: %s" % (self.evt_type, self.rx.pattern) \
             if self.evt_type else self.rx.pattern
 
     @staticmethod
     def update_time(evt):
-        """Convert event's time to ISO format if it is present.
+        """
+        Convert event's time to ISO format if it is present.
 
         Input:
-            evt # A dictionary with an optional 'time' key which stores time
-                # in 'I%:M%:S%' format.
+        `evt`               # A dictionary with an optional 'time' key which
+                            # stores event's time in '%I:%M:%S %p' format.
+
         Transformation:
-            Convert 'time' value of input dictionary to ISO format.
+        Convert 'time' value of input dictionary to ISO format.
         """
         time = evt.get('time')
         if time:
@@ -83,7 +106,29 @@ class TimeStampedRegexParser(object):
 
 class DateTimeStampedRegexParser(TimeStampedRegexParser):
 
+    """Parse a line which has a datetime stamp at the beginning."""
+
     def __call__(self, value):
+        """
+        Take a line, parse it with internal regex and return an event
+        dictionary. Regex must contain 'date' and 'time' groups. Those groups
+        must contain event's date and time in '%b %d, %Y' and '%I:%M:%S %p'
+        formats respectively. If parser has own type, it will be added to the
+        event.
+
+        Input:
+        `value`             # A string which begins with event's datetime
+                            # in '[%b %d, %Y %I:%M:%S %p]' format
+
+        Output:
+        {                   # A dictionary which contains:
+            'date': "DATE", # event's date value in '%Y:%m:%d' format;
+            'time': "TIME", # event's time value in '%H:%M:%S' format;
+            'type': "TYPE", # an optional type value specified by parser.
+        }                   #
+                            # Output can contain another extra values provided
+                            # by groups of regex.
+        """
         evt = super(DateTimeStampedRegexParser, self).__call__(value)
         if evt:
             DateTimeStampedRegexParser.update_date(evt)
@@ -91,12 +136,51 @@ class DateTimeStampedRegexParser(TimeStampedRegexParser):
 
     @staticmethod
     def update_date(evt):
+        """
+        Convert event's date to ISO format.
+
+        Input:
+        `evt`               # A dictionary with 'date' key which stores event's
+                            # date in '%b %d, %Y' format.
+
+        Transformation:
+        Convert 'date' value of input dictionary to ISO format.
+        """
         evt['date'] = parse_date(evt['date'])
 
 
 class PositionedRegexParser(TimeStampedRegexParser):
 
+    """
+    Parse a line which has a time stamp at the beginning and two-dimensional
+    float coordinates at the end.
+    """
+
     def __call__(self, value):
+        """
+        Take a line, parse it with internal regex and return an event
+        dictionary. Regex must contain 'time', 'pos_x' and 'pos_y' groups.
+        Those groups must contain event's time in '%I:%M:%S %p' format, x and y
+        position float values represented by strings. If parser has own type,
+        it will be added to the event.
+
+        Input:
+        `value`             # A string which begins with event's time in
+                            # '[%I:%M:%S %p]' format and ends with
+                            # two-dimensional float coordinates.
+
+        Output:
+        {                   # A dictionary which contains:
+            'time': "TIME", # event's time value in '%H:%M:%S' format;
+            'pos': {        # a dictionary with
+                'x': X,     # float x position value;
+                'y': Y,     # float y position value;
+            },              #
+            'type': "TYPE", # an optional type value specified by parser.
+        }                   #
+                            # Output can contain another extra values provided
+                            # by groups of regex.
+        """
         evt = super(PositionedRegexParser, self).__call__(value)
         if evt:
             PositionedRegexParser.update_pos(evt)
@@ -104,6 +188,18 @@ class PositionedRegexParser(TimeStampedRegexParser):
 
     @staticmethod
     def update_pos(evt):
+        """
+        Wrap event's x and y string position values to a dictionary with
+        float x and y position values.
+
+        Input:
+        `evt`               # A dictionary with 'pos_x' and 'pos_y' keys
+                            # containing float values represented by strings.
+
+        Transformation:
+        Replace 'pos_x' and 'pos_y' string values with a single 'pos'
+        dictionary containing float 'x' and 'y' values.
+        """
         x = evt.pop('pos_x')
         y = evt.pop('pos_y')
         evt['pos'] = {
@@ -114,7 +210,38 @@ class PositionedRegexParser(TimeStampedRegexParser):
 
 class SeatRegexParser(PositionedRegexParser):
 
+    """
+    Parse a line which has a time stamp at the beginning, seat integer
+    number in the middle and two-dimensional float coordinates at the end.
+    """
+
     def __call__(self, value):
+        """
+        Take a line, parse it with internal regex and return an event
+        dictionary. Regex must contain 'time', 'seat', 'pos_x' and 'pos_y'
+        groups. Those groups must contain event's time in '%I:%M:%S %p' format,
+        seat number integer value, x and y position float values represented by
+        strings. If parser has own type, it will be added to the event.
+
+        Input:
+        `value`             # A string which begins with event's time in
+                            # '[%I:%M:%S %p]' format, has seat integer
+                            # number in the middle and and ends with
+                            # two-dimensional float coordinates.
+
+        Output:
+        {                   # A dictionary which contains:
+            'time': "TIME", # event's time value in '%H:%M:%S' format;
+            'seat': SEAT,   # integer number of seat;
+            'pos': {        # a dictionary with
+                'x': X,     # float x position value;
+                'y': Y,     # float y position value;
+            },              #
+            'type': "TYPE", # an optional type value specified by parser.
+        }                   #
+                            # Output can contain another extra values provided
+                            # by groups of regex.
+        """
         evt = super(SeatRegexParser, self).__call__(value)
         if evt:
             SeatRegexParser.update_seat(evt)
@@ -122,12 +249,60 @@ class SeatRegexParser(PositionedRegexParser):
 
     @staticmethod
     def update_seat(evt):
+        """
+        Convert event's seat number's type from string to int.
+
+        Input:
+        `evt`               # A dictionary with 'seat' key which stores integer
+                            # represented by string.
+
+        Transformation:
+        Convert 'seat' value of input dictionary to int.
+        """
         evt['seat'] = int(evt['seat'])
 
 
 class VictimOfUserRegexParser(PositionedRegexParser):
 
+    """
+    Parse a line which has a time stamp at the beginning, enemy's callsign
+    and aircraft in the middle and two-dimensional float coordinates at the
+    end.
+    """
+
     def __call__(self, value):
+        """
+        Take a line, parse it with internal regex and return an event
+        dictionary. Regex must contain 'time', 'e_callsign', 'e_aircraft',
+        'pos_x' and 'pos_y' groups. Those groups must contain event's time in
+        '%I:%M:%S %p' format, enemy's callsign and aircraft string values,
+        x and y position float values represented by strings. If parser has own
+        type, it will be added to the event.
+
+        Input:
+        `value`             # A string which begins with event's time in
+                            # '[%I:%M:%S %p]' format, has enemy's callsign and
+                            # aircraft string values in the middle and and ends
+                            # with two-dimensional float coordinates.
+
+        Output:
+        {                   # A dictionary which contains:
+            'time': "TIME", # event's time value in '%H:%M:%S' format;
+            'attacker': {   # a dictionary with attacker's
+
+                'callsign': "CALLSIGN",     # callsign and
+                'aircraft': "AIRCRAFT",     # aircraft
+
+            },              #
+            'pos': {        # a dictionary with
+                'x': X,     # float x position value;
+                'y': Y,     # float y position value;
+            },              #
+            'type': "TYPE", # an optional type value specified by parser.
+        }                   #
+                            # Output can contain another extra values provided
+                            # by groups of regex.
+        """
         evt = super(VictimOfUserRegexParser, self).__call__(value)
         if evt:
             VictimOfUserRegexParser.update_attacker(evt)
@@ -135,6 +310,20 @@ class VictimOfUserRegexParser(PositionedRegexParser):
 
     @staticmethod
     def update_attacker(evt):
+        """
+        Wrap event's enemy's callsign and aircraft string values into a
+        dictionary.
+
+        Input:
+        `evt`               # A dictionary with 'e_callsign' and 'e_aircraft'
+                            # keys containing attacker's callsign and aircraft
+                            # values represented by strings.
+
+        Transformation:
+        Replace 'e_callsign' and 'e_aircraft' string values with a single
+        'attacker' dictionary containing string 'callsign' and 'aircraft'
+        values.
+        """
         callsign = evt.pop('e_callsign')
         aircraft = evt.pop('e_aircraft')
         evt['attacker'] = {
@@ -145,7 +334,42 @@ class VictimOfUserRegexParser(PositionedRegexParser):
 
 class VictimOfStaticRegexParser(PositionedRegexParser):
 
+    """
+    Parse a line which has a time stamp at the beginning, attacking static's
+    name in the middle and two-dimensional float coordinates at the end.
+    """
+
     def __call__(self, value):
+        """
+        Take a line, parse it with internal regex and return an event
+        dictionary. Regex must contain 'time', 'static', 'pos_x' and 'pos_y'
+        groups. Those groups must contain event's time in '%I:%M:%S %p' format,
+        attacking static's name string value, x and y position float values
+        represented by strings. If parser has own type, it will be added to the
+        event.
+
+        Input:
+        `value`             # A string which begins with event's time in
+                            # '[%I:%M:%S %p]' format, has enemy's callsign and
+                            # aircraft string values in the middle and and ends
+                            # with two-dimensional float coordinates.
+
+        Output:
+        {                   # A dictionary which contains:
+            'time': "TIME", # event's time value in '%H:%M:%S' format;
+
+            'attacker': "ATTACKER",     # attacking static's string name
+
+            'pos': {        # a dictionary with
+                'x': X,     # float x position value;
+                'y': Y,     # float y position value;
+            },              #
+            'type': "TYPE", # an optional type value specified
+                            # by parser.
+        }                   #
+                            # Output can contain another extra values provided
+                            # by groups of regex.
+        """
         evt = super(VictimOfStaticRegexParser, self).__call__(value)
         if evt:
             VictimOfStaticRegexParser.update_attacker(evt)
@@ -153,13 +377,64 @@ class VictimOfStaticRegexParser(PositionedRegexParser):
 
     @staticmethod
     def update_attacker(evt):
+        """
+        Change attacker's dictionary key from 'static' to 'attacker'.
+
+        Input:
+        `evt`               # A dictionary with 'static' key containing
+                            # attacking static's name represented by string.
+
+        Transformation:
+        Replace 'static' string value with 'attacker' string value.
+        """
         attacker = evt.pop('static')
         evt['attacker'] = attacker
 
 
 class SeatVictimOfUserRegexParser(PositionedRegexParser):
 
+    """
+    Parse a line which has a time stamp at the beginning, seat integer
+    number, enemy's callsign and aircraft in the middle and two-dimensional
+    float coordinates at the end.
+    """
+
     def __call__(self, value):
+        """
+        Take a line, parse it with internal regex and return an event
+        dictionary. Regex must contain 'time', 'seat', 'e_callsign',
+        'e_aircraft', 'pos_x' and 'pos_y' groups. Those groups must contain
+        event's time in '%I:%M:%S %p' format, seat number integer value,
+        enemy's callsign and aircraft string values, x and y position float
+        values represented by strings. If parser has own type, it will be added
+        to the event.
+
+        Input:
+        `value`             # A string which begins with event's time in
+                            # '[%I:%M:%S %p]' format, has seat integer number,
+                            # enemy's callsign and aircraft string values in
+                            # the middle and and ends with two-dimensional
+                            # float coordinates.
+
+        Output:
+        {                   # A dictionary which contains:
+            'time': "TIME", # event's time value in '%H:%M:%S' format;
+            'seat': SEAT,   # integer number of seat;
+            'attacker': {   # a dictionary with attacker's
+
+                'callsign': "CALLSIGN",     # callsign and
+                'aircraft': "AIRCRAFT",     # aircraft
+
+            },              #
+            'pos': {        # a dictionary with
+                'x': X,     # float x position value;
+                'y': Y,     # float y position value;
+            },              #
+            'type': "TYPE", # an optional type value specified by parser.
+        }                   #
+                            # Output can contain another extra values provided
+                            # by groups of regex.
+        """
         evt = super(SeatVictimOfUserRegexParser, self).__call__(value)
         if evt:
             SeatRegexParser.update_seat(evt)
@@ -173,7 +448,19 @@ class RegistrationError(Exception):
 
 class MultipleParser(object):
 
+    """
+    Combines multiple parsers with unique patterns into a chain of parsers and
+    callbacks which can be called if a string will match parser's pattern.
+    """
+
     def __init__(self, parsers=None):
+        """
+        Input:
+        `parsers`           # Initial list of parsers or a list of tuples
+                            # consisting of a parser and a callback which will
+                            # be called if parsing string will match parser's
+                            # pattern. Default value: `None`.
+        """
         self._registered_parsers = []
         if parsers:
             for parser in parsers:
@@ -182,15 +469,53 @@ class MultipleParser(object):
                 self._registered_parsers.append(parser)
 
     def _is_registered(self, (parser, callback)):
+        """
+        Check if a tuple consisting of parser with callback is registered in
+        multiparser. A tuple is considered to be registered if registered
+        parsers list has a tuple consisting of parser and callback which are
+        equal to given ones. Note: a tuple's contents are compared, not the
+        tuples themselves.
+
+        Input:
+        `(parser, callback)`    # A tuple containing a parser with a callback.
+
+        Output:
+        `True` if the tuple is registered, `False` in another case.
+        """
         for (p, c) in self._registered_parsers:
-            if p.rx.pattern == parser.rx.pattern and c == callback:
+            if p == parser and c == callback:
                 return True
         return False
 
     def is_registered(self, parser, callback=None):
+        """
+        Check if a parser and a callback are registered in multiparser. They
+        are considered to be registered if registered parsers list has given
+        parser with callback.
+
+        Input:
+        `parser`            # A parser to check presence of;
+
+        `callback`          # a callback to check presence of.
+                            # Default value: None.
+
+        Output:
+        `True` if the parser with the callback are registered, `False` in
+        another case.
+        """
         return self._is_registered((parser, callback))
 
     def register(self, parser, callback=None):
+        """
+        Register parser with callback to call if a string will match parser's
+        pattern. `RegistrationError` exception will be raised if they are
+        already registered.
+
+        Input:
+        `parser`:           # A parser to register;
+
+        `callback`:         # a callback to register. Default value: None.
+        """
         parser_n_callback = (parser, callback)
         if self._is_registered(parser_n_callback):
             raise RegistrationError(
@@ -198,6 +523,15 @@ class MultipleParser(object):
         self._registered_parsers.append(parser_n_callback)
 
     def unregister(self, parser, callback=None):
+        """
+        Unregister parser with callback. `RegistrationError` exception will be
+        raised if they are not registered yet.
+
+        Input:
+        `parser`:           # A parser to unregister;
+
+        `callback`:         # a callback to unregister. Default value: None.
+        """
         parser_n_callback = (parser, callback)
         if not self._is_registered(parser_n_callback):
             raise RegistrationError(
@@ -205,6 +539,23 @@ class MultipleParser(object):
         self._registered_parsers.remove(parser_n_callback)
 
     def __call__(self, value):
+        """
+        Take a line and parse it with registered parsers. If a string matches
+        a parser's pattern, parser's callback will be called with a value
+        returned by the parser. If the callback returnes a value, that value
+        will be returned by this method. In other case parser's original return
+        value will be returned. If the string will not match any parser,
+        `None` value will be returned.
+
+        Input:
+        `value`             # A string to parse.
+
+        Output:
+        A value returned by callback if a string matched. Or a value returned
+        by a registered parser if it does not have related callback or a
+        callback will return no value. Or `None` if string does not match any
+        parser.
+        """
         for parser, callback in self._registered_parsers:
             result = parser(value)
             if result:

@@ -69,6 +69,14 @@ class TimeStampedRegexParserTestCase(unittest.TestCase):
         parser = TimeStampedRegexParser("^Hello!$", 'TYPE')
         self.assertEqual(str(parser), "TYPE: ^Hello!$")
 
+    def test_equal(self):
+        parser1 = TimeStampedRegexParser("^Hello!$",)
+        parser2 = TimeStampedRegexParser("^Hello!$", 'TYPE')
+        self.assertEqual(parser1, parser2)
+
+        parser3 = TimeStampedRegexParser("^Hi!$", 'TYPE')
+        self.assertNotEqual(parser1, parser3)
+
 
 class DateStampedRegexParserTestCase(unittest.TestCase):
 
