@@ -4,6 +4,10 @@ import re
 import unittest
 
 from il2ds_log_parser.regex import *
+from il2ds_log_parser.regex import (RX_TIME_BASE, RX_TIME, RX_DATE_TIME,
+    RX_CALLSIGN, RX_SEAT, RX_BRIDGE, RX_ARMY, RX_AIRCRAFT,
+    RX_POS, RX_TOGGLE_VALUE, RX_STATIC, RX_ENEMY_CALLSIGN_AIRCRAFT,
+    RX_TIME_CALLSIGN, RX_TIME_AIRCRAFT, RX_DESTROYED_BY, )
 
 
 class BaseTestCase(unittest.TestCase):

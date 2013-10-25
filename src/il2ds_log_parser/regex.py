@@ -2,6 +2,21 @@
 
 import re
 
+__all__ =  [
+    'RX_FLAGS',
+    'RX_MISSION_BEGIN', 'RX_MISSION_END', 'RX_MISSION_PLAYING',
+    'RX_MISSION_WON', 'RX_TARGET_END',
+    'RX_CONNECTED', 'RX_DISCONNECTED', 'RX_WENT_TO_MENU', 'RX_SELECTED_ARMY',
+    'RX_SEAT_OCCUPIED', 'RX_WEAPONS_LOADED', 'RX_BAILED_OUT',
+    'RX_PARACHUTE_OPENED', 'RX_CAPTURED', 'RX_IN_FLIGHT', 'RX_CRASHED',
+    'RX_LANDED', 'RX_TOGGLE_LANDING_LIGHTS', 'RX_TOGGLE_WINGTIP_SMOKES',
+    'RX_WOUNDED', 'RX_HEAVILY_WOUNDED', 'RX_KILLED', 'RX_KILLED_BY_EAIR',
+    'RX_SHOT_DOWN_BY_EAIR', 'RX_SHOT_DOWN_BY_STATIC', 'RX_SHOT_DOWN_SELF',
+    'RX_DAMAGED_BY_EAIR', 'RX_DAMAGED_ON_GROUND', 'RX_DAMAGED_SELF',
+    'RX_DESTROYED_BLD', 'RX_DESTROYED_BRIDGE', 'RX_DESTROYED_STATIC',
+    'RX_DESTROYED_TREE',
+]
+
 #------------------------------------------------------------------------------
 # Commons
 #------------------------------------------------------------------------------

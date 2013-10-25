@@ -4,11 +4,12 @@ import unittest
 
 from il2ds_log_parser import parse_evt
 from il2ds_log_parser.events import *
+from il2ds_log_parser.parser import *
+from il2ds_log_parser.parser import parse_time, parse_date
 from il2ds_log_parser.regex import *
-from il2ds_log_parser.parser import (parse_time, parse_date,
-    TimeStampedRegexParser, DateTimeStampedRegexParser, PositionedRegexParser,
-    SeatRegexParser, VictimOfUserRegexParser, VictimOfStaticRegexParser,
-    SeatVictimOfUserRegexParser, MultipleParser, RegistrationError, )
+from il2ds_log_parser.regex import (RX_TIME_BASE, RX_TIME, RX_DATE_TIME,
+    RX_POS, RX_TOGGLE_VALUE, RX_SEAT, RX_STATIC, RX_ENEMY_CALLSIGN_AIRCRAFT,
+    RX_TIME_CALLSIGN, RX_TIME_AIRCRAFT, RX_TIME_SEAT, RX_DESTROYED_BY, )
 
 
 class DatetimeTestCase(unittest.TestCase):
