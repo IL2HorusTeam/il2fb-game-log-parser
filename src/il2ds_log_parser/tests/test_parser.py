@@ -179,7 +179,7 @@ class SeatVictimOfUserRegexParserTestCase(unittest.TestCase):
 class MultipleParserTestCase(unittest.TestCase):
 
     def setUp(self):
-        self.root = MultipleParser()
+        self.parser = MultipleParser()
 
     def _build_parser(self):
         return TimeStampedRegexParser(
@@ -191,42 +191,51 @@ class MultipleParserTestCase(unittest.TestCase):
         parser2 = self._build_parser()
 
         self.assertNotEqual(parser1, parser2)
-        self.root.register(parser1)
-        self.assertTrue(self.root.is_registered(parser1))
+        self.parser.register(parser1)
+        self.assertTrue(self.parser.is_registered(parser1))
 
         with self.assertRaises(Exception) as ctx:
-            self.root.register(parser2)
+            self.parser.register(parser2)
 
         self.assertIsInstance(ctx.exception, RegistrationError)
         self.assertEqual(
             ctx.exception.message,
             "Parser is already registered: {parser}".format(parser=parser2))
 
-        self.root.unregister(parser1)
-        self.assertFalse(self.root.is_registered(parser1))
+        self.parser.unregister(parser1)
+        self.assertFalse(self.parser.is_registered(parser1))
 
         with self.assertRaises(Exception) as ctx:
-            self.root.unregister(parser1)
+            self.parser.unregister(parser1)
 
         self.assertIsInstance(ctx.exception, RegistrationError)
         self.assertEqual(
             ctx.exception.message,
             "Parser is not registered yet: {parser}".format(parser=parser1))
-        self.assertFalse(self.root.is_registered(parser2))
+        self.assertFalse(self.parser.is_registered(parser2))
 
-        self.root.register(parser2)
-        self.assertTrue(self.root.is_registered(parser2))
+        self.parser.register(parser2)
+        self.assertTrue(self.parser.is_registered(parser2))
+
+    def test_call(self):
+        self.parser.register(self._build_parser())
+        result = self.parser("Hello, username!")
+        self.assertIsNone(result)
+
+        result = self.parser("[1:00:00 AM] Hello, username!")
+        self.assertIsNotNone(result)
+        self.assertEqual(result.get('time'), "01:00:00")
+        self.assertEqual(result.get('name'), "username")
 
     def test_callback(self):
-
         result = {}
 
         def callback(data):
             self.assertIsInstance(data, dict)
             result.update(data)
 
-        self.root.register(self._build_parser(), callback)
-        self.root("[1:00:00 AM] Hello, username!")
+        self.parser.register(self._build_parser(), callback)
+        self.parser("[1:00:00 AM] Hello, username!")
         self.assertEqual(result.get('time'), "01:00:00")
         self.assertEqual(result.get('name'), "username")
 
