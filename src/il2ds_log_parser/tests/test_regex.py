@@ -311,8 +311,8 @@ class ActionsTestCase(BaseTestCase):
         self.assertEqual(d.get('pos_x'), "100.0")
         self.assertEqual(d.get('pos_y'), "200.99")
 
-    def test_in_flight(self):
-        rx = self._compile_re(RX_IN_FLIGHT)
+    def test_took_off(self):
+        rx = self._compile_re(RX_TOOK_OFF)
         m = rx.match("[8:49:32 PM] User:Pe-8 in flight at 100.0 200.99")
         self.assertIsNotNone(m)
         d = m.groupdict()
@@ -391,8 +391,8 @@ class ActionsTestCase(BaseTestCase):
         self.assertIsNotNone(m)
         self._assert_time_seat_pos(m.groupdict())
 
-    def test_killed_by_eair(self):
-        rx = self._compile_re(RX_KILLED_BY_EAIR)
+    def test_killed_by_user(self):
+        rx = self._compile_re(RX_KILLED_BY_USER)
         m = rx.match("[8:49:39 PM] User1:Pe-8(0) was killed by User2:Bf-109G-6_Late at 100.0 200.99")
         self.assertIsNotNone(m)
         d = m.groupdict()
@@ -435,8 +435,8 @@ class ActionsTestCase(BaseTestCase):
         self.assertIsNotNone(m)
         self._assert_time_aircraft_pos(m.groupdict())
 
-    def test_damaged_by_eair(self):
-        rx = self._compile_re(RX_DAMAGED_BY_EAIR)
+    def test_damaged_by_user(self):
+        rx = self._compile_re(RX_DAMAGED_BY_USER)
         m = rx.match("[8:49:39 PM] User1:Pe-8 damaged by User2:Bf-109G-6_Late at 100.0 200.99")
         self.assertIsNotNone(m)
         self._assert_time_aircraft_under_eair_attack_pos(m.groupdict())
@@ -447,8 +447,8 @@ class ActionsTestCase(BaseTestCase):
         self.assertIsNotNone(m)
         self._assert_time_aircraft_pos(m.groupdict())
 
-    def test_shot_down_by_eair(self):
-        rx = self._compile_re(RX_SHOT_DOWN_BY_EAIR)
+    def test_shot_down_by_user(self):
+        rx = self._compile_re(RX_SHOT_DOWN_BY_USER)
         m = rx.match("[8:49:39 PM] User1:Pe-8 shot down by User2:Bf-109G-6_Late at 100.0 200.99")
         self.assertIsNotNone(m)
         self._assert_time_aircraft_under_eair_attack_pos(m.groupdict())

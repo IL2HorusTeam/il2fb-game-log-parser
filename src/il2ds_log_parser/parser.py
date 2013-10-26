@@ -676,6 +676,7 @@ class MultipleParser(object):
 default_evt_parser = MultipleParser(parsers=[
     # Events of destroying
     PositionedRegexParser(RX_DESTROYED_BLD, EVT_DESTROYED_BLD),
+    PositionedRegexParser(RX_DESTROYED_TREE, EVT_DESTROYED_TREE),
     PositionedRegexParser(RX_DESTROYED_STATIC, EVT_DESTROYED_STATIC),
     PositionedRegexParser(RX_DESTROYED_BRIDGE, EVT_DESTROYED_BRIDGE),
 
@@ -700,17 +701,17 @@ default_evt_parser = MultipleParser(parsers=[
 
     # Aircraft events
     FuelRegexParser(RX_WEAPONS_LOADED, EVT_WEAPONS_LOADED),
-    PositionedRegexParser(RX_IN_FLIGHT, EVT_IN_FLIGHT),
+    PositionedRegexParser(RX_TOOK_OFF, EVT_TOOK_OFF),
     PositionedRegexParser(RX_CRASHED, EVT_CRASHED),
     PositionedRegexParser(RX_LANDED, EVT_LANDED),
 
     PositionedRegexParser(RX_DAMAGED_ON_GROUND, EVT_DAMAGED_ON_GROUND),
     PositionedRegexParser(RX_DAMAGED_SELF, EVT_DAMAGED_SELF),
-    VictimOfUserRegexParser(RX_DAMAGED_BY_EAIR, EVT_DAMAGED_BY_EAIR),
+    VictimOfUserRegexParser(RX_DAMAGED_BY_USER, EVT_DAMAGED_BY_USER),
 
     PositionedRegexParser(RX_SHOT_DOWN_SELF, EVT_SHOT_DOWN_SELF),
     VictimOfUserRegexParser(
-        RX_SHOT_DOWN_BY_EAIR, EVT_SHOT_DOWN_BY_EAIR),
+        RX_SHOT_DOWN_BY_USER, EVT_SHOT_DOWN_BY_USER),
     VictimOfStaticRegexParser(
         RX_SHOT_DOWN_BY_STATIC, EVT_SHOT_DOWN_BY_STATIC),
 
@@ -718,7 +719,7 @@ default_evt_parser = MultipleParser(parsers=[
     SeatRegexParser(RX_SEAT_OCCUPIED, EVT_SEAT_OCCUPIED),
 
     SeatRegexParser(RX_KILLED, EVT_KILLED),
-    SeatVictimOfUserRegexParser(RX_KILLED_BY_EAIR, EVT_KILLED_BY_EAIR),
+    SeatVictimOfUserRegexParser(RX_KILLED_BY_USER, EVT_KILLED_BY_USER),
 
     SeatRegexParser(RX_BAILED_OUT, EVT_BAILED_OUT),
     SeatRegexParser(RX_PARACHUTE_OPENED, EVT_PARACHUTE_OPENED),

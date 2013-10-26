@@ -8,11 +8,11 @@ __all__ =  [
     'RX_MISSION_WON', 'RX_TARGET_END',
     'RX_CONNECTED', 'RX_DISCONNECTED', 'RX_WENT_TO_MENU', 'RX_SELECTED_ARMY',
     'RX_SEAT_OCCUPIED', 'RX_WEAPONS_LOADED', 'RX_BAILED_OUT',
-    'RX_PARACHUTE_OPENED', 'RX_CAPTURED', 'RX_IN_FLIGHT', 'RX_CRASHED',
+    'RX_PARACHUTE_OPENED', 'RX_CAPTURED', 'RX_TOOK_OFF', 'RX_CRASHED',
     'RX_LANDED', 'RX_TOGGLE_LANDING_LIGHTS', 'RX_TOGGLE_WINGTIP_SMOKES',
-    'RX_WOUNDED', 'RX_HEAVILY_WOUNDED', 'RX_KILLED', 'RX_KILLED_BY_EAIR',
-    'RX_SHOT_DOWN_BY_EAIR', 'RX_SHOT_DOWN_BY_STATIC', 'RX_SHOT_DOWN_SELF',
-    'RX_DAMAGED_BY_EAIR', 'RX_DAMAGED_ON_GROUND', 'RX_DAMAGED_SELF',
+    'RX_WOUNDED', 'RX_HEAVILY_WOUNDED', 'RX_KILLED', 'RX_KILLED_BY_USER',
+    'RX_SHOT_DOWN_BY_USER', 'RX_SHOT_DOWN_BY_STATIC', 'RX_SHOT_DOWN_SELF',
+    'RX_DAMAGED_BY_USER', 'RX_DAMAGED_ON_GROUND', 'RX_DAMAGED_SELF',
     'RX_DESTROYED_BLD', 'RX_DESTROYED_BRIDGE', 'RX_DESTROYED_STATIC',
     'RX_DESTROYED_TREE',
 ]
@@ -456,7 +456,7 @@ army            #
 {pos}           # 'position' regex placeholder
 """.format(time_callsign=RX_TIME_CALLSIGN, pos=RX_POS)
 
-RX_IN_FLIGHT = """
+RX_TOOK_OFF = """
 # Capture 'user took-off' event. E.g.:
 #
 # "[8:49:32 PM] User:Pe-8 in flight at 100.0 200.99"
@@ -665,7 +665,7 @@ killed          #
 {pos}           # 'position' regex placeholder
 """.format(time_seat=RX_TIME_SEAT, pos=RX_POS)
 
-RX_KILLED_BY_EAIR = """
+RX_KILLED_BY_USER = """
 # Capture 'crew member was killed by another user' event. E.g.:
 #
 # "[8:49:39 PM] User1:Pe-8(0) was killed by User2:Bf-109G-6_Late at 100.0 200.99"
@@ -781,7 +781,7 @@ landscape       #
 {pos}           # 'position' regex placeholder
 """.format(time_aircraft=RX_TIME_AIRCRAFT, pos=RX_POS)
 
-RX_DAMAGED_BY_EAIR = """
+RX_DAMAGED_BY_USER = """
 # Capture 'user damaged by another user' event. E.g.:
 #
 # "[8:49:32 PM] User1:Pe-8 damaged by User2:Bf-109G-6_Late at 100.0 200.99"
@@ -827,7 +827,7 @@ landscape       #
 {pos}           # 'position' regex placeholder
 """.format(time_aircraft=RX_TIME_AIRCRAFT, pos=RX_POS)
 
-RX_SHOT_DOWN_BY_EAIR = """
+RX_SHOT_DOWN_BY_USER = """
 # Capture 'user shot down by another user' event. E.g.:
 #
 # "[8:49:32 PM] User1:Pe-8 shot down by User2:Bf-109G-6_Late at 100.0 200.99"
