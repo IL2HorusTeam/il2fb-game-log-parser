@@ -1,4 +1,4 @@
-from setuptools import setup, find_packages
+from setuptools import setup
 
 setup(
     name='il2ds-log-parser',
@@ -8,7 +8,8 @@ setup(
     url='https://github.com/IL2HorusTeam/il2ds-log-parser',
     author='Alexander Oblovatniy',
     author_email='oblovatniy@gmail.com',
-    packages=find_packages(exclude=["log_examples", ]),
+    packages=['src/il2ds_log_parser', ],
+    package_dir={'il2ds_log_parser': 'src/il2ds_log_parser', },
     install_requires=[i.strip() for i in open("requirements.pip").readlines()],
     classifiers = [
         'Development Status :: 3 - Alpha',
