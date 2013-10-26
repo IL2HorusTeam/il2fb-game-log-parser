@@ -10,9 +10,10 @@ from il2ds_log_parser.regex import *
 
 __all__ =  [
     'TimeStampedRegexParser', 'DateTimeStampedRegexParser',
-    'PositionedRegexParser', 'SeatRegexParser', 'VictimOfUserRegexParser',
-    'VictimOfStaticRegexParser', 'SeatVictimOfUserRegexParser',
-    'MultipleParser', 'RegistrationError', 'default_evt_parser',
+    'NumeratedRegexParser', 'PositionedRegexParser', 'SeatRegexParser',
+    'VictimOfUserRegexParser', 'VictimOfStaticRegexParser',
+    'SeatVictimOfUserRegexParser', 'MultipleParser', 'RegistrationError',
+    'default_evt_parser',
 ]
 
 
@@ -156,6 +157,57 @@ class DateTimeStampedRegexParser(TimeStampedRegexParser):
         evt['date'] = parse_date(evt['date'])
 
 
+class NumeratedRegexParser(TimeStampedRegexParser):
+
+    """
+    Parse a line which has a time stamp at the beginning and an integer number
+    in the middle.
+    """
+
+    def __call__(self, value):
+        """
+        Take a line, parse it with internal regex and return an event
+        dictionary. Regex must contain 'time' and 'number'. Those groups must
+        contain event's time in '%I:%M:%S %p' format and an integer number
+        represented by string. If parser has own type, it will be added to the
+        event.
+
+        Input:
+        `value`             # A string which begins with event's time in
+                            # '[%I:%M:%S %p]' formata and has integer
+                            # number in the middle.
+
+        Output:
+        {                   # A dictionary which contains:
+            'time': "TIME", # event's time value in '%H:%M:%S' format;
+
+            'number': NUMBER,   # integer number;
+
+            'type': "TYPE", # an optional type value specified by parser.
+        }                   #
+                            # Output can contain another extra values provided
+                            # by groups of regex.
+        """
+        evt = super(NumeratedRegexParser, self).__call__(value)
+        if evt:
+            NumeratedRegexParser.update_number(evt)
+        return evt
+
+    @staticmethod
+    def update_number(evt):
+        """
+        Convert event's number's type from string to int.
+
+        Input:
+        `evt`               # A dictionary with 'number' key which stores
+                            # an integer represented by string.
+
+        Transformation:
+        Convert 'number' value of input dictionary to int.
+        """
+        evt['number'] = int(evt['number'])
+
+
 class PositionedRegexParser(TimeStampedRegexParser):
 
     """
@@ -260,8 +312,8 @@ class SeatRegexParser(PositionedRegexParser):
         Convert event's seat number's type from string to int.
 
         Input:
-        `evt`               # A dictionary with 'seat' key which stores integer
-                            # represented by string.
+        `evt`               # A dictionary with 'seat' key which stores an
+                            # integer represented by string.
 
         Transformation:
         Convert 'seat' value of input dictionary to int.
@@ -589,7 +641,7 @@ default_evt_parser = MultipleParser(parsers=[
     DateTimeStampedRegexParser(RX_MISSION_WON, EVT_MISSION_WON),
     TimeStampedRegexParser(RX_MISSION_BEGIN, EVT_MISSION_BEGIN),
     TimeStampedRegexParser(RX_MISSION_END, EVT_MISSION_END),
-    TimeStampedRegexParser(RX_TARGET_END, EVT_TARGET_END),
+    NumeratedRegexParser(RX_TARGET_END, EVT_TARGET_END),
 
     # User state events
     TimeStampedRegexParser(RX_CONNECTED, EVT_CONNECTED),

@@ -83,6 +83,17 @@ class DateStampedRegexParserTestCase(unittest.TestCase):
         self.assertEqual(result.get('time'), "01:00:00")
 
 
+class NumeratedRegexParserTestCase(unittest.TestCase):
+
+    def test_call(self):
+        parser = NumeratedRegexParser(
+            "{time}Hello,\s(?P<number>\d+)!$".format(time=RX_TIME))
+        result = parser("[1:00:00 AM] Hello, 1!")
+        self.assertIsNotNone(result)
+        self.assertEqual(result.get('time'), "01:00:00")
+        self.assertEqual(result.get('number'), 1)
+
+
 class PositionedRegexParserTestCase(unittest.TestCase):
 
     def test_call(self):
@@ -266,3 +277,48 @@ class GameFlowTestCase(unittest.TestCase):
 
         self.assertEqual(result.get('type'), EVT_MISSION_END)
         self.assertEqual(result.get('time'), "20:33:08")
+
+    def test_parse_mission_won(self):
+        result = parse_evt("[Dec 29, 2012 5:19:49 PM] Mission: RED WON")
+        self.assertIsNotNone(result)
+
+        self.assertEqual(result.get('type'), EVT_MISSION_WON)
+        self.assertEqual(result.get('date'), "2012-12-29")
+        self.assertEqual(result.get('time'), "17:19:49")
+        self.assertEqual(result.get('army'), "RED")
+
+    def test_target_complete(self):
+        result = parse_evt("[5:15:22 PM] Target 3 Complete")
+        self.assertIsNotNone(result)
+
+        self.assertEqual(result.get('type'), EVT_TARGET_END)
+        self.assertEqual(result.get('time'), "17:15:22")
+        self.assertEqual(result.get('number'), 3)
+        self.assertEqual(result.get('result'), "Complete")
+
+        result = parse_evt("[5:19:49 PM] Target 5 Failed")
+        self.assertIsNotNone(result)
+
+        self.assertEqual(result.get('type'), EVT_TARGET_END)
+        self.assertEqual(result.get('time'), "17:19:49")
+        self.assertEqual(result.get('number'), 5)
+        self.assertEqual(result.get('result'), "Failed")
+
+
+class UserStateTestCase(unittest.TestCase):
+
+    def test_connected(self):
+        result = parse_evt("[8:33:16 PM] User has connected")
+        self.assertIsNotNone(result)
+
+        self.assertEqual(result.get('type'), EVT_CONNECTED)
+        self.assertEqual(result.get('time'), "20:33:16")
+        self.assertEqual(result.get('callsign'), "User")
+
+    def test_disconnected(self):
+        result = parse_evt("[8:49:28 PM] User has disconnected")
+        self.assertIsNotNone(result)
+
+        self.assertEqual(result.get('type'), EVT_DISCONNECTED)
+        self.assertEqual(result.get('time'), "20:49:28")
+        self.assertEqual(result.get('callsign'), "User")
