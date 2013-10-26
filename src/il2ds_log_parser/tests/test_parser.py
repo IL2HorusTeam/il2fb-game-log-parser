@@ -94,6 +94,17 @@ class NumeratedRegexParserTestCase(unittest.TestCase):
         self.assertEqual(result.get('number'), 1)
 
 
+class FuelRegexParserTestCase(unittest.TestCase):
+
+    def test_call(self):
+        parser = FuelRegexParser(
+            "{time}Fuel\sis\sat\s(?P<fuel>\d+)%$".format(time=RX_TIME))
+        result = parser("[1:00:00 AM] Fuel is at 100%")
+        self.assertIsNotNone(result)
+        self.assertEqual(result.get('time'), "01:00:00")
+        self.assertEqual(result.get('fuel'), 100)
+
+
 class PositionedRegexParserTestCase(unittest.TestCase):
 
     def test_call(self):
@@ -253,7 +264,7 @@ class MultipleParserTestCase(unittest.TestCase):
         self.assertEqual(result.get('name'), "username")
 
 
-class GameFlowTestCase(unittest.TestCase):
+class DefaultEventParserTestCase(unittest.TestCase):
 
     def test_parse_mission_playing(self):
         result = parse_evt("[Sep 15, 2013 8:33:08 PM] Mission: Helsinky.mis is Playing")
@@ -304,9 +315,6 @@ class GameFlowTestCase(unittest.TestCase):
         self.assertEqual(result.get('number'), 5)
         self.assertEqual(result.get('result'), "Failed")
 
-
-class UserStateTestCase(unittest.TestCase):
-
     def test_connected(self):
         result = parse_evt("[8:33:16 PM] User has connected")
         self.assertIsNotNone(result)
@@ -322,3 +330,21 @@ class UserStateTestCase(unittest.TestCase):
         self.assertEqual(result.get('type'), EVT_DISCONNECTED)
         self.assertEqual(result.get('time'), "20:49:28")
         self.assertEqual(result.get('callsign'), "User")
+
+    def test_went_to_menu(self):
+        result = parse_evt("[8:49:20 PM] User entered refly menu")
+        self.assertIsNotNone(result)
+
+        self.assertEqual(result.get('type'), EVT_WENT_TO_MENU)
+        self.assertEqual(result.get('time'), "20:49:20")
+        self.assertEqual(result.get('callsign'), "User")
+
+    def test_weapons_loaded(self):
+        result = parse_evt("[8:47:27 PM] User:Pe-8 loaded weapons '40fab100' fuel 40%")
+        self.assertIsNotNone(result)
+
+        self.assertEqual(result.get('type'), EVT_WEAPONS_LOADED)
+        self.assertEqual(result.get('time'), "20:47:27")
+        self.assertEqual(result.get('callsign'), "User")
+        self.assertEqual(result.get('loadout'), "40fab100")
+        self.assertEqual(result.get('fuel'), 40)

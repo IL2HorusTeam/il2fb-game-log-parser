@@ -10,8 +10,8 @@ from il2ds_log_parser.regex import *
 
 __all__ =  [
     'TimeStampedRegexParser', 'DateTimeStampedRegexParser',
-    'NumeratedRegexParser', 'PositionedRegexParser', 'SeatRegexParser',
-    'VictimOfUserRegexParser', 'VictimOfStaticRegexParser',
+    'NumeratedRegexParser', 'FuelRegexParser', 'PositionedRegexParser',
+    'SeatRegexParser', 'VictimOfUserRegexParser', 'VictimOfStaticRegexParser',
     'SeatVictimOfUserRegexParser', 'MultipleParser', 'RegistrationError',
     'default_evt_parser',
 ]
@@ -167,14 +167,14 @@ class NumeratedRegexParser(TimeStampedRegexParser):
     def __call__(self, value):
         """
         Take a line, parse it with internal regex and return an event
-        dictionary. Regex must contain 'time' and 'number'. Those groups must
-        contain event's time in '%I:%M:%S %p' format and an integer number
+        dictionary. Regex must contain 'time' and 'number' groups. Those groups
+        must contain event's time in '%I:%M:%S %p' format and an integer number
         represented by string. If parser has own type, it will be added to the
         event.
 
         Input:
         `value`             # A string which begins with event's time in
-                            # '[%I:%M:%S %p]' formata and has integer
+                            # '[%I:%M:%S %p]' format and has an integer
                             # number in the middle.
 
         Output:
@@ -203,9 +203,58 @@ class NumeratedRegexParser(TimeStampedRegexParser):
                             # an integer represented by string.
 
         Transformation:
-        Convert 'number' value of input dictionary to int.
+        Convert 'number' value of input dictionary from string to integer.
         """
         evt['number'] = int(evt['number'])
+
+
+class FuelRegexParser(TimeStampedRegexParser):
+
+    """
+    Parse a line which has a time stamp at the beginning and fuel percentage
+    integer value at the end.
+    """
+
+    def __call__(self, value):
+        """
+        Take a line, parse it with internal regex and return an event
+        dictionary. Regex must contain 'time' and 'fuel' groups. Those groups
+        must contain event's time in '%I:%M:%S %p' format and fuel percentage
+        integer number represented by string. If parser has own type, it will
+        be added to the event.
+
+        Input:
+        `value`             # A string which begins with event's time in
+                            # '[%I:%M:%S %p]' format and ends with fuel
+                            # percentage integer number.
+
+        Output:
+        {                   # A dictionary which contains:
+            'time': "TIME", # event's time value in '%H:%M:%S' format;
+            'fuel': FUEL,   # fuel integer value;
+            'type': "TYPE", # an optional type value specified by parser.
+        }                   #
+                            # Output can contain another extra values provided
+                            # by groups of regex.
+        """
+        evt = super(FuelRegexParser, self).__call__(value)
+        if evt:
+            FuelRegexParser.update_fuel(evt)
+        return evt
+
+    @staticmethod
+    def update_fuel(evt):
+        """
+        Convert event's fuel's type from string to int.
+
+        Input:
+        `evt`               # A dictionary with 'fuel' key which stores
+                            # an integer represented by string.
+
+        Transformation:
+        Convert 'fuel' value of input dictionary from string to integer.
+        """
+        evt['fuel'] = int(evt['fuel'])
 
 
 class PositionedRegexParser(TimeStampedRegexParser):
@@ -316,7 +365,7 @@ class SeatRegexParser(PositionedRegexParser):
                             # integer represented by string.
 
         Transformation:
-        Convert 'seat' value of input dictionary to int.
+        Convert 'seat' value of input dictionary from string to integer.
         """
         evt['seat'] = int(evt['seat'])
 
@@ -650,7 +699,7 @@ default_evt_parser = MultipleParser(parsers=[
     PositionedRegexParser(RX_SELECTED_ARMY, EVT_SELECTED_ARMY),
 
     # Aircraft events
-    TimeStampedRegexParser(RX_WEAPONS_LOADED, EVT_WEAPONS_LOADED),
+    FuelRegexParser(RX_WEAPONS_LOADED, EVT_WEAPONS_LOADED),
     PositionedRegexParser(RX_IN_FLIGHT, EVT_IN_FLIGHT),
     PositionedRegexParser(RX_CRASHED, EVT_CRASHED),
     PositionedRegexParser(RX_LANDED, EVT_LANDED),
