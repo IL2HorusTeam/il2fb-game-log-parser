@@ -8,7 +8,7 @@ setup(
     url='https://github.com/IL2HorusTeam/il2ds-log-parser',
     author='Alexander Oblovatniy',
     author_email='oblovatniy@gmail.com',
-    packages=['src/il2ds_log_parser', ],
+    packages=['il2ds_log_parser', ],
     package_dir={'il2ds_log_parser': 'src/il2ds_log_parser', },
     install_requires=[i.strip() for i in open("requirements.pip").readlines()],
     classifiers = [
