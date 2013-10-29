@@ -2,12 +2,13 @@
 
 import re
 
-from il2ds_log_parser.constants import TOGGLE_VALUE_ON, TOGGLE_VALUE_OFF
+from il2ds_log_parser.constants import (TOGGLE_VALUE_ON, TOGGLE_VALUE_OFF,
+    TARGET_RESULT_COMPLETE, TARGET_RESULT_FAILED, )
 
 __all__ =  [
     'RX_FLAGS',
     'RX_MISSION_BEGIN', 'RX_MISSION_END', 'RX_MISSION_PLAYING',
-    'RX_MISSION_WON', 'RX_TARGET_END',
+    'RX_MISSION_WON', 'RX_TARGET_RESULT',
     'RX_CONNECTED', 'RX_DISCONNECTED', 'RX_WENT_TO_MENU', 'RX_SELECTED_ARMY',
     'RX_SEAT_OCCUPIED', 'RX_WEAPONS_LOADED', 'RX_BAILED_OUT',
     'RX_PARACHUTE_OPENED', 'RX_CAPTURED', 'RX_TOOK_OFF', 'RX_CRASHED',
@@ -362,7 +363,7 @@ WON             #
 $               # end of the string
 """.format(datetime=RX_DATE_TIME, army=RX_ARMY)
 
-RX_TARGET_END = """
+RX_TARGET_RESULT = """
 # Capture 'target end' event. E.g.:
 #
 # "[8:33:05 PM] Target 3 Complete"
@@ -378,12 +379,13 @@ Target          #
 )               # 'number' group end
 \s              # single whitespace
 (?P<result>     # 'result' group start
-    Complete    #
+    {complete}  #
     |           # or
-    Failed      #
+    {failed}    #
 )               # 'result' group end
 $               # end of the string
-""".format(time=RX_TIME)
+""".format(time=RX_TIME,
+           complete=TARGET_RESULT_COMPLETE, failed=TARGET_RESULT_FAILED)
 
 #------------------------------------------------------------------------------
 # Action events

@@ -309,20 +309,20 @@ class DefaultEventParserTestCase(unittest.TestCase):
         self.assertEqual(evt.get('time'), datetime.time(17, 19, 49))
         self.assertEqual(evt.get('army'), "RED")
 
-    def test_target_complete(self):
+    def test_target_result(self):
         evt = parse_evt("[5:15:22 PM] Target 3 Complete")
         self.assertIsNotNone(evt)
-        self.assertEqual(evt.get('type'), EVT_TARGET_END)
+        self.assertEqual(evt.get('type'), EVT_TARGET_RESULT)
         self.assertEqual(evt.get('time'), datetime.time(17, 15, 22))
         self.assertEqual(evt.get('number'), 3)
-        self.assertEqual(evt.get('result'), "Complete")
+        self.assertEqual(evt.get('result'), True)
 
         evt = parse_evt("[5:19:49 PM] Target 5 Failed")
         self.assertIsNotNone(evt)
-        self.assertEqual(evt.get('type'), EVT_TARGET_END)
+        self.assertEqual(evt.get('type'), EVT_TARGET_RESULT)
         self.assertEqual(evt.get('time'), datetime.time(17, 19, 49))
         self.assertEqual(evt.get('number'), 5)
-        self.assertEqual(evt.get('result'), "Failed")
+        self.assertEqual(evt.get('result'), False)
 
     def test_connected(self):
         evt = parse_evt("[8:33:16 PM] User has connected")

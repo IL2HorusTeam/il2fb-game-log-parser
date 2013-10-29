@@ -212,8 +212,8 @@ class MissionFlowTestCase(BaseTestCase):
         self.assertEqual(d.get('time'), "5:19:49 PM")
         self.assertEqual(d.get('army'), "RED")
 
-    def test_target_end(self):
-        rx = self._compile_re(RX_TARGET_END)
+    def test_target_result(self):
+        rx = self._compile_re(RX_TARGET_RESULT)
 
         m = rx.match("[5:15:22 PM] Target 3 Complete")
         self.assertIsNotNone(m)

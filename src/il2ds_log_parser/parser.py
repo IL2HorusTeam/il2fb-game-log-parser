@@ -4,7 +4,8 @@ import datetime
 import re
 
 from il2ds_log_parser.constants import (LOG_TIME_FORMAT, LOG_DATE_FORMAT,
-    TOGGLE_VALUE_ON, TOGGLE_VALUE_OFF, )
+    TOGGLE_VALUE_ON, TOGGLE_VALUE_OFF, TARGET_RESULT_COMPLETE,
+    TARGET_RESULT_FAILED, )
 from il2ds_log_parser.events import *
 from il2ds_log_parser.regex import *
 
@@ -207,6 +208,20 @@ class NumeratedRegexParser(TimeStampedRegexParser):
         Convert 'number' value of input dictionary from string to integer.
         """
         evt['number'] = int(evt['number'])
+
+
+class TargetResultRegexParser(TimeStampedRegexParser):
+
+    def __call__(self, value):
+        evt = super(TargetResultRegexParser, self).__call__(value)
+        if evt:
+            NumeratedRegexParser.update_number(evt)
+            TargetResultRegexParser.update_target_result(evt)
+        return evt
+
+    @staticmethod
+    def update_target_result(evt):
+        evt['result'] = (evt['result'] == TARGET_RESULT_COMPLETE)
 
 
 class FuelRegexParser(TimeStampedRegexParser):
@@ -705,7 +720,7 @@ default_evt_parser = MultipleParser(parsers=[
     DateTimeStampedRegexParser(RX_MISSION_WON, EVT_MISSION_WON),
     TimeStampedRegexParser(RX_MISSION_BEGIN, EVT_MISSION_BEGIN),
     TimeStampedRegexParser(RX_MISSION_END, EVT_MISSION_END),
-    NumeratedRegexParser(RX_TARGET_END, EVT_TARGET_END),
+    TargetResultRegexParser(RX_TARGET_RESULT, EVT_TARGET_RESULT),
 
     # User state events
     TimeStampedRegexParser(RX_CONNECTED, EVT_CONNECTED),
