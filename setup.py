@@ -2,7 +2,7 @@ from setuptools import setup
 
 setup(
     name='il2ds-log-parser',
-    version='0.9.0',
+    version='0.9.1',
     description='Parser of IL-2 FB Dedicated Server events log.',
     license='BSD License',
     url='https://github.com/IL2HorusTeam/il2ds-log-parser',

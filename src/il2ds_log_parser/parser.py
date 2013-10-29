@@ -20,13 +20,13 @@ __all__ =  [
 def parse_time(value):
     """Take time in '%I:%M:%S %p' format and convert it to ISO format."""
     dt = datetime.datetime.strptime(value, LOG_TIME_FORMAT)
-    return dt.time().isoformat()
+    return dt.time()
 
 
 def parse_date(value):
     """Take date in '%b %d, %Y' format and convert it to ISO format."""
     dt = datetime.datetime.strptime(value, LOG_DATE_FORMAT)
-    return dt.date().isoformat()
+    return dt.date()
 
 
 class TimeStampedRegexParser(object):
@@ -762,6 +762,10 @@ def parse_log_lines(lines, evt_parser=default_evt_parser):
         if evt is None:
             unparsed.append(line)
             continue
+        if 'time' in evt:
+            evt['time'] = evt['time'].isoformat()
+        if 'date' in evt:
+            evt['date'] = evt['date'].isoformat()
         if evt['type'] == EVT_MISSION_PLAYING:
             if mission:
                 end_mission(evt['time'])
