@@ -2,6 +2,8 @@
 
 import re
 
+from il2ds_log_parser.constants import TOGGLE_VALUE_ON, TOGGLE_VALUE_OFF
+
 __all__ =  [
     'RX_FLAGS',
     'RX_MISSION_BEGIN', 'RX_MISSION_END', 'RX_MISSION_PLAYING',
@@ -114,10 +116,10 @@ RX_TOGGLE_VALUE = """
 # "on" will be captured into 'value' group.
                 # any beginning of the string
 (?P<value>      # 'value' group start
-    on|off      # switch value (e.g. 'on' or 'off')
+    {on}|{off}  # switch value (e.g. 'on' or 'off')
 )               # 'value' group end
                 # any ending of the string
-"""
+""".format(on=TOGGLE_VALUE_ON, off=TOGGLE_VALUE_OFF)
 
 RX_CALLSIGN = """
 # Capturing pilot's callsign. E.g.:

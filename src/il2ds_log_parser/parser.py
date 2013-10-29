@@ -3,7 +3,8 @@
 import datetime
 import re
 
-from il2ds_log_parser.constants import LOG_TIME_FORMAT, LOG_DATE_FORMAT
+from il2ds_log_parser.constants import (LOG_TIME_FORMAT, LOG_DATE_FORMAT,
+    TOGGLE_VALUE_ON, TOGGLE_VALUE_OFF, )
 from il2ds_log_parser.events import *
 from il2ds_log_parser.regex import *
 
@@ -314,6 +315,19 @@ class PositionedRegexParser(TimeStampedRegexParser):
             'x': float(x),
             'y': float(y),
         }
+
+
+class ToggleValueRegexParser(PositionedRegexParser):
+
+    def __call__(self, value):
+        evt = super(ToggleValueRegexParser, self).__call__(value)
+        if evt:
+            ToggleValueRegexParser.update_toggle_value(evt)
+        return evt
+
+    @staticmethod
+    def update_toggle_value(evt):
+        evt['value'] = (evt['value'] == TOGGLE_VALUE_ON)
 
 
 class SeatRegexParser(PositionedRegexParser):
@@ -681,9 +695,9 @@ default_evt_parser = MultipleParser(parsers=[
     PositionedRegexParser(RX_DESTROYED_BRIDGE, EVT_DESTROYED_BRIDGE),
 
     # Events of lightning effects
-    PositionedRegexParser(
+    ToggleValueRegexParser(
         RX_TOGGLE_LANDING_LIGHTS, EVT_TOGGLE_LANDING_LIGHTS),
-    PositionedRegexParser(
+    ToggleValueRegexParser(
         RX_TOGGLE_WINGTIP_SMOKES, EVT_TOGGLE_WINGTIP_SMOKES),
 
     # Mission flow events

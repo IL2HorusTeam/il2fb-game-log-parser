@@ -396,7 +396,7 @@ class DefaultEventParserTestCase(unittest.TestCase):
         self.assertEqual(evt.get('type'), EVT_TOGGLE_LANDING_LIGHTS)
         self.assertEqual(evt.get('time'), datetime.time(20, 47, 45))
         self.assertCalsignAircraft(evt, "User", "Pe-8")
-        self.assertEqual(evt.get('value'), 'on')
+        self.assertEqual(evt.get('value'), True)
         self.assertPos(evt, 238667.52, 104125.04)
 
         evt = parse_evt("[8:47:47 PM] User:Pe-8 turned landing lights off at 238667.52 104125.04")
@@ -404,7 +404,7 @@ class DefaultEventParserTestCase(unittest.TestCase):
         self.assertEqual(evt.get('type'), EVT_TOGGLE_LANDING_LIGHTS)
         self.assertEqual(evt.get('time'), datetime.time(20, 47, 47))
         self.assertCalsignAircraft(evt, "User", "Pe-8")
-        self.assertEqual(evt.get('value'), 'off')
+        self.assertEqual(evt.get('value'), False)
         self.assertPos(evt, 238667.52, 104125.04)
 
     def test_toggle_wingtip_smokes(self):
@@ -413,7 +413,7 @@ class DefaultEventParserTestCase(unittest.TestCase):
         self.assertEqual(evt.get('type'), EVT_TOGGLE_WINGTIP_SMOKES)
         self.assertEqual(evt.get('time'), datetime.time(21, 9, 39))
         self.assertCalsignAircraft(evt, "User", "Pe-8")
-        self.assertEqual(evt.get('value'), 'on')
+        self.assertEqual(evt.get('value'), True)
         self.assertPos(evt, 208420.42, 103602.61)
 
         evt = parse_evt("[9:09:42 PM] User:Pe-8 turned wingtip smokes off at 208370.92 103669.64")
@@ -421,7 +421,7 @@ class DefaultEventParserTestCase(unittest.TestCase):
         self.assertEqual(evt.get('type'), EVT_TOGGLE_WINGTIP_SMOKES)
         self.assertEqual(evt.get('time'), datetime.time(21, 9, 42))
         self.assertCalsignAircraft(evt, "User", "Pe-8")
-        self.assertEqual(evt.get('value'), 'off')
+        self.assertEqual(evt.get('value'), False)
         self.assertPos(evt, 208370.92, 103669.64)
 
     def test_took_off(self):
