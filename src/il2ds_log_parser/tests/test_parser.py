@@ -4,200 +4,13 @@ import datetime
 import unittest
 
 from il2ds_log_parser import parse_evt
-from il2ds_log_parser.events import *
+from il2ds_log_parser.content_processor import process_time
+from il2ds_log_parser.event_types import *
 from il2ds_log_parser.parser import *
-from il2ds_log_parser.parser import parse_time, parse_date
 from il2ds_log_parser.regex import *
 from il2ds_log_parser.regex import (RX_TIME_BASE, RX_TIME, RX_DATE_TIME,
     RX_POS, RX_TOGGLE_VALUE, RX_SEAT, RX_STATIC, RX_ENEMY_CALLSIGN_AIRCRAFT,
     RX_TIME_CALLSIGN, RX_TIME_AIRCRAFT, RX_TIME_SEAT, RX_DESTROYED_BY, )
-
-
-class DatetimeTestCase(unittest.TestCase):
-
-    def test_parse_time(self):
-        result = parse_time("08:33:05 AM")
-        self.assertEqual(result, datetime.time(8, 33, 5))
-
-        result = parse_time("8:33:05 PM")
-        self.assertEqual(result, datetime.time(20, 33, 5))
-
-    def test_parse_date(self):
-        result = parse_date("Sep 1, 2013")
-        self.assertEqual(result, datetime.date(2013, 9, 1))
-
-        result = parse_date("Feb 15, 2013")
-        self.assertEqual(result, datetime.date(2013, 2, 15))
-
-
-class TimeStampedRegexParserTestCase(unittest.TestCase):
-
-    def test_call(self):
-        parser = TimeStampedRegexParser(
-            "{time}Hello,\s\S+!$".format(time=RX_TIME))
-
-        result = parser("Hello, user!")
-        self.assertIsNone(result)
-
-        result = parser("[1:00:00 AM] Hello, user!")
-        self.assertIsNotNone(result)
-        self.assertEqual(result.get('time'), datetime.time(1, 0))
-        self.assertIsNone(result.get('type'))
-
-    def test_call_with_type(self):
-        parser = TimeStampedRegexParser(
-            "{time}Hello,\s\S+!$".format(time=RX_TIME), 'TYPE')
-
-        result = parser("Hello, user!")
-        self.assertIsNone(result)
-
-        result = parser("[1:00:00 AM] Hello, user!")
-        self.assertIsNotNone(result)
-        self.assertEqual(result.get('time'), datetime.time(1, 0))
-        self.assertEqual(result.get('type'), 'TYPE')
-
-    def test_str(self):
-        parser = TimeStampedRegexParser("^Hello!$")
-        self.assertEqual(str(parser), "^Hello!$")
-
-    def test_str_with_type(self):
-        parser = TimeStampedRegexParser("^Hello!$", 'TYPE')
-        self.assertEqual(str(parser), "TYPE: ^Hello!$")
-
-    def test_equal(self):
-        parser1 = TimeStampedRegexParser("^Hello!$",)
-        parser2 = TimeStampedRegexParser("^Hello!$", 'TYPE')
-        self.assertEqual(parser1, parser2)
-        parser3 = TimeStampedRegexParser("^Hi!$", 'TYPE')
-        self.assertNotEqual(parser1, parser3)
-
-
-class DateStampedRegexParserTestCase(unittest.TestCase):
-
-    def test_call(self):
-        parser = DateTimeStampedRegexParser(
-            "{datetime}Hello!$".format(datetime=RX_DATE_TIME))
-        result = parser("[Sep 1, 2013 1:00:00 AM] Hello!")
-        self.assertIsNotNone(result)
-        self.assertEqual(result.get('date'), datetime.date(2013, 9, 1))
-        self.assertEqual(result.get('time'), datetime.time(1, 0))
-
-
-class NumeratedRegexParserTestCase(unittest.TestCase):
-
-    def test_call(self):
-        parser = NumeratedRegexParser(
-            "{time}Hello,\s(?P<number>\d+)!$".format(time=RX_TIME))
-        result = parser("[1:00:00 AM] Hello, 1!")
-        self.assertIsNotNone(result)
-        self.assertEqual(result.get('time'), datetime.time(1, 0))
-        self.assertEqual(result.get('number'), 1)
-
-
-class FuelRegexParserTestCase(unittest.TestCase):
-
-    def test_call(self):
-        parser = FuelRegexParser(
-            "{time}Fuel\sis\sat\s(?P<fuel>\d+)%$".format(time=RX_TIME))
-        result = parser("[1:00:00 AM] Fuel is at 100%")
-        self.assertIsNotNone(result)
-        self.assertEqual(result.get('time'), datetime.time(1, 0))
-        self.assertEqual(result.get('fuel'), 100)
-
-
-class PositionedRegexParserTestCase(unittest.TestCase):
-
-    def test_call(self):
-        parser = PositionedRegexParser(
-            "{time}Hello{pos}".format(time=RX_TIME, pos=RX_POS))
-        result = parser("[1:00:00 AM] Hello at 100.0 200.99")
-        self.assertIsNotNone(result)
-        self.assertEqual(result.get('time'), datetime.time(1, 0))
-        pos = result.get('pos')
-        self.assertIsNotNone(pos)
-        self.assertEqual(pos.get('x'), 100.0)
-        self.assertEqual(pos.get('y'), 200.99)
-
-
-class SeatRegexParserTestCase(unittest.TestCase):
-
-    def test_call(self):
-        parser = SeatRegexParser(
-            "{time_seat}hello{pos}".format(
-                time_seat=RX_TIME_SEAT, pos=RX_POS))
-        result = parser("[1:00:00 AM] User:Ubercraft(0) hello at 100.0 200.99")
-        self.assertIsNotNone(result)
-        self.assertEqual(result.get('time'), datetime.time(1, 0))
-        self.assertEqual(result.get('callsign'), "User")
-        self.assertEqual(result.get('aircraft'), "Ubercraft")
-        self.assertEqual(result.get('seat'), 0)
-        pos = result.get('pos')
-        self.assertIsNotNone(pos)
-        self.assertEqual(pos.get('x'), 100.0)
-        self.assertEqual(pos.get('y'), 200.99)
-
-
-class VictimOfUserRegexParserTestCase(unittest.TestCase):
-
-    def test_call(self):
-        parser = VictimOfUserRegexParser(
-            "{time_aircraft}\swas\sgreeted\sby\s{eair}{pos}".format(
-                time_aircraft=RX_TIME_AIRCRAFT,
-                eair=RX_ENEMY_CALLSIGN_AIRCRAFT, pos=RX_POS))
-        result = parser("[1:00:00 AM] User1:Ubercraft was greeted by User2:Ubercraft at 100.0 200.99")
-        self.assertIsNotNone(result)
-        self.assertEqual(result.get('time'), datetime.time(1, 0))
-        self.assertEqual(result.get('callsign'), "User1")
-        self.assertEqual(result.get('aircraft'), "Ubercraft")
-        attacker = result.get('attacker')
-        self.assertIsNotNone(attacker)
-        self.assertEqual(attacker.get('callsign'), "User2")
-        self.assertEqual(attacker.get('aircraft'), "Ubercraft")
-        pos = result.get('pos')
-        self.assertIsNotNone(pos)
-        self.assertEqual(pos.get('x'), 100.0)
-        self.assertEqual(pos.get('y'), 200.99)
-
-
-class VictimOfStaticRegexParserTestCase(unittest.TestCase):
-
-    def test_call(self):
-        parser = VictimOfStaticRegexParser(
-            "{time_aircraft}\swas\sgreeted\sby\s{static}{pos}".format(
-                time_aircraft=RX_TIME_AIRCRAFT, static=RX_STATIC, pos=RX_POS))
-        result = parser("[1:00:00 AM] User:Ubercraft was greeted by 0_Static at 100.0 200.99")
-        self.assertIsNotNone(result)
-        self.assertEqual(result.get('time'), datetime.time(1, 0))
-        self.assertEqual(result.get('callsign'), "User")
-        self.assertEqual(result.get('aircraft'), "Ubercraft")
-        self.assertEqual(result.get('attacker'), "0_Static")
-        pos = result.get('pos')
-        self.assertIsNotNone(pos)
-        self.assertEqual(pos.get('x'), 100.0)
-        self.assertEqual(pos.get('y'), 200.99)
-
-
-class SeatVictimOfUserRegexParserTestCase(unittest.TestCase):
-
-    def test_call(self):
-        parser = SeatVictimOfUserRegexParser(
-            "{time_seat}was\sgreeted\sby\s{eair}{pos}".format(
-                time_seat=RX_TIME_SEAT,
-                eair=RX_ENEMY_CALLSIGN_AIRCRAFT, pos=RX_POS))
-        result = parser("[1:00:00 AM] User1:Ubercraft(0) was greeted by User2:Ubercraft at 100.0 200.99")
-        self.assertIsNotNone(result)
-        self.assertEqual(result.get('time'), datetime.time(1, 0))
-        self.assertEqual(result.get('callsign'), "User1")
-        self.assertEqual(result.get('aircraft'), "Ubercraft")
-        self.assertEqual(result.get('seat'), 0)
-        attacker = result.get('attacker')
-        self.assertIsNotNone(attacker)
-        self.assertEqual(attacker.get('callsign'), "User2")
-        self.assertEqual(attacker.get('aircraft'), "Ubercraft")
-        pos = result.get('pos')
-        self.assertIsNotNone(pos)
-        self.assertEqual(pos.get('x'), 100.0)
-        self.assertEqual(pos.get('y'), 200.99)
 
 
 class MultipleParserTestCase(unittest.TestCase):
@@ -206,8 +19,8 @@ class MultipleParserTestCase(unittest.TestCase):
         self.parser = MultipleParser()
 
     def _build_parser(self):
-        return TimeStampedRegexParser(
-            "{time}Hello,\s(?P<name>\S+)!$".format(time=RX_TIME))
+        return RegexParser(
+            "{time}Hello,\s(?P<name>\S+)!$".format(time=RX_TIME), process_time)
 
     def test_register_unregister(self):
 
@@ -307,7 +120,7 @@ class DefaultEventParserTestCase(unittest.TestCase):
         self.assertEqual(evt.get('type'), EVT_MISSION_WON)
         self.assertEqual(evt.get('date'), datetime.date(2012, 12, 29))
         self.assertEqual(evt.get('time'), datetime.time(17, 19, 49))
-        self.assertEqual(evt.get('army'), "RED")
+        self.assertEqual(evt.get('army'), "Red")
 
     def test_target_result(self):
         evt = parse_evt("[5:15:22 PM] Target 3 Complete")
@@ -381,10 +194,10 @@ class DefaultEventParserTestCase(unittest.TestCase):
         self.assertEqual(evt.get('seat'), 0)
         self.assertPos(evt, 149880.23, 105703.76)
 
-    def test_parachute_opened(self):
+    def test_successfully_bailed_out(self):
         evt = parse_evt("[9:33:20 PM] User:Pe-8(0) successfully bailed out at 148534.2 105877.93")
         self.assertIsNotNone(evt)
-        self.assertEqual(evt.get('type'), EVT_PARACHUTE_OPENED)
+        self.assertEqual(evt.get('type'), EVT_SUCCESSFULLY_BAILED_OUT)
         self.assertEqual(evt.get('time'), datetime.time(21, 33, 20))
         self.assertCalsignAircraft(evt, "User", "Pe-8")
         self.assertEqual(evt.get('seat'), 0)
@@ -578,5 +391,5 @@ class DefaultEventParserTestCase(unittest.TestCase):
         self.assertEqual(evt.get('type'), EVT_SHOT_DOWN_BY_STATIC)
         self.assertEqual(evt.get('time'), datetime.time(21, 45, 16))
         self.assertCalsignAircraft(evt, "User", "Pe-8")
-        self.assertEqual(evt.get('attacker'), "85_Static")
+        self.assertEqual(evt.get('static'), "85_Static")
         self.assertPos(evt, 47626.78, 126637.38)

@@ -1,41 +1,26 @@
 # -*- coding: utf-8 -*-
 
 import datetime
+import logging
 import re
 
-from il2ds_log_parser.constants import (LOG_TIME_FORMAT, LOG_DATE_FORMAT,
-    TOGGLE_VALUE_ON, TOGGLE_VALUE_OFF, TARGET_RESULT_COMPLETE,
-    TARGET_RESULT_FAILED, )
-from il2ds_log_parser.events import *
+from il2ds_log_parser.content_processor import *
+from il2ds_log_parser.event_types import *
 from il2ds_log_parser.regex import *
 
 
 __all__ =  [
-    'TimeStampedRegexParser', 'DateTimeStampedRegexParser',
-    'NumeratedRegexParser', 'FuelRegexParser', 'PositionedRegexParser',
-    'SeatRegexParser', 'VictimOfUserRegexParser', 'VictimOfStaticRegexParser',
-    'SeatVictimOfUserRegexParser', 'MultipleParser', 'RegistrationError',
-    'default_evt_parser',
+    'RegexParser', 'MultipleParser', 'RegistrationError', 'default_evt_parser',
 ]
 
-
-def parse_time(value):
-    """Take time in '%I:%M:%S %p' format and convert it to ISO format."""
-    dt = datetime.datetime.strptime(value, LOG_TIME_FORMAT)
-    return dt.time()
+LOG = logging.getLogger(__file__)
 
 
-def parse_date(value):
-    """Take date in '%b %d, %Y' format and convert it to ISO format."""
-    dt = datetime.datetime.strptime(value, LOG_DATE_FORMAT)
-    return dt.date()
-
-
-class TimeStampedRegexParser(object):
+class RegexParser(object):
 
     """Parse a line which has a time stamp at the beginning."""
 
-    def __init__(self, regex, evt_type=None):
+    def __init__(self, regex, processors=None, evt_type=None):
         """
         Input:
         `regex`             # verbose regular expression which contains
@@ -45,6 +30,9 @@ class TimeStampedRegexParser(object):
                             # Default value: `None`.
         """
         self.rx = re.compile(regex, RX_FLAGS)
+        if processors and not isinstance(processors, list):
+                processors = [processors, ]
+        self.processors = processors
         self.evt_type = evt_type
 
     def __call__(self, value):
@@ -71,7 +59,14 @@ class TimeStampedRegexParser(object):
             evt = m.groupdict()
             if self.evt_type:
                 evt['type'] = self.evt_type
-            TimeStampedRegexParser.update_time(evt)
+            if self.processors:
+                for processor in self.processors:
+                    try:
+                        processor(evt)
+                    except KeyError as e:
+                        pass
+                    except ValueError as e:
+                        pass
             return evt
         return None
 
@@ -99,485 +94,6 @@ class TimeStampedRegexParser(object):
         return "%s: %s" % (self.evt_type, self.rx.pattern) \
             if self.evt_type else self.rx.pattern
 
-    @staticmethod
-    def update_time(evt):
-        """
-        Convert event's time to ISO format.
-
-        Input:
-        `evt`               # A dictionary with 'time' key which stores event's
-                            # time in '%I:%M:%S %p' format.
-
-        Transformation:
-        Convert 'time' value of input dictionary to ISO format.
-        """
-        evt['time'] = parse_time(evt.get('time'))
-
-
-class DateTimeStampedRegexParser(TimeStampedRegexParser):
-
-    """Parse a line which has a datetime stamp at the beginning."""
-
-    def __call__(self, value):
-        """
-        Take a line, parse it with internal regex and return an event
-        dictionary. Regex must contain 'date' and 'time' groups. Those groups
-        must contain event's date and time in '%b %d, %Y' and '%I:%M:%S %p'
-        formats respectively. If parser has own type, it will be added to the
-        event.
-
-        Input:
-        `value`             # A string which begins with event's datetime
-                            # in '[%b %d, %Y %I:%M:%S %p]' format
-
-        Output:
-        {                   # A dictionary which contains:
-            'date': "DATE", # event's date value in '%Y:%m:%d' format;
-            'time': "TIME", # event's time value in '%H:%M:%S' format;
-            'type': "TYPE", # an optional type value specified by parser.
-        }                   #
-                            # Output can contain another extra values provided
-                            # by groups of regex.
-        """
-        evt = super(DateTimeStampedRegexParser, self).__call__(value)
-        if evt:
-            DateTimeStampedRegexParser.update_date(evt)
-        return evt
-
-    @staticmethod
-    def update_date(evt):
-        """
-        Convert event's date to ISO format.
-
-        Input:
-        `evt`               # A dictionary with 'date' key which stores event's
-                            # date in '%b %d, %Y' format.
-
-        Transformation:
-        Convert 'date' value of input dictionary to ISO format.
-        """
-        evt['date'] = parse_date(evt['date'])
-
-
-class NumeratedRegexParser(TimeStampedRegexParser):
-
-    """
-    Parse a line which has a time stamp at the beginning and an integer number
-    in the middle.
-    """
-
-    def __call__(self, value):
-        """
-        Take a line, parse it with internal regex and return an event
-        dictionary. Regex must contain 'time' and 'number' groups. Those groups
-        must contain event's time in '%I:%M:%S %p' format and an integer number
-        represented by string. If parser has own type, it will be added to the
-        event.
-
-        Input:
-        `value`             # A string which begins with event's time in
-                            # '[%I:%M:%S %p]' format and has an integer
-                            # number in the middle.
-
-        Output:
-        {                   # A dictionary which contains:
-            'time': "TIME", # event's time value in '%H:%M:%S' format;
-
-            'number': NUMBER,   # integer number;
-
-            'type': "TYPE", # an optional type value specified by parser.
-        }                   #
-                            # Output can contain another extra values provided
-                            # by groups of regex.
-        """
-        evt = super(NumeratedRegexParser, self).__call__(value)
-        if evt:
-            NumeratedRegexParser.update_number(evt)
-        return evt
-
-    @staticmethod
-    def update_number(evt):
-        """
-        Convert event's number's type from string to int.
-
-        Input:
-        `evt`               # A dictionary with 'number' key which stores
-                            # an integer represented by string.
-
-        Transformation:
-        Convert 'number' value of input dictionary from string to integer.
-        """
-        evt['number'] = int(evt['number'])
-
-
-class TargetResultRegexParser(TimeStampedRegexParser):
-
-    def __call__(self, value):
-        evt = super(TargetResultRegexParser, self).__call__(value)
-        if evt:
-            NumeratedRegexParser.update_number(evt)
-            TargetResultRegexParser.update_target_result(evt)
-        return evt
-
-    @staticmethod
-    def update_target_result(evt):
-        evt['result'] = (evt['result'] == TARGET_RESULT_COMPLETE)
-
-
-class FuelRegexParser(TimeStampedRegexParser):
-
-    """
-    Parse a line which has a time stamp at the beginning and fuel percentage
-    integer value at the end.
-    """
-
-    def __call__(self, value):
-        """
-        Take a line, parse it with internal regex and return an event
-        dictionary. Regex must contain 'time' and 'fuel' groups. Those groups
-        must contain event's time in '%I:%M:%S %p' format and fuel percentage
-        integer number represented by string. If parser has own type, it will
-        be added to the event.
-
-        Input:
-        `value`             # A string which begins with event's time in
-                            # '[%I:%M:%S %p]' format and ends with fuel
-                            # percentage integer number.
-
-        Output:
-        {                   # A dictionary which contains:
-            'time': "TIME", # event's time value in '%H:%M:%S' format;
-            'fuel': FUEL,   # fuel integer value;
-            'type': "TYPE", # an optional type value specified by parser.
-        }                   #
-                            # Output can contain another extra values provided
-                            # by groups of regex.
-        """
-        evt = super(FuelRegexParser, self).__call__(value)
-        if evt:
-            FuelRegexParser.update_fuel(evt)
-        return evt
-
-    @staticmethod
-    def update_fuel(evt):
-        """
-        Convert event's fuel's type from string to int.
-
-        Input:
-        `evt`               # A dictionary with 'fuel' key which stores
-                            # an integer represented by string.
-
-        Transformation:
-        Convert 'fuel' value of input dictionary from string to integer.
-        """
-        evt['fuel'] = int(evt['fuel'])
-
-
-class PositionedRegexParser(TimeStampedRegexParser):
-
-    """
-    Parse a line which has a time stamp at the beginning and two-dimensional
-    float coordinates at the end.
-    """
-
-    def __call__(self, value):
-        """
-        Take a line, parse it with internal regex and return an event
-        dictionary. Regex must contain 'time', 'pos_x' and 'pos_y' groups.
-        Those groups must contain event's time in '%I:%M:%S %p' format, x and y
-        position float values represented by strings. If parser has own type,
-        it will be added to the event.
-
-        Input:
-        `value`             # A string which begins with event's time in
-                            # '[%I:%M:%S %p]' format and ends with
-                            # two-dimensional float coordinates.
-
-        Output:
-        {                   # A dictionary which contains:
-            'time': "TIME", # event's time value in '%H:%M:%S' format;
-            'pos': {        # a dictionary with
-                'x': X,     # float x position value;
-                'y': Y,     # float y position value;
-            },              #
-            'type': "TYPE", # an optional type value specified by parser.
-        }                   #
-                            # Output can contain another extra values provided
-                            # by groups of regex.
-        """
-        evt = super(PositionedRegexParser, self).__call__(value)
-        if evt:
-            PositionedRegexParser.update_pos(evt)
-        return evt
-
-    @staticmethod
-    def update_pos(evt):
-        """
-        Wrap event's x and y string position values to a dictionary with
-        float x and y position values.
-
-        Input:
-        `evt`               # A dictionary with 'pos_x' and 'pos_y' keys
-                            # containing float values represented by strings.
-
-        Transformation:
-        Replace 'pos_x' and 'pos_y' string values with a single 'pos'
-        dictionary containing float 'x' and 'y' values.
-        """
-        x = evt.pop('pos_x')
-        y = evt.pop('pos_y')
-        evt['pos'] = {
-            'x': float(x),
-            'y': float(y),
-        }
-
-
-class ToggleValueRegexParser(PositionedRegexParser):
-
-    def __call__(self, value):
-        evt = super(ToggleValueRegexParser, self).__call__(value)
-        if evt:
-            ToggleValueRegexParser.update_toggle_value(evt)
-        return evt
-
-    @staticmethod
-    def update_toggle_value(evt):
-        evt['value'] = (evt['value'] == TOGGLE_VALUE_ON)
-
-
-class SeatRegexParser(PositionedRegexParser):
-
-    """
-    Parse a line which has a time stamp at the beginning, seat integer
-    number in the middle and two-dimensional float coordinates at the end.
-    """
-
-    def __call__(self, value):
-        """
-        Take a line, parse it with internal regex and return an event
-        dictionary. Regex must contain 'time', 'seat', 'pos_x' and 'pos_y'
-        groups. Those groups must contain event's time in '%I:%M:%S %p' format,
-        seat number integer value, x and y position float values represented by
-        strings. If parser has own type, it will be added to the event.
-
-        Input:
-        `value`             # A string which begins with event's time in
-                            # '[%I:%M:%S %p]' format, has seat integer
-                            # number in the middle and and ends with
-                            # two-dimensional float coordinates.
-
-        Output:
-        {                   # A dictionary which contains:
-            'time': "TIME", # event's time value in '%H:%M:%S' format;
-            'seat': SEAT,   # integer number of seat;
-            'pos': {        # a dictionary with
-                'x': X,     # float x position value;
-                'y': Y,     # float y position value;
-            },              #
-            'type': "TYPE", # an optional type value specified by parser.
-        }                   #
-                            # Output can contain another extra values provided
-                            # by groups of regex.
-        """
-        evt = super(SeatRegexParser, self).__call__(value)
-        if evt:
-            SeatRegexParser.update_seat(evt)
-        return evt
-
-    @staticmethod
-    def update_seat(evt):
-        """
-        Convert event's seat number's type from string to int.
-
-        Input:
-        `evt`               # A dictionary with 'seat' key which stores an
-                            # integer represented by string.
-
-        Transformation:
-        Convert 'seat' value of input dictionary from string to integer.
-        """
-        evt['seat'] = int(evt['seat'])
-
-
-class VictimOfUserRegexParser(PositionedRegexParser):
-
-    """
-    Parse a line which has a time stamp at the beginning, enemy's callsign
-    and aircraft in the middle and two-dimensional float coordinates at the
-    end.
-    """
-
-    def __call__(self, value):
-        """
-        Take a line, parse it with internal regex and return an event
-        dictionary. Regex must contain 'time', 'e_callsign', 'e_aircraft',
-        'pos_x' and 'pos_y' groups. Those groups must contain event's time in
-        '%I:%M:%S %p' format, enemy's callsign and aircraft string values,
-        x and y position float values represented by strings. If parser has own
-        type, it will be added to the event.
-
-        Input:
-        `value`             # A string which begins with event's time in
-                            # '[%I:%M:%S %p]' format, has enemy's callsign and
-                            # aircraft string values in the middle and and ends
-                            # with two-dimensional float coordinates.
-
-        Output:
-        {                   # A dictionary which contains:
-            'time': "TIME", # event's time value in '%H:%M:%S' format;
-            'attacker': {   # a dictionary with attacker's
-
-                'callsign': "CALLSIGN",     # callsign and
-                'aircraft': "AIRCRAFT",     # aircraft
-
-            },              #
-            'pos': {        # a dictionary with
-                'x': X,     # float x position value;
-                'y': Y,     # float y position value;
-            },              #
-            'type': "TYPE", # an optional type value specified by parser.
-        }                   #
-                            # Output can contain another extra values provided
-                            # by groups of regex.
-        """
-        evt = super(VictimOfUserRegexParser, self).__call__(value)
-        if evt:
-            VictimOfUserRegexParser.update_attacker(evt)
-        return evt
-
-    @staticmethod
-    def update_attacker(evt):
-        """
-        Wrap event's enemy's callsign and aircraft string values into a
-        dictionary.
-
-        Input:
-        `evt`               # A dictionary with 'e_callsign' and 'e_aircraft'
-                            # keys containing attacker's callsign and aircraft
-                            # values represented by strings.
-
-        Transformation:
-        Replace 'e_callsign' and 'e_aircraft' string values with a single
-        'attacker' dictionary containing string 'callsign' and 'aircraft'
-        values.
-        """
-        callsign = evt.pop('e_callsign')
-        aircraft = evt.pop('e_aircraft')
-        evt['attacker'] = {
-            'callsign': callsign,
-            'aircraft': aircraft,
-        }
-
-
-class VictimOfStaticRegexParser(PositionedRegexParser):
-
-    """
-    Parse a line which has a time stamp at the beginning, attacking static's
-    name in the middle and two-dimensional float coordinates at the end.
-    """
-
-    def __call__(self, value):
-        """
-        Take a line, parse it with internal regex and return an event
-        dictionary. Regex must contain 'time', 'static', 'pos_x' and 'pos_y'
-        groups. Those groups must contain event's time in '%I:%M:%S %p' format,
-        attacking static's name string value, x and y position float values
-        represented by strings. If parser has own type, it will be added to the
-        event.
-
-        Input:
-        `value`             # A string which begins with event's time in
-                            # '[%I:%M:%S %p]' format, has enemy's callsign and
-                            # aircraft string values in the middle and and ends
-                            # with two-dimensional float coordinates.
-
-        Output:
-        {                   # A dictionary which contains:
-            'time': "TIME", # event's time value in '%H:%M:%S' format;
-
-            'attacker': "ATTACKER",     # attacking static's string name
-
-            'pos': {        # a dictionary with
-                'x': X,     # float x position value;
-                'y': Y,     # float y position value;
-            },              #
-            'type': "TYPE", # an optional type value specified
-                            # by parser.
-        }                   #
-                            # Output can contain another extra values provided
-                            # by groups of regex.
-        """
-        evt = super(VictimOfStaticRegexParser, self).__call__(value)
-        if evt:
-            VictimOfStaticRegexParser.update_attacker(evt)
-        return evt
-
-    @staticmethod
-    def update_attacker(evt):
-        """
-        Change attacker's dictionary key from 'static' to 'attacker'.
-
-        Input:
-        `evt`               # A dictionary with 'static' key containing
-                            # attacking static's name represented by string.
-
-        Transformation:
-        Replace 'static' string value with 'attacker' string value.
-        """
-        attacker = evt.pop('static')
-        evt['attacker'] = attacker
-
-
-class SeatVictimOfUserRegexParser(PositionedRegexParser):
-
-    """
-    Parse a line which has a time stamp at the beginning, seat integer
-    number, enemy's callsign and aircraft in the middle and two-dimensional
-    float coordinates at the end.
-    """
-
-    def __call__(self, value):
-        """
-        Take a line, parse it with internal regex and return an event
-        dictionary. Regex must contain 'time', 'seat', 'e_callsign',
-        'e_aircraft', 'pos_x' and 'pos_y' groups. Those groups must contain
-        event's time in '%I:%M:%S %p' format, seat number integer value,
-        enemy's callsign and aircraft string values, x and y position float
-        values represented by strings. If parser has own type, it will be added
-        to the event.
-
-        Input:
-        `value`             # A string which begins with event's time in
-                            # '[%I:%M:%S %p]' format, has seat integer number,
-                            # enemy's callsign and aircraft string values in
-                            # the middle and and ends with two-dimensional
-                            # float coordinates.
-
-        Output:
-        {                   # A dictionary which contains:
-            'time': "TIME", # event's time value in '%H:%M:%S' format;
-            'seat': SEAT,   # integer number of seat;
-            'attacker': {   # a dictionary with attacker's
-
-                'callsign': "CALLSIGN",     # callsign and
-                'aircraft': "AIRCRAFT",     # aircraft
-
-            },              #
-            'pos': {        # a dictionary with
-                'x': X,     # float x position value;
-                'y': Y,     # float y position value;
-            },              #
-            'type': "TYPE", # an optional type value specified by parser.
-        }                   #
-                            # Output can contain another extra values provided
-                            # by groups of regex.
-        """
-        evt = super(SeatVictimOfUserRegexParser, self).__call__(value)
-        if evt:
-            SeatRegexParser.update_seat(evt)
-            VictimOfUserRegexParser.update_attacker(evt)
-        return evt
-
 
 class RegistrationError(Exception):
     """Thrown when registering or unregistering parser goes wrong."""
@@ -601,7 +117,7 @@ class MultipleParser(object):
         self._registered_parsers = []
         if parsers:
             for parser in parsers:
-                if isinstance(parser, TimeStampedRegexParser):
+                if isinstance(parser, RegexParser):
                     parser = (parser, None)
                 self._registered_parsers.append(parser)
 
@@ -702,61 +218,105 @@ class MultipleParser(object):
         return None
 
 
-default_evt_parser = MultipleParser(parsers=[
-    # Events of destroying
-    PositionedRegexParser(RX_DESTROYED_BLD, EVT_DESTROYED_BLD),
-    PositionedRegexParser(RX_DESTROYED_TREE, EVT_DESTROYED_TREE),
-    PositionedRegexParser(RX_DESTROYED_STATIC, EVT_DESTROYED_STATIC),
-    PositionedRegexParser(RX_DESTROYED_BRIDGE, EVT_DESTROYED_BRIDGE),
+def build_default_event_parser():
+    time_position = [
+        process_time, process_position,
+    ]
+    time_togle_position = [
+        process_time, process_toggle_value, process_position,
+    ]
+    time_seat_position = [
+        process_time, process_seat, process_position,
+    ]
+    params = (
+        # Mission flow events
+        (
+            RX_MISSION_WON,
+            [process_time, process_date, process_army, ],
+            EVT_MISSION_WON
+        ),
+        (
+            RX_MISSION_PLAYING,
+            [process_time, process_date, ],
+            EVT_MISSION_PLAYING
+        ),
+        (RX_MISSION_BEGIN, process_time, EVT_MISSION_BEGIN),
+        (RX_MISSION_END, process_time, EVT_MISSION_END),
+        (
+            RX_TARGET_RESULT,
+            [process_time, process_number, process_target_result, ],
+            EVT_TARGET_RESULT
+        ),
+        # User state events
+        (RX_CONNECTED, process_time, EVT_CONNECTED),
+        (RX_DISCONNECTED, process_time, EVT_DISCONNECTED),
+        (RX_WENT_TO_MENU, process_time, EVT_WENT_TO_MENU),
+        (RX_SELECTED_ARMY, time_position, EVT_SELECTED_ARMY),
+        # Destruction events
+        (RX_DESTROYED_BLD, time_position, EVT_DESTROYED_BLD),
+        (RX_DESTROYED_TREE, time_position, EVT_DESTROYED_TREE),
+        (RX_DESTROYED_BRIDGE, time_position, EVT_DESTROYED_BRIDGE),
+        (RX_DESTROYED_STATIC, time_position, EVT_DESTROYED_STATIC),
+        # Lightning effect events
+        (
+            RX_TOGGLE_LANDING_LIGHTS,
+            time_togle_position,
+            EVT_TOGGLE_LANDING_LIGHTS
+        ),
+        (
+            RX_TOGGLE_WINGTIP_SMOKES,
+            time_togle_position,
+            EVT_TOGGLE_WINGTIP_SMOKES
+        ),
+        # Aircraft events
+        (
+            RX_WEAPONS_LOADED,
+            [process_time, process_fuel, process_position, ],
+            EVT_WEAPONS_LOADED
+        ),
+        (RX_TOOK_OFF, time_position, EVT_TOOK_OFF),
+        (RX_CRASHED, time_position, EVT_CRASHED),
+        (RX_LANDED, time_position, EVT_LANDED),
+        (RX_DAMAGED_ON_GROUND, time_position, EVT_DAMAGED_ON_GROUND),
+        (RX_DAMAGED_SELF, time_position, EVT_DAMAGED_SELF),
+        (
+            RX_DAMAGED_BY_USER,
+            [process_time, process_attacking_user, process_position, ],
+            EVT_DAMAGED_BY_USER
+        ),
+        (RX_SHOT_DOWN_SELF, time_position, EVT_SHOT_DOWN_SELF),
+        (RX_SHOT_DOWN_BY_STATIC, time_position, EVT_SHOT_DOWN_BY_STATIC),
+        (
+            RX_SHOT_DOWN_BY_USER,
+            [process_time, process_attacking_user, process_position, ],
+            EVT_SHOT_DOWN_BY_USER
+        ),
+        # Crew member events
+        (RX_SEAT_OCCUPIED, time_seat_position, EVT_SEAT_OCCUPIED),
+        (RX_KILLED, time_seat_position, EVT_KILLED),
+        (
+            RX_KILLED_BY_USER,
+            [
+                process_time, process_seat, process_attacking_user,
+                process_position,
+            ],
+            EVT_KILLED_BY_USER
+        ),
+        (RX_BAILED_OUT, time_seat_position, EVT_BAILED_OUT),
+        (
+            RX_SUCCESSFULLY_BAILED_OUT,
+            time_seat_position,
+            EVT_SUCCESSFULLY_BAILED_OUT
+        ),
+        (RX_WOUNDED, time_seat_position, EVT_WOUNDED),
+        (RX_HEAVILY_WOUNDED, time_seat_position, EVT_HEAVILY_WOUNDED),
+        (RX_CAPTURED, time_seat_position, EVT_CAPTURED),
+    )
+    parsers = [RegexParser(*x) for x in params]
+    return MultipleParser(parsers=parsers)
 
-    # Events of lightning effects
-    ToggleValueRegexParser(
-        RX_TOGGLE_LANDING_LIGHTS, EVT_TOGGLE_LANDING_LIGHTS),
-    ToggleValueRegexParser(
-        RX_TOGGLE_WINGTIP_SMOKES, EVT_TOGGLE_WINGTIP_SMOKES),
 
-    # Mission flow events
-    DateTimeStampedRegexParser(RX_MISSION_PLAYING, EVT_MISSION_PLAYING),
-    DateTimeStampedRegexParser(RX_MISSION_WON, EVT_MISSION_WON),
-    TimeStampedRegexParser(RX_MISSION_BEGIN, EVT_MISSION_BEGIN),
-    TimeStampedRegexParser(RX_MISSION_END, EVT_MISSION_END),
-    TargetResultRegexParser(RX_TARGET_RESULT, EVT_TARGET_RESULT),
-
-    # User state events
-    TimeStampedRegexParser(RX_CONNECTED, EVT_CONNECTED),
-    TimeStampedRegexParser(RX_DISCONNECTED, EVT_DISCONNECTED),
-    TimeStampedRegexParser(RX_WENT_TO_MENU, EVT_WENT_TO_MENU),
-    PositionedRegexParser(RX_SELECTED_ARMY, EVT_SELECTED_ARMY),
-
-    # Aircraft events
-    FuelRegexParser(RX_WEAPONS_LOADED, EVT_WEAPONS_LOADED),
-    PositionedRegexParser(RX_TOOK_OFF, EVT_TOOK_OFF),
-    PositionedRegexParser(RX_CRASHED, EVT_CRASHED),
-    PositionedRegexParser(RX_LANDED, EVT_LANDED),
-
-    PositionedRegexParser(RX_DAMAGED_ON_GROUND, EVT_DAMAGED_ON_GROUND),
-    PositionedRegexParser(RX_DAMAGED_SELF, EVT_DAMAGED_SELF),
-    VictimOfUserRegexParser(RX_DAMAGED_BY_USER, EVT_DAMAGED_BY_USER),
-
-    PositionedRegexParser(RX_SHOT_DOWN_SELF, EVT_SHOT_DOWN_SELF),
-    VictimOfUserRegexParser(
-        RX_SHOT_DOWN_BY_USER, EVT_SHOT_DOWN_BY_USER),
-    VictimOfStaticRegexParser(
-        RX_SHOT_DOWN_BY_STATIC, EVT_SHOT_DOWN_BY_STATIC),
-
-    # Crew member events
-    SeatRegexParser(RX_SEAT_OCCUPIED, EVT_SEAT_OCCUPIED),
-
-    SeatRegexParser(RX_KILLED, EVT_KILLED),
-    SeatVictimOfUserRegexParser(RX_KILLED_BY_USER, EVT_KILLED_BY_USER),
-
-    SeatRegexParser(RX_BAILED_OUT, EVT_BAILED_OUT),
-    SeatRegexParser(RX_PARACHUTE_OPENED, EVT_PARACHUTE_OPENED),
-    SeatRegexParser(RX_WOUNDED, EVT_WOUNDED),
-    SeatRegexParser(RX_HEAVILY_WOUNDED, EVT_HEAVILY_WOUNDED),
-
-    SeatRegexParser(RX_CAPTURED, EVT_CAPTURED),
-])
+default_evt_parser = build_default_event_parser()
 
 
 def parse_log_lines(lines, evt_parser=default_evt_parser):
@@ -791,10 +351,11 @@ def parse_log_lines(lines, evt_parser=default_evt_parser):
         if evt is None:
             unparsed.append(line)
             continue
-        if 'time' in evt:
-            evt['time'] = evt['time'].isoformat()
+
+        evt['time'] = evt['time'].isoformat()
         if 'date' in evt:
             evt['date'] = evt['date'].isoformat()
+
         if evt['type'] == EVT_MISSION_PLAYING:
             if mission:
                 end_mission(evt['time'])

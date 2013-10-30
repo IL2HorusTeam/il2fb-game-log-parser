@@ -11,7 +11,7 @@ __all__ =  [
     'RX_MISSION_WON', 'RX_TARGET_RESULT',
     'RX_CONNECTED', 'RX_DISCONNECTED', 'RX_WENT_TO_MENU', 'RX_SELECTED_ARMY',
     'RX_SEAT_OCCUPIED', 'RX_WEAPONS_LOADED', 'RX_BAILED_OUT',
-    'RX_PARACHUTE_OPENED', 'RX_CAPTURED', 'RX_TOOK_OFF', 'RX_CRASHED',
+    'RX_SUCCESSFULLY_BAILED_OUT', 'RX_CAPTURED', 'RX_TOOK_OFF', 'RX_CRASHED',
     'RX_LANDED', 'RX_TOGGLE_LANDING_LIGHTS', 'RX_TOGGLE_WINGTIP_SMOKES',
     'RX_WOUNDED', 'RX_HEAVILY_WOUNDED', 'RX_KILLED', 'RX_KILLED_BY_USER',
     'RX_SHOT_DOWN_BY_USER', 'RX_SHOT_DOWN_BY_STATIC', 'RX_SHOT_DOWN_SELF',
@@ -547,7 +547,7 @@ out             #
 {pos}           # 'position' regex placeholder
 """.format(time_seat=RX_TIME_SEAT, pos=RX_POS)
 
-RX_PARACHUTE_OPENED = """
+RX_SUCCESSFULLY_BAILED_OUT = """
 # Capture 'crew member's parachute opened' event. E.g.:
 #
 # "[9:33:20 PM] User:Pe-8(0) successfully bailed out at 100.0 200.99"

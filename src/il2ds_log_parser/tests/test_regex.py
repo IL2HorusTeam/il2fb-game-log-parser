@@ -346,7 +346,7 @@ class ActionsTestCase(BaseTestCase):
         self._assert_time_seat_pos(m.groupdict())
 
     def test_successfully_bailed_out(self):
-        rx = self._compile_re(RX_PARACHUTE_OPENED)
+        rx = self._compile_re(RX_SUCCESSFULLY_BAILED_OUT)
         m = rx.match("[8:49:39 PM] User:Pe-8(0) successfully bailed out at 100.0 200.99")
         self.assertIsNotNone(m)
         self._assert_time_seat_pos(m.groupdict())
