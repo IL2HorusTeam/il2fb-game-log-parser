@@ -1,5 +1,4 @@
 # -*- coding: utf-8 -*-
-
 import datetime
 import unittest
 
@@ -52,10 +51,10 @@ class EventProcessorTestCase(unittest.TestCase):
             'pos_y': "-0.99999",
         }
         process_position(data)
-        pos = data.get('pos')
+        pos = data['pos']
         self.assertIsInstance(pos, dict)
-        self.assertEqual(pos.get('x'), 50)
-        self.assertEqual(pos.get('y'), -0.99999)
+        self.assertEqual(pos['x'], 50)
+        self.assertEqual(pos['y'], -0.99999)
 
     def test_process_toggle_value(self):
         data = {'value': "on", }
@@ -85,10 +84,10 @@ class EventProcessorTestCase(unittest.TestCase):
             'e_aircraft': "Ubercraft",
         }
         process_attacking_user(data)
-        attacker = data.get('attacker')
+        attacker = data['attacker']
         self.assertIsInstance(attacker, dict)
-        self.assertEqual(attacker.get('callsign'), "User")
-        self.assertEqual(attacker.get('aircraft'), "Ubercraft")
+        self.assertEqual(attacker['callsign'], "User")
+        self.assertEqual(attacker['aircraft'], "Ubercraft")
 
     def test_process_army(self):
         datas = [

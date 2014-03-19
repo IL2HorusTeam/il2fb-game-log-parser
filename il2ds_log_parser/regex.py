@@ -1,5 +1,4 @@
 # -*- coding: utf-8 -*-
-
 import re
 
 from il2ds_log_parser.constants import (TOGGLE_VALUE_ON, TOGGLE_VALUE_OFF,
@@ -24,7 +23,9 @@ __all__ =  [
 # Commons
 #------------------------------------------------------------------------------
 
-"""Flags to be used for matching strings."""
+"""
+Flags to be used for matching strings.
+"""
 RX_FLAGS = re.VERBOSE
 
 RX_TIME_BASE = """

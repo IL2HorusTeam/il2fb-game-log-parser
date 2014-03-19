@@ -1,6 +1,4 @@
 # -*- coding: utf-8 -*-
-
-import datetime
 import logging
 import re
 
@@ -17,8 +15,9 @@ LOG = logging.getLogger(__file__)
 
 
 class RegexParser(object):
-
-    """Parse a line which has a time stamp at the beginning."""
+    """
+    Parse a line which has a time stamp at the beginning.
+    """
 
     def __init__(self, regex, processors=None, evt_type=None):
         """
@@ -96,11 +95,12 @@ class RegexParser(object):
 
 
 class RegistrationError(Exception):
-    """Thrown when registering or unregistering parser goes wrong."""
+    """
+    Thrown when registering or unregistering parser goes wrong.
+    """
 
 
 class MultipleParser(object):
-
     """
     Combines multiple parsers with unique patterns into a chain of parsers and
     callbacks which can be called if a string will match parser's pattern.

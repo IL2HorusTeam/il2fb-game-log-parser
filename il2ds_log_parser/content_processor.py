@@ -1,5 +1,4 @@
 # -*- coding: utf-8 -*-
-
 import datetime
 
 from il2ds_log_parser.constants import (LOG_TIME_FORMAT, LOG_DATE_FORMAT,
@@ -77,5 +76,4 @@ def process_attacking_user(data):
 
 
 def process_army(data):
-    army = data['army']
-    data['army'] = army[0].upper() + army[1:].lower()
+    data['army'] = data['army'].capitalize()

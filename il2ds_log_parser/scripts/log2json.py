@@ -1,5 +1,4 @@
 # -*- coding: utf-8 -*-
-
 import optparse
 import simplejson as json
 
