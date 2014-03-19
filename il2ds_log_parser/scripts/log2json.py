@@ -6,7 +6,7 @@ from il2ds_log_parser import parse_log
 
 
 def parse_args():
-    usage = """usage: %prog --src=SRC --dst=DST"""
+    usage = "usage: %prog --src=SRC --dst=DST"
     parser = optparse.OptionParser(usage)
 
     help = "Path to the source events log file. Default: events.log"
