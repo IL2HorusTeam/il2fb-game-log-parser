@@ -2,7 +2,7 @@
 import optparse
 import simplejson as json
 
-from il2ds_log_parser import parse_log
+from il2fb.parsers.events import parse_log
 
 
 def parse_args():

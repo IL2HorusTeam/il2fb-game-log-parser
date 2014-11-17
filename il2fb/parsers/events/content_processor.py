@@ -1,15 +1,15 @@
 # -*- coding: utf-8 -*-
 import datetime
 
-from il2ds_log_parser.constants import (LOG_TIME_FORMAT, LOG_DATE_FORMAT,
+from il2fb.parsers.events.constants import (LOG_TIME_FORMAT, LOG_DATE_FORMAT,
     TARGET_RESULT_COMPLETE, TARGET_RESULTS, TOGGLE_VALUE_ON, TOGGLE_VALUES, )
 
 
-__all__ = [
+__all__ = (
     'process_time', 'process_date', 'process_number', 'process_target_result',
     'process_fuel', 'process_position', 'process_toggle_value', 'process_seat',
     'process_attacking_user', 'process_army',
-]
+)
 
 
 def process_time(data):

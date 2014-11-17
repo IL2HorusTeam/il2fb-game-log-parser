@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 import re
 
-from il2ds_log_parser.constants import (TOGGLE_VALUE_ON, TOGGLE_VALUE_OFF,
+from il2fb.parsers.events.constants import (TOGGLE_VALUE_ON, TOGGLE_VALUE_OFF,
     TARGET_RESULT_COMPLETE, TARGET_RESULT_FAILED, )
 
 __all__ =  [

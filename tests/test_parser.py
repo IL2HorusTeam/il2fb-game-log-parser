@@ -2,13 +2,13 @@
 import datetime
 import unittest
 
-from il2ds_log_parser import parse_evt
-from il2ds_log_parser.content_processor import process_time
-from il2ds_log_parser.event_types import *
-from il2ds_log_parser.parser import *
+from il2fb.parsers.events import parse_evt
+from il2fb.parsers.events.content_processor import process_time
+from il2fb.parsers.events.event_types import *
+from il2fb.parsers.events.parser import *
 
-from il2ds_log_parser.regex import *
-from il2ds_log_parser.regex import (RX_TIME_BASE, RX_TIME, RX_DATE_TIME,
+from il2fb.parsers.events.regex import *
+from il2fb.parsers.events.regex import (RX_TIME_BASE, RX_TIME, RX_DATE_TIME,
     RX_POS, RX_TOGGLE_VALUE, RX_SEAT, RX_STATIC, RX_ENEMY_CALLSIGN_AIRCRAFT,
     RX_TIME_CALLSIGN, RX_TIME_AIRCRAFT, RX_TIME_SEAT, RX_DESTROYED_BY, )
 

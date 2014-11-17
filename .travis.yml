@@ -1,11 +1,20 @@
 language: python
 python:
-    - "2.7"
+  - '2.7'
+  - '3.2'
+  - '3.3'
+  - '3.4'
 install:
-    - pip install -e . --use-mirrors
+  - pip install -e . --use-mirrors
 before_script:
-    - pip install coverage coveralls --use-mirrors
+  - pip install coverage coveralls nose scrutinizer-ocular
 script:
-    - nosetests --with-coverage --cover-package=il2ds_log_parser
+  - coverage run `which nosetests` --nocapture
 after_success:
-    - coveralls
+  - coverage report -m
+  - coveralls
+  - ocular --data-file ".coverage" --config-file ".coveragerc"
+notifications:
+  email: false
+  slack:
+    secure: dPhiB6NFrgX5G4QCek4Z/2G9t0Sxfh63td5J7INmH+9d47C9bXUu/lSYFbPhqkP82qnZ+xrKbbjBjosa0aYwTysKK6Wy26fmeuBVI7/4Tr8uePu21GfvNdm69YHQswNBxaSvRBSeg3Dfss7rGA/jDPCFuF1IYOfwL1ey6Y8ew94=

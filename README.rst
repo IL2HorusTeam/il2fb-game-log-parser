@@ -20,7 +20,7 @@ Usage
 
 ### Parse single events from log:
 
-    from il2ds_log_parser import parse_evt
+    from il2fb.parsers.events import parse_evt
     evt = parse_evt("[8:46:57 PM] User selected army Red at 238667.0 104506.0")
 
 `evt` will contain:
@@ -38,7 +38,7 @@ Usage
 
 ### Parse the whole log and group events by missions:
 
-    from il2ds_log_parser import parse_log
+    from il2fb.parsers.events import parse_log
 
     with open('/path/to/events.log', 'r') as f:
         lines = [line.strip() for line in f.readlines()]
@@ -47,7 +47,7 @@ Usage
 
 ### Convert the whole log to JSON and print statistics:
 
-    python il2ds_log_parser/scripts/log2json.py --src=log_examples/Helsinki_event_eventlog.lst --dst=Helsinki_events.json
+    python il2fb.parsers.events/scripts/log2json.py --src=log_examples/Helsinki_event_eventlog.lst --dst=Helsinki_events.json
     Total: 3326.
     Done: 3326.
     Skipped: 0.

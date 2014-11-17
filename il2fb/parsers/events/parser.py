@@ -2,9 +2,9 @@
 import logging
 import re
 
-from il2ds_log_parser.content_processor import *
-from il2ds_log_parser.event_types import *
-from il2ds_log_parser.regex import *
+from il2fb.parsers.events.content_processor import *
+from il2fb.parsers.events.event_types import *
+from il2fb.parsers.events.regex import *
 
 
 __all__ =  [

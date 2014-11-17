@@ -2,7 +2,7 @@
 import datetime
 import unittest
 
-from il2ds_log_parser.content_processor import *
+from il2fb.parsers.events.content_processor import *
 
 
 class EventProcessorTestCase(unittest.TestCase):
