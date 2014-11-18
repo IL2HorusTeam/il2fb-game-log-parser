@@ -1,55 +1,38 @@
-##IL-2 FB Dedicated Server Events Log Parser
+IL-2 FB Events Parser
+=====================
 
-[![Build Status](https://travis-ci.org/IL2HorusTeam/il2ds-log-parser.png?branch=master)](https://travis-ci.org/IL2HorusTeam/il2ds-log-parser)
-[![Coverage Status](https://coveralls.io/repos/IL2HorusTeam/il2ds-log-parser/badge.png)](https://coveralls.io/r/IL2HorusTeam/il2ds-log-parser)
-[![PyPi package](https://badge.fury.io/py/il2ds-log-parser.png)](http://badge.fury.io/py/il2ds-log-parser/)
-[![Downloads](https://pypip.in/d/il2ds-log-parser/badge.png)](https://crate.io/packages/il2ds-log-parser/)
+|PyPi package| |PyPi downloads| |License|
 
-Parse log file of IL-2 FB DS and produce information about events.
+|Build Status| |Coverage Status| |Code Review| |Health| |Quality| |Requirements|
 
-Currently mostly all events can be parsed. AI-related events still need to be
-studied, so that's why this is beta version.
+Parse log file (or single line) from IL-2 FB dedicated server and produce
+information about events.
 
-Installation
-------------
+  **Note**: Currently mostly all events can be parsed. AI-related events still
+  need to be studied, so that's why this is beta version.
 
-    pip install il2ds-log-parser
 
-Usage
------
-
-### Parse single events from log:
-
-    from il2fb.parsers.events import parse_evt
-    evt = parse_evt("[8:46:57 PM] User selected army Red at 238667.0 104506.0")
-
-`evt` will contain:
-
-    {
-        'army': 'Red',
-        'pos': {
-            'y': 104506.0,
-            'x': 238667.0
-        },
-        'callsign': 'User',
-        'time': datetime.time(20, 46, 57),
-        'type': 'SEL_ARMY',
-    }
-
-### Parse the whole log and group events by missions:
-
-    from il2fb.parsers.events import parse_log
-
-    with open('/path/to/events.log', 'r') as f:
-        lines = [line.strip() for line in f.readlines()]
-
-    missions, unparsed = parse_log(lines)
-
-### Convert the whole log to JSON and print statistics:
-
-    python il2fb.parsers.events/scripts/log2json.py --src=log_examples/Helsinki_event_eventlog.lst --dst=Helsinki_events.json
-    Total: 3326.
-    Done: 3326.
-    Skipped: 0.
-
-This will convert [Helsinki_event_eventlog.lst](log_examples/Helsinki_event_eventlog.lst) into [Helsinki_events.json](https://www.dropbox.com/s/3irqjk5p0jxf9yy/Helsinki_events.json).
+.. |Build Status| image:: http://img.shields.io/travis/IL2HorusTeam/il2fb-events-parser.svg?style=flat&branch=master
+   :target: https://travis-ci.org/IL2HorusTeam/il2fb-events-parser
+.. |Coverage Status| image:: http://img.shields.io/coveralls/IL2HorusTeam/il2fb-events-parser.svg?style=flat&branch=master
+   :target: https://coveralls.io/r/IL2HorusTeam/il2fb-events-parser?branch=master
+.. |PyPi package| image:: http://img.shields.io/pypi/v/il2fb-events-parser.svg?style=flat
+   :target: http://badge.fury.io/py/il2fb-events-parser/
+.. |PyPi downloads| image:: http://img.shields.io/pypi/dm/il2fb-events-parser.svg?style=flat
+   :target: https://crate.io/packages/il2fb-events-parser/
+.. |Docs| image:: https://readthedocs.org/projects/il-2-missions-parser/badge/?version=latest&style=flat
+   :target: `read the docs`_
+.. |License| image:: https://img.shields.io/badge/license-LGPLv3-brightgreen.svg?style=flat
+   :target: https://github.com/IL2HorusTeam/il2fb-events-parser/blob/master/LICENSE
+.. |Code Review| image:: https://www.codacy.com/project/badge/4c79f2cb39234620bce5d4c49a54be52
+    :target: https://www.codacy.com/public/IL2HorusTeam/il2fbmissionparser/dashboard
+    :alt: Codacy Code Review
+.. |Health| image:: https://landscape.io/github/IL2HorusTeam/il2fb-events-parser/master/landscape.png?style=flat
+   :target: https://landscape.io/github/IL2HorusTeam/il2fb-events-parser/master
+   :alt: Code Health
+.. |Quality| image:: https://scrutinizer-ci.com/g/IL2HorusTeam/il2fb-events-parser/badges/quality-score.png?b=master&style=flat
+   :target: https://scrutinizer-ci.com/g/IL2HorusTeam/il2fb-events-parser/?branch=master
+   :alt: Scrutinizer Code Quality
+.. |Requirements| image:: https://requires.io/github/IL2HorusTeam/il2fb-events-parser/requirements.svg?branch=master&style=flat
+    :target: https://requires.io/github/IL2HorusTeam/il2fb-events-parser/requirements/?branch=master
+    :alt: Requirements Status
