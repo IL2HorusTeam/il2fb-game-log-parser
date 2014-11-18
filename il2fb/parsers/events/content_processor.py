@@ -1,8 +1,11 @@
 # -*- coding: utf-8 -*-
+
 import datetime
 
-from il2fb.parsers.events.constants import (LOG_TIME_FORMAT, LOG_DATE_FORMAT,
-    TARGET_RESULT_COMPLETE, TARGET_RESULTS, TOGGLE_VALUE_ON, TOGGLE_VALUES, )
+from .constants import (
+    LOG_TIME_FORMAT, LOG_DATE_FORMAT, TARGET_RESULT_COMPLETE, TARGET_RESULTS,
+    TOGGLE_VALUE_ON, TOGGLE_VALUES,
+)
 
 
 __all__ = (
@@ -57,9 +60,8 @@ def process_toggle_value(data):
         data['value'] = (v == TOGGLE_VALUE_ON)
     else:
         raise ValueError(
-            "Toggle value '{value}' is invalid. Valid values: {valid}.".format(
-                value=v,
-                valid=', '.join(TOGGLE_VALUES)))
+            "Toggle value '{value}' is invalid. Valid values: {valid}."
+            .format(value=v, valid=', '.join(TOGGLE_VALUES)))
 
 
 def process_seat(data):

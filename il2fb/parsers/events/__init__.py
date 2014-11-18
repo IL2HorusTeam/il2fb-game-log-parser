@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
-from il2fb.parsers.events.parser import default_evt_parser, parse_log_lines
+
+from .parser import default_evt_parser, parse_log_lines
 
 
 __all__ = (

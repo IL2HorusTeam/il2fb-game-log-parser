@@ -1,10 +1,13 @@
 # -*- coding: utf-8 -*-
+
 import re
 
-from il2fb.parsers.events.constants import (TOGGLE_VALUE_ON, TOGGLE_VALUE_OFF,
-    TARGET_RESULT_COMPLETE, TARGET_RESULT_FAILED, )
+from .constants import (
+    TOGGLE_VALUE_ON, TOGGLE_VALUE_OFF, TARGET_RESULT_COMPLETE,
+    TARGET_RESULT_FAILED,
+)
 
-__all__ =  [
+__all__ = (
     'RX_FLAGS',
     'RX_MISSION_BEGIN', 'RX_MISSION_END', 'RX_MISSION_PLAYING',
     'RX_MISSION_WON', 'RX_TARGET_RESULT',
@@ -17,7 +20,7 @@ __all__ =  [
     'RX_DAMAGED_BY_USER', 'RX_DAMAGED_ON_GROUND', 'RX_DAMAGED_SELF',
     'RX_DESTROYED_BLD', 'RX_DESTROYED_BRIDGE', 'RX_DESTROYED_STATIC',
     'RX_DESTROYED_TREE',
-]
+)
 
 #------------------------------------------------------------------------------
 # Commons
@@ -386,7 +389,8 @@ Target          #
 )               # 'result' group end
 $               # end of the string
 """.format(time=RX_TIME,
-           complete=TARGET_RESULT_COMPLETE, failed=TARGET_RESULT_FAILED)
+           complete=TARGET_RESULT_COMPLETE,
+           failed=TARGET_RESULT_FAILED)
 
 #------------------------------------------------------------------------------
 # Action events
@@ -806,9 +810,9 @@ by              #
 \s              # single whitespace
 {eair}          # 'enemy callsign with aircraft' regex placeholder
 {pos}           # 'position' regex placeholder
-""".format(
-    time_aircraft=RX_TIME_AIRCRAFT,
-    eair=RX_ENEMY_CALLSIGN_AIRCRAFT, pos=RX_POS)
+""".format(time_aircraft=RX_TIME_AIRCRAFT,
+           eair=RX_ENEMY_CALLSIGN_AIRCRAFT,
+           pos=RX_POS)
 
 RX_SHOT_DOWN_SELF = """
 # Capture 'user shot down self' event. E.g.:
@@ -854,9 +858,9 @@ by              #
 \s              # single whitespace
 {eair}          # 'enemy callsign with aircraft' regex placeholder
 {pos}           # 'position' regex placeholder
-""".format(
-    time_aircraft=RX_TIME_AIRCRAFT,
-    eair=RX_ENEMY_CALLSIGN_AIRCRAFT, pos=RX_POS)
+""".format(time_aircraft=RX_TIME_AIRCRAFT,
+           eair=RX_ENEMY_CALLSIGN_AIRCRAFT,
+           pos=RX_POS)
 
 RX_SHOT_DOWN_BY_STATIC = """
 # Capture 'user shot down by static' event. E.g.:

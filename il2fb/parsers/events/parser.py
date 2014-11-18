@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+
 import logging
 import re
 
@@ -7,9 +8,9 @@ from il2fb.parsers.events.event_types import *
 from il2fb.parsers.events.regex import *
 
 
-__all__ =  [
+__all__ = (
     'RegexParser', 'MultipleParser', 'RegistrationError', 'default_evt_parser',
-]
+)
 
 LOG = logging.getLogger(__file__)
 
@@ -62,9 +63,9 @@ class RegexParser(object):
                 for processor in self.processors:
                     try:
                         processor(evt)
-                    except KeyError as e:
+                    except KeyError:
                         pass
-                    except ValueError as e:
+                    except ValueError:
                         pass
             return evt
         return None
