@@ -1,20 +1,28 @@
 # -*- coding: utf-8 -*-
 
-#------------------------------------------------------------------------------
-# Formats
-#------------------------------------------------------------------------------
+from candv import Values, ValueConstant
+
 
 LOG_TIME_FORMAT = "%I:%M:%S %p"
 LOG_DATE_FORMAT = "%b %d, %Y"
 
-#------------------------------------------------------------------------------
-# Constants
-#------------------------------------------------------------------------------
 
-TOGGLE_VALUE_ON = 'on'
-TOGGLE_VALUE_OFF = 'off'
-TOGGLE_VALUES = (TOGGLE_VALUE_ON, TOGGLE_VALUE_OFF)
+class RegexChoices(Values):
 
-TARGET_RESULT_COMPLETE = 'Complete'
-TARGET_RESULT_FAILED = 'Failed'
-TARGET_RESULTS = (TARGET_RESULT_COMPLETE, TARGET_RESULT_FAILED)
+    @classmethod
+    def regex_choices(cls):
+        return '|'.join(cls.values())
+
+    @classmethod
+    def list_choices(cls):
+        return ', '.join(cls.values())
+
+
+class TOGGLE_VALUES(RegexChoices):
+    ON = ValueConstant('on')
+    OFF = ValueConstant('off')
+
+
+class TARGET_RESULT_TYPES(RegexChoices):
+    COMPLETE = ValueConstant('Complete')
+    FAILED = ValueConstant('Failed')

@@ -3,8 +3,7 @@
 import datetime
 
 from .constants import (
-    LOG_TIME_FORMAT, LOG_DATE_FORMAT, TARGET_RESULT_COMPLETE, TARGET_RESULTS,
-    TOGGLE_VALUE_ON, TOGGLE_VALUES,
+    LOG_TIME_FORMAT, LOG_DATE_FORMAT, TOGGLE_VALUES, TARGET_RESULT_TYPES,
 )
 
 
@@ -31,14 +30,13 @@ def process_number(data):
 
 def process_target_result(data):
     r = data.get('result')
-    if r in TARGET_RESULTS:
-        data['result'] = (r == TARGET_RESULT_COMPLETE)
+    if r in TARGET_RESULT_TYPES.values():
+        data['result'] = (r == TARGET_RESULT_TYPES.COMPLETE.value)
     else:
         raise ValueError(
             "Target result value '{value}' is invalid. "
-            "Valid values: {valid}.".format(
-                value=r,
-                valid=', '.join(TARGET_RESULTS)))
+            "Valid values: {valid}."
+            .format(value=r, valid=TARGET_RESULT_TYPES.list_choices()))
 
 
 def process_fuel(data):
@@ -56,12 +54,12 @@ def process_position(data):
 
 def process_toggle_value(data):
     v = data.get('value')
-    if v in TOGGLE_VALUES:
-        data['value'] = (v == TOGGLE_VALUE_ON)
+    if v in TOGGLE_VALUES.values():
+        data['value'] = (v == TOGGLE_VALUES.ON.value)
     else:
         raise ValueError(
             "Toggle value '{value}' is invalid. Valid values: {valid}."
-            .format(value=v, valid=', '.join(TOGGLE_VALUES)))
+            .format(value=v, valid=TOGGLE_VALUES.list_choices()))
 
 
 def process_seat(data):

@@ -4,4 +4,6 @@
 #
 #     pip install -r requirements.pip
 
+candv>=1.2.0
+il2fb-commons>=0.9.8
 simplejson>=3.3.1

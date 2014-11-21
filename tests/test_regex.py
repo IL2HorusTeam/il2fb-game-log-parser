@@ -3,10 +3,12 @@ import re
 import unittest
 
 from il2fb.parsers.events.regex import *
-from il2fb.parsers.events.regex import (RX_TIME_BASE, RX_TIME, RX_DATE_TIME,
+from il2fb.parsers.events.regex import (
+    RX_TIME_BASE, RX_TIME, RX_DATE_TIME,
     RX_CALLSIGN, RX_SEAT, RX_BRIDGE, RX_ARMY, RX_AIRCRAFT,
     RX_POS, RX_TOGGLE_VALUE, RX_STATIC, RX_ENEMY_CALLSIGN_AIRCRAFT,
-    RX_TIME_CALLSIGN, RX_TIME_AIRCRAFT, RX_DESTROYED_BY, )
+    RX_TIME_CALLSIGN, RX_TIME_AIRCRAFT, RX_DESTROYED_BY,
+)
 
 
 class BaseTestCase(unittest.TestCase):
@@ -26,7 +28,7 @@ class BaseTestCase(unittest.TestCase):
 
 class CommonsTestCase(BaseTestCase):
 
-    def test_time_base(self):
+    def test_RX_TIME_BASE(self):
         rx = self._compile_re(RX_TIME_BASE)
         m = rx.search("[8:33:05 AM]")
         self.assertIsNotNone(m)

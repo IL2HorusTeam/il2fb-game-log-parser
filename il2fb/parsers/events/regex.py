@@ -2,10 +2,7 @@
 
 import re
 
-from .constants import (
-    TOGGLE_VALUE_ON, TOGGLE_VALUE_OFF, TARGET_RESULT_COMPLETE,
-    TARGET_RESULT_FAILED,
-)
+from .constants import TOGGLE_VALUES, TARGET_RESULT_TYPES
 
 __all__ = (
     'RX_FLAGS',
@@ -26,17 +23,15 @@ __all__ = (
 # Commons
 #------------------------------------------------------------------------------
 
-"""
-Flags to be used for matching strings.
-"""
+#: Flags to be used for matching strings.
 RX_FLAGS = re.VERBOSE
 
+#: Capturing base event time stamp. E.g., for::
+#:
+#:     "foo 8:33:05 PM bar"
+#:
+#: ``8:33:05 PM`` will be captured into ``time`` group.
 RX_TIME_BASE = """
-# Capturing base event time stamp. E.g.:
-#
-# "foo 8:33:05 PM bar"
-#
-# "8:33:05 PM" will be captured into 'time' group.
                 # any beginning of the string
 (?P<time>       # 'time' group start
     \d{1,2}     # 1 or 2 digits for hours (e.g. 8, 08 or 18)
@@ -50,27 +45,27 @@ RX_TIME_BASE = """
                 # any ending of the string
 """
 
+#: Capturing event time stamp. E.g., for::
+#:
+#:     "[8:33:05 PM] foo"
+#:
+#: ``8:33:05 PM`` will be captured into ``time`` group.
 RX_TIME = """
-# Capturing regular event datetime stamp. E.g.:
-#
-# "[8:33:05 PM] foo"
-#
-# "8:33:05 PM" will be captured into 'time' group.
 ^               # beginning of the string
 \[              # left time wrapper
-{time_base}     # 'time_base' regex placeholder
+{RX_TIME_BASE}     # 'RX_TIME_BASE' regex placeholder
 \]              # right time wrapper
 \s+             # one or more whitespaces
                 # any ending of the string
-""".format(time_base=RX_TIME_BASE)
+""".format(RX_TIME_BASE=RX_TIME_BASE)
 
+#: Capturing regular event datetime stamp. E.g., for::
+#:
+#:     "[Sep 15, 2013 8:33:05 PM] foo"
+#:
+#: ``Sep 15, 2013`` will be captured into ``date`` group,
+#: ``8:33:05 PM`` will be captured into ``time`` group.
 RX_DATE_TIME = """
-# Capturing regular event datetime stamp. E.g.:
-#
-# "[Sep 15, 2013 8:33:05 PM] foo"
-#
-# "Sep 15, 2013" will be captured into 'date' group,
-# "8:33:05 PM" will be captured into 'time' group.
 ^               # beginning of the string
 \[              # opening brackets
 (?P<date>       # 'date' group start
@@ -82,19 +77,19 @@ RX_DATE_TIME = """
     \d{{4}}     # 4 digits for year (e.g. 2013)
 )               # 'date' group end
 \s              # single whitespace
-{time_base}     # 'time_base' regex placeholder
+{RX_TIME_BASE}     # 'RX_TIME_BASE' regex placeholder
 \]              # closing brackets
 \s+             # one or more whitespaces
                 # any ending of the string
-""".format(time_base=RX_TIME_BASE)
+""".format(RX_TIME_BASE=RX_TIME_BASE)
 
+#: Capturing map position of the event. E.g., for::
+#:
+#:     "Something has happened at 100.0 200.99"
+#:
+#: ``100.0`` will be captured into ``pos_x`` group,
+#: ``200.99`` will be captured into ``pos_y`` group.
 RX_POS = """
-# Capturing map position of the event. E.g.:
-#
-# "Something has happened at 100.0 200.99"
-#
-# "100.0" will be captured into 'pos_x' group,
-# "200.99" will be captured into 'pos_y' group.
                 # any beginning of the string
 \s              # single whitespace
 at              #
@@ -113,25 +108,25 @@ at              #
 $               # end of the string
 """
 
+#: Capturing pilot's callsign. E.g., for::
+#:
+#:     "something is on"
+#:
+#: ``on`` will be captured into ``value`` group.
 RX_TOGGLE_VALUE = """
-# Capturing pilot's callsign. E.g.:
-#
-# "something is on"
-#
-# "on" will be captured into 'value' group.
                 # any beginning of the string
 (?P<value>      # 'value' group start
-    {on}|{off}  # switch value (e.g. 'on' or 'off')
+    {choices}   # switch value (e.g. 'on' or 'off')
 )               # 'value' group end
                 # any ending of the string
-""".format(on=TOGGLE_VALUE_ON, off=TOGGLE_VALUE_OFF)
+""".format(choices=TOGGLE_VALUES.regex_choices())
 
+#: Capturing pilot's callsign. E.g., for::
+#:
+#:     "    User   "
+#:
+#: ``User`` will be captured into ``callsign`` group.
 RX_CALLSIGN = """
-# Capturing pilot's callsign. E.g.:
-#
-# "    User   "
-#
-# "User" will be captured into 'callsign' group.
                 # any beginning of the string
 (?P<callsign>   # 'callsign' group start
     \S+         # one or more non-whitespace characters
@@ -139,12 +134,12 @@ RX_CALLSIGN = """
                 # any ending of the string
 """
 
+#: Capturing current user's seat. E.g., for::
+#:
+#:     "Pe-8(0) seat occupied"
+#:
+#: ``0`` will be captured into ``seat`` group.
 RX_SEAT = """
-# Capturing current user's seat. E.g.:
-#
-# "Pe-8(0) seat occupied"
-#
-# "0" will be captured into 'seat' group.
                 # any beginning of the string
 \(              # opening parenthesis
 (?P<seat>       # 'seat' group start
@@ -154,12 +149,12 @@ RX_SEAT = """
                 # any ending of the string
 """
 
+#: Capturing pilot's aircraft. E.g., for::
+#:
+#:     "User:Pe-8"
+#:
+#: ``Pe-8`` will be captured into ``aircraft`` group.
 RX_AIRCRAFT = """
-# Capturing pilot's aircraft. E.g.:
-#
-# "User:Pe-8"
-#
-# "Pe-8" will be captured into 'aircraft' group.
                 # any beginning of the string
 :               # a colon
 (?P<aircraft>   # 'aircraft' group start
@@ -168,13 +163,13 @@ RX_AIRCRAFT = """
                 # any ending of the string
 """
 
+#: Capturing enemy pilot's callsign and aircraft. E.g., for::
+#:
+#:     "  User:Pe-8   "
+#:
+#: ``User`` will be captured into ``e_callsign`` group,
+#: ``Pe-8`` will be captured into ``e_aircraft`` group.
 RX_ENEMY_CALLSIGN_AIRCRAFT = """
-# Capturing enemy pilot's callsign and aircraft. E.g.:
-#
-# "  User:Pe-8   "
-#
-# "User" will be captured into 'e_callsign' group,
-# "Pe-8" will be captured into 'e_aircraft' group.
                 # any beginning of the string
 (?P<e_callsign> # 'e_callsign' group start
     \S+         # one or more non-whitespace characters
@@ -186,12 +181,12 @@ RX_ENEMY_CALLSIGN_AIRCRAFT = """
                 # any ending of the string
 """
 
+#: Capturing static's name. E.g., for::
+#:
+#:     "  0_Static  "
+#:
+#: ``0_Static`` will be captured into ``static`` group.
 RX_STATIC = """
-# Capturing static's name. E.g.:
-#
-# "  0_Static  "
-#
-# "0_Static" will be captured into 'static' group.
                 # any beginning of the string
 (?P<static>     # 'static' group start
     \d+         # one or more digits for static's ID
@@ -200,12 +195,12 @@ RX_STATIC = """
                 # any ending of the string
 """
 
+#: Capturing bridge's name. E.g., for::
+#:
+#:     "  Bridge0  "
+#:
+#: ``Bridge0`` will be captured into ``bridge`` group.
 RX_BRIDGE = """
-# Capturing bridge's name. E.g.:
-#
-# "  Bridge0  "
-#
-# "Bridge0" will be captured into 'bridge' group.
                 # any beginning of the string
 (?P<bridge>     # 'bridge' group start
     Bridge      #
@@ -214,12 +209,12 @@ RX_BRIDGE = """
                 # any ending of the string
 """
 
+#: Capturing army's name. E.g., for::
+#:
+#:     "  Red  "
+#:
+#: ``Red`` will be captured into ``army`` group.
 RX_ARMY = """
-# Capturing army's name. E.g.:
-#
-# "  Red  "
-#
-# "Red" will be captured into 'army' group.
                 # any beginning of the string
 (?P<army>       # 'army' group start
     \S+         # one or more non-whitespaces for army's name
@@ -227,68 +222,68 @@ RX_ARMY = """
                 # any ending of the string
 """
 
+#: Capturing pilot's callsign and aircraft. E.g., for::
+#:
+#:     "  User:Pe-8   "
+#:
+#: ``User`` will be captured into ``callsign`` group,
+#: ``Pe-8`` will be captured into ``aircraft`` group.
 RX_CALLSIGN_AIRCRAFT = """
-# Capturing pilot's callsign and aircraft. E.g.:
-#
-# "  User:Pe-8   "
-#
-# "User" will be captured into 'callsign' group,
-# "Pe-8" will be captured into 'aircraft' group.
                 # any beginning of the string
 {callsign}      # 'callsign' regex placeholder
 {aircraft}      # 'aircraft' regex placeholder
                 # any ending of the string
 """.format(callsign=RX_CALLSIGN, aircraft=RX_AIRCRAFT)
 
+#: Capturing time and pilot's callsign. E.g., for::
+#:
+#:     "[8:33:05 PM] User  "
+#:
+#: ``8:33:05 PM`` will be captured into ``time`` group,
+#: ``User`` will be captured into ``callsign`` group.
 RX_TIME_CALLSIGN = """
-# Capturing time and pilot's callsign. E.g.:
-#
-# "[8:33:05 PM] User  "
-#
-# "8:33:05 PM" will be captured into 'time' group,
-# "User" will be captured into 'callsign' group.
 {time}          # 'time' regex placeholder
 {callsign}      # 'callsign' regex placeholder
                 # any ending of the string
 """.format(time=RX_TIME, callsign=RX_CALLSIGN)
 
+#: Capturing time, pilot's callsign and aircraft. E.g., for::
+#:
+#: "[8:33:05 PM] User:Pe-8  "
+#:
+#: ``8:33:05 PM`` will be captured into ``time`` group,
+#: ``User`` will be captured into ``callsign`` group,
+#: ``Pe-8`` will be captured into ``aircraft`` group.
 RX_TIME_AIRCRAFT = """
-# Capturing time, pilot's callsign and aircraft. E.g.:
-#
-# "[8:33:05 PM] User:Pe-8  "
-#
-# "8:33:05 PM" will be captured into 'time' group,
-# "User" will be captured into 'callsign' group,
-# "Pe-8" will be captured into 'aircraft' group.
 {time}              # 'time' regex placeholder
 {callsign_aircraft} # 'callsign with aircraft' regex placeholder
                     # any ending of the string
 """.format(time=RX_TIME, callsign_aircraft=RX_CALLSIGN_AIRCRAFT)
 
+#: Capturing time, pilot's callsign, aircraft and seat number. E.g., for::
+#:
+#:     "[8:33:05 PM] User:Pe-8(0)  "
+#:
+#: ``8:33:05 PM`` will be captured into ``time`` group,
+#: ``User`` will be captured into ``callsign`` group,
+#: ``Pe-8`` will be captured into ``aircraft`` group,
+#: ``0`` will be captured into ``seat`` group.
 RX_TIME_SEAT = """
-# Capturing time, pilot's callsign, aircraft and seat number. E.g.:
-#
-# "[8:33:05 PM] User:Pe-8(0)  "
-#
-# "8:33:05 PM" will be captured into 'time' group,
-# "User" will be captured into 'callsign' group,
-# "Pe-8" will be captured into 'aircraft' group,
-# "0" will be captured into 'seat' group.
 {time_aircraft} # 'time with callsign and aircraft' regex placeholder
 {seat}          # 'seat' regex placeholder
 \s+             # one or more whitespaces
                 # any ending of the string
 """.format(time_aircraft=RX_TIME_AIRCRAFT, seat=RX_SEAT)
 
+#: Capturing object destroyed by user. E.g., for::
+#:
+#:    " destroyed by User:Pe-8 at 100.0 200.99"
+#:
+#: ``User`` will be captured into ``callsign`` group,
+#: ``Pe-8`` will be captured into ``aircraft`` group,
+#: ``100.0`` will be captured into ``pos_x`` group,
+#: ``200.99`` will be captured into ``pos_y`` group.
 RX_DESTROYED_BY = """
-# Capturing object destroyed by user. E.g.:
-#
-# " destroyed by User:Pe-8 at 100.0 200.99"
-#
-# "User" will be captured into 'callsign' group,
-# "Pe-8" will be captured into 'aircraft' group,
-# "100.0" will be captured into 'pos_x' group,
-# "200.99" will be captured into 'pos_y' group.
 \s                  # single whitespace
 destroyed           #
 \s                  # single whitespace
@@ -302,14 +297,14 @@ by                  #
 # Mission flow
 #------------------------------------------------------------------------------
 
+#: Capture 'mission playing' event. E.g., for::
+#:
+#:     "[Sep 15, 2013 8:33:05 PM] Mission: PH.mis is Playing"
+#:
+#: ``Sep 15, 2013`` will be captured into ``date`` group,
+#: ``8:33:05 PM`` will be captured into ``time`` group,
+#: ``PH.mis`` will be captured into ``mission`` group.
 RX_MISSION_PLAYING = """
-# Capture 'mission playing' event. E.g.:
-#
-# "[Sep 15, 2013 8:33:05 PM] Mission: PH.mis is Playing"
-#
-# "Sep 15, 2013" will be captured into 'date' group,
-# "8:33:05 PM" will be captured into 'time' group,
-# "PH.mis" will be captured into 'mission' group.
 {datetime}      # 'datetime' regex placeholder
 Mission:        #
 \s              # single whitespace
@@ -324,12 +319,12 @@ Playing         #
 $               # end of the string
 """.format(datetime=RX_DATE_TIME)
 
+#: Capture 'mission beginning' event. E.g., for::
+#:
+#:     "[8:33:05 PM] Mission BEGIN"
+#:
+#: ``8:33:05 PM`` will be captured into ``time`` group.
 RX_MISSION_BEGIN = """
-# Capture 'mission beginning' event. E.g.:
-#
-# "[8:33:05 PM] Mission BEGIN"
-#
-# "8:33:05 PM" will be captured into 'time' group.
 {time}          # 'time' regex placeholder
 Mission         #
 \s              # single whitespace
@@ -337,12 +332,12 @@ BEGIN           #
 $               # end of the string
 """.format(time=RX_TIME)
 
+#: Capture 'mission end' event. E.g., for::
+#:
+#:     "[8:33:05 PM] Mission END"
+#:
+#: ``8:33:05 PM`` will be captured into ``time`` group.
 RX_MISSION_END = """
-# Capture 'mission end' event. E.g.:
-#
-# "[8:33:05 PM] Mission END"
-#
-# "8:33:05 PM" will be captured into 'time' group.
 {time}          # 'time' regex placeholder
 Mission         #
 \s              # single whitespace
@@ -350,14 +345,14 @@ END             #
 $               # end of the string
 """.format(time=RX_TIME)
 
+#: Capture 'mission was won' event. E.g., for::
+#:
+#:     "[Sep 15, 2013 8:33:05 PM] Mission: RED WON"
+#:
+#: ``Sep 15, 2013`` will be captured into ``date`` group,
+#: ``8:33:05 PM`` will be captured into ``time`` group,
+#: ``Red`` will be captured into ``army`` group.
 RX_MISSION_WON = """
-# Capture 'mission was won' event. E.g.:
-#
-# "[Sep 15, 2013 8:33:05 PM] Mission: RED WON"
-#
-# "Sep 15, 2013" will be captured into 'date' group,
-# "8:33:05 PM" will be captured into 'time' group,
-# "Red" will be captured into 'army' group.
 {datetime}      # 'datetime' regex placeholder
 Mission:        #
 \s              # single whitespace
@@ -367,14 +362,14 @@ WON             #
 $               # end of the string
 """.format(datetime=RX_DATE_TIME, army=RX_ARMY)
 
+#: Capture 'target end' event. E.g., for::
+#:
+#:     "[8:33:05 PM] Target 3 Complete"
+#:
+#: ``8:33:05 PM`` will be captured into ``time`` group,
+#: ``3`` will be captured into ``number`` group,
+#: ``Complete`` will be captured into ``result`` group.
 RX_TARGET_RESULT = """
-# Capture 'target end' event. E.g.:
-#
-# "[8:33:05 PM] Target 3 Complete"
-#
-# "8:33:05 PM" will be captured into 'time' group,
-# "3" will be captured into 'number' group,
-# "Complete" will be captured into 'result' group.
 {time}          # 'time' regex placeholder
 Target          #
 \s              # single whitespace
@@ -383,26 +378,22 @@ Target          #
 )               # 'number' group end
 \s              # single whitespace
 (?P<result>     # 'result' group start
-    {complete}  #
-    |           # or
-    {failed}    #
+    {choices}   #
 )               # 'result' group end
 $               # end of the string
-""".format(time=RX_TIME,
-           complete=TARGET_RESULT_COMPLETE,
-           failed=TARGET_RESULT_FAILED)
+""".format(time=RX_TIME, choices=TARGET_RESULT_TYPES.regex_choices())
 
 #------------------------------------------------------------------------------
 # Action events
 #------------------------------------------------------------------------------
 
+#: Capture 'user connection' event. E.g., for::
+#:
+#:     "[8:45:57 PM] User has connected"
+#:
+#: ``8:45:57 PM`` will be captured into ``time`` group,
+#: ``User`` will be captured into ``callsign`` group.
 RX_CONNECTED = """
-# Capture 'user connection' event. E.g.:
-#
-# "[8:45:57 PM] User has connected"
-#
-# "8:45:57 PM" will be captured into 'time' group,
-# "User" will be captured into 'callsign' group.
 {time_callsign} # 'time with callsign' regex placeholder
 \s              # single whitespace
 has             #
@@ -411,13 +402,13 @@ connected       #
 $               # end of the string
 """.format(time_callsign=RX_TIME_CALLSIGN)
 
+#: Capture 'user disconnection' event. E.g., for::
+#:
+#:     "[8:46:37 PM] User has disconnected"
+#:
+#: ``8:46:37 PM`` will be captured into ``time`` group,
+#: ``User`` will be captured into ``callsign`` group.
 RX_DISCONNECTED = """
-# Capture 'user disconnection' event. E.g.:
-#
-# "[8:46:37 PM] User has disconnected"
-#
-# "8:46:37 PM" will be captured into 'time' group,
-# "User" will be captured into 'callsign' group.
 {time_callsign} # 'time with callsign' regex placeholder
 \s              # single whitespace
 has             #
@@ -426,13 +417,13 @@ disconnected    #
 $               # end of the string
 """.format(time_callsign=RX_TIME_CALLSIGN)
 
+#: Capture 'user went to refly menu' event. E.g., for::
+#:
+#:     "[8:49:20 PM] User entered refly menu"
+#:
+#: ``8:49:20 PM`` will be captured into ``time`` group,
+#: ``User`` will be captured into ``callsign`` group.
 RX_WENT_TO_MENU = """
-# Capture 'user went to refly menu' event. E.g.:
-#
-# "[8:49:20 PM] User entered refly menu"
-#
-# "8:49:20 PM" will be captured into 'time' group,
-# "User" will be captured into 'callsign' group.
 {time_callsign} # 'time with callsign' regex placeholder
 \s              # single whitespace
 entered         #
@@ -443,16 +434,16 @@ menu            #
 $               # end of the string
 """.format(time_callsign=RX_TIME_CALLSIGN)
 
+#: Capture 'user selected army' event. E.g., for::
+#:
+#:     "[8:46:55 PM] User selected army Red at 100.0 200.99"
+#:
+#: ``8:46:55 PM`` will be captured into ``time`` group,
+#: ``User`` will be captured into ``callsign`` group,
+#: ``Red`` will be captured into ``army`` group,
+#: ``53377.0`` will be captured into ``pos_x`` group,
+#: ``1303.10`` will be captured into ``pos_y`` group.
 RX_SELECTED_ARMY = """
-# Capture 'user selected army' event. E.g.:
-#
-# "[8:46:55 PM] User selected army Red at 100.0 200.99"
-#
-# "8:46:55 PM" will be captured into 'time' group,
-# "User" will be captured into 'callsign' group,
-# "Red" will be captured into 'army' group,
-# "53377.0" will be captured into 'pos_x' group,
-# "1303.10" will be captured into 'pos_y' group.
 {time_callsign} # 'time with callsign' regex placeholder
 \s              # single whitespace
 selected        #
@@ -465,16 +456,16 @@ army            #
 {pos}           # 'position' regex placeholder
 """.format(time_callsign=RX_TIME_CALLSIGN, pos=RX_POS)
 
+#: Capture 'user took-off' event. E.g., for::
+#:
+#:     "[8:49:32 PM] User:Pe-8 in flight at 100.0 200.99"
+#:
+#: ``8:49:32 PM`` will be captured into ``time`` group,
+#: ``User`` will be captured into ``callsign`` group,
+#: ``Pe-8`` will be captured into ``aircraft`` group,
+#: ``100.0`` will be captured into ``pos_x`` group,
+#: ``200.99`` will be captured into ``pos_y`` group.
 RX_TOOK_OFF = """
-# Capture 'user took-off' event. E.g.:
-#
-# "[8:49:32 PM] User:Pe-8 in flight at 100.0 200.99"
-#
-# "8:49:32 PM" will be captured into 'time' group,
-# "User" will be captured into 'callsign' group,
-# "Pe-8" will be captured into 'aircraft' group,
-# "100.0" will be captured into 'pos_x' group,
-# "200.99" will be captured into 'pos_y' group.
 {time_aircraft} # 'time with callsign and aircraft' regex placeholder
 \s              # single whitespace
 in              #
@@ -483,16 +474,16 @@ flight          #
 {pos}           # 'position' regex placeholder
 """.format(time_aircraft=RX_TIME_AIRCRAFT, pos=RX_POS)
 
+#: Capture 'user loaded weapons' event. E.g., for::
+#:
+#:     "[8:49:35 PM] User:Pe-8 loaded weapons '40fab100' fuel 40%"
+#:
+#: ``8:49:35 PM`` will be captured into ``time`` group,
+#: ``User`` will be captured into ``callsign`` group,
+#: ``Pe-8`` will be captured into ``aircraft`` group,
+#: ``40fab100`` will be captured into ``weapons`` group,
+#: ``40`` will be captured into ``fuel`` group.
 RX_WEAPONS_LOADED = """
-# Capture 'user loaded weapons' event. E.g.:
-#
-# "[8:49:35 PM] User:Pe-8 loaded weapons '40fab100' fuel 40%"
-#
-# "8:49:35 PM PM" will be captured into 'time' group,
-# "User" will be captured into 'callsign' group,
-# "Pe-8" will be captured into 'aircraft' group,
-# "40fab100" will be captured into 'weapons' group,
-# "40" will be captured into 'fuel' group.
 {time_aircraft} # 'time with callsign and aircraft' regex placeholder
 \s              # single whitespace
 loaded          #
@@ -514,17 +505,17 @@ fuel            #
 $
 """.format(time_aircraft=RX_TIME_AIRCRAFT, pos=RX_POS)
 
+#: Capture 'user occupied seat' event. E.g., for::
+#:
+#:     "[8:49:39 PM] User:Pe-8(0) seat occupied by User at 100.0 200.99"
+#:
+#: ``8:49:32 PM`` will be captured into ``time`` group,
+#: ``User`` will be captured into ``callsign`` group,
+#: ``Pe-8`` will be captured into ``aircraft`` group,
+#: ``0`` will be captured into ``seat`` group,
+#: ``100.0`` will be captured into ``pos_x`` group,
+#: ``200.99`` will be captured into ``pos_y`` group.
 RX_SEAT_OCCUPIED = """
-# Capture 'user occupied seat' event. E.g.:
-#
-# "[8:49:39 PM] User:Pe-8(0) seat occupied by User at 100.0 200.99"
-#
-# "8:49:32 PM" will be captured into 'time' group,
-# "User" will be captured into 'callsign' group,
-# "Pe-8" will be captured into 'aircraft' group,
-# "0" will be captured into 'seat' group,
-# "100.0" will be captured into 'pos_x' group,
-# "200.99" will be captured into 'pos_y' group.
 {time_seat}     # 'time with pilot's callsign, aircraft and seat' regex placeholder
 seat            #
 \s              # single whitespace
@@ -534,17 +525,17 @@ occupied        #
 {pos}           # 'position' regex placeholder
 """.format(time_seat=RX_TIME_SEAT, pos=RX_POS)
 
+#: Capture 'crew member bailed out' event. E.g., for::
+#:
+#:     "[9:31:20 PM] User:Pe-8(0) bailed out at 100.0 200.99"
+#:
+#: ``9:31:20 PM`` will be captured into ``time`` group,
+#: ``User`` will be captured into ``callsign`` group,
+#: ``Pe-8`` will be captured into ``aircraft`` group,
+#: ``0`` will be captured into ``seat`` group,
+#: ``100.0`` will be captured into ``pos_x`` group,
+#: ``200.99`` will be captured into ``pos_y`` group.
 RX_BAILED_OUT = """
-# Capture 'crew member bailed out' event. E.g.:
-#
-# "[9:31:20 PM] User:Pe-8(0) bailed out at 100.0 200.99"
-#
-# "9:31:20 PM" will be captured into 'time' group,
-# "User" will be captured into 'callsign' group,
-# "Pe-8" will be captured into 'aircraft' group,
-# "0" will be captured into 'seat' group,
-# "100.0" will be captured into 'pos_x' group,
-# "200.99" will be captured into 'pos_y' group.
 {time_seat}     # 'time with pilot's callsign, aircraft and seat' regex placeholder
 bailed          #
 \s              # single whitespace
@@ -552,17 +543,17 @@ out             #
 {pos}           # 'position' regex placeholder
 """.format(time_seat=RX_TIME_SEAT, pos=RX_POS)
 
+#: Capture 'crew member's parachute opened' event. E.g., for::
+#:
+#:     "[9:33:20 PM] User:Pe-8(0) successfully bailed out at 100.0 200.99"
+#:
+#: ``9:33:20 PM`` will be captured into ``time`` group,
+#: ``User`` will be captured into ``callsign`` group,
+#: ``Pe-8`` will be captured into ``aircraft`` group,
+#: ``0`` will be captured into ``seat`` group,
+#: ``100.0`` will be captured into ``pos_x`` group,
+#: ``200.99`` will be captured into ``pos_y`` group.
 RX_SUCCESSFULLY_BAILED_OUT = """
-# Capture 'crew member's parachute opened' event. E.g.:
-#
-# "[9:33:20 PM] User:Pe-8(0) successfully bailed out at 100.0 200.99"
-#
-# "9:33:20 PM" will be captured into 'time' group,
-# "User" will be captured into 'callsign' group,
-# "Pe-8" will be captured into 'aircraft' group,
-# "0" will be captured into 'seat' group,
-# "100.0" will be captured into 'pos_x' group,
-# "200.99" will be captured into 'pos_y' group.
 {time_seat}     # 'time with pilot's callsign, aircraft and seat' regex placeholder
 successfully    #
 \s              # single whitespace
@@ -572,17 +563,17 @@ out             #
 {pos}           # 'position' regex placeholder
 """.format(time_seat=RX_TIME_SEAT, pos=RX_POS)
 
+#: Capture 'user toggled landing lights' event. E.g., for::
+#:
+#:     "[9:33:20 PM] User:Pe-8 turned landing lights off at 100.0 200.99"
+#:
+#: ``9:33:20 PM`` will be captured into ``time`` group,
+#: ``User`` will be captured into ``callsign`` group,
+#: ``Pe-8`` will be captured into ``aircraft`` group,
+#: ``off`` will be captured into ``value`` group,
+#: ``100.0`` will be captured into ``pos_x`` group,
+#: ``200.99`` will be captured into ``pos_y`` group.
 RX_TOGGLE_LANDING_LIGHTS = """
-# Capture 'user toggled landing lights' event. E.g.:
-#
-# "[9:33:20 PM] User:Pe-8 turned landing lights off at 100.0 200.99"
-#
-# "9:33:20 PM" will be captured into 'time' group,
-# "User" will be captured into 'callsign' group,
-# "Pe-8" will be captured into 'aircraft' group,
-# "off" will be captured into 'value' group,
-# "100.0" will be captured into 'pos_x' group,
-# "200.99" will be captured into 'pos_y' group.
 {time_aircraft} # 'time with callsign and aircraft' regex placeholder
 \s              # single whitespace
 turned          #
@@ -595,17 +586,17 @@ lights          #
 {pos}           # 'position' regex placeholder
 """.format(time_aircraft=RX_TIME_AIRCRAFT, toggle=RX_TOGGLE_VALUE, pos=RX_POS)
 
+#: Capture 'user toggled wingtip smokes' event. E.g., for::
+#:
+#:     "[9:33:20 PM] User:Pe-8 turned wingtip smokes off at 100.0 200.99"
+#:
+#: ``9:33:20 PM`` will be captured into ``time`` group,
+#: ``User`` will be captured into ``callsign`` group,
+#: ``Pe-8`` will be captured into ``aircraft`` group,
+#: ``off`` will be captured into ``value`` group,
+#: ``100.0`` will be captured into ``pos_x`` group,
+#: ``200.99`` will be captured into ``pos_y`` group.
 RX_TOGGLE_WINGTIP_SMOKES = """
-# Capture 'user toggled wingtip smokes' event. E.g.:
-#
-# "[9:33:20 PM] User:Pe-8 turned wingtip smokes off at 100.0 200.99"
-#
-# "9:33:20 PM" will be captured into 'time' group,
-# "User" will be captured into 'callsign' group,
-# "Pe-8" will be captured into 'aircraft' group,
-# "off" will be captured into 'value' group,
-# "100.0" will be captured into 'pos_x' group,
-# "200.99" will be captured into 'pos_y' group.
 {time_aircraft} # 'time with callsign and aircraft' regex placeholder
 \s              # single whitespace
 turned          #
@@ -618,17 +609,17 @@ smokes          #
 {pos}           # 'position' regex placeholder
 """.format(time_aircraft=RX_TIME_AIRCRAFT, toggle=RX_TOGGLE_VALUE, pos=RX_POS)
 
+#: Capture 'crew member wounded' event. E.g., for::
+#:
+#:     "[8:49:39 PM] User:Pe-8(0) was wounded at 100.0 200.99"
+#:
+#: ``8:49:32 PM`` will be captured into ``time`` group,
+#: ``User`` will be captured into ``callsign`` group,
+#: ``Pe-8`` will be captured into ``aircraft`` group,
+#: ``0`` will be captured into ``seat`` group,
+#: ``100.0`` will be captured into ``pos_x`` group,
+#: ``200.99`` will be captured into ``pos_y`` group.
 RX_WOUNDED = """
-# Capture 'crew member wounded' event. E.g.:
-#
-# "[8:49:39 PM] User:Pe-8(0) was wounded at 100.0 200.99"
-#
-# "8:49:32 PM" will be captured into 'time' group,
-# "User" will be captured into 'callsign' group,
-# "Pe-8" will be captured into 'aircraft' group,
-# "0" will be captured into 'seat' group,
-# "100.0" will be captured into 'pos_x' group,
-# "200.99" will be captured into 'pos_y' group.
 {time_seat}     # 'time with pilot's callsign, aircraft and seat' regex placeholder
 was             #
 \s              # single whitespace
@@ -636,17 +627,17 @@ wounded         #
 {pos}           # 'position' regex placeholder
 """.format(time_seat=RX_TIME_SEAT, pos=RX_POS)
 
+#: Capture 'crew member heavily wounded' event. E.g., for::
+#:
+#:     "[8:49:39 PM] User:Pe-8(0) was heavily wounded at 100.0 200.99"
+#:
+#: ``8:49:32 PM`` will be captured into ``time`` group,
+#: ``User`` will be captured into ``callsign`` group,
+#: ``Pe-8`` will be captured into ``aircraft`` group,
+#: ``0`` will be captured into ``seat`` group,
+#: ``100.0`` will be captured into ``pos_x`` group,
+#: ``200.99`` will be captured into ``pos_y`` group.
 RX_HEAVILY_WOUNDED = """
-# Capture 'crew member heavily wounded' event. E.g.:
-#
-# "[8:49:39 PM] User:Pe-8(0) was heavily wounded at 100.0 200.99"
-#
-# "8:49:32 PM" will be captured into 'time' group,
-# "User" will be captured into 'callsign' group,
-# "Pe-8" will be captured into 'aircraft' group,
-# "0" will be captured into 'seat' group,
-# "100.0" will be captured into 'pos_x' group,
-# "200.99" will be captured into 'pos_y' group.
 {time_seat}     # 'time with pilot's callsign, aircraft and seat' regex placeholder
 was             #
 \s              # single whitespace
@@ -656,17 +647,17 @@ wounded         #
 {pos}           # 'position' regex placeholder
 """.format(time_seat=RX_TIME_SEAT, pos=RX_POS)
 
+#: Capture 'crew member was killed' event. E.g., for::
+#:
+#:     "[8:49:39 PM] User:Pe-8(0) was killed at 100.0 200.99"
+#:
+#: ``8:49:32 PM`` will be captured into ``time`` group,
+#: ``User`` will be captured into ``callsign`` group,
+#: ``Pe-8`` will be captured into ``aircraft`` group,
+#: ``0`` will be captured into ``seat`` group,
+#: ``100.0`` will be captured into ``pos_x`` group,
+#: ``200.99`` will be captured into ``pos_y`` group.
 RX_KILLED = """
-# Capture 'crew member was killed' event. E.g.:
-#
-# "[8:49:39 PM] User:Pe-8(0) was killed at 100.0 200.99"
-#
-# "8:49:32 PM" will be captured into 'time' group,
-# "User" will be captured into 'callsign' group,
-# "Pe-8" will be captured into 'aircraft' group,
-# "0" will be captured into 'seat' group,
-# "100.0" will be captured into 'pos_x' group,
-# "200.99" will be captured into 'pos_y' group.
 {time_seat}     # 'time with pilot's callsign, aircraft and seat' regex placeholder
 was             #
 \s              # single whitespace
@@ -674,19 +665,19 @@ killed          #
 {pos}           # 'position' regex placeholder
 """.format(time_seat=RX_TIME_SEAT, pos=RX_POS)
 
+# Capture 'crew member was killed by another user' event. E.g., for::
+#
+#     "[8:49:39 PM] User1:Pe-8(0) was killed by User2:Bf-109G-6_Late at 100.0 200.99"
+#
+# ``8:49:32 PM`` will be captured into ``time`` group,
+# ``User1`` will be captured into ``callsign`` group,
+# ``Pe-8`` will be captured into ``aircraft`` group,
+# ``0`` will be captured into ``seat`` group,
+# ``User2`` will be captured into ``e_callsign`` group,
+# ``Bf-109G-6_Late`` will be captured into ``e_aircraft`` group,
+# ``100.0`` will be captured into ``pos_x`` group,
+# ``200.99`` will be captured into ``pos_y`` group.
 RX_KILLED_BY_USER = """
-# Capture 'crew member was killed by another user' event. E.g.:
-#
-# "[8:49:39 PM] User1:Pe-8(0) was killed by User2:Bf-109G-6_Late at 100.0 200.99"
-#
-# "8:49:32 PM" will be captured into 'time' group,
-# "User1" will be captured into 'callsign' group,
-# "Pe-8" will be captured into 'aircraft' group,
-# "0" will be captured into 'seat' group,
-# "User2" will be captured into 'e_callsign' group,
-# "Bf-109G-6_Late" will be captured into 'e_aircraft' group,
-# "100.0" will be captured into 'pos_x' group,
-# "200.99" will be captured into 'pos_y' group.
 {time_seat}     # 'time with pilot's callsign, aircraft and seat' regex placeholder
 was             #
 \s              # single whitespace
@@ -698,17 +689,17 @@ by              #
 {pos}           # 'position' regex placeholder
 """.format(time_seat=RX_TIME_SEAT, eair=RX_ENEMY_CALLSIGN_AIRCRAFT, pos=RX_POS)
 
+#: Capture 'crew member captured by enemies' event. E.g., for::
+#:
+#:     "[8:49:39 PM] User:Pe-8(0) was captured at 100.0 200.99"
+#:
+#: ``8:49:32 PM`` will be captured into ``time`` group,
+#: ``User`` will be captured into ``callsign`` group,
+#: ``Pe-8`` will be captured into ``aircraft`` group,
+#: ``0`` will be captured into ``seat`` group,
+#: ``100.0`` will be captured into ``pos_x`` group,
+#: ``200.99`` will be captured into ``pos_y`` group.
 RX_CAPTURED = """
-# Capture 'crew member captured by enemies' event. E.g.:
-#
-# "[8:49:39 PM] User:Pe-8(0) was captured at 100.0 200.99"
-#
-# "8:49:32 PM" will be captured into 'time' group,
-# "User" will be captured into 'callsign' group,
-# "Pe-8" will be captured into 'aircraft' group,
-# "0" will be captured into 'seat' group,
-# "100.0" will be captured into 'pos_x' group,
-# "200.99" will be captured into 'pos_y' group.
 {time_seat}     # 'time with pilot's callsign, aircraft and seat' regex placeholder
 was             #
 \s              # single whitespace
@@ -716,48 +707,48 @@ captured        #
 {pos}           # 'position' regex placeholder
 """.format(time_seat=RX_TIME_SEAT, pos=RX_POS)
 
+#: Capture 'user crashed' event. E.g., for::
+#:
+#:     "[8:49:32 PM] User:Pe-8 crashed at 100.0 200.99"
+#:
+#: ``8:49:32 PM`` will be captured into ``time`` group,
+#: ``User`` will be captured into ``callsign`` group,
+#: ``Pe-8`` will be captured into ``aircraft`` group,
+#: ``100.0`` will be captured into ``pos_x`` group,
+#: ``200.99`` will be captured into ``pos_y`` group.
 RX_CRASHED = """
-# Capture 'user crashed' event. E.g.:
-#
-# "[8:49:32 PM] User:Pe-8 crashed at 100.0 200.99"
-#
-# "8:49:32 PM" will be captured into 'time' group,
-# "User" will be captured into 'callsign' group,
-# "Pe-8" will be captured into 'aircraft' group,
-# "100.0" will be captured into 'pos_x' group,
-# "200.99" will be captured into 'pos_y' group.
 {time_aircraft} # 'time with callsign and aircraft' regex placeholder
 \s              # single whitespace
 crashed         #
 {pos}           # 'position' regex placeholder
 """.format(time_aircraft=RX_TIME_AIRCRAFT, pos=RX_POS)
 
+#: Capture 'user landed' event. E.g., for::
+#:
+#:     "[8:49:32 PM] User:Pe-8 landed at 100.0 200.99"
+#:
+#: ``8:49:32 PM`` will be captured into ``time`` group,
+#: ``User`` will be captured into ``callsign`` group,
+#: ``Pe-8`` will be captured into ``aircraft`` group,
+#: ``100.0`` will be captured into ``pos_x`` group,
+#: ``200.99`` will be captured into ``pos_y`` group.
 RX_LANDED = """
-# Capture 'user landed' event. E.g.:
-#
-# "[8:49:32 PM] User:Pe-8 landed at 100.0 200.99"
-#
-# "8:49:32 PM" will be captured into 'time' group,
-# "User" will be captured into 'callsign' group,
-# "Pe-8" will be captured into 'aircraft' group,
-# "100.0" will be captured into 'pos_x' group,
-# "200.99" will be captured into 'pos_y' group.
 {time_aircraft} # 'time with callsign and aircraft' regex placeholder
 \s              # single whitespace
 landed          #
 {pos}           # 'position' regex placeholder
 """.format(time_aircraft=RX_TIME_AIRCRAFT, pos=RX_POS)
 
+#: Capture 'user damaged on the ground' event. E.g., for::
+#:
+#:     "[8:49:32 PM] User:Pe-8 damaged on the ground at 100.0 200.99"
+#:
+#: ``8:49:32 PM`` will be captured into ``time`` group,
+#: ``User`` will be captured into ``callsign`` group,
+#: ``Pe-8`` will be captured into ``aircraft`` group,
+#: ``100.0`` will be captured into ``pos_x`` group,
+#: ``200.99`` will be captured into ``pos_y`` group.
 RX_DAMAGED_ON_GROUND = """
-# Capture 'user damaged on the ground' event. E.g.:
-#
-# "[8:49:32 PM] User:Pe-8 damaged on the ground at 100.0 200.99"
-#
-# "8:49:32 PM" will be captured into 'time' group,
-# "User" will be captured into 'callsign' group,
-# "Pe-8" will be captured into 'aircraft' group,
-# "100.0" will be captured into 'pos_x' group,
-# "200.99" will be captured into 'pos_y' group.
 {time_aircraft} # 'time with callsign and aircraft' regex placeholder
 \s              # single whitespace
 damaged         #
@@ -770,16 +761,16 @@ ground          #
 {pos}           # 'position' regex placeholder
 """.format(time_aircraft=RX_TIME_AIRCRAFT, pos=RX_POS)
 
+#: Capture 'user damaged self' event. E.g., for::
+#:
+#:     "[8:49:32 PM] User:Pe-8 damaged by landscape at 100.0 200.99"
+#:
+#: ``8:49:32 PM`` will be captured into ``time`` group,
+#: ``User`` will be captured into ``callsign`` group,
+#: ``Pe-8`` will be captured into ``aircraft`` group,
+#: ``100.0`` will be captured into ``pos_x`` group,
+#: ``200.99`` will be captured into ``pos_y`` group.
 RX_DAMAGED_SELF = """
-# Capture 'user damaged self' event. E.g.:
-#
-# "[8:49:32 PM] User:Pe-8 damaged by landscape at 100.0 200.99"
-#
-# "8:49:32 PM" will be captured into 'time' group,
-# "User" will be captured into 'callsign' group,
-# "Pe-8" will be captured into 'aircraft' group,
-# "100.0" will be captured into 'pos_x' group,
-# "200.99" will be captured into 'pos_y' group.
 {time_aircraft} # 'time with callsign and aircraft' regex placeholder
 \s              # single whitespace
 damaged         #
@@ -790,18 +781,18 @@ landscape       #
 {pos}           # 'position' regex placeholder
 """.format(time_aircraft=RX_TIME_AIRCRAFT, pos=RX_POS)
 
+#: Capture 'user damaged by another user' event. E.g., for::
+#:
+#:     "[8:49:32 PM] User1:Pe-8 damaged by User2:Bf-109G-6_Late at 100.0 200.99"
+#:
+#: ``8:49:32 PM`` will be captured into ``time`` group,
+#: ``User1`` will be captured into ``callsign`` group,
+#: ``Pe-8`` will be captured into ``aircraft`` group,
+#: ``User2`` will be captured into ``e_callsign`` group,
+#: ``Bf-109G-6_Late`` will be captured into ``e_aircraft`` group,
+#: ``100.0`` will be captured into ``pos_x`` group,
+#: ``200.99`` will be captured into ``pos_y`` group.
 RX_DAMAGED_BY_USER = """
-# Capture 'user damaged by another user' event. E.g.:
-#
-# "[8:49:32 PM] User1:Pe-8 damaged by User2:Bf-109G-6_Late at 100.0 200.99"
-#
-# "8:49:32 PM" will be captured into 'time' group,
-# "User1" will be captured into 'callsign' group,
-# "Pe-8" will be captured into 'aircraft' group,
-# "User2" will be captured into 'e_callsign' group,
-# "Bf-109G-6_Late" will be captured into 'e_aircraft' group,
-# "100.0" will be captured into 'pos_x' group,
-# "200.99" will be captured into 'pos_y' group.
 {time_aircraft} # 'time with callsign and aircraft' regex placeholder
 \s              # single whitespace
 damaged         #
@@ -814,16 +805,16 @@ by              #
            eair=RX_ENEMY_CALLSIGN_AIRCRAFT,
            pos=RX_POS)
 
+#: Capture 'user shot down self' event. E.g., for::
+#:
+#:     "[8:49:32 PM] User:Pe-8 shot down by landscape at 100.0 200.99"
+#:
+#: ``8:49:32 PM`` will be captured into ``time`` group,
+#: ``User`` will be captured into ``callsign`` group,
+#: ``Pe-8`` will be captured into ``aircraft`` group,
+#: ``100.0`` will be captured into ``pos_x`` group,
+#: ``200.99`` will be captured into ``pos_y`` group.
 RX_SHOT_DOWN_SELF = """
-# Capture 'user shot down self' event. E.g.:
-#
-# "[8:49:32 PM] User:Pe-8 shot down by landscape at 100.0 200.99"
-#
-# "8:49:32 PM" will be captured into 'time' group,
-# "User" will be captured into 'callsign' group,
-# "Pe-8" will be captured into 'aircraft' group,
-# "100.0" will be captured into 'pos_x' group,
-# "200.99" will be captured into 'pos_y' group.
 {time_aircraft} # 'time with callsign and aircraft' regex placeholder
 \s              # single whitespace
 shot            #
@@ -836,18 +827,18 @@ landscape       #
 {pos}           # 'position' regex placeholder
 """.format(time_aircraft=RX_TIME_AIRCRAFT, pos=RX_POS)
 
+#: Capture 'user shot down by another user' event. E.g., for::
+#:
+#:     "[8:49:32 PM] User1:Pe-8 shot down by User2:Bf-109G-6_Late at 100.0 200.99"
+#:
+#: ``8:49:32 PM`` will be captured into ``time`` group,
+#: ``User1`` will be captured into ``callsign`` group,
+#: ``Pe-8`` will be captured into ``aircraft`` group,
+#: ``User2`` will be captured into ``e_callsign`` group,
+#: ``Bf-109G-6_Late`` will be captured into ``e_aircraft`` group,
+#: ``100.0`` will be captured into ``pos_x`` group,
+#: ``200.99`` will be captured into ``pos_y`` group.
 RX_SHOT_DOWN_BY_USER = """
-# Capture 'user shot down by another user' event. E.g.:
-#
-# "[8:49:32 PM] User1:Pe-8 shot down by User2:Bf-109G-6_Late at 100.0 200.99"
-#
-# "8:49:32 PM" will be captured into 'time' group,
-# "User1" will be captured into 'callsign' group,
-# "Pe-8" will be captured into 'aircraft' group,
-# "User2" will be captured into 'e_callsign' group,
-# "Bf-109G-6_Late" will be captured into 'e_aircraft' group,
-# "100.0" will be captured into 'pos_x' group,
-# "200.99" will be captured into 'pos_y' group.
 {time_aircraft} # 'time with callsign and aircraft' regex placeholder
 \s              # single whitespace
 shot            #
@@ -862,17 +853,17 @@ by              #
            eair=RX_ENEMY_CALLSIGN_AIRCRAFT,
            pos=RX_POS)
 
+#: Capture 'user shot down by static' event. E.g., for::
+#:
+#:     "[8:49:32 PM] User:Pe-8 shot down by 0_Static at 100.0 200.99"
+#:
+#: ``8:49:32 PM`` will be captured into ``time`` group,
+#: ``User`` will be captured into ``callsign`` group,
+#: ``Pe-8`` will be captured into ``aircraft`` group,
+#: ``0_Static`` will be captured into ``static`` group,
+#: ``100.0`` will be captured into ``pos_x`` group,
+#: ``200.99`` will be captured into ``pos_y`` group.
 RX_SHOT_DOWN_BY_STATIC = """
-# Capture 'user shot down by static' event. E.g.:
-#
-# "[8:49:32 PM] User:Pe-8 shot down by 0_Static at 100.0 200.99"
-#
-# "8:49:32 PM" will be captured into 'time' group,
-# "User" will be captured into 'callsign' group,
-# "Pe-8" will be captured into 'aircraft' group,
-# "0_Static" will be captured into 'static' group,
-# "100.0" will be captured into 'pos_x' group,
-# "200.99" will be captured into 'pos_y' group.
 {time_aircraft} # 'time with callsign and aircraft' regex placeholder
 \s              # single whitespace
 shot            #
@@ -885,17 +876,17 @@ by              #
 {pos}           # 'position' regex placeholder
 """.format(time_aircraft=RX_TIME_AIRCRAFT, static=RX_STATIC, pos=RX_POS)
 
+#: Capture 'user destroyed building' event. E.g., for::
+#:
+#:     "[8:49:39 PM] 3do/Buildings/Finland/CenterHouse1_w/live.sim destroyed by User:Pe-8 at 100.0 200.99"
+#:
+#: ``8:49:32 PM`` will be captured into ``time`` group,
+#: ``CenterHouse1_w`` will be captured into ``building`` group,
+#: ``User`` will be captured into ``callsign`` group,
+#: ``Pe-8`` will be captured into ``aircraft`` group,
+#: ``100.0`` will be captured into ``pos_x`` group,
+#: ``200.99`` will be captured into ``pos_y`` group.
 RX_DESTROYED_BLD = """
-# Capture 'user destroyed building' event. E.g.:
-#
-# "[8:49:39 PM] 3do/Buildings/Finland/CenterHouse1_w/live.sim destroyed by User:Pe-8 at 100.0 200.99"
-#
-# "8:49:32 PM" will be captured into 'time' group,
-# "CenterHouse1_w" will be captured into 'building' group,
-# "User" will be captured into 'callsign' group,
-# "Pe-8" will be captured into 'aircraft' group,
-# "100.0" will be captured into 'pos_x' group,
-# "200.99" will be captured into 'pos_y' group.
 {time}          # 'time' regex placeholder
 3do/Buildings/  #
 \S+             # one or more non-whitespace characters
@@ -909,17 +900,17 @@ RX_DESTROYED_BLD = """
 {destroyed_by}  # 'destroyed by' regex placeholder
 """.format(time=RX_TIME, destroyed_by=RX_DESTROYED_BY)
 
+#: Capture 'user destroyed tree' event. E.g., for::
+#:
+#:     "[8:49:39 PM] 3do/Tree/Line_W/live.sim destroyed by User:Pe-8 at 100.0 200.99"
+#:
+#: ``8:49:32 PM`` will be captured into ``time`` group,
+#: ``Line_W`` will be captured into ``tree`` group,
+#: ``User`` will be captured into ``callsign`` group,
+#: ``Pe-8`` will be captured into ``aircraft`` group,
+#: ``100.0`` will be captured into ``pos_x`` group,
+#: ``200.99`` will be captured into ``pos_y`` group.
 RX_DESTROYED_TREE = """
-# Capture 'user destroyed tree' event. E.g.:
-#
-# "[8:49:39 PM] 3do/Tree/Line_W/live.sim destroyed by User:Pe-8 at 100.0 200.99"
-#
-# "8:49:32 PM" will be captured into 'time' group,
-# "Line_W" wiil be captured into 'tree' group,
-# "User" will be captured into 'callsign' group,
-# "Pe-8" will be captured into 'aircraft' group,
-# "100.0" will be captured into 'pos_x' group,
-# "200.99" will be captured into 'pos_y' group.
 {time}          # 'time' regex placeholder
 3do/Tree/       #
 (?P<tree>       # 'tree' group start
@@ -931,33 +922,33 @@ RX_DESTROYED_TREE = """
 {destroyed_by}  # 'destroyed by' regex placeholder
 """.format(time=RX_TIME, destroyed_by=RX_DESTROYED_BY)
 
+#: Capture 'user destroyed static' event. E.g., for::
+#:
+#:     "[8:49:39 PM] 0_Static destroyed by User:Pe-8 at 100.0 200.99"
+#:
+#: ``8:49:32 PM`` will be captured into ``time`` group,
+#: ``0_Static`` will be captured into ``static`` group,
+#: ``User`` will be captured into ``callsign`` group,
+#: ``Pe-8`` will be captured into ``aircraft`` group,
+#: ``100.0`` will be captured into ``pos_x`` group,
+#: ``200.99`` will be captured into ``pos_y`` group.
 RX_DESTROYED_STATIC = """
-# Capture 'user destroyed static' event. E.g.:
-#
-# "[8:49:39 PM] 0_Static destroyed by User:Pe-8 at 100.0 200.99"
-#
-# "8:49:32 PM" will be captured into 'time' group,
-# "0_Static" wiil be captured into 'static' group,
-# "User" will be captured into 'callsign' group,
-# "Pe-8" will be captured into 'aircraft' group,
-# "100.0" will be captured into 'pos_x' group,
-# "200.99" will be captured into 'pos_y' group.
 {time}          # 'time' regex placeholder
 {static}        # 'static' regex placeholder
 {destroyed_by}  # 'destroyed by' regex placeholder
 """.format(time=RX_TIME, static=RX_STATIC, destroyed_by=RX_DESTROYED_BY)
 
+#: Capture 'user destroyed bridge' event. E.g., for::
+#:
+#:     "[8:49:39 PM]  Bridge0 destroyed by User:Pe-8 at 100.0 200.99"
+#:
+#: ``8:49:32 PM`` will be captured into ``time`` group,
+#: ``Bridge0`` will be captured into ``bridge`` group,
+#: ``User`` will be captured into ``callsign`` group,
+#: ``Pe-8`` will be captured into ``aircraft`` group,
+#: ``100.0`` will be captured into ``pos_x`` group,
+#: ``200.99`` will be captured into ``pos_y`` group.
 RX_DESTROYED_BRIDGE = """
-# Capture 'user destroyed bridge' event. E.g.:
-#
-# "[8:49:39 PM]  Bridge0 destroyed by User:Pe-8 at 100.0 200.99"
-#
-# "8:49:32 PM" will be captured into 'time' group,
-# "Bridge0" wiil be captured into 'bridge' group,
-# "User" will be captured into 'callsign' group,
-# "Pe-8" will be captured into 'aircraft' group,
-# "100.0" will be captured into 'pos_x' group,
-# "200.99" will be captured into 'pos_y' group.
 {time}          # 'time' regex placeholder
 {bridge}        # 'bridge' regex placeholder
 {destroyed_by}  # 'destroyed by' regex placeholder

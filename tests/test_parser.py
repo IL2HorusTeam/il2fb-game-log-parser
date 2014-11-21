@@ -8,9 +8,7 @@ from il2fb.parsers.events.event_types import *
 from il2fb.parsers.events.parser import *
 
 from il2fb.parsers.events.regex import *
-from il2fb.parsers.events.regex import (RX_TIME_BASE, RX_TIME, RX_DATE_TIME,
-    RX_POS, RX_TOGGLE_VALUE, RX_SEAT, RX_STATIC, RX_ENEMY_CALLSIGN_AIRCRAFT,
-    RX_TIME_CALLSIGN, RX_TIME_AIRCRAFT, RX_TIME_SEAT, RX_DESTROYED_BY, )
+from il2fb.parsers.events.regex import RX_TIME
 
 
 class MultipleParserTestCase(unittest.TestCase):
@@ -19,8 +17,8 @@ class MultipleParserTestCase(unittest.TestCase):
         self.parser = MultipleParser()
 
     def _build_parser(self):
-        return RegexParser(
-            "{time}Hello,\s(?P<name>\S+)!$".format(time=RX_TIME), process_time)
+        rx = "{time}Hello,\s(?P<name>\S+)!$".format(time=RX_TIME)
+        return RegexParser(rx, process_time)
 
     def test_register_unregister(self):
 
