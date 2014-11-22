@@ -6,7 +6,7 @@ from pyparsing import (
 )
 
 from .actions import (
-    convert_time, convert_date, convert_float, convert_pos,
+    convert_time, convert_date, convert_int, convert_float, convert_pos,
     convert_toggle_value,
 )
 from .constants import TOGGLE_VALUES
@@ -70,3 +70,10 @@ callsign = Combine(
 
 # Example: "=XXX=User0"
 enemy_callsign = callsign.setResultsName('enemy_callsign')
+
+# Example: "(0)"
+seat_number = Combine(
+    '('
+    + Word(nums).setParseAction(convert_int).setResultsName('seat_number')
+    + ')'
+)

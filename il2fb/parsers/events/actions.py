@@ -16,6 +16,10 @@ def convert_date(tokens):
     return datetime.datetime.strptime(value, LOG_DATE_FORMAT).date()
 
 
+def convert_int(tokens):
+    return int(tokens.asList()[0])
+
+
 def convert_float(tokens):
     return float(tokens.asList()[0])
 
