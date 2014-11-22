@@ -7,8 +7,8 @@ from pyparsing import ParseException
 from il2fb.parsers.events.constants import TOGGLE_VALUES
 from il2fb.parsers.events.grammar import (
     day_period, time, event_time, date, date_time, event_date_time,
-    float_number, event_pos, toggle_value, callsign, enemy_callsign,
-    seat_number, printable_word,
+    float_number, event_pos, toggle_value, printable_word, seat_number,
+    callsign, enemy_callsign, aircraft,
 )
 from il2fb.parsers.events.structures import Point2D
 
@@ -86,3 +86,7 @@ class GrammarTestCase(BaseTestCase):
     def test_seat_number(self):
         result = seat_number.parseString("(0)")
         self.assertEqual(result.seat_number, 0)
+
+    def test_aircraft(self):
+        result = aircraft.parseString(":Pe-8")
+        self.assertEqual(result.aircraft, "Pe-8")

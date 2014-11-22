@@ -76,3 +76,6 @@ seat_number = Combine(
     + Word(nums).setParseAction(convert_int).setResultsName('seat_number')
     + ')'
 )
+
+# Example: ":Pe-8"
+aircraft = Combine(":" + Word(printables).setResultsName('aircraft'))
