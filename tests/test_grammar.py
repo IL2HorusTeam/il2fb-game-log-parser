@@ -8,7 +8,7 @@ from il2fb.parsers.events.constants import TOGGLE_VALUES
 from il2fb.parsers.events.grammar import (
     day_period, time, event_time, date, date_time, event_date_time,
     float_number, event_pos, toggle_value, callsign, enemy_callsign,
-    seat_number,
+    seat_number, printable_word,
 )
 from il2fb.parsers.events.structures import Point2D
 
@@ -68,6 +68,10 @@ class GrammarTestCase(BaseTestCase):
 
         with self.assertRaises(ParseException):
             toggle_value.parseString("XXX")
+
+    def test_printable_word(self):
+        result = printable_word.parseString(" foo ")
+        self.assertEqual(result[0], "foo")
 
     def test_callsign(self):
         for string in ["User0", " User0 ", ]:

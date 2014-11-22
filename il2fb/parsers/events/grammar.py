@@ -14,6 +14,7 @@ from .constants import TOGGLE_VALUES
 
 single_space = White(ws=' ', exact=1)
 float_number = Regex(r"\d+.\d+").setParseAction(convert_float)
+printable_word = Combine(WordStart() + Word(printables) + WordEnd())
 
 # Example: "AM" or "PM"
 day_period = Combine(
@@ -64,12 +65,10 @@ toggle_value = Or([
 ]).setResultsName('toggle_value').setParseAction(convert_toggle_value)
 
 # Example: "=XXX=User0"
-callsign = Combine(
-    WordStart() + Word(printables) + WordEnd()
-).setResultsName('callsign')
+callsign = printable_word.setResultsName('callsign')
 
 # Example: "=XXX=User0"
-enemy_callsign = callsign.setResultsName('enemy_callsign')
+enemy_callsign = printable_word.setResultsName('enemy_callsign')
 
 # Example: "(0)"
 seat_number = Combine(
