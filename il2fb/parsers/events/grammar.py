@@ -1,11 +1,11 @@
 # -*- coding: utf-8 -*-
 
 from pyparsing import (
-    Combine, LineStart, Regex, White, Word, alphas, nums, oneOf,
+    Combine, LineStart, LineEnd, Regex, White, Word, alphas, nums, oneOf,
 )
 
 from .actions import (
-    convert_time, convert_date, convert_float,
+    convert_time, convert_date, convert_float, convert_pos,
 )
 
 
@@ -43,3 +43,14 @@ date_time = Combine(date + single_space + time)
 
 # Example: "[Sep 15, 2013 8:33:05 PM] "
 event_date_time = Combine(LineStart() + '[' + date_time + ']' + single_space)
+
+# Example: " at 100.0 200.99"
+event_pos = Combine(
+    single_space
+    + 'at'
+    + single_space
+    + float_number.setResultsName('x')
+    + single_space
+    + float_number.setResultsName('y')
+    + LineEnd()
+).setResultsName('pos').setParseAction(convert_pos)

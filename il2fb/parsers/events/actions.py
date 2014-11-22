@@ -3,6 +3,7 @@
 import datetime
 
 from .constants import LOG_TIME_FORMAT, LOG_DATE_FORMAT
+from .structures import Point2D
 
 
 def convert_time(tokens):
@@ -15,5 +16,9 @@ def convert_date(tokens):
     return datetime.datetime.strptime(value, LOG_DATE_FORMAT).date()
 
 
-def convert_float(tockens):
-    return float(tockens.asList()[0])
+def convert_float(tokens):
+    return float(tokens.asList()[0])
+
+
+def convert_pos(tokens):
+    return Point2D(tokens.pos.x, tokens.pos.y)

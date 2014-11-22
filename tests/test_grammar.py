@@ -6,8 +6,9 @@ from pyparsing import ParseException
 
 from il2fb.parsers.events.grammar import (
     day_period, time, event_time, date, date_time, event_date_time,
-    float_number,
+    float_number, event_pos,
 )
+from il2fb.parsers.events.structures import Point2D
 
 from .base import BaseTestCase
 
@@ -50,3 +51,7 @@ class GrammarTestCase(BaseTestCase):
     def test_float_number(self):
         result = float_number.parseString("123.321")
         self.assertEqual(result[0], 123.321)
+
+    def test_event_pos(self):
+        result = event_pos.parseString(" at 123.321 456.654")
+        self.assertEqual(result.pos, Point2D(123.321, 456.654))
