@@ -13,6 +13,10 @@ from .actions import (
 from .constants import TOGGLE_VALUES
 
 
+#------------------------------------------------------------------------------
+# Primmitives
+#------------------------------------------------------------------------------
+
 space = White(ws=' ', exact=1)
 
 colon = Literal(':')
@@ -28,6 +32,10 @@ float_number = Combine(
 
 callsign_chars = alphanums + "!#%$&)(+*-/.=<>@[]_^{}|~"
 aircraft_chars = Word(alphanums + "_-")
+
+#------------------------------------------------------------------------------
+# Helpers
+#------------------------------------------------------------------------------
 
 # Example: "AM" or "PM"
 day_period = Combine(
@@ -118,3 +126,20 @@ bridge = Combine(
 belligerent = Or([
     Literal(x.title()) for x in Belligerents.names()
 ]).setResultsName('belligerent').setParseAction(convert_belligerent)
+
+# Example: " destroyed by User:Pe-8 at 100.0 200.99"
+destroyed_by = Combine(
+    space
+    + Literal('destroyed')
+    + space
+    + Literal('by')
+    + space
+    + aircraft
+    + event_pos
+)
+
+#------------------------------------------------------------------------------
+# Events
+#------------------------------------------------------------------------------
+
+# TODO:

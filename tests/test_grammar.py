@@ -10,7 +10,7 @@ from il2fb.parsers.events.constants import TOGGLE_VALUES
 from il2fb.parsers.events.grammar import (
     day_period, time, event_time, date, date_time, event_date_time,
     float_number, event_pos, toggle_value, seat_number, callsign, aircraft,
-    enemy_aircraft, static, bridge, belligerent, crew_member,
+    enemy_aircraft, static, bridge, belligerent, crew_member, destroyed_by,
 )
 from il2fb.parsers.events.structures import Point2D
 
@@ -110,3 +110,11 @@ class GrammarTestCase(BaseTestCase):
     def test_belligerent(self):
         result = belligerent.parseString("Red").belligerent
         self.assertEqual(result, Belligerents.red)
+
+    def test_destroyed_by(self):
+        string = " destroyed by User:Pe-8 at 100.0 200.99"
+        result = destroyed_by.parseString(string)
+
+        self.assertEqual(result.callsign, "User")
+        self.assertEqual(result.aircraft, "Pe-8")
+        self.assertEqual(result.pos, Point2D(100.0, 200.99))
