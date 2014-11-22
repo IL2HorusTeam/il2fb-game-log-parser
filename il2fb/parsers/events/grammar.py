@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 
 from pyparsing import (
-    Combine, LineStart, LineEnd, Literal, Or, Regex, White, Word, WordStart,
-    WordEnd, alphas, nums, oneOf, printables
+    Combine, LineStart, LineEnd, Literal, Or, Regex, White, Word, alphas, nums,
+    oneOf, printables,
 )
 
 from .actions import (
@@ -14,7 +14,7 @@ from .constants import TOGGLE_VALUES
 
 single_space = White(ws=' ', exact=1)
 float_number = Regex(r"\d+.\d+").setParseAction(convert_float)
-printable_word = Combine(WordStart() + Word(printables) + WordEnd())
+printable_word = Word(printables.replace(':', ''))
 
 # Example: "AM" or "PM"
 day_period = Combine(
@@ -67,8 +67,19 @@ toggle_value = Or([
 # Example: "=XXX=User0"
 callsign = printable_word.setResultsName('callsign')
 
-# Example: "=XXX=User0"
-enemy_callsign = printable_word.setResultsName('enemy_callsign')
+# Example: "=XXX=User0:Pe-8"
+aircraft = Combine(
+    callsign
+    + ":"
+    + printable_word.setResultsName('aircraft')
+)
+
+# Example: "=XXX=User1:Pe-8"
+enemy_aircraft = Combine(
+    callsign.setResultsName('enemy_callsign')
+    + ":"
+    + printable_word.setResultsName('enemy_aircraft')
+)
 
 # Example: "(0)"
 seat_number = Combine(
@@ -76,6 +87,3 @@ seat_number = Combine(
     + Word(nums).setParseAction(convert_int).setResultsName('seat_number')
     + ')'
 )
-
-# Example: ":Pe-8"
-aircraft = Combine(":" + Word(printables).setResultsName('aircraft'))
