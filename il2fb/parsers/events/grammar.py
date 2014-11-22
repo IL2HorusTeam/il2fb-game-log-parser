@@ -18,15 +18,15 @@ printable_word = Word(printables.replace(':', ''))
 
 # Example: "AM" or "PM"
 day_period = Combine(
-    oneOf("A P") + 'M'
+    oneOf("A P") + Literal('M')
 ).setResultsName('day_period')
 
 # Example: "8:33:05 PM" or "08:33:05 PM"
 time = Combine(
-    Word(nums, min=1, max=2)            # Hours (e.g. 8, 08 or 18)
-    + (':' + Word(nums, exact=2)) * 2   # Minutes and seconds
-    + single_space                      #
-    + day_period                        #
+    Word(nums, min=1, max=2)                     # Hours (e.g. 8, 08 or 18)
+    + (Literal(':') + Word(nums, exact=2)) * 2   # Minutes and seconds
+    + single_space                               #
+    + day_period                                 #
 ).setResultsName('time').setParseAction(convert_time)
 
 # Example: "[8:33:05 PM] "
@@ -51,7 +51,7 @@ event_date_time = Combine(LineStart() + '[' + date_time + ']' + single_space)
 # Example: " at 100.0 200.99"
 event_pos = Combine(
     single_space
-    + 'at'
+    + Literal('at')
     + single_space
     + float_number.setResultsName('x')
     + single_space
@@ -70,20 +70,25 @@ callsign = printable_word.setResultsName('callsign')
 # Example: "=XXX=User0:Pe-8"
 aircraft = Combine(
     callsign
-    + ":"
+    + Literal(":")
     + printable_word.setResultsName('aircraft')
 )
 
 # Example: "=XXX=User1:Pe-8"
 enemy_aircraft = Combine(
     callsign.setResultsName('enemy_callsign')
-    + ":"
+    + Literal(":")
     + printable_word.setResultsName('enemy_aircraft')
 )
 
 # Example: "(0)"
 seat_number = Combine(
-    '('
+    Literal('(')
     + Word(nums).setParseAction(convert_int).setResultsName('seat_number')
-    + ')'
+    + Literal(')')
 )
+
+# Example: "0_Static"
+static = Combine(
+    Word(nums) + Literal('_Static')
+).setResultsName('static')
