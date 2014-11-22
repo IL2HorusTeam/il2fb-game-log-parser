@@ -1,21 +1,21 @@
 # -*- coding: utf-8 -*-
 
 from pyparsing import (
-    Combine, LineStart, White, Word, alphas, nums, oneOf,
+    Combine, LineStart, Regex, White, Word, alphas, nums, oneOf,
 )
 
 from .actions import (
-    convert_time, convert_date,
+    convert_time, convert_date, convert_float,
 )
 
 
 single_space = White(ws=' ', exact=1)
+float_number = Regex(r"\d+.\d+").setParseAction(convert_float)
 
 # Example: "AM" or "PM"
 day_period = Combine(
     oneOf("A P") + 'M'
 ).setResultsName('day_period')
-
 
 # Example: "8:33:05 PM" or "08:33:05 PM"
 time = Combine(
@@ -40,3 +40,6 @@ date = Combine(
 
 # Example: "Sep 15, 2013 8:33:05 PM"
 date_time = Combine(date + single_space + time)
+
+# Example: "[Sep 15, 2013 8:33:05 PM] "
+event_date_time = Combine(LineStart() + '[' + date_time + ']' + single_space)

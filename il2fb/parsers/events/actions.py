@@ -13,3 +13,7 @@ def convert_time(tokens):
 def convert_date(tokens):
     value = tokens.date
     return datetime.datetime.strptime(value, LOG_DATE_FORMAT).date()
+
+
+def convert_float(tockens):
+    return float(tockens.asList()[0])
