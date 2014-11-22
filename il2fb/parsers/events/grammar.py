@@ -37,3 +37,6 @@ date = Combine(
     + single_space              #
     + Word(nums, exact=4)       # Year
 ).setResultsName('date').setParseAction(convert_date)
+
+# Example: "Sep 15, 2013 8:33:05 PM"
+date_time = Combine(date + single_space + time)

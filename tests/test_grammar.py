@@ -5,7 +5,7 @@ import datetime
 from pyparsing import ParseException
 
 from il2fb.parsers.events.grammar import (
-    day_period, time, event_time, date,
+    day_period, time, event_time, date, date_time,
 )
 
 from .base import BaseTestCase
@@ -27,9 +27,15 @@ class GrammarTestCase(BaseTestCase):
         self.assertEqual(time.parseString("08:33:05 PM").time, expected)
 
     def test_event_time(self):
-        result = event_time.parseString("[08:33:05 PM] ").time
-        self.assertEqual(result, datetime.time(20, 33, 05))
+        result = event_time.parseString("[08:33:05 PM] ")
+        self.assertEqual(result.time, datetime.time(20, 33, 05))
 
     def test_date(self):
-        result = date.parseString("Oct 30, 2013").date
-        self.assertEqual(result, datetime.date(2013, 10, 30))
+        result = date.parseString("Oct 30, 2013")
+        self.assertEqual(result.date, datetime.date(2013, 10, 30))
+
+    def test_date_time(self):
+        result = date_time.parseString("Oct 30, 2013 8:33:05 PM")
+
+        self.assertEqual(result.date, datetime.date(2013, 10, 30))
+        self.assertEqual(result.time, datetime.time(20, 33, 05))
