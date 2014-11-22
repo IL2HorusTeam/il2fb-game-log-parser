@@ -3,9 +3,9 @@
 import logging
 import re
 
-from il2fb.parsers.events.content_processor import *
-from il2fb.parsers.events.event_types import *
-from il2fb.parsers.events.regex import *
+from .content_processor import *
+from .event_types import *
+from .regex import *
 
 
 __all__ = (

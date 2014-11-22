@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-from .parser import default_evt_parser, parse_log_lines
+from .parsers import default_evt_parser, parse_log_lines
 
 
 __all__ = (

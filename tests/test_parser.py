@@ -5,7 +5,7 @@ import unittest
 from il2fb.parsers.events import parse_evt
 from il2fb.parsers.events.content_processor import process_time
 from il2fb.parsers.events.event_types import *
-from il2fb.parsers.events.parser import *
+from il2fb.parsers.events.parsers import *
 
 from il2fb.parsers.events.regex import *
 from il2fb.parsers.events.regex import RX_TIME
