@@ -92,3 +92,8 @@ seat_number = Combine(
 static = Combine(
     Word(nums) + Literal('_Static')
 ).setResultsName('static')
+
+# Example: "Bridge0"
+bridge = Combine(
+    Literal('Bridge') + Word(nums)
+).setResultsName('bridge')

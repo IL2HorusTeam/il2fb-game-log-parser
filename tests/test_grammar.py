@@ -8,7 +8,7 @@ from il2fb.parsers.events.constants import TOGGLE_VALUES
 from il2fb.parsers.events.grammar import (
     day_period, time, event_time, date, date_time, event_date_time,
     float_number, event_pos, toggle_value, printable_word, seat_number,
-    callsign, aircraft, enemy_aircraft, static,
+    callsign, aircraft, enemy_aircraft, static, bridge,
 )
 from il2fb.parsers.events.structures import Point2D
 
@@ -97,3 +97,7 @@ class GrammarTestCase(BaseTestCase):
     def test_static(self):
         result = static.parseString("0_Static")
         self.assertEqual(result.static, "0_Static")
+
+    def test_bridge(self):
+        result = bridge.parseString("Bridge0")
+        self.assertEqual(result.bridge, "Bridge0")
