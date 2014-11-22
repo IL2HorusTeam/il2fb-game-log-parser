@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 from pyparsing import (
-    Combine, White, Word, oneOf, nums,
+    Combine, LineStart, White, Word, oneOf, nums,
 )
 
 from .actions import (
@@ -17,10 +17,13 @@ day_period = Combine(
 ).setResultsName('day_period')
 
 
-#: Example: ``8:33:05 PM``
+#: Example: ``8:33:05 PM`` or ``08:33:05 PM``
 time = Combine(
     Word(nums, min=1, max=2)            # hours
     + (':' + Word(nums, exact=2)) * 2   # minutes and seconds
     + single_space
     + day_period
 ).setResultsName('time').setParseAction(convert_time)
+
+#: Example: ``[8:33:05 PM] ``
+event_time = Combine(LineStart() + '[' + time + ']' + single_space)

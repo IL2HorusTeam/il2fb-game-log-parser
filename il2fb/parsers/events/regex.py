@@ -54,7 +54,7 @@ RX_TIME_BASE = """
 RX_TIME = """
 ^               # beginning of the string
 \[              # left time wrapper
-{RX_TIME_BASE}     # 'RX_TIME_BASE' regex placeholder
+{RX_TIME_BASE}  # 'RX_TIME_BASE' regex placeholder
 \]              # right time wrapper
 \s+             # one or more whitespaces
                 # any ending of the string
