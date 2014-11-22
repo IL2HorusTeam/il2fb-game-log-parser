@@ -9,8 +9,8 @@ from il2fb.commons.organization import Belligerents
 from il2fb.parsers.events.constants import TOGGLE_VALUES
 from il2fb.parsers.events.grammar import (
     day_period, time, event_time, date, date_time, event_date_time,
-    float_number, event_pos, toggle_value, printable_word, seat_number,
-    callsign, aircraft, enemy_aircraft, static, bridge, belligerent,
+    float_number, event_pos, toggle_value, seat_number, callsign, aircraft,
+    enemy_aircraft, static, bridge, belligerent, crew_member,
 )
 from il2fb.parsers.events.structures import Point2D
 
@@ -71,10 +71,6 @@ class GrammarTestCase(BaseTestCase):
         with self.assertRaises(ParseException):
             toggle_value.parseString("XXX")
 
-    def test_printable_word(self):
-        result = printable_word.parseString(" foo ")
-        self.assertEqual(result[0], "foo")
-
     def test_callsign(self):
         for string in ["User0", " User0 ", ]:
             result = callsign.parseString(string).callsign
@@ -95,6 +91,13 @@ class GrammarTestCase(BaseTestCase):
     def test_seat_number(self):
         result = seat_number.parseString("(0)").seat_number
         self.assertEqual(result, 0)
+
+    def test_crew_member(self):
+        result = crew_member.parseString("User:Pe-8(0)")
+
+        self.assertEqual(result.callsign, "User")
+        self.assertEqual(result.aircraft, "Pe-8")
+        self.assertEqual(result.seat_number, 0)
 
     def test_static(self):
         result = static.parseString("0_Static").static
