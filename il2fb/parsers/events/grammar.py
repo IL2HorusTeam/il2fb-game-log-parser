@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 
 from pyparsing import (
-    Combine, LineStart, LineEnd, Literal, Or, Regex, White, Word, alphas, nums,
-    oneOf,
+    Combine, LineStart, LineEnd, Literal, Or, Regex, White, Word, WordStart,
+    WordEnd, alphas, nums, oneOf, printables
 )
 
 from .actions import (
@@ -62,3 +62,11 @@ event_pos = Combine(
 toggle_value = Or([
     Literal(x) for x in TOGGLE_VALUES.values()
 ]).setResultsName('toggle_value').setParseAction(convert_toggle_value)
+
+# Example: "=XXX=User0"
+callsign = Combine(
+    WordStart() + Word(printables) + WordEnd()
+).setResultsName('callsign')
+
+# Example: "=XXX=User0"
+enemy_callsign = callsign.setResultsName('enemy_callsign')

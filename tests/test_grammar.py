@@ -7,7 +7,7 @@ from pyparsing import ParseException
 from il2fb.parsers.events.constants import TOGGLE_VALUES
 from il2fb.parsers.events.grammar import (
     day_period, time, event_time, date, date_time, event_date_time,
-    float_number, event_pos, toggle_value,
+    float_number, event_pos, toggle_value, callsign, enemy_callsign,
 )
 from il2fb.parsers.events.structures import Point2D
 
@@ -67,3 +67,13 @@ class GrammarTestCase(BaseTestCase):
 
         with self.assertRaises(ParseException):
             toggle_value.parseString("XXX")
+
+    def test_callsign(self):
+        for string in ["User0", " User0 ", ]:
+            result = callsign.parseString(string)
+            self.assertEqual(result.callsign, "User0")
+
+    def test_enemy_callsign(self):
+        for string in ["User0", " User0 ", ]:
+            result = enemy_callsign.parseString(string)
+            self.assertEqual(result.enemy_callsign, "User0")
