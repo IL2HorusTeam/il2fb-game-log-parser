@@ -4,6 +4,14 @@ il2fb.parsers.events package
 Submodules
 ----------
 
+il2fb.parsers.events.actions module
+-----------------------------------
+
+.. automodule:: il2fb.parsers.events.actions
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
 il2fb.parsers.events.constants module
 -------------------------------------
 
@@ -28,10 +36,18 @@ il2fb.parsers.events.event_types module
     :undoc-members:
     :show-inheritance:
 
-il2fb.parsers.events.parser module
-----------------------------------
+il2fb.parsers.events.grammar module
+-----------------------------------
 
-.. automodule:: il2fb.parsers.events.parser
+.. automodule:: il2fb.parsers.events.grammar
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+il2fb.parsers.events.parsers module
+-----------------------------------
+
+.. automodule:: il2fb.parsers.events.parsers
     :members:
     :undoc-members:
     :show-inheritance:
