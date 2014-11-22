@@ -4,9 +4,10 @@ import datetime
 
 from pyparsing import ParseException
 
+from il2fb.parsers.events.constants import TOGGLE_VALUES
 from il2fb.parsers.events.grammar import (
     day_period, time, event_time, date, date_time, event_date_time,
-    float_number, event_pos,
+    float_number, event_pos, toggle_value,
 )
 from il2fb.parsers.events.structures import Point2D
 
@@ -55,3 +56,14 @@ class GrammarTestCase(BaseTestCase):
     def test_event_pos(self):
         result = event_pos.parseString(" at 123.321 456.654")
         self.assertEqual(result.pos, Point2D(123.321, 456.654))
+
+    def test_toggle_value(self):
+        self.assertEqual(
+            toggle_value.parseString("on").toggle_value,
+            TOGGLE_VALUES.ON)
+        self.assertEqual(
+            toggle_value.parseString("off").toggle_value,
+            TOGGLE_VALUES.OFF)
+
+        with self.assertRaises(ParseException):
+            toggle_value.parseString("XXX")

@@ -2,7 +2,7 @@
 
 import datetime
 
-from .constants import LOG_TIME_FORMAT, LOG_DATE_FORMAT
+from .constants import LOG_TIME_FORMAT, LOG_DATE_FORMAT, TOGGLE_VALUES
 from .structures import Point2D
 
 
@@ -22,3 +22,7 @@ def convert_float(tokens):
 
 def convert_pos(tokens):
     return Point2D(tokens.pos.x, tokens.pos.y)
+
+
+def convert_toggle_value(tokens):
+    return TOGGLE_VALUES.get_by_value(tokens.toggle_value)

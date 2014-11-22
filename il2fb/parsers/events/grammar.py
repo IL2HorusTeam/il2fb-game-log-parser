@@ -1,12 +1,15 @@
 # -*- coding: utf-8 -*-
 
 from pyparsing import (
-    Combine, LineStart, LineEnd, Regex, White, Word, alphas, nums, oneOf,
+    Combine, LineStart, LineEnd, Literal, Or, Regex, White, Word, alphas, nums,
+    oneOf,
 )
 
 from .actions import (
     convert_time, convert_date, convert_float, convert_pos,
+    convert_toggle_value,
 )
+from .constants import TOGGLE_VALUES
 
 
 single_space = White(ws=' ', exact=1)
@@ -54,3 +57,8 @@ event_pos = Combine(
     + float_number.setResultsName('y')
     + LineEnd()
 ).setResultsName('pos').setParseAction(convert_pos)
+
+# Example: "on" or "off"
+toggle_value = Or([
+    Literal(x) for x in TOGGLE_VALUES.values()
+]).setResultsName('toggle_value').setParseAction(convert_toggle_value)
