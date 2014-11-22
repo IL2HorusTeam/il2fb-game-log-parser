@@ -4,11 +4,13 @@ import datetime
 
 from pyparsing import ParseException
 
+from il2fb.commons.organization import Belligerents
+
 from il2fb.parsers.events.constants import TOGGLE_VALUES
 from il2fb.parsers.events.grammar import (
     day_period, time, event_time, date, date_time, event_date_time,
     float_number, event_pos, toggle_value, printable_word, seat_number,
-    callsign, aircraft, enemy_aircraft, static, bridge,
+    callsign, aircraft, enemy_aircraft, static, bridge, belligerent,
 )
 from il2fb.parsers.events.structures import Point2D
 
@@ -31,12 +33,12 @@ class GrammarTestCase(BaseTestCase):
         self.assertEqual(time.parseString("08:33:05 PM").time, expected)
 
     def test_event_time(self):
-        result = event_time.parseString("[08:33:05 PM] ")
-        self.assertEqual(result.time, datetime.time(20, 33, 05))
+        result = event_time.parseString("[08:33:05 PM] ").time
+        self.assertEqual(result, datetime.time(20, 33, 05))
 
     def test_date(self):
-        result = date.parseString("Oct 30, 2013")
-        self.assertEqual(result.date, datetime.date(2013, 10, 30))
+        result = date.parseString("Oct 30, 2013").date
+        self.assertEqual(result, datetime.date(2013, 10, 30))
 
     def test_date_time(self):
         result = date_time.parseString("Oct 30, 2013 8:33:05 PM")
@@ -55,8 +57,8 @@ class GrammarTestCase(BaseTestCase):
         self.assertEqual(result[0], 123.321)
 
     def test_event_pos(self):
-        result = event_pos.parseString(" at 123.321 456.654")
-        self.assertEqual(result.pos, Point2D(123.321, 456.654))
+        result = event_pos.parseString(" at 123.321 456.654").pos
+        self.assertEqual(result, Point2D(123.321, 456.654))
 
     def test_toggle_value(self):
         self.assertEqual(
@@ -75,8 +77,8 @@ class GrammarTestCase(BaseTestCase):
 
     def test_callsign(self):
         for string in ["User0", " User0 ", ]:
-            result = callsign.parseString(string)
-            self.assertEqual(result.callsign, "User0")
+            result = callsign.parseString(string).callsign
+            self.assertEqual(result, "User0")
 
     def test_aircraft(self):
         result = aircraft.parseString("User0:Pe-8")
@@ -91,13 +93,17 @@ class GrammarTestCase(BaseTestCase):
         self.assertEqual(result.enemy_aircraft, "Pe-8")
 
     def test_seat_number(self):
-        result = seat_number.parseString("(0)")
-        self.assertEqual(result.seat_number, 0)
+        result = seat_number.parseString("(0)").seat_number
+        self.assertEqual(result, 0)
 
     def test_static(self):
-        result = static.parseString("0_Static")
-        self.assertEqual(result.static, "0_Static")
+        result = static.parseString("0_Static").static
+        self.assertEqual(result, "0_Static")
 
     def test_bridge(self):
-        result = bridge.parseString("Bridge0")
-        self.assertEqual(result.bridge, "Bridge0")
+        result = bridge.parseString("Bridge0").bridge
+        self.assertEqual(result, "Bridge0")
+
+    def test_belligerent(self):
+        result = belligerent.parseString("Red").belligerent
+        self.assertEqual(result, Belligerents.red)

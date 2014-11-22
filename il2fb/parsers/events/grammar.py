@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 
+from il2fb.commons.organization import Belligerents
 from pyparsing import (
     Combine, LineStart, LineEnd, Literal, Or, Regex, White, Word, alphas, nums,
     oneOf, printables,
@@ -7,7 +8,7 @@ from pyparsing import (
 
 from .actions import (
     convert_time, convert_date, convert_int, convert_float, convert_pos,
-    convert_toggle_value,
+    convert_toggle_value, convert_belligerent,
 )
 from .constants import TOGGLE_VALUES
 
@@ -97,3 +98,8 @@ static = Combine(
 bridge = Combine(
     Literal('Bridge') + Word(nums)
 ).setResultsName('bridge')
+
+# Example: "Red" or "Blue"
+belligerent = Or([
+    Literal(x.title()) for x in Belligerents.names()
+]).setResultsName('belligerent').setParseAction(convert_belligerent)

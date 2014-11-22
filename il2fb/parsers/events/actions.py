@@ -2,6 +2,8 @@
 
 import datetime
 
+from il2fb.commons.organization import Belligerents
+
 from .constants import LOG_TIME_FORMAT, LOG_DATE_FORMAT, TOGGLE_VALUES
 from .structures import Point2D
 
@@ -30,3 +32,7 @@ def convert_pos(tokens):
 
 def convert_toggle_value(tokens):
     return TOGGLE_VALUES.get_by_value(tokens.toggle_value)
+
+
+def convert_belligerent(tokens):
+    return Belligerents[tokens.belligerent.lower()]
