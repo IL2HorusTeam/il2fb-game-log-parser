@@ -8,6 +8,7 @@
 *.egg-info
 dist
 build
+_build
 eggs
 parts
 bin
@@ -17,15 +18,17 @@ develop-eggs
 .installed.cfg
 lib
 lib64
+__pycache__
 
 # Installer logs
 pip-log.txt
 
-# Unit test / coverage reports
+# Unit test / coverage / profiler reports
 .coverage
 .coveralls.yml
 .tox
 nosetests.xml
+*.lprof
 
 # Translations
 *.mo
@@ -34,6 +37,7 @@ nosetests.xml
 .mr.developer.cfg
 .project
 .pydevproject
+.idea
 
 # Twisted
 _trial_temp

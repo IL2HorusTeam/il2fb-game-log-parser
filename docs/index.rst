@@ -1,15 +1,20 @@
 IL-2 FB Events Parser
 =====================
 
-|PyPi package| |PyPi downloads| |Docs| |License|
+|PyPi package| |PyPi downloads| |License|
 
 |Build Status| |Coverage Status| |Code Review| |Health| |Quality| |Requirements|
 
 Parse log file (or single line) from IL-2 FB dedicated server and produce
 information about events.
 
-  **Note**: Currently mostly all events can be parsed. AI-related events still
-  need to be studied, so that's why this is beta version.
+
+Indices and tables
+==================
+
+* :ref:`genindex`
+* :ref:`modindex`
+* :ref:`search`
 
 
 .. |Build Status| image:: http://img.shields.io/travis/IL2HorusTeam/il2fb-events-parser.svg?style=flat&branch=master
@@ -20,8 +25,6 @@ information about events.
    :target: http://badge.fury.io/py/il2fb-events-parser/
 .. |PyPi downloads| image:: http://img.shields.io/pypi/dm/il2fb-events-parser.svg?style=flat
    :target: https://crate.io/packages/il2fb-events-parser/
-.. |Docs| image:: https://readthedocs.org/projects/il2fb-events-parser/badge/?version=latest&style=flat
-   :target: `read the docs`_
 .. |License| image:: https://img.shields.io/badge/license-LGPLv3-brightgreen.svg?style=flat
    :target: https://github.com/IL2HorusTeam/il2fb-events-parser/blob/master/LICENSE
 .. |Code Review| image:: https://www.codacy.com/project/badge/4c79f2cb39234620bce5d4c49a54be52
@@ -36,6 +39,3 @@ information about events.
 .. |Requirements| image:: https://requires.io/github/IL2HorusTeam/il2fb-events-parser/requirements.svg?branch=master&style=flat
     :target: https://requires.io/github/IL2HorusTeam/il2fb-events-parser/requirements/?branch=master
     :alt: Requirements Status
-
-
-.. _read the docs: http://il2fb-events-parser.readthedocs.org/

@@ -4,6 +4,7 @@ import re
 
 from .constants import TOGGLE_VALUES, TARGET_RESULT_TYPES
 
+
 __all__ = (
     'RX_FLAGS',
     'RX_MISSION_BEGIN', 'RX_MISSION_END', 'RX_MISSION_PLAYING',
