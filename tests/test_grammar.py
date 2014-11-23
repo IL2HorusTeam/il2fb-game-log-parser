@@ -56,6 +56,9 @@ class GrammarTestCase(BaseTestCase):
         result = float_number.parseString("123.321")
         self.assertEqual(result[0], 123.321)
 
+        result = float_number.parseString("-456.654")
+        self.assertEqual(result[0], -456.654)
+
     def test_event_pos(self):
         result = event_pos.parseString(" at 123.321 456.654").pos
         self.assertEqual(result, Point2D(123.321, 456.654))
