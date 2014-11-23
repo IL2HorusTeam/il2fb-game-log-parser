@@ -8,8 +8,8 @@ from pyparsing import (
 
 from .constants import TOGGLE_VALUES
 from .converters import (
-    convert_time, convert_date, convert_int, convert_float, convert_pos,
-    convert_toggle_value, convert_belligerent,
+    to_time, to_date, to_int, to_float, to_pos,
+    to_toggle_value, to_belligerent,
 )
 from .structures import MissionPlaying
 
@@ -36,7 +36,7 @@ number = Word(nums)
 integer = Combine(Optional(plus_or_minus) + number)
 float_number = Combine(
     integer + Optional(point + number)
-).setParseAction(convert_float)
+).setParseAction(to_float)
 
 #------------------------------------------------------------------------------
 # Helpers
@@ -53,7 +53,7 @@ time = Combine(
     + (colon + Word(nums, exact=2)) * 2   # Minutes and seconds
     + space
     + day_period
-).setResultsName('time').setParseAction(convert_time)
+).setResultsName('time').setParseAction(to_time)
 
 # Example: "[8:33:05 PM] "
 event_time = Combine(LineStart() + '[' + time + ']' + space)
@@ -66,7 +66,7 @@ date = Combine(
     + comma                     #
     + space                     #
     + Word(nums, exact=4)       # Year
-).setResultsName('date').setParseAction(convert_date)
+).setResultsName('date').setParseAction(to_date)
 
 # Example: "Sep 15, 2013 8:33:05 PM"
 date_time = Combine(date + space + time)
@@ -89,12 +89,12 @@ event_pos = Combine(
     + space
     + float_number.setResultsName('y')
     + LineEnd()
-).setResultsName('pos').setParseAction(convert_pos)
+).setResultsName('pos').setParseAction(to_pos)
 
 # Example: "on" or "off"
 toggle_value = Or([
     Literal(x) for x in TOGGLE_VALUES.values()
-]).setResultsName('toggle_value').setParseAction(convert_toggle_value)
+]).setResultsName('toggle_value').setParseAction(to_toggle_value)
 
 # Example: "=XXX=User0"
 callsign = Word(
@@ -116,7 +116,7 @@ enemy = pilot.setResultsName('enemy')
 # Example: "(0)"
 seat_number = (
     l_paren.suppress() + number + r_paren.suppress()
-).setParseAction(convert_int).setResultsName('seat_number')
+).setParseAction(to_int).setResultsName('seat_number')
 
 # Example: "User:Pe-8(0)"
 crew_member = WordStart() + pilot + seat_number + WordEnd()
@@ -134,7 +134,7 @@ bridge = Combine(
 # Example: "Red" or "Blue"
 belligerent = Or([
     Literal(x.title()) for x in Belligerents.names()
-]).setResultsName('belligerent').setParseAction(convert_belligerent)
+]).setResultsName('belligerent').setParseAction(to_belligerent)
 
 # Example: " destroyed by User:Pe-8 at 100.0 200.99"
 destroyed_by = Combine(
