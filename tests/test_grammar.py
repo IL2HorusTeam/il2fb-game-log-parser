@@ -8,9 +8,9 @@ from il2fb.commons.organization import Belligerents
 
 from il2fb.parsers.events.constants import TOGGLE_VALUES
 from il2fb.parsers.events.grammar import (
-    day_period, time, event_time, date, date_time, event_date_time,
-    float_number, event_pos, toggle_value, seat_number, callsign, aircraft,
-    enemy_aircraft, static, bridge, belligerent, crew_member, destroyed_by,
+    space, day_period, time, event_time, date, date_time, event_date_time,
+    float_number, event_pos, toggle_value, callsign, aircraft, pilot, enemy,
+    seat_number, crew_member, static, bridge, belligerent, destroyed_by,
 )
 from il2fb.parsers.events.structures import Point2D
 
@@ -77,16 +77,32 @@ class GrammarTestCase(BaseTestCase):
             self.assertEqual(result, "User0")
 
     def test_aircraft(self):
-        result = aircraft.parseString("User0:Pe-8")
+        result = aircraft.parseString("Pe-8").aircraft
+        self.assertEqual(result, "Pe-8")
+
+    def test_pilot(self):
+        result = pilot.parseString("User0:Pe-8").pilot
 
         self.assertEqual(result.callsign, "User0")
         self.assertEqual(result.aircraft, "Pe-8")
 
-    def test_enemy_aircraft(self):
-        result = enemy_aircraft.parseString("User0:Pe-8")
+    def test_enemy(self):
+        result = enemy.parseString("User1:Bf-109G-6_Late").enemy
 
-        self.assertEqual(result.enemy_callsign, "User0")
-        self.assertEqual(result.enemy_aircraft, "Pe-8")
+        self.assertEqual(result.callsign, "User1")
+        self.assertEqual(result.aircraft, "Bf-109G-6_Late")
+
+    def test_victim_and_offender(self):
+        grammar = pilot + space + enemy
+        result = grammar.parseString("User0:Pe-8 User1:Bf-109G-6_Late")
+
+        victim = result.pilot
+        self.assertEqual(victim.callsign, "User0")
+        self.assertEqual(victim.aircraft, "Pe-8")
+
+        offender = result.enemy
+        self.assertEqual(offender.callsign, "User1")
+        self.assertEqual(offender.aircraft, "Bf-109G-6_Late")
 
     def test_seat_number(self):
         result = seat_number.parseString("(0)").seat_number

@@ -2,8 +2,8 @@
 
 from il2fb.commons.organization import Belligerents
 from pyparsing import (
-    Combine, LineStart, LineEnd, Literal, Or, White, Word, alphas, nums,
-    alphanums, oneOf, Suppress, Optional,
+    Combine, LineStart, LineEnd, Literal, Or, White, Word, WordStart, WordEnd,
+    alphas, nums, alphanums, oneOf, Suppress, Optional,
 )
 
 from .converters import (
@@ -14,7 +14,7 @@ from .constants import TOGGLE_VALUES
 
 
 #------------------------------------------------------------------------------
-# Primmitives
+# Primitives
 #------------------------------------------------------------------------------
 
 space = White(ws=' ', exact=1)
@@ -22,16 +22,20 @@ space = White(ws=' ', exact=1)
 colon = Literal(':')
 comma = Literal(',')
 point = Literal('.')
+
+l_paren = Literal('(')
+r_paren = Literal(')')
+
+l_bracket = Literal('[')
+r_bracket = Literal(']')
+
 plus_or_minus = Literal('+') | Literal('-')
 
 number = Word(nums)
 integer = Combine(Optional(plus_or_minus) + number)
 float_number = Combine(
-    integer + Optional(point + Optional(number))
+    integer + Optional(point + number)
 ).setParseAction(convert_float)
-
-callsign_chars = alphanums + "!#%$&)(+*-/.=<>@[]_^{}|~"
-aircraft_chars = Word(alphanums + "_-")
 
 #------------------------------------------------------------------------------
 # Helpers
@@ -67,7 +71,13 @@ date = Combine(
 date_time = Combine(date + space + time)
 
 # Example: "[Sep 15, 2013 8:33:05 PM] "
-event_date_time = Combine(LineStart() + '[' + date_time + ']' + space)
+event_date_time = Combine(
+    LineStart()
+    + l_bracket
+    + date_time
+    + r_bracket
+    + space
+)
 
 # Example: " at 100.0 200.99"
 event_pos = Combine(
@@ -86,31 +96,29 @@ toggle_value = Or([
 ]).setResultsName('toggle_value').setParseAction(convert_toggle_value)
 
 # Example: "=XXX=User0"
-callsign = Word(callsign_chars).setResultsName('callsign')
+callsign = Word(
+    alphanums + "!#%$&)(+*-/.=<>@[]_^{}|~"
+).setResultsName('callsign')
+
+# Example: "Pe-8"
+aircraft = Word(
+    alphanums + "_-"
+).setResultsName('aircraft')
 
 # Example: "=XXX=User0:Pe-8"
-aircraft = (
-    callsign
-    + colon.suppress()
-    + aircraft_chars.setResultsName('aircraft')
-)
+pilot = (
+    callsign + colon.suppress() + aircraft
+).setResultsName('pilot')
 
-# Example: "=XXX=User1:Pe-8"
-enemy_aircraft = (
-    callsign.setResultsName('enemy_callsign')
-    + colon.suppress()
-    + aircraft_chars.setResultsName('enemy_aircraft')
-)
+enemy = pilot.setResultsName('enemy')
 
 # Example: "(0)"
 seat_number = (
-    Suppress('(')
-    + number.setParseAction(convert_int).setResultsName('seat_number')
-    + Suppress(')')
-)
+    l_paren.suppress() + number + r_paren.suppress()
+).setParseAction(convert_int).setResultsName('seat_number')
 
 # Example: "User:Pe-8(0)"
-crew_member = aircraft + seat_number
+crew_member = WordStart() + pilot + seat_number + WordEnd()
 
 # Example: "0_Static"
 static = Combine(
@@ -134,7 +142,7 @@ destroyed_by = Combine(
     + space
     + Literal('by')
     + space
-    + aircraft
+    + pilot
     + event_pos
 )
 
