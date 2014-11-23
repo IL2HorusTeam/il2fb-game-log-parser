@@ -1,5 +1,7 @@
 # -*- coding: utf-8 -*-
 
+from .constants import EVENT_TYPES
+
 
 class Base(object):
     __slots__ = ()
@@ -30,3 +32,24 @@ class Point2D(Base):
 
     def __repr__(self):
         return "<Point2D '{0};{1}'>".format(self.x, self.y)
+
+
+class Event(Base):
+    __slots__ = ['type', ]
+
+    def __init__(self, type):
+        self.type = type
+
+    def __repr__(self):
+        return "<Event '{0}'>".format(self.type.name)
+
+
+class MissionPlaying(Event):
+    __slots__ = Event.__slots__ + ['date', 'time', 'mission', ]
+
+    def __init__(self, source):
+        super(MissionPlaying, self).__init__(EVENT_TYPES.MISSION_PLAYING)
+
+        self.date = source['date']
+        self.time = source['time']
+        self.mission = source['mission']

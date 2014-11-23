@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-from candv import Values, ValueConstant
+from candv import Values, ValueConstant, Constants, SimpleConstant
 
 
 LOG_TIME_FORMAT = "%I:%M:%S %p"
@@ -26,3 +26,7 @@ class TOGGLE_VALUES(RegexChoices):
 class TARGET_RESULT_TYPES(RegexChoices):
     COMPLETE = ValueConstant('Complete')
     FAILED = ValueConstant('Failed')
+
+
+class EVENT_TYPES(Constants):
+    MISSION_PLAYING = SimpleConstant()

@@ -6,18 +6,19 @@ from pyparsing import ParseException
 
 from il2fb.commons.organization import Belligerents
 
-from il2fb.parsers.events.constants import TOGGLE_VALUES
+from il2fb.parsers.events.constants import TOGGLE_VALUES, EVENT_TYPES
 from il2fb.parsers.events.grammar import (
     space, day_period, time, event_time, date, date_time, event_date_time,
     float_number, event_pos, toggle_value, callsign, aircraft, pilot, enemy,
     seat_number, crew_member, static, bridge, belligerent, destroyed_by,
+    mission_playing,
 )
 from il2fb.parsers.events.structures import Point2D
 
 from .base import BaseTestCase
 
 
-class GrammarTestCase(BaseTestCase):
+class CommonGrammarTestCase(BaseTestCase):
 
     def test_day_period(self):
         self.assertEqual(day_period.parseString("AM").day_period, "AM")
@@ -137,3 +138,15 @@ class GrammarTestCase(BaseTestCase):
         self.assertEqual(result.callsign, "User")
         self.assertEqual(result.aircraft, "Pe-8")
         self.assertEqual(result.pos, Point2D(100.0, 200.99))
+
+
+class EventsGrammarTestCase(BaseTestCase):
+
+    def test_mission_playing(self):
+        string = "[Sep 15, 2013 8:33:05 PM] Mission: path/PH.mis is Playing"
+        result = mission_playing.parseString(string).event
+
+        self.assertEqual(result.type, EVENT_TYPES.MISSION_PLAYING)
+        self.assertEqual(result.date, datetime.date(2013, 9, 15))
+        self.assertEqual(result.time, datetime.time(20, 33, 5))
+        self.assertEqual(result.mission, "path/PH.mis")

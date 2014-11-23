@@ -3,14 +3,15 @@
 from il2fb.commons.organization import Belligerents
 from pyparsing import (
     Combine, LineStart, LineEnd, Literal, Or, White, Word, WordStart, WordEnd,
-    alphas, nums, alphanums, oneOf, Suppress, Optional,
+    alphas, nums, alphanums, oneOf, Suppress, Optional, Regex,
 )
 
+from .constants import TOGGLE_VALUES
 from .converters import (
     convert_time, convert_date, convert_int, convert_float, convert_pos,
     convert_toggle_value, convert_belligerent,
 )
-from .constants import TOGGLE_VALUES
+from .structures import MissionPlaying
 
 
 #------------------------------------------------------------------------------
@@ -60,10 +61,10 @@ event_time = Combine(LineStart() + '[' + time + ']' + space)
 # Example: "Sep 15, 2013"
 date = Combine(
     Word(alphas, exact=3)       # Month abbreviation (e.g. Jan, Feb, Sep, etc.)
-    + space              #
+    + space                     #
     + Word(nums, min=1, max=2)  # Day number (e.g. 8, 08 or 18)
     + comma                     #
-    + space              #
+    + space                     #
     + Word(nums, exact=4)       # Year
 ).setResultsName('date').setParseAction(convert_date)
 
@@ -146,8 +147,26 @@ destroyed_by = Combine(
     + event_pos
 )
 
+
 #------------------------------------------------------------------------------
 # Events
 #------------------------------------------------------------------------------
 
-# TODO:
+def Event(expr, structure):
+    to_structure = lambda tokens: structure(tokens.event)
+    return Combine(expr).setResultsName('event').setParseAction(to_structure)
+
+# Example: "[Sep 15, 2013 8:33:05 PM] Mission: PH.mis is Playing"
+mission_playing = Event(
+    event_date_time
+    + Literal('Mission')
+    + colon
+    + space
+    + Regex(r".+\.mis").setResultsName('mission')
+    + space
+    + Literal('is')
+    + space
+    + Literal('Playing')
+    + LineEnd(),
+    structure=MissionPlaying
+)
