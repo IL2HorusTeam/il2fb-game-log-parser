@@ -1,7 +1,7 @@
 IL-2 FB Events Parser
 =====================
 
-|PyPi package| |PyPi downloads| |Docs| |License|
+|PyPi package| |PyPi downloads| |License|
 
 |Build Status| |Coverage Status| |Code Review| |Health| |Quality| |Requirements|
 
