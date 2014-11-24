@@ -30,3 +30,4 @@ class TARGET_RESULT_TYPES(RegexChoices):
 
 class EVENT_TYPES(Constants):
     MISSION_PLAYING = SimpleConstant()
+    MISSION_BEGIN = SimpleConstant()

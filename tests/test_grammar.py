@@ -11,7 +11,7 @@ from il2fb.parsers.events.grammar import (
     space, day_period, time, event_time, date, date_time, event_date_time,
     float_number, event_pos, toggle_value, callsign, aircraft, pilot, enemy,
     seat_number, crew_member, static, bridge, belligerent, destroyed_by,
-    mission_playing,
+    mission_playing, mission_begin,
 )
 from il2fb.parsers.events.structures import Point2D
 
@@ -150,3 +150,10 @@ class EventsGrammarTestCase(BaseTestCase):
         self.assertEqual(result.date, datetime.date(2013, 9, 15))
         self.assertEqual(result.time, datetime.time(20, 33, 5))
         self.assertEqual(result.mission, "path/PH.mis")
+
+    def test_mission_begin(self):
+        string = "[8:33:05 PM] Mission BEGIN"
+        result = mission_begin.parseString(string).event
+
+        self.assertEqual(result.type, EVENT_TYPES.MISSION_BEGIN)
+        self.assertEqual(result.time, datetime.time(20, 33, 5))

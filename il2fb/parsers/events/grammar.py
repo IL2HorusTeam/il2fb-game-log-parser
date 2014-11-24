@@ -11,7 +11,7 @@ from .converters import (
     to_time, to_date, to_int, to_float, to_pos,
     to_toggle_value, to_belligerent,
 )
-from .structures import MissionPlaying
+from .structures import MissionPlaying, MissionBegin
 
 
 #------------------------------------------------------------------------------
@@ -156,10 +156,12 @@ def Event(expr, structure):
     to_structure = lambda tokens: structure(tokens.event)
     return Combine(expr).setResultsName('event').setParseAction(to_structure)
 
+mission = Literal('Mission')
+
 # Example: "[Sep 15, 2013 8:33:05 PM] Mission: PH.mis is Playing"
 mission_playing = Event(
     event_date_time
-    + Literal('Mission')
+    + mission
     + colon
     + space
     + Regex(r".+\.mis").setResultsName('mission')
@@ -169,4 +171,14 @@ mission_playing = Event(
     + Literal('Playing')
     + LineEnd(),
     structure=MissionPlaying
+)
+
+# Example: "[8:33:05 PM] Mission BEGIN"
+mission_begin = Event(
+    event_time
+    + mission
+    + space
+    + Literal('BEGIN')
+    + LineEnd(),
+    structure=MissionBegin
 )
