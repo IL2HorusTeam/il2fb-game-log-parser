@@ -52,12 +52,19 @@ class EventWithTime(Event):
         self.time = source['time']
 
 
-class MissionPlaying(EventWithTime):
-    __slots__ = EventWithTime.__slots__ + ['date', 'mission', ]
+class EventWithDateTime(EventWithTime):
+    __slots__ = EventWithTime.__slots__ + ['date', ]
+
+    def __init__(self, event_type, source):
+        super(EventWithDateTime, self).__init__(event_type, source)
+        self.date = source['date']
+
+
+class MissionPlaying(EventWithDateTime):
+    __slots__ = EventWithDateTime.__slots__ + ['mission', ]
 
     def __init__(self, source):
         super(MissionPlaying, self).__init__(EVENT_TYPES.MISSION_PLAYING, source)
-        self.date = source['date']
         self.mission = source['mission']
 
 
