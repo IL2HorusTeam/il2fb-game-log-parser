@@ -34,8 +34,7 @@ class Point2D(Base):
         return "<Point2D '{0};{1}'>".format(self.x, self.y)
 
 
-class Event(Base):
-    __slots__ = ['event_type', ]
+class Event(object):
 
     def __init__(self, *args, **kwargs):
         super(Event, self).__init__()
@@ -52,7 +51,6 @@ class EventWithTime(object):
 
     def __init__(self, data):
         super(EventWithTime, self).__init__(data)
-        self.__slots__.append('time')
         self.time = data['time']
 
 
@@ -60,7 +58,6 @@ class EventWithDate(object):
 
     def __init__(self, data):
         super(EventWithDate, self).__init__(data)
-        self.__slots__.append('date')
         self.date = data['date']
 
 
@@ -70,7 +67,6 @@ class MissionPlaying(EventWithDate, EventWithTime, Event):
 
     def __init__(self, data):
         super(MissionPlaying, self).__init__(data)
-        self.__slots__.append('mission')
         self.mission = data['mission']
 
 
