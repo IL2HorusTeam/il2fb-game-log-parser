@@ -37,37 +37,37 @@ class Point2D(Base):
 class Event(Base):
     __slots__ = ['type', ]
 
-    def __init__(self, type):
-        self.type = type
+    def __init__(self, event_type):
+        self.type = event_type
 
     def __repr__(self):
         return "<Event '{0}'>".format(self.type.name)
 
 
-class MissionPlaying(Event):
-    __slots__ = Event.__slots__ + ['date', 'time', 'mission', ]
+class EventWithTime(Event):
+    __slots__ = Event.__slots__ + ['time', ]
+
+    def __init__(self, event_type, source):
+        super(EventWithTime, self).__init__(event_type)
+        self.time = source['time']
+
+
+class MissionPlaying(EventWithTime):
+    __slots__ = EventWithTime.__slots__ + ['date', 'mission', ]
 
     def __init__(self, source):
-        super(MissionPlaying, self).__init__(EVENT_TYPES.MISSION_PLAYING)
-
+        super(MissionPlaying, self).__init__(EVENT_TYPES.MISSION_PLAYING, source)
         self.date = source['date']
-        self.time = source['time']
         self.mission = source['mission']
 
 
-class MissionBegin(Event):
-    __slots__ = Event.__slots__ + ['time', ]
+class MissionBegin(EventWithTime):
 
     def __init__(self, source):
-        super(MissionBegin, self).__init__(EVENT_TYPES.MISSION_BEGIN)
-
-        self.time = source['time']
+        super(MissionBegin, self).__init__(EVENT_TYPES.MISSION_BEGIN, source)
 
 
-class MissionEnd(Event):
-    __slots__ = Event.__slots__ + ['time', ]
+class MissionEnd(EventWithTime):
 
     def __init__(self, source):
-        super(MissionEnd, self).__init__(EVENT_TYPES.MISSION_END)
-
-        self.time = source['time']
+        super(MissionEnd, self).__init__(EVENT_TYPES.MISSION_END, source)
