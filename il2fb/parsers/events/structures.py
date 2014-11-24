@@ -4,7 +4,7 @@ from .constants import EVENT_TYPES
 
 
 class Base(object):
-    __slots__ = ()
+    __slots__ = []
 
     def __eq__(self, other):
         if not isinstance(other, self.__class__):
@@ -35,46 +35,50 @@ class Point2D(Base):
 
 
 class Event(Base):
-    __slots__ = ['type', ]
+    __slots__ = ['event_type', ]
 
-    def __init__(self, event_type):
-        self.type = event_type
+    def __init__(self, *args, **kwargs):
+        super(Event, self).__init__()
+
+    @property
+    def event_type(self):
+        raise NotImplementedError
 
     def __repr__(self):
-        return "<Event '{0}'>".format(self.type.name)
+        return "<Event '{0}'>".format(self.event_type.name)
 
 
-class EventWithTime(Event):
-    __slots__ = Event.__slots__ + ['time', ]
+class EventWithTime(object):
 
-    def __init__(self, event_type, source):
-        super(EventWithTime, self).__init__(event_type)
-        self.time = source['time']
-
-
-class EventWithDateTime(EventWithTime):
-    __slots__ = EventWithTime.__slots__ + ['date', ]
-
-    def __init__(self, event_type, source):
-        super(EventWithDateTime, self).__init__(event_type, source)
-        self.date = source['date']
+    def __init__(self, data):
+        super(EventWithTime, self).__init__(data)
+        self.__slots__.append('time')
+        self.time = data['time']
 
 
-class MissionPlaying(EventWithDateTime):
-    __slots__ = EventWithDateTime.__slots__ + ['mission', ]
+class EventWithDate(object):
 
-    def __init__(self, source):
-        super(MissionPlaying, self).__init__(EVENT_TYPES.MISSION_PLAYING, source)
-        self.mission = source['mission']
-
-
-class MissionBegin(EventWithTime):
-
-    def __init__(self, source):
-        super(MissionBegin, self).__init__(EVENT_TYPES.MISSION_BEGIN, source)
+    def __init__(self, data):
+        super(EventWithDate, self).__init__(data)
+        self.__slots__.append('date')
+        self.date = data['date']
 
 
-class MissionEnd(EventWithTime):
+class MissionPlaying(EventWithDate, EventWithTime, Event):
 
-    def __init__(self, source):
-        super(MissionEnd, self).__init__(EVENT_TYPES.MISSION_END, source)
+    event_type = EVENT_TYPES.MISSION_PLAYING
+
+    def __init__(self, data):
+        super(MissionPlaying, self).__init__(data)
+        self.__slots__.append('mission')
+        self.mission = data['mission']
+
+
+class MissionBegin(EventWithTime, Event):
+
+    event_type = EVENT_TYPES.MISSION_BEGIN
+
+
+class MissionEnd(EventWithTime, Event):
+
+    event_type = EVENT_TYPES.MISSION_END
