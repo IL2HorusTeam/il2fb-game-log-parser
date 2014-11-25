@@ -11,7 +11,7 @@ from .converters import (
     to_time, to_date, to_int, to_float, to_pos,
     to_toggle_value, to_belligerent,
 )
-from .structures import MissionPlaying, MissionBegin, MissionEnd
+from .structures import MissionIsPlaying, MissionBegin, MissionEnd
 
 
 #------------------------------------------------------------------------------
@@ -170,7 +170,7 @@ mission_playing = Event(
     + space
     + Literal('Playing')
     + LineEnd(),
-    structure=MissionPlaying
+    structure=MissionIsPlaying
 )
 
 # Example: "[8:33:05 PM] Mission BEGIN"

@@ -1,7 +1,5 @@
 # -*- coding: utf-8 -*-
 
-from .constants import EVENT_TYPES
-
 
 class Base(object):
     __slots__ = []
@@ -61,20 +59,16 @@ class EventWithDate(object):
         self.date = data['date']
 
 
-class MissionPlaying(EventWithDate, EventWithTime, Event):
-
-    event_type = EVENT_TYPES.MISSION_IS_PLAYING
+class MissionIsPlaying(EventWithDate, EventWithTime, Event):
 
     def __init__(self, data):
-        super(MissionPlaying, self).__init__(data)
+        super(MissionIsPlaying, self).__init__(data)
         self.mission = data['mission']
 
 
 class MissionBegin(EventWithTime, Event):
-
-    event_type = EVENT_TYPES.MISSION_BEGAN
+    pass
 
 
 class MissionEnd(EventWithTime, Event):
-
-    event_type = EVENT_TYPES.MISSION_ENDED
+    pass
