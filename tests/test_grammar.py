@@ -11,10 +11,10 @@ from il2fb.parsers.events.grammar import (
     space, day_period, time, event_time, date, date_time, event_date_time,
     float_number, event_pos, toggle_value, callsign, aircraft, pilot, enemy,
     seat_number, crew_member, static, bridge, belligerent, destroyed_by,
-    mission_playing, mission_begin, mission_end,
+    mission_is_playing, mission_has_begun, mission_has_ended,
 )
 from il2fb.parsers.events.structures import (
-    Point2D, MissionIsPlaying, MissionBegin, MissionEnd,
+    Point2D, MissionIsPlaying, MissionHasBegun, MissionHasEnded,
 )
 
 from .base import BaseTestCase
@@ -146,7 +146,7 @@ class EventsGrammarTestCase(BaseTestCase):
 
     def test_mission_playing(self):
         string = "[Sep 15, 2013 8:33:05 PM] Mission: path/PH.mis is Playing"
-        result = mission_playing.parseString(string).event
+        result = mission_is_playing.parseString(string).event
 
         self.assertIsInstance(result, MissionIsPlaying)
         self.assertEqual(result.date, datetime.date(2013, 9, 15))
@@ -155,14 +155,14 @@ class EventsGrammarTestCase(BaseTestCase):
 
     def test_mission_begin(self):
         string = "[8:33:05 PM] Mission BEGIN"
-        result = mission_begin.parseString(string).event
+        result = mission_has_begun.parseString(string).event
 
-        self.assertIsInstance(result, MissionBegin)
+        self.assertIsInstance(result, MissionHasBegun)
         self.assertEqual(result.time, datetime.time(20, 33, 5))
 
     def test_mission_end(self):
         string = "[8:33:05 PM] Mission END"
-        result = mission_end.parseString(string).event
+        result = mission_has_ended.parseString(string).event
 
-        self.assertIsInstance(result, MissionEnd)
+        self.assertIsInstance(result, MissionHasEnded)
         self.assertEqual(result.time, datetime.time(20, 33, 5))

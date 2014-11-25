@@ -11,7 +11,7 @@ from .converters import (
     to_time, to_date, to_int, to_float, to_pos,
     to_toggle_value, to_belligerent,
 )
-from .structures import MissionIsPlaying, MissionBegin, MissionEnd
+from .structures import MissionIsPlaying, MissionHasBegun, MissionHasEnded
 
 
 #------------------------------------------------------------------------------
@@ -159,7 +159,7 @@ def Event(expr, structure):
 mission = Literal('Mission')
 
 # Example: "[Sep 15, 2013 8:33:05 PM] Mission: PH.mis is Playing"
-mission_playing = Event(
+mission_is_playing = Event(
     event_date_time
     + mission
     + colon
@@ -174,21 +174,21 @@ mission_playing = Event(
 )
 
 # Example: "[8:33:05 PM] Mission BEGIN"
-mission_begin = Event(
+mission_has_begun = Event(
     event_time
     + mission
     + space
     + Literal('BEGIN')
     + LineEnd(),
-    structure=MissionBegin
+    structure=MissionHasBegun
 )
 
 # Example: "[8:33:05 PM] Mission END"
-mission_end = Event(
+mission_has_ended = Event(
     event_time
     + mission
     + space
     + Literal('END')
     + LineEnd(),
-    structure=MissionEnd
+    structure=MissionHasEnded
 )

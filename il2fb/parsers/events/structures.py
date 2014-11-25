@@ -37,12 +37,8 @@ class Event(object):
     def __init__(self, *args, **kwargs):
         super(Event, self).__init__()
 
-    @property
-    def event_type(self):
-        raise NotImplementedError
-
     def __repr__(self):
-        return "<Event '{0}'>".format(self.event_type.name)
+        return "<Event '{0}'>".format(self.__class__.__name__)
 
 
 class EventWithTime(object):
@@ -66,9 +62,9 @@ class MissionIsPlaying(EventWithDate, EventWithTime, Event):
         self.mission = data['mission']
 
 
-class MissionBegin(EventWithTime, Event):
+class MissionHasBegun(EventWithTime, Event):
     pass
 
 
-class MissionEnd(EventWithTime, Event):
+class MissionHasEnded(EventWithTime, Event):
     pass
