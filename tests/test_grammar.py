@@ -146,7 +146,7 @@ class EventsGrammarTestCase(BaseTestCase):
         string = "[Sep 15, 2013 8:33:05 PM] Mission: path/PH.mis is Playing"
         result = mission_playing.parseString(string).event
 
-        self.assertEqual(result.event_type, EVENT_TYPES.MISSION_PLAYING)
+        self.assertEqual(result.event_type, EVENT_TYPES.MISSION_IS_PLAYING)
         self.assertEqual(result.date, datetime.date(2013, 9, 15))
         self.assertEqual(result.time, datetime.time(20, 33, 5))
         self.assertEqual(result.mission, "path/PH.mis")
@@ -155,12 +155,12 @@ class EventsGrammarTestCase(BaseTestCase):
         string = "[8:33:05 PM] Mission BEGIN"
         result = mission_begin.parseString(string).event
 
-        self.assertEqual(result.event_type, EVENT_TYPES.MISSION_BEGIN)
+        self.assertEqual(result.event_type, EVENT_TYPES.MISSION_BEGAN)
         self.assertEqual(result.time, datetime.time(20, 33, 5))
 
     def test_mission_end(self):
         string = "[8:33:05 PM] Mission END"
         result = mission_end.parseString(string).event
 
-        self.assertEqual(result.event_type, EVENT_TYPES.MISSION_END)
+        self.assertEqual(result.event_type, EVENT_TYPES.MISSION_ENDED)
         self.assertEqual(result.time, datetime.time(20, 33, 5))

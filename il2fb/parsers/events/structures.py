@@ -63,7 +63,7 @@ class EventWithDate(object):
 
 class MissionPlaying(EventWithDate, EventWithTime, Event):
 
-    event_type = EVENT_TYPES.MISSION_PLAYING
+    event_type = EVENT_TYPES.MISSION_IS_PLAYING
 
     def __init__(self, data):
         super(MissionPlaying, self).__init__(data)
@@ -72,9 +72,9 @@ class MissionPlaying(EventWithDate, EventWithTime, Event):
 
 class MissionBegin(EventWithTime, Event):
 
-    event_type = EVENT_TYPES.MISSION_BEGIN
+    event_type = EVENT_TYPES.MISSION_BEGAN
 
 
 class MissionEnd(EventWithTime, Event):
 
-    event_type = EVENT_TYPES.MISSION_END
+    event_type = EVENT_TYPES.MISSION_ENDED
