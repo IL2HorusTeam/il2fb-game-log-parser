@@ -7,13 +7,14 @@ from pyparsing import (
     Regex,
 )
 
-from .constants import TOGGLE_VALUES, TARGET_RESULTS
+from .constants import TOGGLE_VALUES, TARGET_END_STATES
 from .converters import (
     to_time, to_date, to_int, to_float, to_pos,
-    to_toggle_value, to_belligerent, to_target_result,
+    to_toggle_value, to_belligerent, to_target_end_state,
 )
 from .structures import (
     MissionIsPlaying, MissionHasBegun, MissionHasEnded, MissionWasWon,
+    TargetStateHasChanged,
 )
 
 
@@ -151,9 +152,9 @@ destroyed_by = Combine(
 )
 
 # Example: "Complete" or "Failed"
-target_result = Or([
-    Literal(x) for x in TARGET_RESULTS.values()
-]).setResultsName('target_result').setParseAction(to_target_result)
+target_end_state = Or([
+    Literal(x) for x in TARGET_END_STATES.values()
+]).setResultsName('target_end_state').setParseAction(to_target_end_state)
 
 
 #------------------------------------------------------------------------------
@@ -212,4 +213,16 @@ mission_was_won = Event(
     + Literal('WON')
     + LineEnd(),
     structure=MissionWasWon
+)
+
+# Example: "[8:33:05 PM] Target 3 Complete"
+target_state_has_changed = Event(
+    event_time
+    + Literal("Target")
+    + space
+    + number.setParseAction(to_int).setResultsName('target_index')
+    + space
+    + target_end_state
+    + LineEnd(),
+    structure=TargetStateHasChanged
 )

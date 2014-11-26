@@ -5,7 +5,7 @@ import datetime
 from il2fb.commons.organization import Belligerents
 
 from .constants import (
-    LOG_TIME_FORMAT, LOG_DATE_FORMAT, TOGGLE_VALUES, TARGET_RESULTS,
+    LOG_TIME_FORMAT, LOG_DATE_FORMAT, TOGGLE_VALUES, TARGET_END_STATES,
 )
 from .structures import Point2D
 
@@ -40,5 +40,5 @@ def to_belligerent(tokens):
     return Belligerents[tokens.belligerent.lower()]
 
 
-def to_target_result(tokens):
-    return TARGET_RESULTS.get_by_value(tokens.target_result)
+def to_target_end_state(tokens):
+    return TARGET_END_STATES.get_by_value(tokens.target_end_state)

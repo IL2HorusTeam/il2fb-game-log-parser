@@ -6,16 +6,17 @@ from pyparsing import ParseException
 
 from il2fb.commons.organization import Belligerents
 
-from il2fb.parsers.events.constants import TOGGLE_VALUES, TARGET_RESULTS
+from il2fb.parsers.events.constants import TOGGLE_VALUES, TARGET_END_STATES
 from il2fb.parsers.events.grammar import (
     space, day_period, time, event_time, date, date_time, event_date_time,
     float_number, event_pos, toggle_value, callsign, aircraft, pilot, enemy,
     seat_number, crew_member, static, bridge, belligerent, destroyed_by,
-    target_result, mission_is_playing, mission_has_begun, mission_has_ended,
-    mission_was_won,
+    target_end_state, mission_is_playing, mission_has_begun, mission_has_ended,
+    mission_was_won, target_state_has_changed,
 )
 from il2fb.parsers.events.structures import (
     Point2D, MissionIsPlaying, MissionHasBegun, MissionHasEnded, MissionWasWon,
+    TargetStateHasChanged,
 )
 
 from .base import BaseTestCase
@@ -149,14 +150,14 @@ class CommonGrammarTestCase(BaseTestCase):
         self.assertEqual(result.pos, Point2D(100.0, 200.99))
 
     def test_target_result(self):
-        result = target_result.parseString("Complete").target_result
-        self.assertEqual(result, TARGET_RESULTS.COMPLETE)
+        result = target_end_state.parseString("Complete").target_end_state
+        self.assertEqual(result, TARGET_END_STATES.COMPLETE)
 
-        result = target_result.parseString("Failed").target_result
-        self.assertEqual(result, TARGET_RESULTS.FAILED)
+        result = target_end_state.parseString("Failed").target_end_state
+        self.assertEqual(result, TARGET_END_STATES.FAILED)
 
         with self.assertRaises(ParseException):
-            target_result.parseString("XXX")
+            target_end_state.parseString("XXX")
 
 
 class EventsGrammarTestCase(BaseTestCase):
@@ -192,3 +193,21 @@ class EventsGrammarTestCase(BaseTestCase):
         self.assertEqual(result.date, datetime.date(2013, 9, 15))
         self.assertEqual(result.time, datetime.time(20, 33, 5))
         self.assertEqual(result.belligerent, Belligerents.red)
+
+    def test_target_state_has_changed_to_complete(self):
+        string = "[8:33:05 PM] Target 3 Complete"
+        result = target_state_has_changed.parseString(string).event
+
+        self.assertIsInstance(result, TargetStateHasChanged)
+        self.assertEqual(result.time, datetime.time(20, 33, 5))
+        self.assertEqual(result.target_index, 3)
+        self.assertEqual(result.state, TARGET_END_STATES.COMPLETE)
+
+    def test_target_state_has_changed_to_failed(self):
+        string = "[8:33:05 PM] Target 4 Failed"
+        result = target_state_has_changed.parseString(string).event
+
+        self.assertIsInstance(result, TargetStateHasChanged)
+        self.assertEqual(result.time, datetime.time(20, 33, 5))
+        self.assertEqual(result.target_index, 4)
+        self.assertEqual(result.state, TARGET_END_STATES.FAILED)

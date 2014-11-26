@@ -75,3 +75,11 @@ class MissionWasWon(EventWithDate, EventWithTime, Event):
     def __init__(self, data):
         super(MissionWasWon, self).__init__(data)
         self.belligerent = data['belligerent']
+
+
+class TargetStateHasChanged(EventWithTime, Event):
+
+    def __init__(self, data):
+        super(TargetStateHasChanged, self).__init__(data)
+        self.target_index = data['target_index']
+        self.state = data['target_end_state']

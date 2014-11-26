@@ -23,6 +23,6 @@ class TOGGLE_VALUES(RegexChoices):
     OFF = ValueConstant('off')
 
 
-class TARGET_RESULTS(RegexChoices):
+class TARGET_END_STATES(RegexChoices):
     COMPLETE = ValueConstant('Complete')
     FAILED = ValueConstant('Failed')
