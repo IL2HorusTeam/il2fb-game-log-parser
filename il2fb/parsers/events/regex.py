@@ -2,7 +2,7 @@
 
 import re
 
-from .constants import TOGGLE_VALUES, TARGET_RESULT_TYPES
+from .constants import TOGGLE_VALUES, TARGET_RESULTS
 
 
 __all__ = (
@@ -382,7 +382,7 @@ Target          #
     {choices}   #
 )               # 'result' group end
 $               # end of the string
-""".format(time=RX_TIME, choices=TARGET_RESULT_TYPES.regex_choices())
+""".format(time=RX_TIME, choices=TARGET_RESULTS.regex_choices())
 
 #------------------------------------------------------------------------------
 # Action events

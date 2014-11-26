@@ -7,10 +7,10 @@ from pyparsing import (
     Regex,
 )
 
-from .constants import TOGGLE_VALUES
+from .constants import TOGGLE_VALUES, TARGET_RESULTS
 from .converters import (
     to_time, to_date, to_int, to_float, to_pos,
-    to_toggle_value, to_belligerent,
+    to_toggle_value, to_belligerent, to_target_result,
 )
 from .structures import (
     MissionIsPlaying, MissionHasBegun, MissionHasEnded, MissionWasWon,
@@ -149,6 +149,11 @@ destroyed_by = Combine(
     + pilot
     + event_pos
 )
+
+# Example: "Complete" or "Failed"
+target_result = Or([
+    Literal(x) for x in TARGET_RESULTS.values()
+]).setResultsName('target_result').setParseAction(to_target_result)
 
 
 #------------------------------------------------------------------------------

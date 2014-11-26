@@ -3,7 +3,7 @@
 import datetime
 
 from .constants import (
-    LOG_TIME_FORMAT, LOG_DATE_FORMAT, TOGGLE_VALUES, TARGET_RESULT_TYPES,
+    LOG_TIME_FORMAT, LOG_DATE_FORMAT, TOGGLE_VALUES, TARGET_RESULTS,
 )
 
 
@@ -30,13 +30,13 @@ def process_number(data):
 
 def process_target_result(data):
     r = data.get('result')
-    if r in TARGET_RESULT_TYPES.values():
-        data['result'] = (r == TARGET_RESULT_TYPES.COMPLETE.value)
+    if r in TARGET_RESULTS.values():
+        data['result'] = (r == TARGET_RESULTS.COMPLETE.value)
     else:
         raise ValueError(
             "Target result value '{value}' is invalid. "
             "Valid values: {valid}."
-            .format(value=r, valid=TARGET_RESULT_TYPES.list_choices()))
+            .format(value=r, valid=TARGET_RESULTS.list_choices()))
 
 
 def process_fuel(data):

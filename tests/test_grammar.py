@@ -6,12 +6,13 @@ from pyparsing import ParseException
 
 from il2fb.commons.organization import Belligerents
 
-from il2fb.parsers.events.constants import TOGGLE_VALUES
+from il2fb.parsers.events.constants import TOGGLE_VALUES, TARGET_RESULTS
 from il2fb.parsers.events.grammar import (
     space, day_period, time, event_time, date, date_time, event_date_time,
     float_number, event_pos, toggle_value, callsign, aircraft, pilot, enemy,
     seat_number, crew_member, static, bridge, belligerent, destroyed_by,
-    mission_is_playing, mission_has_begun, mission_has_ended, mission_was_won,
+    target_result, mission_is_playing, mission_has_begun, mission_has_ended,
+    mission_was_won,
 )
 from il2fb.parsers.events.structures import (
     Point2D, MissionIsPlaying, MissionHasBegun, MissionHasEnded, MissionWasWon,
@@ -146,6 +147,16 @@ class CommonGrammarTestCase(BaseTestCase):
         self.assertEqual(result.callsign, "User")
         self.assertEqual(result.aircraft, "Pe-8")
         self.assertEqual(result.pos, Point2D(100.0, 200.99))
+
+    def test_target_result(self):
+        result = target_result.parseString("Complete").target_result
+        self.assertEqual(result, TARGET_RESULTS.COMPLETE)
+
+        result = target_result.parseString("Failed").target_result
+        self.assertEqual(result, TARGET_RESULTS.FAILED)
+
+        with self.assertRaises(ParseException):
+            target_result.parseString("XXX")
 
 
 class EventsGrammarTestCase(BaseTestCase):
