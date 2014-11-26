@@ -22,14 +22,31 @@ from il2fb.parsers.events.structures import (
 from .base import BaseTestCase
 
 
-class CommonGrammarTestCase(BaseTestCase):
+class DayPeriodTestCase(BaseTestCase):
 
-    def test_day_period(self):
+    def test_day_period_is_am(self):
         self.assertEqual(day_period.parseString("AM").day_period, "AM")
+
+    def test_day_period_is_pm(self):
         self.assertEqual(day_period.parseString("PM").day_period, "PM")
 
+    def test_day_period_is_invalid(self):
         with self.assertRaises(ParseException):
             day_period.parseString("ZZ")
+
+
+class FloatNumberTestCase(BaseTestCase):
+
+    def test_positive_float_number(self):
+        result = float_number.parseString("123.321")
+        self.assertEqual(result[0], 123.321)
+
+    def test_negative_float_number(self):
+        result = float_number.parseString("-456.654")
+        self.assertEqual(result[0], -456.654)
+
+
+class CommonGrammarTestCase(BaseTestCase):
 
     def test_time(self):
         expected = datetime.time(20, 33, 5)
@@ -57,27 +74,9 @@ class CommonGrammarTestCase(BaseTestCase):
         self.assertEqual(result.date, datetime.date(2013, 10, 30))
         self.assertEqual(result.time, datetime.time(20, 33, 5))
 
-    def test_float_number(self):
-        result = float_number.parseString("123.321")
-        self.assertEqual(result[0], 123.321)
-
-        result = float_number.parseString("-456.654")
-        self.assertEqual(result[0], -456.654)
-
     def test_event_pos(self):
         result = event_pos.parseString(" at 123.321 456.654").pos
         self.assertEqual(result, Point2D(123.321, 456.654))
-
-    def test_toggle_value(self):
-        self.assertEqual(
-            toggle_value.parseString("on").toggle_value,
-            TOGGLE_VALUES.ON)
-        self.assertEqual(
-            toggle_value.parseString("off").toggle_value,
-            TOGGLE_VALUES.OFF)
-
-        with self.assertRaises(ParseException):
-            toggle_value.parseString("XXX")
 
     def test_callsign(self):
         for string in ["User0", " User0 ", ]:
@@ -131,16 +130,6 @@ class CommonGrammarTestCase(BaseTestCase):
         result = bridge.parseString("Bridge0").bridge
         self.assertEqual(result, "Bridge0")
 
-    def test_belligerent(self):
-        result = belligerent.parseString("Red").belligerent
-        self.assertEqual(result, Belligerents.red)
-
-        result = belligerent.parseString("red").belligerent
-        self.assertEqual(result, Belligerents.red)
-
-        result = belligerent.parseString("RED").belligerent
-        self.assertEqual(result, Belligerents.red)
-
     def test_destroyed_by(self):
         string = " destroyed by User:Pe-8 at 100.0 200.99"
         result = destroyed_by.parseString(string)
@@ -149,20 +138,55 @@ class CommonGrammarTestCase(BaseTestCase):
         self.assertEqual(result.aircraft, "Pe-8")
         self.assertEqual(result.pos, Point2D(100.0, 200.99))
 
-    def test_target_result(self):
+
+class ToggleValueTestCase(BaseTestCase):
+
+    def test_toggle_value_is_on(self):
+        self.assertEqual(toggle_value.parseString("on").toggle_value,
+                         TOGGLE_VALUES.ON)
+
+    def test_toggle_value_is_off(self):
+        self.assertEqual(toggle_value.parseString("off").toggle_value,
+                         TOGGLE_VALUES.OFF)
+
+    def test_toggle_value_is_invalid(self):
+        with self.assertRaises(ParseException):
+            toggle_value.parseString("XXX")
+
+
+class BelligerentTestCase(BaseTestCase):
+
+    def test_belligerent_in_title_case(self):
+        result = belligerent.parseString("Red").belligerent
+        self.assertEqual(result, Belligerents.red)
+
+    def test_belligerent_in_lower_case(self):
+        result = belligerent.parseString("red").belligerent
+        self.assertEqual(result, Belligerents.red)
+
+    def test_belligerent_in_upper_case(self):
+        result = belligerent.parseString("RED").belligerent
+        self.assertEqual(result, Belligerents.red)
+
+
+class TargetEndStateTestCase(BaseTestCase):
+
+    def test_target_end_state_is_complete(self):
         result = target_end_state.parseString("Complete").target_end_state
         self.assertEqual(result, TARGET_END_STATES.COMPLETE)
 
+    def test_target_end_state_is_failed(self):
         result = target_end_state.parseString("Failed").target_end_state
         self.assertEqual(result, TARGET_END_STATES.FAILED)
 
+    def test_target_end_state_is_invalid(self):
         with self.assertRaises(ParseException):
             target_end_state.parseString("XXX")
 
 
 class EventsGrammarTestCase(BaseTestCase):
 
-    def test_mission_playing(self):
+    def test_mission_is_playing(self):
         string = "[Sep 15, 2013 8:33:05 PM] Mission: path/PH.mis is Playing"
         result = mission_is_playing.parseString(string).event
 
@@ -171,14 +195,14 @@ class EventsGrammarTestCase(BaseTestCase):
         self.assertEqual(result.time, datetime.time(20, 33, 5))
         self.assertEqual(result.mission, "path/PH.mis")
 
-    def test_mission_begin(self):
+    def test_mission_has_begun(self):
         string = "[8:33:05 PM] Mission BEGIN"
         result = mission_has_begun.parseString(string).event
 
         self.assertIsInstance(result, MissionHasBegun)
         self.assertEqual(result.time, datetime.time(20, 33, 5))
 
-    def test_mission_end(self):
+    def test_mission_has_ended(self):
         string = "[8:33:05 PM] Mission END"
         result = mission_has_ended.parseString(string).event
 
@@ -193,6 +217,9 @@ class EventsGrammarTestCase(BaseTestCase):
         self.assertEqual(result.date, datetime.date(2013, 9, 15))
         self.assertEqual(result.time, datetime.time(20, 33, 5))
         self.assertEqual(result.belligerent, Belligerents.red)
+
+
+class TargetEndStateHasChangedTestCase(BaseTestCase):
 
     def test_target_state_has_changed_to_complete(self):
         string = "[8:33:05 PM] Target 3 Complete"
