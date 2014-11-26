@@ -11,10 +11,10 @@ from il2fb.parsers.events.grammar import (
     space, day_period, time, event_time, date, date_time, event_date_time,
     float_number, event_pos, toggle_value, callsign, aircraft, pilot, enemy,
     seat_number, crew_member, static, bridge, belligerent, destroyed_by,
-    mission_is_playing, mission_has_begun, mission_has_ended,
+    mission_is_playing, mission_has_begun, mission_has_ended, mission_was_won,
 )
 from il2fb.parsers.events.structures import (
-    Point2D, MissionIsPlaying, MissionHasBegun, MissionHasEnded,
+    Point2D, MissionIsPlaying, MissionHasBegun, MissionHasEnded, MissionWasWon,
 )
 
 from .base import BaseTestCase
@@ -133,6 +133,12 @@ class CommonGrammarTestCase(BaseTestCase):
         result = belligerent.parseString("Red").belligerent
         self.assertEqual(result, Belligerents.red)
 
+        result = belligerent.parseString("red").belligerent
+        self.assertEqual(result, Belligerents.red)
+
+        result = belligerent.parseString("RED").belligerent
+        self.assertEqual(result, Belligerents.red)
+
     def test_destroyed_by(self):
         string = " destroyed by User:Pe-8 at 100.0 200.99"
         result = destroyed_by.parseString(string)
@@ -166,3 +172,12 @@ class EventsGrammarTestCase(BaseTestCase):
 
         self.assertIsInstance(result, MissionHasEnded)
         self.assertEqual(result.time, datetime.time(20, 33, 5))
+
+    def test_mission_was_won(self):
+        string = "[Sep 15, 2013 8:33:05 PM] Mission: RED WON"
+        result = mission_was_won.parseString(string).event
+
+        self.assertIsInstance(result, MissionWasWon)
+        self.assertEqual(result.date, datetime.date(2013, 9, 15))
+        self.assertEqual(result.time, datetime.time(20, 33, 5))
+        self.assertEqual(result.belligerent, Belligerents.red)

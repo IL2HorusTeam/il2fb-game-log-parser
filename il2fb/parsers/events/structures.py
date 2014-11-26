@@ -68,3 +68,10 @@ class MissionHasBegun(EventWithTime, Event):
 
 class MissionHasEnded(EventWithTime, Event):
     pass
+
+
+class MissionWasWon(EventWithDate, EventWithTime, Event):
+
+    def __init__(self, data):
+        super(MissionWasWon, self).__init__(data)
+        self.belligerent = data['belligerent']

@@ -2,8 +2,9 @@
 
 from il2fb.commons.organization import Belligerents
 from pyparsing import (
-    Combine, LineStart, LineEnd, Literal, Or, White, Word, WordStart, WordEnd,
-    alphas, nums, alphanums, oneOf, Suppress, Optional, Regex,
+    Combine, LineStart, LineEnd, Literal, CaselessLiteral, Or, White, Word,
+    WordStart, WordEnd, alphas, nums, alphanums, oneOf, Suppress, Optional,
+    Regex,
 )
 
 from .constants import TOGGLE_VALUES
@@ -11,7 +12,9 @@ from .converters import (
     to_time, to_date, to_int, to_float, to_pos,
     to_toggle_value, to_belligerent,
 )
-from .structures import MissionIsPlaying, MissionHasBegun, MissionHasEnded
+from .structures import (
+    MissionIsPlaying, MissionHasBegun, MissionHasEnded, MissionWasWon,
+)
 
 
 #------------------------------------------------------------------------------
@@ -133,7 +136,7 @@ bridge = Combine(
 
 # Example: "Red" or "Blue"
 belligerent = Or([
-    Literal(x.title()) for x in Belligerents.names()
+    CaselessLiteral(x.title()) for x in Belligerents.names()
 ]).setResultsName('belligerent').setParseAction(to_belligerent)
 
 # Example: " destroyed by User:Pe-8 at 100.0 200.99"
@@ -191,4 +194,17 @@ mission_has_ended = Event(
     + Literal('END')
     + LineEnd(),
     structure=MissionHasEnded
+)
+
+# Example: "[Sep 15, 2013 8:33:05 PM] Mission: RED WON"
+mission_was_won = Event(
+    event_date_time
+    + mission
+    + colon
+    + space
+    + belligerent
+    + space
+    + Literal('WON')
+    + LineEnd(),
+    structure=MissionWasWon
 )
