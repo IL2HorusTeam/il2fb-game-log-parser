@@ -161,9 +161,12 @@ target_end_state = Or([
 # Events
 #------------------------------------------------------------------------------
 
-def Event(expr, structure):
-    to_structure = lambda tokens: structure(**tokens.event)
-    return Combine(expr).setResultsName('event').setParseAction(to_structure)
+class Event(Combine):
+
+    def toStructure(self, structure):
+        to_structure = lambda tokens: structure(**tokens.event)
+        return self.setResultsName('event').setParseAction(to_structure)
+
 
 mission = Literal('Mission')
 
@@ -178,9 +181,8 @@ mission_is_playing = Event(
     + Literal('is')
     + space
     + Literal('Playing')
-    + LineEnd(),
-    structure=MissionIsPlaying
-)
+    + LineEnd()
+).toStructure(MissionIsPlaying)
 
 # Example: "[8:33:05 PM] Mission BEGIN"
 mission_has_begun = Event(
@@ -188,9 +190,8 @@ mission_has_begun = Event(
     + mission
     + space
     + Literal('BEGIN')
-    + LineEnd(),
-    structure=MissionHasBegun
-)
+    + LineEnd()
+).toStructure(MissionHasBegun)
 
 # Example: "[8:33:05 PM] Mission END"
 mission_has_ended = Event(
@@ -199,8 +200,7 @@ mission_has_ended = Event(
     + space
     + Literal('END')
     + LineEnd(),
-    structure=MissionHasEnded
-)
+).toStructure(MissionHasEnded)
 
 # Example: "[Sep 15, 2013 8:33:05 PM] Mission: RED WON"
 mission_was_won = Event(
@@ -212,8 +212,7 @@ mission_was_won = Event(
     + space
     + Literal('WON')
     + LineEnd(),
-    structure=MissionWasWon
-)
+).toStructure(MissionWasWon)
 
 # Example: "[8:33:05 PM] Target 3 Complete"
 target_state_has_changed = Event(
@@ -224,5 +223,4 @@ target_state_has_changed = Event(
     + space
     + target_end_state
     + LineEnd(),
-    structure=TargetStateHasChanged
-)
+).toStructure(TargetStateHasChanged)
