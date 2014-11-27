@@ -6,7 +6,7 @@ from pyparsing import (
     WordEnd, alphanums, Suppress,
 )
 
-from ..constants import TOGGLE_VALUES, TARGET_END_STATES
+from ..constants import ToggleValues, TargetEndStates
 from .converters import (
     to_int, to_pos, to_toggle_value, to_belligerent, to_target_end_state,
 )
@@ -41,7 +41,7 @@ event_pos = Combine(
 
 # Example: "on" or "off"
 toggle_value = Or([
-    Literal(x) for x in TOGGLE_VALUES.values()
+    Literal(x) for x in ToggleValues.values()
 ]).setResultsName('toggle_value').setParseAction(to_toggle_value)
 
 # Example: "=XXX=User0"
@@ -97,5 +97,5 @@ destroyed_by = Combine(
 
 # Example: "Complete" or "Failed"
 target_end_state = Or([
-    Literal(x) for x in TARGET_END_STATES.values()
+    Literal(x) for x in TargetEndStates.values()
 ]).setResultsName('target_end_state').setParseAction(to_target_end_state)

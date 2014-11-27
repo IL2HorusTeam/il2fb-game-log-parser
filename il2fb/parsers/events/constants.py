@@ -18,11 +18,11 @@ class RegexChoices(Values):
         return ', '.join(cls.values())
 
 
-class TOGGLE_VALUES(RegexChoices):
+class ToggleValues(RegexChoices):
     ON = ValueConstant('on')
     OFF = ValueConstant('off')
 
 
-class TARGET_END_STATES(RegexChoices):
+class TargetEndStates(RegexChoices):
     COMPLETE = ValueConstant('Complete')
     FAILED = ValueConstant('Failed')

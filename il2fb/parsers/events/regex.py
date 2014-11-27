@@ -2,7 +2,7 @@
 
 import re
 
-from .constants import TOGGLE_VALUES, TARGET_END_STATES
+from .constants import ToggleValues, TargetEndStates
 
 
 __all__ = (
@@ -120,7 +120,7 @@ RX_TOGGLE_VALUE = """
     {choices}   # switch value (e.g. 'on' or 'off')
 )               # 'value' group end
                 # any ending of the string
-""".format(choices=TOGGLE_VALUES.regex_choices())
+""".format(choices=ToggleValues.regex_choices())
 
 #: Capturing pilot's callsign. E.g., for::
 #:
@@ -382,7 +382,7 @@ Target          #
     {choices}   #
 )               # 'result' group end
 $               # end of the string
-""".format(time=RX_TIME, choices=TARGET_END_STATES.regex_choices())
+""".format(time=RX_TIME, choices=TargetEndStates.regex_choices())
 
 #------------------------------------------------------------------------------
 # Action events

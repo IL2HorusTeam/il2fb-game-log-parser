@@ -3,7 +3,7 @@
 import datetime
 
 from .constants import (
-    LOG_TIME_FORMAT, LOG_DATE_FORMAT, TOGGLE_VALUES, TARGET_END_STATES,
+    LOG_TIME_FORMAT, LOG_DATE_FORMAT, ToggleValues, TargetEndStates,
 )
 
 
@@ -30,13 +30,13 @@ def process_number(data):
 
 def process_target_result(data):
     r = data.get('result')
-    if r in TARGET_END_STATES.values():
-        data['result'] = (r == TARGET_END_STATES.COMPLETE.value)
+    if r in TargetEndStates.values():
+        data['result'] = (r == TargetEndStates.COMPLETE.value)
     else:
         raise ValueError(
             "Target result value '{value}' is invalid. "
             "Valid values: {valid}."
-            .format(value=r, valid=TARGET_END_STATES.list_choices()))
+            .format(value=r, valid=TargetEndStates.list_choices()))
 
 
 def process_fuel(data):
@@ -54,12 +54,12 @@ def process_position(data):
 
 def process_toggle_value(data):
     v = data.get('value')
-    if v in TOGGLE_VALUES.values():
-        data['value'] = (v == TOGGLE_VALUES.ON.value)
+    if v in ToggleValues.values():
+        data['value'] = (v == ToggleValues.ON.value)
     else:
         raise ValueError(
             "Toggle value '{value}' is invalid. Valid values: {valid}."
-            .format(value=v, valid=TOGGLE_VALUES.list_choices()))
+            .format(value=v, valid=ToggleValues.list_choices()))
 
 
 def process_seat(data):

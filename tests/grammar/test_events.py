@@ -4,7 +4,7 @@ import datetime
 
 from il2fb.commons.organization import Belligerents
 
-from il2fb.parsers.events.constants import TARGET_END_STATES
+from il2fb.parsers.events.constants import TargetEndStates
 from il2fb.parsers.events.grammar.events import (
     mission_is_playing, mission_has_begun, mission_has_ended,
     mission_was_won, target_state_has_changed,
@@ -61,7 +61,7 @@ class TargetEndStateHasChangedTestCase(BaseTestCase):
         self.assertIsInstance(result, TargetStateHasChanged)
         self.assertEqual(result.time, datetime.time(20, 33, 5))
         self.assertEqual(result.target_index, 3)
-        self.assertEqual(result.state, TARGET_END_STATES.COMPLETE)
+        self.assertEqual(result.state, TargetEndStates.COMPLETE)
 
     def test_target_state_has_changed_to_failed(self):
         string = "[8:33:05 PM] Target 4 Failed"
@@ -70,4 +70,4 @@ class TargetEndStateHasChangedTestCase(BaseTestCase):
         self.assertIsInstance(result, TargetStateHasChanged)
         self.assertEqual(result.time, datetime.time(20, 33, 5))
         self.assertEqual(result.target_index, 4)
-        self.assertEqual(result.state, TARGET_END_STATES.FAILED)
+        self.assertEqual(result.state, TargetEndStates.FAILED)

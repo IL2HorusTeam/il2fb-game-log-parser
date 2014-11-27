@@ -5,7 +5,7 @@ import datetime
 from il2fb.commons.organization import Belligerents
 from pyparsing import ParseException
 
-from il2fb.parsers.events.constants import TOGGLE_VALUES, TARGET_END_STATES
+from il2fb.parsers.events.constants import ToggleValues, TargetEndStates
 from il2fb.parsers.events.grammar.helpers import (
     event_time, event_date_time, event_pos, callsign, aircraft, pilot, enemy,
     seat_number, static, bridge, crew_member, destroyed_by, toggle_value,
@@ -98,11 +98,11 @@ class ToggleValueTestCase(BaseTestCase):
 
     def test_toggle_value_is_on(self):
         self.assertEqual(toggle_value.parseString("on").toggle_value,
-                         TOGGLE_VALUES.ON)
+                         ToggleValues.ON)
 
     def test_toggle_value_is_off(self):
         self.assertEqual(toggle_value.parseString("off").toggle_value,
-                         TOGGLE_VALUES.OFF)
+                         ToggleValues.OFF)
 
     def test_toggle_value_is_invalid(self):
         with self.assertRaises(ParseException):
@@ -128,11 +128,11 @@ class TargetEndStateTestCase(BaseTestCase):
 
     def test_target_end_state_is_complete(self):
         result = target_end_state.parseString("Complete").target_end_state
-        self.assertEqual(result, TARGET_END_STATES.COMPLETE)
+        self.assertEqual(result, TargetEndStates.COMPLETE)
 
     def test_target_end_state_is_failed(self):
         result = target_end_state.parseString("Failed").target_end_state
-        self.assertEqual(result, TARGET_END_STATES.FAILED)
+        self.assertEqual(result, TargetEndStates.FAILED)
 
     def test_target_end_state_is_invalid(self):
         with self.assertRaises(ParseException):
