@@ -24,6 +24,13 @@ class EventWithDate(object):
         self.date = kwargs['date']
 
 
+class EventWithCallsign(object):
+
+    def __init__(self, **kwargs):
+        super(EventWithCallsign, self).__init__(**kwargs)
+        self.callsign = kwargs['callsign']
+
+
 class MissionIsPlaying(EventWithDate, EventWithTime, Event):
 
     def __init__(self, **kwargs):
@@ -52,3 +59,7 @@ class TargetStateHasChanged(EventWithTime, Event):
         super(TargetStateHasChanged, self).__init__(**kwargs)
         self.target_index = kwargs['target_index']
         self.state = kwargs['target_end_state']
+
+
+class UserHasConnected(EventWithTime, EventWithCallsign, Event):
+    pass

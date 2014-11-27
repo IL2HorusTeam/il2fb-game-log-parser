@@ -3,11 +3,13 @@
 from pyparsing import Combine, LineEnd, Literal, Regex
 
 from .converters import to_int
-from .helpers import event_time, event_date_time, belligerent, target_end_state
+from .helpers import (
+    event_time, event_date_time, belligerent, target_end_state, callsign,
+)
 from .primitives import colon, space, number
 from ..structures.events import (
     MissionIsPlaying, MissionHasBegun, MissionHasEnded, MissionWasWon,
-    TargetStateHasChanged,
+    TargetStateHasChanged, UserHasConnected,
 )
 
 
@@ -67,10 +69,21 @@ mission_was_won = Event(
 # Example: "[8:33:05 PM] Target 3 Complete"
 target_state_has_changed = Event(
     event_time
-    + Literal("Target")
+    + Literal('Target')
     + space
     + number.setParseAction(to_int).setResultsName('target_index')
     + space
     + target_end_state
     + LineEnd(),
 ).toStructure(TargetStateHasChanged)
+
+# Example: "[8:45:57 PM] User0 has connected"
+user_has_connected = Event(
+    event_time
+    + callsign
+    + space
+    + Literal('has')
+    + space
+    + Literal('connected')
+    + LineEnd()
+).toStructure(UserHasConnected)

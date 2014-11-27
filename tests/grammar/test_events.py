@@ -7,11 +7,11 @@ from il2fb.commons.organization import Belligerents
 from il2fb.parsers.events.constants import TargetEndStates
 from il2fb.parsers.events.grammar.events import (
     mission_is_playing, mission_has_begun, mission_has_ended,
-    mission_was_won, target_state_has_changed,
+    mission_was_won, target_state_has_changed, user_has_connected,
 )
 from il2fb.parsers.events.structures.events import (
     MissionIsPlaying, MissionHasBegun, MissionHasEnded, MissionWasWon,
-    TargetStateHasChanged,
+    TargetStateHasChanged, UserHasConnected,
 )
 
 from ..base import BaseTestCase
@@ -50,6 +50,13 @@ class EventsGrammarTestCase(BaseTestCase):
         self.assertEqual(result.date, datetime.date(2013, 9, 15))
         self.assertEqual(result.time, datetime.time(20, 33, 5))
         self.assertEqual(result.belligerent, Belligerents.red)
+
+    def test_user_has_connected(self):
+        string = "[8:33:05 PM] User0 has connected"
+        result = user_has_connected.parseString(string).event
+
+        self.assertIsInstance(result, UserHasConnected)
+        self.assertEqual(result.callsign, "User0")
 
 
 class TargetEndStateHasChangedTestCase(BaseTestCase):
