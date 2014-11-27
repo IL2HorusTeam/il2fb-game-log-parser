@@ -43,23 +43,23 @@ class Event(object):
 
 class EventWithTime(object):
 
-    def __init__(self, data):
-        super(EventWithTime, self).__init__(data)
-        self.time = data['time']
+    def __init__(self, **kwargs):
+        super(EventWithTime, self).__init__(**kwargs)
+        self.time = kwargs['time']
 
 
 class EventWithDate(object):
 
-    def __init__(self, data):
-        super(EventWithDate, self).__init__(data)
-        self.date = data['date']
+    def __init__(self, **kwargs):
+        super(EventWithDate, self).__init__(**kwargs)
+        self.date = kwargs['date']
 
 
 class MissionIsPlaying(EventWithDate, EventWithTime, Event):
 
-    def __init__(self, data):
-        super(MissionIsPlaying, self).__init__(data)
-        self.mission = data['mission']
+    def __init__(self, **kwargs):
+        super(MissionIsPlaying, self).__init__(**kwargs)
+        self.mission = kwargs['mission']
 
 
 class MissionHasBegun(EventWithTime, Event):
@@ -72,14 +72,14 @@ class MissionHasEnded(EventWithTime, Event):
 
 class MissionWasWon(EventWithDate, EventWithTime, Event):
 
-    def __init__(self, data):
-        super(MissionWasWon, self).__init__(data)
-        self.belligerent = data['belligerent']
+    def __init__(self, **kwargs):
+        super(MissionWasWon, self).__init__(**kwargs)
+        self.belligerent = kwargs['belligerent']
 
 
 class TargetStateHasChanged(EventWithTime, Event):
 
-    def __init__(self, data):
-        super(TargetStateHasChanged, self).__init__(data)
-        self.target_index = data['target_index']
-        self.state = data['target_end_state']
+    def __init__(self, **kwargs):
+        super(TargetStateHasChanged, self).__init__(**kwargs)
+        self.target_index = kwargs['target_index']
+        self.state = kwargs['target_end_state']

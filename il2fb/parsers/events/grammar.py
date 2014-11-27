@@ -162,7 +162,7 @@ target_end_state = Or([
 #------------------------------------------------------------------------------
 
 def Event(expr, structure):
-    to_structure = lambda tokens: structure(tokens.event)
+    to_structure = lambda tokens: structure(**tokens.event)
     return Combine(expr).setResultsName('event').setParseAction(to_structure)
 
 mission = Literal('Mission')
