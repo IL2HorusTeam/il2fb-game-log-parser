@@ -67,3 +67,7 @@ class UserHasConnected(EventWithTime, EventWithCallsign, Event):
 
 class UserHasDisconnected(EventWithTime, EventWithCallsign, Event):
     pass
+
+
+class UserHasWentToMenu(EventWithTime, EventWithCallsign, Event):
+    pass

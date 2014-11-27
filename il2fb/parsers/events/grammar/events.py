@@ -10,6 +10,7 @@ from .primitives import colon, space, number
 from ..structures.events import (
     MissionIsPlaying, MissionHasBegun, MissionHasEnded, MissionWasWon,
     TargetStateHasChanged, UserHasConnected, UserHasDisconnected,
+    UserHasWentToMenu,
 )
 
 
@@ -78,7 +79,7 @@ target_state_has_changed = Event(
     + LineEnd(),
 ).toStructure(TargetStateHasChanged)
 
-# Example: "[8:45:57 PM] User0 has connected"
+# Example: "[8:33:05 PM] User0 has connected"
 user_has_connected = Event(
     event_time
     + callsign
@@ -87,7 +88,7 @@ user_has_connected = Event(
     + LineEnd()
 ).toStructure(UserHasConnected)
 
-# Example: "[8:45:57 PM] User0 has disconnected"
+# Example: "[8:33:05 PM] User0 has disconnected"
 user_has_disconnected = Event(
     event_time
     + callsign
@@ -95,3 +96,16 @@ user_has_disconnected = Event(
     + Literal('disconnected')
     + LineEnd()
 ).toStructure(UserHasDisconnected)
+
+# Example: "[8:33:05 PM] User0 entered refly menu"
+user_has_went_to_menu = Event(
+    event_time
+    + callsign
+    + space
+    + Literal('entered')
+    + space
+    + Literal('refly')
+    + space
+    + Literal('menu')
+    + LineEnd()
+).toStructure(UserHasWentToMenu)
