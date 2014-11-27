@@ -2,71 +2,26 @@
 
 import datetime
 
+from il2fb.commons.organization import Belligerents
 from pyparsing import ParseException
 
-from il2fb.commons.organization import Belligerents
-
 from il2fb.parsers.events.constants import TOGGLE_VALUES, TARGET_END_STATES
-from il2fb.parsers.events.grammar import (
-    space, day_period, time, event_time, date, date_time, event_date_time,
-    float_number, event_pos, toggle_value, callsign, aircraft, pilot, enemy,
-    seat_number, crew_member, static, bridge, belligerent, destroyed_by,
-    target_end_state, mission_is_playing, mission_has_begun, mission_has_ended,
-    mission_was_won, target_state_has_changed,
+from il2fb.parsers.events.grammar.helpers import (
+    event_time, event_date_time, event_pos, callsign, aircraft, pilot, enemy,
+    seat_number, static, bridge, crew_member, destroyed_by, toggle_value,
+    target_end_state, belligerent,
 )
-from il2fb.parsers.events.structures import (
-    Point2D, MissionIsPlaying, MissionHasBegun, MissionHasEnded, MissionWasWon,
-    TargetStateHasChanged,
-)
+from il2fb.parsers.events.grammar.primitives import space
+from il2fb.parsers.events.structures import Point2D
 
-from .base import BaseTestCase
-
-
-class DayPeriodTestCase(BaseTestCase):
-
-    def test_day_period_is_am(self):
-        self.assertEqual(day_period.parseString("AM").day_period, "AM")
-
-    def test_day_period_is_pm(self):
-        self.assertEqual(day_period.parseString("PM").day_period, "PM")
-
-    def test_day_period_is_invalid(self):
-        with self.assertRaises(ParseException):
-            day_period.parseString("ZZ")
-
-
-class FloatNumberTestCase(BaseTestCase):
-
-    def test_positive_float_number(self):
-        result = float_number.parseString("123.321")
-        self.assertEqual(result[0], 123.321)
-
-    def test_negative_float_number(self):
-        result = float_number.parseString("-456.654")
-        self.assertEqual(result[0], -456.654)
+from ..base import BaseTestCase
 
 
 class CommonGrammarTestCase(BaseTestCase):
 
-    def test_time(self):
-        expected = datetime.time(20, 33, 5)
-
-        self.assertEqual(time.parseString("8:33:05 PM").time, expected)
-        self.assertEqual(time.parseString("08:33:05 PM").time, expected)
-
     def test_event_time(self):
         result = event_time.parseString("[08:33:05 PM] ").time
         self.assertEqual(result, datetime.time(20, 33, 5))
-
-    def test_date(self):
-        result = date.parseString("Oct 30, 2013").date
-        self.assertEqual(result, datetime.date(2013, 10, 30))
-
-    def test_date_time(self):
-        result = date_time.parseString("Oct 30, 2013 8:33:05 PM")
-
-        self.assertEqual(result.date, datetime.date(2013, 10, 30))
-        self.assertEqual(result.time, datetime.time(20, 33, 5))
 
     def test_event_date_time(self):
         result = event_date_time.parseString("[Oct 30, 2013 8:33:05 PM] ")
@@ -182,59 +137,3 @@ class TargetEndStateTestCase(BaseTestCase):
     def test_target_end_state_is_invalid(self):
         with self.assertRaises(ParseException):
             target_end_state.parseString("XXX")
-
-
-class EventsGrammarTestCase(BaseTestCase):
-
-    def test_mission_is_playing(self):
-        string = "[Sep 15, 2013 8:33:05 PM] Mission: path/PH.mis is Playing"
-        result = mission_is_playing.parseString(string).event
-
-        self.assertIsInstance(result, MissionIsPlaying)
-        self.assertEqual(result.date, datetime.date(2013, 9, 15))
-        self.assertEqual(result.time, datetime.time(20, 33, 5))
-        self.assertEqual(result.mission, "path/PH.mis")
-
-    def test_mission_has_begun(self):
-        string = "[8:33:05 PM] Mission BEGIN"
-        result = mission_has_begun.parseString(string).event
-
-        self.assertIsInstance(result, MissionHasBegun)
-        self.assertEqual(result.time, datetime.time(20, 33, 5))
-
-    def test_mission_has_ended(self):
-        string = "[8:33:05 PM] Mission END"
-        result = mission_has_ended.parseString(string).event
-
-        self.assertIsInstance(result, MissionHasEnded)
-        self.assertEqual(result.time, datetime.time(20, 33, 5))
-
-    def test_mission_was_won(self):
-        string = "[Sep 15, 2013 8:33:05 PM] Mission: RED WON"
-        result = mission_was_won.parseString(string).event
-
-        self.assertIsInstance(result, MissionWasWon)
-        self.assertEqual(result.date, datetime.date(2013, 9, 15))
-        self.assertEqual(result.time, datetime.time(20, 33, 5))
-        self.assertEqual(result.belligerent, Belligerents.red)
-
-
-class TargetEndStateHasChangedTestCase(BaseTestCase):
-
-    def test_target_state_has_changed_to_complete(self):
-        string = "[8:33:05 PM] Target 3 Complete"
-        result = target_state_has_changed.parseString(string).event
-
-        self.assertIsInstance(result, TargetStateHasChanged)
-        self.assertEqual(result.time, datetime.time(20, 33, 5))
-        self.assertEqual(result.target_index, 3)
-        self.assertEqual(result.state, TARGET_END_STATES.COMPLETE)
-
-    def test_target_state_has_changed_to_failed(self):
-        string = "[8:33:05 PM] Target 4 Failed"
-        result = target_state_has_changed.parseString(string).event
-
-        self.assertIsInstance(result, TargetStateHasChanged)
-        self.assertEqual(result.time, datetime.time(20, 33, 5))
-        self.assertEqual(result.target_index, 4)
-        self.assertEqual(result.state, TARGET_END_STATES.FAILED)

@@ -4,10 +4,10 @@ import datetime
 
 from il2fb.commons.organization import Belligerents
 
-from .constants import (
+from ..constants import (
     LOG_TIME_FORMAT, LOG_DATE_FORMAT, TOGGLE_VALUES, TARGET_END_STATES,
 )
-from .structures import Point2D
+from ..structures import Point2D
 
 
 def to_time(tokens):
