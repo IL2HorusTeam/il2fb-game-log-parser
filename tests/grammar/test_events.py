@@ -9,7 +9,7 @@ from il2fb.parsers.events.grammar.events import (
     mission_is_playing, mission_has_begun, mission_has_ended,
     mission_was_won, target_state_has_changed,
 )
-from il2fb.parsers.events.structures import (
+from il2fb.parsers.events.structures.events import (
     MissionIsPlaying, MissionHasBegun, MissionHasEnded, MissionWasWon,
     TargetStateHasChanged,
 )

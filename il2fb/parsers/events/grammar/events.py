@@ -5,7 +5,7 @@ from pyparsing import Combine, LineEnd, Literal, Regex
 from .converters import to_int
 from .helpers import event_time, event_date_time, belligerent, target_end_state
 from .primitives import colon, space, number
-from ..structures import (
+from ..structures.events import (
     MissionIsPlaying, MissionHasBegun, MissionHasEnded, MissionWasWon,
     TargetStateHasChanged,
 )
