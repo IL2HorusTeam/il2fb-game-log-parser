@@ -9,7 +9,7 @@ from .helpers import (
 from .primitives import colon, space, number
 from ..structures.events import (
     MissionIsPlaying, MissionHasBegun, MissionHasEnded, MissionWasWon,
-    TargetStateHasChanged, UserHasConnected,
+    TargetStateHasChanged, UserHasConnected, UserHasDisconnected,
 )
 
 
@@ -21,6 +21,7 @@ class Event(Combine):
 
 
 mission = Literal('Mission')
+has = space + Literal('has') + space
 
 # Example: "[Sep 15, 2013 8:33:05 PM] Mission: PH.mis is Playing"
 mission_is_playing = Event(
@@ -81,9 +82,16 @@ target_state_has_changed = Event(
 user_has_connected = Event(
     event_time
     + callsign
-    + space
-    + Literal('has')
-    + space
+    + has
     + Literal('connected')
     + LineEnd()
 ).toStructure(UserHasConnected)
+
+# Example: "[8:45:57 PM] User0 has disconnected"
+user_has_disconnected = Event(
+    event_time
+    + callsign
+    + has
+    + Literal('disconnected')
+    + LineEnd()
+).toStructure(UserHasDisconnected)

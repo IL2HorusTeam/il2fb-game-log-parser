@@ -63,3 +63,7 @@ class TargetStateHasChanged(EventWithTime, Event):
 
 class UserHasConnected(EventWithTime, EventWithCallsign, Event):
     pass
+
+
+class UserHasDisconnected(EventWithTime, EventWithCallsign, Event):
+    pass
