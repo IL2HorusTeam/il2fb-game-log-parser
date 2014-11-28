@@ -24,6 +24,10 @@ class EventWithDate(object):
         self.date = kwargs['date']
 
 
+class EventWithDateTime(EventWithDate, EventWithTime):
+    pass
+
+
 class EventWithCallsign(object):
 
     def __init__(self, **kwargs):
@@ -45,7 +49,7 @@ class EventWithPos(object):
         self.pos = kwargs['pos']
 
 
-class MissionIsPlaying(EventWithDate, EventWithTime, Event):
+class MissionIsPlaying(EventWithDateTime, Event):
 
     def __init__(self, **kwargs):
         super(MissionIsPlaying, self).__init__(**kwargs)
@@ -60,7 +64,7 @@ class MissionHasEnded(EventWithTime, Event):
     pass
 
 
-class MissionWasWon(EventWithDate, EventWithTime, EventWithBelligerent, Event):
+class MissionWasWon(EventWithDateTime, EventWithBelligerent, Event):
     pass
 
 
