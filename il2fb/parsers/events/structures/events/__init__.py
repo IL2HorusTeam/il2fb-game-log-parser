@@ -1,5 +1,17 @@
 # -*- coding: utf-8 -*-
 
+from .mixins import (
+    EventWithTime, EventWithDateTime, EventWithBelligerent, EventWithCallsign,
+    EventWithPos,
+)
+
+
+__all__ = (
+    'MissionIsPlaying', 'MissionHasBegun', 'MissionHasEnded', 'MissionWasWon',
+    'TargetStateHasChanged', 'UserHasConnected', 'UserHasDisconnected',
+    'UserHasWentToMenu', 'UserHasSelectedAirfield',
+)
+
 
 class Event(object):
 
@@ -8,29 +20,6 @@ class Event(object):
 
     def __repr__(self):
         return "<Event '{0}'>".format(self.__class__.__name__)
-
-
-def mixin_for_attribute(attribute_name):
-
-    class Mixin(object):
-
-        def __init__(self, **kwargs):
-            super(Mixin, self).__init__(**kwargs)
-            value = kwargs[attribute_name]
-            setattr(self, attribute_name, value)
-
-    return Mixin
-
-
-EventWithTime = mixin_for_attribute('time')
-EventWithDate = mixin_for_attribute('date')
-EventWithCallsign = mixin_for_attribute('callsign')
-EventWithBelligerent = mixin_for_attribute('belligerent')
-EventWithPos = mixin_for_attribute('pos')
-
-
-class EventWithDateTime(EventWithDate, EventWithTime):
-    pass
 
 
 class MissionIsPlaying(EventWithDateTime, Event):
