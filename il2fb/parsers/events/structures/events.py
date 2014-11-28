@@ -60,11 +60,8 @@ class MissionHasEnded(EventWithTime, Event):
     pass
 
 
-class MissionWasWon(EventWithDate, EventWithTime, Event):
-
-    def __init__(self, **kwargs):
-        super(MissionWasWon, self).__init__(**kwargs)
-        self.belligerent = kwargs['belligerent']
+class MissionWasWon(EventWithDate, EventWithTime, EventWithBelligerent, Event):
+    pass
 
 
 class TargetStateHasChanged(EventWithTime, Event):
