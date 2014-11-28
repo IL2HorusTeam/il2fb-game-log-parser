@@ -2,14 +2,14 @@
 
 from .mixins import (
     EventWithTime, EventWithDateTime, EventWithBelligerent, EventWithCallsign,
-    EventWithPos,
+    EventWithPos, EventWithPilot,
 )
 
 
 __all__ = (
     'MissionIsPlaying', 'MissionHasBegun', 'MissionHasEnded', 'MissionWasWon',
     'TargetStateHasChanged', 'UserHasConnected', 'UserHasDisconnected',
-    'UserHasWentToBriefing', 'UserHasSelectedAirfield',
+    'UserHasWentToBriefing', 'UserHasSelectedAirfield', 'UserHasTookOff',
 )
 
 
@@ -66,4 +66,8 @@ class UserHasSelectedAirfield(EventWithTime,
                               EventWithBelligerent,
                               EventWithPos,
                               Event):
+    pass
+
+
+class UserHasTookOff(EventWithTime, EventWithPilot, EventWithPos, Event):
     pass

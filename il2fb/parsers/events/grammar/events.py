@@ -5,13 +5,13 @@ from pyparsing import Combine, LineEnd, Literal, Regex
 from .converters import to_int
 from .helpers import (
     event_time, event_date_time, event_pos, belligerent, target_end_state,
-    callsign,
+    callsign, pilot,
 )
 from .primitives import colon, space, number
 from ..structures.events import (
     MissionIsPlaying, MissionHasBegun, MissionHasEnded, MissionWasWon,
     TargetStateHasChanged, UserHasConnected, UserHasDisconnected,
-    UserHasWentToBriefing, UserHasSelectedAirfield,
+    UserHasWentToBriefing, UserHasSelectedAirfield, UserHasTookOff,
 )
 
 
@@ -111,7 +111,7 @@ user_has_went_to_briefing = Event(
     + LineEnd()
 ).toStructure(UserHasWentToBriefing)
 
-# Example: "[8:46:55 PM] User selected army Red at 100.0 200.99"
+# Example: "[8:33:05 PM] User0 selected army Red at 100.0 200.99"
 user_has_selected_airfield = Event(
     event_time
     + callsign
@@ -123,3 +123,14 @@ user_has_selected_airfield = Event(
     + belligerent
     + event_pos
 ).toStructure(UserHasSelectedAirfield)
+
+# Example: "[8:33:05 PM] User0:Pe-8 in flight at 100.0 200.99"
+user_has_took_off = Event(
+    event_time
+    + pilot
+    + space
+    + Literal('in')
+    + space
+    + Literal('flight')
+    + event_pos
+).toStructure(UserHasTookOff)
