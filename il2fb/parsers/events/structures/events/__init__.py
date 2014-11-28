@@ -9,7 +9,7 @@ from .mixins import (
 __all__ = (
     'MissionIsPlaying', 'MissionHasBegun', 'MissionHasEnded', 'MissionWasWon',
     'TargetStateHasChanged', 'UserHasConnected', 'UserHasDisconnected',
-    'UserHasWentToMenu', 'UserHasSelectedAirfield',
+    'UserHasWentToBriefing', 'UserHasSelectedAirfield',
 )
 
 
@@ -57,7 +57,7 @@ class UserHasDisconnected(EventWithTime, EventWithCallsign, Event):
     pass
 
 
-class UserHasWentToMenu(EventWithTime, EventWithCallsign, Event):
+class UserHasWentToBriefing(EventWithTime, EventWithCallsign, Event):
     pass
 
 

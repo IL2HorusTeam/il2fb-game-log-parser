@@ -8,14 +8,14 @@ from il2fb.parsers.events.constants import TargetEndStates
 from il2fb.parsers.events.grammar.events import (
     mission_is_playing, mission_has_begun, mission_has_ended,
     mission_was_won, target_state_has_changed, user_has_connected,
-    user_has_disconnected, user_has_went_to_menu,
+    user_has_disconnected, user_has_went_to_briefing,
     user_has_selected_airfield,
 )
 from il2fb.parsers.events.structures import Point2D
 from il2fb.parsers.events.structures.events import (
     MissionIsPlaying, MissionHasBegun, MissionHasEnded, MissionWasWon,
     TargetStateHasChanged, UserHasConnected, UserHasDisconnected,
-    UserHasWentToMenu, UserHasSelectedAirfield,
+    UserHasWentToBriefing, UserHasSelectedAirfield,
 )
 
 from ..base import BaseTestCase
@@ -92,11 +92,11 @@ class EventsGrammarTestCase(BaseTestCase):
         self.assertEqual(event.time, datetime.time(20, 33, 5))
         self.assertEqual(event.callsign, "User0")
 
-    def test_user_has_went_to_menu(self):
+    def test_user_has_went_to_briefing(self):
         string = "[8:33:05 PM] User0 entered refly menu"
-        event = self.string_to_event(string, user_has_went_to_menu)
+        event = self.string_to_event(string, user_has_went_to_briefing)
 
-        self.assertIsInstance(event, UserHasWentToMenu)
+        self.assertIsInstance(event, UserHasWentToBriefing)
         self.assertEqual(event.time, datetime.time(20, 33, 5))
         self.assertEqual(event.callsign, "User0")
 
