@@ -10,43 +10,27 @@ class Event(object):
         return "<Event '{0}'>".format(self.__class__.__name__)
 
 
-class EventWithTime(object):
+def mixin_for_attribute(attribute_name):
 
-    def __init__(self, **kwargs):
-        super(EventWithTime, self).__init__(**kwargs)
-        self.time = kwargs['time']
+    class Mixin(object):
+
+        def __init__(self, **kwargs):
+            super(Mixin, self).__init__(**kwargs)
+            value = kwargs[attribute_name]
+            setattr(self, attribute_name, value)
+
+    return Mixin
 
 
-class EventWithDate(object):
-
-    def __init__(self, **kwargs):
-        super(EventWithDate, self).__init__(**kwargs)
-        self.date = kwargs['date']
+EventWithTime = mixin_for_attribute('time')
+EventWithDate = mixin_for_attribute('date')
+EventWithCallsign = mixin_for_attribute('callsign')
+EventWithBelligerent = mixin_for_attribute('belligerent')
+EventWithPos = mixin_for_attribute('pos')
 
 
 class EventWithDateTime(EventWithDate, EventWithTime):
     pass
-
-
-class EventWithCallsign(object):
-
-    def __init__(self, **kwargs):
-        super(EventWithCallsign, self).__init__(**kwargs)
-        self.callsign = kwargs['callsign']
-
-
-class EventWithBelligerent(object):
-
-    def __init__(self, **kwargs):
-        super(EventWithBelligerent, self).__init__(**kwargs)
-        self.belligerent = kwargs['belligerent']
-
-
-class EventWithPos(object):
-
-    def __init__(self, **kwargs):
-        super(EventWithPos, self).__init__(**kwargs)
-        self.pos = kwargs['pos']
 
 
 class MissionIsPlaying(EventWithDateTime, Event):
