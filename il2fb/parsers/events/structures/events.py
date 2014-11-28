@@ -31,6 +31,20 @@ class EventWithCallsign(object):
         self.callsign = kwargs['callsign']
 
 
+class EventWithBelligerent(object):
+
+    def __init__(self, **kwargs):
+        super(EventWithBelligerent, self).__init__(**kwargs)
+        self.belligerent = kwargs['belligerent']
+
+
+class EventWithPos(object):
+
+    def __init__(self, **kwargs):
+        super(EventWithPos, self).__init__(**kwargs)
+        self.pos = kwargs['pos']
+
+
 class MissionIsPlaying(EventWithDate, EventWithTime, Event):
 
     def __init__(self, **kwargs):
@@ -70,4 +84,12 @@ class UserHasDisconnected(EventWithTime, EventWithCallsign, Event):
 
 
 class UserHasWentToMenu(EventWithTime, EventWithCallsign, Event):
+    pass
+
+
+class UserHasSelectedAirfield(EventWithTime,
+                              EventWithCallsign,
+                              EventWithBelligerent,
+                              EventWithPos,
+                              Event):
     pass

@@ -9,11 +9,13 @@ from il2fb.parsers.events.grammar.events import (
     mission_is_playing, mission_has_begun, mission_has_ended,
     mission_was_won, target_state_has_changed, user_has_connected,
     user_has_disconnected, user_has_went_to_menu,
+    user_has_selected_airfield,
 )
+from il2fb.parsers.events.structures import Point2D
 from il2fb.parsers.events.structures.events import (
     MissionIsPlaying, MissionHasBegun, MissionHasEnded, MissionWasWon,
     TargetStateHasChanged, UserHasConnected, UserHasDisconnected,
-    UserHasWentToMenu,
+    UserHasWentToMenu, UserHasSelectedAirfield,
 )
 
 from ..base import BaseTestCase
@@ -97,3 +99,13 @@ class EventsGrammarTestCase(BaseTestCase):
         self.assertIsInstance(event, UserHasWentToMenu)
         self.assertEqual(event.time, datetime.time(20, 33, 5))
         self.assertEqual(event.callsign, "User0")
+
+    def test_user_has_selected_airfield(self):
+        string = "[8:33:05 PM] User0 selected army Red at 100.0 200.99"
+        event = self.string_to_event(string, user_has_selected_airfield)
+
+        self.assertIsInstance(event, UserHasSelectedAirfield)
+        self.assertEqual(event.time, datetime.time(20, 33, 5))
+        self.assertEqual(event.callsign, "User0")
+        self.assertEqual(event.belligerent, Belligerents.red)
+        self.assertEqual(event.pos, Point2D(100.0, 200.99))
