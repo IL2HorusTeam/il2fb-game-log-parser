@@ -13,7 +13,7 @@ from il2fb.parsers.events.grammar.events import (
     user_has_changed_seat, crew_member_has_bailed_out,
     crew_member_has_opened_parachute, user_has_toggled_landing_lights,
     user_has_toggled_wingtip_smokes, crew_member_was_wounded,
-    crew_member_was_heavily_wounded,
+    crew_member_was_heavily_wounded, crew_member_was_killed,
 )
 from il2fb.parsers.events.structures import Point2D
 from il2fb.parsers.events.structures import events
@@ -67,8 +67,10 @@ class EventsGrammarTestCase(BaseTestCase):
         self.assertInAll(events.MissionWasWon)
 
     def test_target_state_has_changed(self):
+        testee = target_state_has_changed
+
         string = "[8:33:05 PM] Target 3 Complete"
-        event = self.string_to_event(string, target_state_has_changed)
+        event = self.string_to_event(string, testee)
 
         self.assertIsInstance(event, events.TargetStateHasChanged)
         self.assertEqual(event.time, datetime.time(20, 33, 5))
@@ -76,7 +78,7 @@ class EventsGrammarTestCase(BaseTestCase):
         self.assertEqual(event.state, TargetEndStates.COMPLETE)
 
         string = "[8:33:05 PM] Target 4 Failed"
-        event = self.string_to_event(string, target_state_has_changed)
+        event = self.string_to_event(string, testee)
 
         self.assertIsInstance(event, events.TargetStateHasChanged)
         self.assertEqual(event.time, datetime.time(20, 33, 5))
@@ -241,3 +243,15 @@ class EventsGrammarTestCase(BaseTestCase):
         self.assertEqual(event.seat_number, 0)
         self.assertEqual(event.pos, Point2D(100.0, 200.99))
         self.assertInAll(events.CrewMemberWasHeavilyWounded)
+
+    def test_crew_member_was_killed(self):
+        string = "[8:33:05 PM] User0:Pe-8(0) was killed at 100.0 200.99"
+        event = self.string_to_event(string, crew_member_was_killed)
+
+        self.assertIsInstance(event, events.CrewMemberWasKilled)
+        self.assertEqual(event.time, datetime.time(20, 33, 5))
+        self.assertEqual(event.callsign, "User0")
+        self.assertEqual(event.aircraft, "Pe-8")
+        self.assertEqual(event.seat_number, 0)
+        self.assertEqual(event.pos, Point2D(100.0, 200.99))
+        self.assertInAll(events.CrewMemberWasKilled)
