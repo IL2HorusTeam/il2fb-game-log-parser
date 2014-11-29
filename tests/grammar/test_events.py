@@ -14,7 +14,7 @@ from il2fb.parsers.events.grammar.events import (
     crew_member_has_opened_parachute, user_has_toggled_landing_lights,
     user_has_toggled_wingtip_smokes, crew_member_was_wounded,
     crew_member_was_heavily_wounded, crew_member_was_killed,
-    crew_member_was_killed_by_enemy_user,
+    human_crew_member_was_killed_by_human,
 )
 from il2fb.parsers.events.structures import Point2D, CrewMember
 from il2fb.parsers.events.structures import events
@@ -245,16 +245,19 @@ class EventsGrammarTestCase(BaseTestCase):
         self.assertEqual(event.pos, Point2D(100.0, 200.99))
         self.assertInAll(events.CrewMemberWasKilled)
 
-    def test_crew_member_was_killed_by_enemy_user(self):
+    def test_human_crew_member_was_killed_by_human(self):
         string = "[8:33:05 PM] User0:Pe-8(0) was killed by User1:Bf-109G-6_Late at 100.0 200.99"
-        event = self.string_to_event(string, crew_member_was_killed_by_enemy_user)
+        event = self.string_to_event(string, human_crew_member_was_killed_by_human)
 
-        self.assertIsInstance(event, events.CrewMemberWasKilledByEnemyUser)
+        self.assertIsInstance(event, events.HumanCrewMemberWasKilledByHuman)
         self.assertEqual(event.time, datetime.time(20, 33, 5))
-        self.assertEqual(event.crew_member, CrewMember("User0", "Pe-8", 0))
 
-        self.assertEqual(event.enemy.callsign, "User1")
-        self.assertEqual(event.enemy.aircraft, "Bf-109G-6_Late")
+        self.assertEqual(event.victim.callsign, "User0")
+        self.assertEqual(event.victim.aircraft, "Pe-8")
+        self.assertEqual(event.victim.seat_number, 0)
+
+        self.assertEqual(event.aggressor.callsign, "User1")
+        self.assertEqual(event.aggressor.aircraft, "Bf-109G-6_Late")
 
         self.assertEqual(event.pos, Point2D(100.0, 200.99))
-        self.assertInAll(events.CrewMemberWasKilledByEnemyUser)
+        self.assertInAll(events.HumanCrewMemberWasKilledByHuman)

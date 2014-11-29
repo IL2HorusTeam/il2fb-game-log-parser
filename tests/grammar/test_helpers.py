@@ -7,9 +7,9 @@ from pyparsing import ParseException
 
 from il2fb.parsers.events.constants import TargetEndStates
 from il2fb.parsers.events.grammar.helpers import (
-    event_time, event_date_time, event_pos, callsign, aircraft, pilot, enemy,
-    seat_number, static, bridge, crew_member, destroyed_by, toggle_value,
-    target_end_state, belligerent,
+    event_time, event_date_time, event_pos, callsign, aircraft, pilot,
+    human_aggressor, seat_number, static, bridge, crew_member, destroyed_by,
+    toggle_value, target_end_state, belligerent,
 )
 from il2fb.parsers.events.grammar.primitives import space
 from il2fb.parsers.events.structures import Point2D, CrewMember
@@ -48,23 +48,21 @@ class CommonGrammarTestCase(BaseTestCase):
         self.assertEqual(result.callsign, "User0")
         self.assertEqual(result.aircraft, "Pe-8")
 
-    def test_enemy(self):
-        result = enemy.parseString("User1:Bf-109G-6_Late").enemy
+    def test_human_aggressor(self):
+        result = human_aggressor.parseString("User1:Bf-109G-6_Late").aggressor
 
         self.assertEqual(result.callsign, "User1")
         self.assertEqual(result.aircraft, "Bf-109G-6_Late")
 
-    def test_victim_and_offender(self):
-        grammar = pilot + space + enemy
+    def test_victim_and_pilot_aggressor(self):
+        grammar = pilot.setResultsName("victim") + space + human_aggressor
         result = grammar.parseString("User0:Pe-8 User1:Bf-109G-6_Late")
 
-        victim = result.pilot
-        self.assertEqual(victim.callsign, "User0")
-        self.assertEqual(victim.aircraft, "Pe-8")
+        self.assertEqual(result.victim.callsign, "User0")
+        self.assertEqual(result.victim.aircraft, "Pe-8")
 
-        offender = result.enemy
-        self.assertEqual(offender.callsign, "User1")
-        self.assertEqual(offender.aircraft, "Bf-109G-6_Late")
+        self.assertEqual(result.aggressor.callsign, "User1")
+        self.assertEqual(result.aggressor.aircraft, "Bf-109G-6_Late")
 
     def test_seat_number(self):
         result = seat_number.parseString("(0)").seat_number

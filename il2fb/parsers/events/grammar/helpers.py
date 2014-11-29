@@ -60,7 +60,7 @@ pilot = (
     callsign + colon.suppress() + aircraft
 ).setResultsName("pilot")
 
-enemy = pilot.setResultsName("enemy")
+human_aggressor = pilot.setResultsName("aggressor")
 
 # Example: "(0)"
 seat_number = (

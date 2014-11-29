@@ -20,7 +20,8 @@ EventWithPos = mixin_for_attribute('pos')
 EventWithCallsign = mixin_for_attribute('callsign')
 EventWithAircraft = mixin_for_attribute('aircraft')
 EventWithCrewMember = mixin_for_attribute('crew_member')
-EventWithEnemy = mixin_for_attribute('enemy')
+EventWithVictim = mixin_for_attribute('victim')
+EventWithAggressor = mixin_for_attribute('aggressor')
 
 
 class EventWithDateTime(EventWithDate, EventWithTime):

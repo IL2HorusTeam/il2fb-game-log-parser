@@ -5,7 +5,7 @@ from pyparsing import Combine, LineEnd, Literal, Regex, QuotedString
 from .converters import to_int
 from .helpers import (
     event_time, event_date_time, event_pos, belligerent, target_end_state,
-    toggle_value, callsign, pilot, enemy, crew_member,
+    toggle_value, callsign, pilot, human_aggressor, crew_member,
 )
 from .primitives import colon, space, number
 from ..structures.events import (
@@ -16,7 +16,7 @@ from ..structures.events import (
     CrewMemberHasOpenedParachute, UserHasToggledLandingLights,
     UserHasToggledWingtipSmokes, CrewMemberWasWounded,
     CrewMemberWasHeavilyWounded, CrewMemberWasKilled,
-    CrewMemberWasKilledByEnemyUser,
+    HumanCrewMemberWasKilledByHuman,
 )
 
 
@@ -202,10 +202,10 @@ crew_member_was_killed = Event(
 ).toStructure(CrewMemberWasKilled)
 
 # Example: "[8:33:05 PM] User0:Pe-8(0) was killed by User1:Bf-109G-6_Late at 100.0 200.99"
-crew_member_was_killed_by_enemy_user = Event(
+human_crew_member_was_killed_by_human = Event(
     event_time
-    + crew_member
+    + crew_member.setResultsName("victim")
     + " was killed by "
-    + enemy
+    + human_aggressor
     + event_pos
-).toStructure(CrewMemberWasKilledByEnemyUser)
+).toStructure(HumanCrewMemberWasKilledByHuman)
