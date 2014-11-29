@@ -5,14 +5,14 @@ import datetime
 from il2fb.commons.organization import Belligerents
 from pyparsing import ParseException
 
-from il2fb.parsers.events.constants import ToggleValues, TargetEndStates
+from il2fb.parsers.events.constants import TargetEndStates
 from il2fb.parsers.events.grammar.helpers import (
     event_time, event_date_time, event_pos, callsign, aircraft, pilot, enemy,
     seat_number, static, bridge, crew_member, destroyed_by, toggle_value,
     target_end_state, belligerent,
 )
 from il2fb.parsers.events.grammar.primitives import space
-from il2fb.parsers.events.structures import Point2D
+from il2fb.parsers.events.structures import Point2D, CrewMember
 
 from ..base import BaseTestCase
 
@@ -71,11 +71,8 @@ class CommonGrammarTestCase(BaseTestCase):
         self.assertEqual(result, 0)
 
     def test_crew_member(self):
-        result = crew_member.parseString("User:Pe-8(0)")
-
-        self.assertEqual(result.callsign, "User")
-        self.assertEqual(result.aircraft, "Pe-8")
-        self.assertEqual(result.seat_number, 0)
+        result = crew_member.parseString("User:Pe-8(0)").crew_member
+        self.assertEqual(result, CrewMember("User", "Pe-8", 0))
 
     def test_static(self):
         result = static.parseString("0_Static").static

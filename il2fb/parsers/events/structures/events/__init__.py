@@ -3,6 +3,7 @@
 from .mixins import (
     EventWithTime, EventWithDateTime, EventWithBelligerent, EventWithCallsign,
     EventWithPos, EventWithPilot, EventWithCrewMember, EventWithToggleValue,
+    EventWithEnemy,
 )
 
 
@@ -14,6 +15,7 @@ __all__ = (
     'CrewMemberHasOpenedParachute', 'UserHasToggledLandingLights',
     'UserHasToggledWingtipSmokes', 'CrewMemberWasWounded',
     'CrewMemberWasHeavilyWounded', 'CrewMemberWasKilled',
+    'CrewMemberWasKilledByEnemyUser',
 )
 
 
@@ -141,4 +143,12 @@ class CrewMemberWasKilled(EventWithTime,
                           EventWithCrewMember,
                           EventWithPos,
                           Event):
+    pass
+
+
+class CrewMemberWasKilledByEnemyUser(EventWithTime,
+                                     EventWithCrewMember,
+                                     EventWithEnemy,
+                                     EventWithPos,
+                                     Event):
     pass

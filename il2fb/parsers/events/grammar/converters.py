@@ -7,7 +7,7 @@ from il2fb.commons.organization import Belligerents
 from ..constants import (
     LOG_TIME_FORMAT, LOG_DATE_FORMAT, ToggleValues, TargetEndStates,
 )
-from ..structures import Point2D
+from ..structures import Point2D, CrewMember
 
 
 def to_time(tokens):
@@ -42,3 +42,7 @@ def to_belligerent(tokens):
 
 def to_target_end_state(tokens):
     return TargetEndStates.get_by_value(tokens.target_end_state)
+
+
+def to_crew_member(tokens):
+    return CrewMember(tokens.callsign, tokens.aircraft, tokens.seat_number)

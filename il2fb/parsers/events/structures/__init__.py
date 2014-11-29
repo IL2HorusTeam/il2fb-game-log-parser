@@ -30,3 +30,18 @@ class Point2D(Base):
 
     def __repr__(self):
         return "<Point2D '{0};{1}'>".format(self.x, self.y)
+
+
+class CrewMember(Base):
+    __slots__ = ['callsign', 'aircraft', 'seat_number', ]
+
+    def __init__(self, callsign, aircraft, seat_number):
+        self.callsign = callsign
+        self.aircraft = aircraft
+        self.seat_number = seat_number
+
+    def __repr__(self):
+        return (
+            "<Crew member #{0} at {1}:{2}>"
+            .format(self.seat_number, self.callsign, self.aircraft)
+        )
