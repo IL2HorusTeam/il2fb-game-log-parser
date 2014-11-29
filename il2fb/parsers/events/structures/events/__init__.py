@@ -2,20 +2,20 @@
 
 from .mixins import (
     EventWithTime, EventWithDateTime, EventWithBelligerent, EventWithCallsign,
-    EventWithPos, EventWithPilot, EventWithCrewMember, EventWithToggleValue,
+    EventWithPos, EventWithActor, EventWithCrewMember, EventWithToggleValue,
     EventWithAggressor, EventWithVictim,
 )
 
 
 __all__ = (
     'MissionIsPlaying', 'MissionHasBegun', 'MissionHasEnded', 'MissionWasWon',
-    'TargetStateHasChanged', 'UserHasConnected', 'UserHasDisconnected',
-    'UserHasWentToBriefing', 'UserHasSelectedAirfield', 'UserHasTookOff',
-    'UserHasSpawned', 'UserHasChangedSeat', 'CrewMemberHasBailedOut',
-    'CrewMemberHasOpenedParachute', 'UserHasToggledLandingLights',
-    'UserHasToggledWingtipSmokes', 'CrewMemberWasWounded',
-    'CrewMemberWasHeavilyWounded', 'CrewMemberWasKilled',
-    'HumanCrewMemberWasKilledByHuman',
+    'TargetStateHasChanged', 'HumanHasConnected', 'HumanHasDisconnected',
+    'HumanHasWentToBriefing', 'HumanHasSelectedAirfield', 'HumanHasTookOff',
+    'HumanHasSpawned', 'HumanHasToggledLandingLights',
+    'HumanHasToggledWingtipSmokes', 'HumanHasChangedSeat',
+    'HumanCrewMemberHasBailedOut', 'HumanCrewMemberHasOpenedParachute',
+    'HumanCrewMemberWasWounded', 'HumanCrewMemberWasHeavilyWounded',
+    'HumanCrewMemberWasKilled', 'HumanCrewMemberWasKilledByHuman',
 )
 
 
@@ -55,94 +55,94 @@ class TargetStateHasChanged(EventWithTime, Event):
         self.state = kwargs['target_end_state']
 
 
-class UserHasConnected(EventWithTime, EventWithCallsign, Event):
+class HumanHasConnected(EventWithTime, EventWithCallsign, Event):
     pass
 
 
-class UserHasDisconnected(EventWithTime, EventWithCallsign, Event):
+class HumanHasDisconnected(EventWithTime, EventWithCallsign, Event):
     pass
 
 
-class UserHasWentToBriefing(EventWithTime, EventWithCallsign, Event):
+class HumanHasWentToBriefing(EventWithTime, EventWithCallsign, Event):
     pass
 
 
-class UserHasSelectedAirfield(EventWithTime,
-                              EventWithCallsign,
-                              EventWithBelligerent,
-                              EventWithPos,
-                              Event):
+class HumanHasSelectedAirfield(EventWithTime,
+                               EventWithCallsign,
+                               EventWithBelligerent,
+                               EventWithPos,
+                               Event):
     pass
 
 
-class UserHasTookOff(EventWithTime, EventWithPilot, EventWithPos, Event):
-    pass
-
-
-class UserHasSpawned(EventWithTime, EventWithPilot, Event):
+class HumanHasSpawned(EventWithTime, EventWithActor, Event):
 
     def __init__(self, **kwargs):
-        super(UserHasSpawned, self).__init__(**kwargs)
+        super(HumanHasSpawned, self).__init__(**kwargs)
         self.weapons = kwargs['weapons']
         self.fuel = kwargs['fuel']
 
 
-class UserHasChangedSeat(EventWithTime,
-                         EventWithCrewMember,
-                         EventWithPos,
-                         Event):
+class HumanHasTookOff(EventWithTime, EventWithActor, EventWithPos, Event):
     pass
 
 
-class CrewMemberHasBailedOut(EventWithTime,
-                             EventWithCrewMember,
-                             EventWithPos,
-                             Event):
-    pass
-
-
-class CrewMemberHasOpenedParachute(EventWithTime,
-                                   EventWithCrewMember,
+class HumanHasToggledLandingLights(EventWithTime,
+                                   EventWithActor,
+                                   EventWithToggleValue,
                                    EventWithPos,
                                    Event):
     pass
 
 
-class UserHasToggledLandingLights(EventWithTime,
-                                  EventWithPilot,
-                                  EventWithToggleValue,
-                                  EventWithPos,
-                                  Event):
-    pass
-
-
-class UserHasToggledWingtipSmokes(EventWithTime,
-                                  EventWithPilot,
-                                  EventWithToggleValue,
-                                  EventWithPos,
-                                  Event):
+class HumanHasToggledWingtipSmokes(EventWithTime,
+                                   EventWithActor,
+                                   EventWithToggleValue,
+                                   EventWithPos,
+                                   Event):
 
     pass
 
 
-class CrewMemberWasWounded(EventWithTime,
-                           EventWithCrewMember,
-                           EventWithPos,
-                           Event):
+class HumanHasChangedSeat(EventWithTime,
+                          EventWithCrewMember,
+                          EventWithPos,
+                          Event):
     pass
 
 
-class CrewMemberWasHeavilyWounded(EventWithTime,
+class HumanCrewMemberHasBailedOut(EventWithTime,
                                   EventWithCrewMember,
                                   EventWithPos,
                                   Event):
     pass
 
 
-class CrewMemberWasKilled(EventWithTime,
-                          EventWithCrewMember,
-                          EventWithPos,
-                          Event):
+class HumanCrewMemberHasOpenedParachute(EventWithTime,
+                                        EventWithCrewMember,
+                                        EventWithPos,
+                                        Event):
+    pass
+
+
+class HumanCrewMemberWasWounded(EventWithTime,
+                                EventWithCrewMember,
+                                EventWithPos,
+                                Event):
+    pass
+
+
+class HumanCrewMemberWasHeavilyWounded(EventWithTime,
+                                       EventWithCrewMember,
+                                       EventWithPos,
+                                       Event):
+    pass
+
+
+class HumanCrewMemberWasKilled(EventWithTime,
+                               EventWithCrewMember,
+                               EventWithPos,
+                               Event):
     pass
 
 

@@ -18,17 +18,13 @@ EventWithDate = mixin_for_attribute('date')
 EventWithBelligerent = mixin_for_attribute('belligerent')
 EventWithPos = mixin_for_attribute('pos')
 EventWithCallsign = mixin_for_attribute('callsign')
-EventWithAircraft = mixin_for_attribute('aircraft')
-EventWithCrewMember = mixin_for_attribute('crew_member')
+EventWithActor = mixin_for_attribute('actor')
 EventWithVictim = mixin_for_attribute('victim')
 EventWithAggressor = mixin_for_attribute('aggressor')
+EventWithCrewMember = mixin_for_attribute('crew_member')
 
 
 class EventWithDateTime(EventWithDate, EventWithTime):
-    pass
-
-
-class EventWithPilot(EventWithCallsign, EventWithAircraft):
     pass
 
 
