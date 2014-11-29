@@ -98,11 +98,11 @@ class ToggleValueTestCase(BaseTestCase):
 
     def test_toggle_value_is_on(self):
         result = toggle_value.parseString("on").toggle_value
-        self.assertEqual(result, ToggleValues.ON)
+        self.assertEqual(result.value, True)
 
     def test_toggle_value_is_off(self):
         result = toggle_value.parseString("off").toggle_value
-        self.assertEqual(result, ToggleValues.OFF)
+        self.assertEqual(result.value, False)
 
     def test_toggle_value_is_invalid(self):
         with self.assertRaises(ParseException):

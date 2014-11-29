@@ -33,7 +33,7 @@ def to_pos(tokens):
 
 
 def to_toggle_value(tokens):
-    return ToggleValues.get_by_value(tokens.toggle_value)
+    return ToggleValues[tokens.toggle_value]
 
 
 def to_belligerent(tokens):

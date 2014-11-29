@@ -190,10 +190,10 @@ class EventsGrammarTestCase(BaseTestCase):
         self.assertEqual(event.time, datetime.time(20, 33, 5))
         self.assertEqual(event.callsign, "User0")
         self.assertEqual(event.aircraft, "Pe-8")
-        self.assertEqual(event.value, ToggleValues.OFF)
+        self.assertEqual(event.value, False)
         self.assertEqual(event.pos, Point2D(100.0, 200.99))
         self.assertInAll(events.UserHasToggledLandingLights)
 
         string = "[8:33:05 PM] User0:Pe-8 turned landing lights on at 100.0 200.99"
         event = self.string_to_event(string, testee)
-        self.assertEqual(event.value, ToggleValues.ON)
+        self.assertEqual(event.value, True)

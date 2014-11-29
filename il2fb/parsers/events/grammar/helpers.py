@@ -41,7 +41,7 @@ event_pos = Combine(
 
 # Example: "on" or "off"
 toggle_value = Or([
-    Literal(x) for x in ToggleValues.values()
+    Literal(x) for x in ToggleValues.names()
 ]).setResultsName("toggle_value").setParseAction(to_toggle_value)
 
 # Example: "=XXX=User0"

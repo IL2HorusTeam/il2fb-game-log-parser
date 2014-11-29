@@ -112,4 +112,4 @@ class UserHasToggledLandingLights(EventWithTime,
 
     def __init__(self, **kwargs):
         super(UserHasToggledLandingLights, self).__init__(**kwargs)
-        self.value = kwargs['toggle_value']
+        self.value = kwargs['toggle_value'].value

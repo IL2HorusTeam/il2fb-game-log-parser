@@ -19,8 +19,8 @@ class RegexChoices(Values):
 
 
 class ToggleValues(RegexChoices):
-    ON = ValueConstant('on')
-    OFF = ValueConstant('off')
+    on = ValueConstant(True)
+    off = ValueConstant(False)
 
 
 class TargetEndStates(RegexChoices):
