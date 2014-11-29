@@ -2,7 +2,7 @@
 
 from .mixins import (
     EventWithTime, EventWithDateTime, EventWithBelligerent, EventWithCallsign,
-    EventWithPos, EventWithPilot,
+    EventWithPos, EventWithPilot, EventWithCrewMember,
 )
 
 
@@ -10,7 +10,7 @@ __all__ = (
     'MissionIsPlaying', 'MissionHasBegun', 'MissionHasEnded', 'MissionWasWon',
     'TargetStateHasChanged', 'UserHasConnected', 'UserHasDisconnected',
     'UserHasWentToBriefing', 'UserHasSelectedAirfield', 'UserHasTookOff',
-    'UserHasSpawned',
+    'UserHasSpawned', 'UserHasChangedSeat',
 )
 
 
@@ -80,3 +80,10 @@ class UserHasSpawned(EventWithTime, EventWithPilot, Event):
         super(UserHasSpawned, self).__init__(**kwargs)
         self.weapons = kwargs['weapons']
         self.fuel = kwargs['fuel']
+
+
+class UserHasChangedSeat(EventWithTime,
+                         EventWithCrewMember,
+                         EventWithPos,
+                         Event):
+    pass

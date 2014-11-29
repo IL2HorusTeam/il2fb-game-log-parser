@@ -5,14 +5,14 @@ from pyparsing import Combine, LineEnd, Literal, Regex, QuotedString
 from .converters import to_int
 from .helpers import (
     event_time, event_date_time, event_pos, belligerent, target_end_state,
-    callsign, pilot,
+    callsign, pilot, crew_member,
 )
 from .primitives import colon, space, number
 from ..structures.events import (
     MissionIsPlaying, MissionHasBegun, MissionHasEnded, MissionWasWon,
     TargetStateHasChanged, UserHasConnected, UserHasDisconnected,
     UserHasWentToBriefing, UserHasSelectedAirfield, UserHasTookOff,
-    UserHasSpawned,
+    UserHasSpawned, UserHasChangedSeat,
 )
 
 
@@ -153,3 +153,12 @@ user_has_spawned = Event(
     + Literal("%")
     + LineEnd()
 ).toStructure(UserHasSpawned)
+
+# Example: "[8:33:05 PM] User0:Pe-8(0) seat occupied by User0 at 100.0 200.99"
+user_has_changed_seat = Event(
+    event_time
+    + crew_member
+    + " seat occupied by "
+    + callsign.suppress()
+    + event_pos
+).toStructure(UserHasChangedSeat)

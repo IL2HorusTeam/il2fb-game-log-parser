@@ -10,6 +10,7 @@ from il2fb.parsers.events.grammar.events import (
     mission_was_won, target_state_has_changed, user_has_connected,
     user_has_disconnected, user_has_went_to_briefing,
     user_has_selected_airfield, user_has_took_off, user_has_spawned,
+    user_has_changed_seat,
 )
 from il2fb.parsers.events.structures import Point2D
 from il2fb.parsers.events.structures import events
@@ -141,3 +142,15 @@ class EventsGrammarTestCase(BaseTestCase):
         self.assertEqual(event.weapons, "40fab100")
         self.assertEqual(event.fuel, 40)
         self.assertInAll(events.UserHasSpawned)
+
+    def test_user_has_changed_seat(self):
+        string = "[8:33:05 PM] User0:Pe-8(0) seat occupied by User0 at 100.0 200.99"
+        event = self.string_to_event(string, user_has_changed_seat)
+
+        self.assertIsInstance(event, events.UserHasChangedSeat)
+        self.assertEqual(event.time, datetime.time(20, 33, 5))
+        self.assertEqual(event.callsign, "User0")
+        self.assertEqual(event.aircraft, "Pe-8")
+        self.assertEqual(event.seat_number, 0)
+        self.assertEqual(event.pos, Point2D(100.0, 200.99))
+        self.assertInAll(events.UserHasChangedSeat)

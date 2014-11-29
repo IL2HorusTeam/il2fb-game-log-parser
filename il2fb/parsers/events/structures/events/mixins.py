@@ -19,6 +19,7 @@ EventWithCallsign = mixin_for_attribute('callsign')
 EventWithAircraft = mixin_for_attribute('aircraft')
 EventWithBelligerent = mixin_for_attribute('belligerent')
 EventWithPos = mixin_for_attribute('pos')
+EventWithSeatNumber = mixin_for_attribute('seat_number')
 
 
 class EventWithDateTime(EventWithDate, EventWithTime):
@@ -26,4 +27,8 @@ class EventWithDateTime(EventWithDate, EventWithTime):
 
 
 class EventWithPilot(EventWithCallsign, EventWithAircraft):
+    pass
+
+
+class EventWithCrewMember(EventWithPilot, EventWithSeatNumber):
     pass
