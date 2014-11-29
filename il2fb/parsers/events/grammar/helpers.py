@@ -9,7 +9,7 @@ from pyparsing import (
 from ..constants import ToggleValues, TargetEndStates
 from .converters import (
     to_int, to_pos, to_toggle_value, to_belligerent, to_target_end_state,
-    to_crew_member,
+    to_human_crew_member,
 )
 from .primitives import (
     space, colon, l_bracket, r_bracket, l_paren, r_paren, number, float_number,
@@ -70,7 +70,7 @@ seat_number = (
 # Example: "User:Pe-8(0)"
 crew_member = (
     WordStart() + pilot + seat_number + WordEnd()
-).setResultsName("crew_member").setParseAction(to_crew_member)
+).setResultsName("crew_member").setParseAction(to_human_crew_member)
 
 # Example: "0_Static"
 static = Combine(

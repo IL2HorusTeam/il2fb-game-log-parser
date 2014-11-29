@@ -16,7 +16,7 @@ from il2fb.parsers.events.grammar.events import (
     crew_member_was_heavily_wounded, crew_member_was_killed,
     human_crew_member_was_killed_by_human,
 )
-from il2fb.parsers.events.structures import Point2D, CrewMember
+from il2fb.parsers.events.structures import Point2D, HumanCrewMember
 from il2fb.parsers.events.structures import events
 
 from ..base import BaseTestCase
@@ -155,7 +155,7 @@ class EventsGrammarTestCase(BaseTestCase):
 
         self.assertIsInstance(event, events.UserHasChangedSeat)
         self.assertEqual(event.time, datetime.time(20, 33, 5))
-        self.assertEqual(event.crew_member, CrewMember("User0", "Pe-8", 0))
+        self.assertEqual(event.crew_member, HumanCrewMember("User0", "Pe-8", 0))
         self.assertEqual(event.pos, Point2D(100.0, 200.99))
         self.assertInAll(events.UserHasChangedSeat)
 
@@ -165,7 +165,7 @@ class EventsGrammarTestCase(BaseTestCase):
 
         self.assertIsInstance(event, events.CrewMemberHasBailedOut)
         self.assertEqual(event.time, datetime.time(20, 33, 5))
-        self.assertEqual(event.crew_member, CrewMember("User0", "Pe-8", 0))
+        self.assertEqual(event.crew_member, HumanCrewMember("User0", "Pe-8", 0))
         self.assertEqual(event.pos, Point2D(100.0, 200.99))
         self.assertInAll(events.CrewMemberHasBailedOut)
 
@@ -175,7 +175,7 @@ class EventsGrammarTestCase(BaseTestCase):
 
         self.assertIsInstance(event, events.CrewMemberHasOpenedParachute)
         self.assertEqual(event.time, datetime.time(20, 33, 5))
-        self.assertEqual(event.crew_member, CrewMember("User0", "Pe-8", 0))
+        self.assertEqual(event.crew_member, HumanCrewMember("User0", "Pe-8", 0))
         self.assertEqual(event.pos, Point2D(100.0, 200.99))
         self.assertInAll(events.CrewMemberHasOpenedParachute)
 
@@ -221,7 +221,7 @@ class EventsGrammarTestCase(BaseTestCase):
 
         self.assertIsInstance(event, events.CrewMemberWasWounded)
         self.assertEqual(event.time, datetime.time(20, 33, 5))
-        self.assertEqual(event.crew_member, CrewMember("User0", "Pe-8", 0))
+        self.assertEqual(event.crew_member, HumanCrewMember("User0", "Pe-8", 0))
         self.assertEqual(event.pos, Point2D(100.0, 200.99))
         self.assertInAll(events.CrewMemberWasWounded)
 
@@ -231,7 +231,7 @@ class EventsGrammarTestCase(BaseTestCase):
 
         self.assertIsInstance(event, events.CrewMemberWasHeavilyWounded)
         self.assertEqual(event.time, datetime.time(20, 33, 5))
-        self.assertEqual(event.crew_member, CrewMember("User0", "Pe-8", 0))
+        self.assertEqual(event.crew_member, HumanCrewMember("User0", "Pe-8", 0))
         self.assertEqual(event.pos, Point2D(100.0, 200.99))
         self.assertInAll(events.CrewMemberWasHeavilyWounded)
 
@@ -241,7 +241,7 @@ class EventsGrammarTestCase(BaseTestCase):
 
         self.assertIsInstance(event, events.CrewMemberWasKilled)
         self.assertEqual(event.time, datetime.time(20, 33, 5))
-        self.assertEqual(event.crew_member, CrewMember("User0", "Pe-8", 0))
+        self.assertEqual(event.crew_member, HumanCrewMember("User0", "Pe-8", 0))
         self.assertEqual(event.pos, Point2D(100.0, 200.99))
         self.assertInAll(events.CrewMemberWasKilled)
 

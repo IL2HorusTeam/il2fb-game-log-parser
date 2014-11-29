@@ -12,7 +12,7 @@ from il2fb.parsers.events.grammar.helpers import (
     toggle_value, target_end_state, belligerent,
 )
 from il2fb.parsers.events.grammar.primitives import space
-from il2fb.parsers.events.structures import Point2D, CrewMember
+from il2fb.parsers.events.structures import Point2D, HumanCrewMember
 
 from ..base import BaseTestCase
 
@@ -70,7 +70,7 @@ class CommonGrammarTestCase(BaseTestCase):
 
     def test_crew_member(self):
         result = crew_member.parseString("User:Pe-8(0)").crew_member
-        self.assertEqual(result, CrewMember("User", "Pe-8", 0))
+        self.assertEqual(result, HumanCrewMember("User", "Pe-8", 0))
 
     def test_static(self):
         result = static.parseString("0_Static").static
