@@ -13,9 +13,10 @@ from ..structures.events import (
     MissionIsPlaying, MissionHasBegun, MissionHasEnded, MissionWasWon,
     TargetStateHasChanged, HumanHasConnected, HumanHasDisconnected,
     HumanHasWentToBriefing, HumanHasSelectedAirfield, HumanHasTookOff,
-    HumanHasSpawned, HumanHasChangedSeat, HumanCrewMemberHasBailedOut,
-    HumanCrewMemberHasOpenedParachute, HumanHasToggledLandingLights,
-    HumanHasToggledWingtipSmokes, HumanCrewMemberWasWounded,
+    HumanHasSpawned, HumanHasToggledLandingLights,
+    HumanHasToggledWingtipSmokes, HumanHasChangedSeat,
+    HumanCrewMemberHasBailedOut, HumanCrewMemberHasOpenedParachute,
+    HumanCrewMemberWasCaptured, HumanCrewMemberWasWounded,
     HumanCrewMemberWasHeavilyWounded, HumanCrewMemberWasKilled,
     HumanCrewMemberWasKilledByHuman,
 )
@@ -177,6 +178,14 @@ human_crew_member_has_opened_parachute = Event(
     + " successfully bailed out"
     + event_pos
 ).toStructure(HumanCrewMemberHasOpenedParachute)
+
+# Example: "[8:33:05 PM] User0:Pe-8(0) was captured at 100.0 200.99"
+human_crew_member_was_captured = Event(
+    event_time
+    + human_crew_member
+    + " was captured"
+    + event_pos
+).toStructure(HumanCrewMemberWasCaptured)
 
 # Example: "[8:33:05 PM] User0:Pe-8(0) was wounded at 100.0 200.99"
 human_crew_member_was_wounded = Event(

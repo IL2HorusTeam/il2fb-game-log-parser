@@ -14,8 +14,9 @@ __all__ = (
     'HumanHasSpawned', 'HumanHasToggledLandingLights',
     'HumanHasToggledWingtipSmokes', 'HumanHasChangedSeat',
     'HumanCrewMemberHasBailedOut', 'HumanCrewMemberHasOpenedParachute',
-    'HumanCrewMemberWasWounded', 'HumanCrewMemberWasHeavilyWounded',
-    'HumanCrewMemberWasKilled', 'HumanCrewMemberWasKilledByHuman',
+    'HumanCrewMemberWasCaptured', 'HumanCrewMemberWasWounded',
+    'HumanCrewMemberWasHeavilyWounded', 'HumanCrewMemberWasKilled',
+    'HumanCrewMemberWasKilledByHuman',
 )
 
 
@@ -122,6 +123,13 @@ class HumanCrewMemberHasOpenedParachute(EventWithTime,
                                         EventWithCrewMember,
                                         EventWithPos,
                                         Event):
+    pass
+
+
+class HumanCrewMemberWasCaptured(EventWithTime,
+                                 EventWithCrewMember,
+                                 EventWithPos,
+                                 Event):
     pass
 
 

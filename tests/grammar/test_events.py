@@ -12,9 +12,9 @@ from il2fb.parsers.events.grammar.events import (
     human_has_selected_airfield, human_has_took_off, human_has_spawned,
     human_has_toggled_landing_lights, human_has_toggled_wingtip_smokes,
     human_has_changed_seat, human_crew_member_has_bailed_out,
-    human_crew_member_has_opened_parachute, human_crew_member_was_wounded,
-    human_crew_member_was_heavily_wounded, human_crew_member_was_killed,
-    human_crew_member_was_killed_by_human,
+    human_crew_member_has_opened_parachute, human_crew_member_was_captured,
+    human_crew_member_was_wounded, human_crew_member_was_heavily_wounded,
+    human_crew_member_was_killed, human_crew_member_was_killed_by_human,
 )
 from il2fb.parsers.events.structures import (
     Point2D, HumanActor, HumanCrewMember,
@@ -212,6 +212,16 @@ class EventsGrammarTestCase(BaseTestCase):
         self.assertEqual(event.crew_member, HumanCrewMember("User0", "Pe-8", 0))
         self.assertEqual(event.pos, Point2D(100.0, 200.99))
         self.assertInAll(events.HumanCrewMemberHasOpenedParachute)
+
+    def test_human_crew_member_was_captured(self):
+        string = "[8:33:05 PM] User0:Pe-8(0) was captured at 100.0 200.99"
+        event = self.string_to_event(string, human_crew_member_was_captured)
+
+        self.assertIsInstance(event, events.HumanCrewMemberWasCaptured)
+        self.assertEqual(event.time, datetime.time(20, 33, 5))
+        self.assertEqual(event.crew_member, HumanCrewMember("User0", "Pe-8", 0))
+        self.assertEqual(event.pos, Point2D(100.0, 200.99))
+        self.assertInAll(events.HumanCrewMemberWasCaptured)
 
     def test_human_crew_member_was_wounded(self):
         string = "[8:33:05 PM] User0:Pe-8(0) was wounded at 100.0 200.99"
