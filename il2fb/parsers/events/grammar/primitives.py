@@ -7,19 +7,19 @@ from pyparsing import (
 from .converters import to_float, to_date, to_time
 
 
-space = White(ws=' ', exact=1)
+space = White(ws=" ", exact=1)
 
-colon = Literal(':')
-comma = Literal(',')
-point = Literal('.')
+colon = Literal(":")
+comma = Literal(",")
+point = Literal(".")
 
-l_paren = Literal('(')
-r_paren = Literal(')')
+l_paren = Literal("(")
+r_paren = Literal(")")
 
-l_bracket = Literal('[')
-r_bracket = Literal(']')
+l_bracket = Literal("[")
+r_bracket = Literal("]")
 
-plus_or_minus = Literal('+') | Literal('-')
+plus_or_minus = Literal("+") | Literal("-")
 
 number = Word(nums)
 integer = Combine(Optional(plus_or_minus) + number)
@@ -29,8 +29,8 @@ float_number = Combine(
 
 # Example: "AM" or "PM"
 day_period = Combine(
-    oneOf("A P") + Literal('M')
-).setResultsName('day_period')
+    oneOf("A P") + Literal("M")
+).setResultsName("day_period")
 
 # Example: "8:33:05 PM" or "08:33:05 PM"
 time = Combine(
@@ -38,7 +38,7 @@ time = Combine(
     + (colon + Word(nums, exact=2)) * 2   # Minutes and seconds
     + space
     + day_period
-).setResultsName('time').setParseAction(to_time)
+).setResultsName("time").setParseAction(to_time)
 
 # Example: "Sep 15, 2013"
 date = Combine(
@@ -48,7 +48,7 @@ date = Combine(
     + comma                     #
     + space                     #
     + Word(nums, exact=4)       # Year
-).setResultsName('date').setParseAction(to_date)
+).setResultsName("date").setParseAction(to_date)
 
 # Example: "Sep 15, 2013 8:33:05 PM"
 date_time = Combine(date + space + time)

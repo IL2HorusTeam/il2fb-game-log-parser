@@ -31,65 +31,65 @@ event_date_time = Combine(
 # Example: " at 100.0 200.99"
 event_pos = Combine(
     space
-    + Suppress('at')
+    + Suppress("at")
     + space
-    + float_number.setResultsName('x')
+    + float_number.setResultsName("x")
     + space
-    + float_number.setResultsName('y')
+    + float_number.setResultsName("y")
     + LineEnd()
-).setResultsName('pos').setParseAction(to_pos)
+).setResultsName("pos").setParseAction(to_pos)
 
 # Example: "on" or "off"
 toggle_value = Or([
     Literal(x) for x in ToggleValues.values()
-]).setResultsName('toggle_value').setParseAction(to_toggle_value)
+]).setResultsName("toggle_value").setParseAction(to_toggle_value)
 
 # Example: "=XXX=User0"
 callsign = Word(
     alphanums + "!#%$&)(+*-/.=<>@[]_^{}|~"
-).setResultsName('callsign')
+).setResultsName("callsign")
 
 # Example: "Pe-8"
 aircraft = Word(
     alphanums + "_-"
-).setResultsName('aircraft')
+).setResultsName("aircraft")
 
 # Example: "=XXX=User0:Pe-8"
 pilot = (
     callsign + colon.suppress() + aircraft
-).setResultsName('pilot')
+).setResultsName("pilot")
 
-enemy = pilot.setResultsName('enemy')
+enemy = pilot.setResultsName("enemy")
 
 # Example: "(0)"
 seat_number = (
     l_paren.suppress() + number + r_paren.suppress()
-).setParseAction(to_int).setResultsName('seat_number')
+).setParseAction(to_int).setResultsName("seat_number")
 
 # Example: "User:Pe-8(0)"
 crew_member = WordStart() + pilot + seat_number + WordEnd()
 
 # Example: "0_Static"
 static = Combine(
-    number + Literal('_Static')
-).setResultsName('static')
+    number + Literal("_Static")
+).setResultsName("static")
 
 # Example: "Bridge0"
 bridge = Combine(
-    Literal('Bridge') + number
-).setResultsName('bridge')
+    Literal("Bridge") + number
+).setResultsName("bridge")
 
 # Example: "Red" or "Blue"
 belligerent = Or([
     CaselessLiteral(x.title()) for x in Belligerents.names()
-]).setResultsName('belligerent').setParseAction(to_belligerent)
+]).setResultsName("belligerent").setParseAction(to_belligerent)
 
 # Example: " destroyed by User:Pe-8 at 100.0 200.99"
 destroyed_by = Combine(
     space
-    + Literal('destroyed')
+    + Literal("destroyed")
     + space
-    + Literal('by')
+    + Literal("by")
     + space
     + pilot
     + event_pos
@@ -98,4 +98,4 @@ destroyed_by = Combine(
 # Example: "Complete" or "Failed"
 target_end_state = Or([
     Literal(x) for x in TargetEndStates.values()
-]).setResultsName('target_end_state').setParseAction(to_target_end_state)
+]).setResultsName("target_end_state").setParseAction(to_target_end_state)

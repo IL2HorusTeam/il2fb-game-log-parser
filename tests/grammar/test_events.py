@@ -9,16 +9,10 @@ from il2fb.parsers.events.grammar.events import (
     mission_is_playing, mission_has_begun, mission_has_ended,
     mission_was_won, target_state_has_changed, user_has_connected,
     user_has_disconnected, user_has_went_to_briefing,
-    user_has_selected_airfield, user_has_took_off,
+    user_has_selected_airfield, user_has_took_off, user_has_spawned,
 )
 from il2fb.parsers.events.structures import Point2D
 from il2fb.parsers.events.structures import events
-
-# from il2fb.parsers.events.structures.events import (
-#     MissionIsPlaying, MissionHasBegun, MissionHasEnded, MissionWasWon,
-#     TargetStateHasChanged, UserHasConnected, UserHasDisconnected,
-#     UserHasWentToBriefing, UserHasSelectedAirfield, UserHasTookOff,
-# )
 
 from ..base import BaseTestCase
 
@@ -135,3 +129,15 @@ class EventsGrammarTestCase(BaseTestCase):
         self.assertEqual(event.aircraft, "Pe-8")
         self.assertEqual(event.pos, Point2D(100.0, 200.99))
         self.assertInAll(events.UserHasTookOff)
+
+    def test_user_has_spawned(self):
+        string = "[8:33:05 PM] User0:Pe-8 loaded weapons '40fab100' fuel 40%"
+        event = self.string_to_event(string, user_has_spawned)
+
+        self.assertIsInstance(event, events.UserHasSpawned)
+        self.assertEqual(event.time, datetime.time(20, 33, 5))
+        self.assertEqual(event.callsign, "User0")
+        self.assertEqual(event.aircraft, "Pe-8")
+        self.assertEqual(event.weapons, "40fab100")
+        self.assertEqual(event.fuel, 40)
+        self.assertInAll(events.UserHasSpawned)

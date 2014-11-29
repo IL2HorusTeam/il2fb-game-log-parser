@@ -10,6 +10,7 @@ __all__ = (
     'MissionIsPlaying', 'MissionHasBegun', 'MissionHasEnded', 'MissionWasWon',
     'TargetStateHasChanged', 'UserHasConnected', 'UserHasDisconnected',
     'UserHasWentToBriefing', 'UserHasSelectedAirfield', 'UserHasTookOff',
+    'UserHasSpawned',
 )
 
 
@@ -71,3 +72,11 @@ class UserHasSelectedAirfield(EventWithTime,
 
 class UserHasTookOff(EventWithTime, EventWithPilot, EventWithPos, Event):
     pass
+
+
+class UserHasSpawned(EventWithTime, EventWithPilot, Event):
+
+    def __init__(self, **kwargs):
+        super(UserHasSpawned, self).__init__(**kwargs)
+        self.weapons = kwargs['weapons']
+        self.fuel = kwargs['fuel']

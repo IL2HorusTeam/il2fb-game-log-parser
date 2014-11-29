@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-from pyparsing import Combine, LineEnd, Literal, Regex
+from pyparsing import Combine, LineEnd, Literal, Regex, QuotedString
 
 from .converters import to_int
 from .helpers import (
@@ -12,6 +12,7 @@ from ..structures.events import (
     MissionIsPlaying, MissionHasBegun, MissionHasEnded, MissionWasWon,
     TargetStateHasChanged, UserHasConnected, UserHasDisconnected,
     UserHasWentToBriefing, UserHasSelectedAirfield, UserHasTookOff,
+    UserHasSpawned,
 )
 
 
@@ -19,11 +20,11 @@ class Event(Combine):
 
     def toStructure(self, structure):
         to_structure = lambda tokens: structure(**tokens.event)
-        return self.setResultsName('event').setParseAction(to_structure)
+        return self.setResultsName("event").setParseAction(to_structure)
 
 
-mission = Literal('Mission')
-has = space + Literal('has') + space
+mission = Literal("Mission")
+has = space + Literal("has") + space
 
 # Example: "[Sep 15, 2013 8:33:05 PM] Mission: PH.mis is Playing"
 mission_is_playing = Event(
@@ -31,11 +32,11 @@ mission_is_playing = Event(
     + mission
     + colon
     + space
-    + Regex(r".+\.mis").setResultsName('mission')
+    + Regex(r".+\.mis").setResultsName("mission")
     + space
-    + Literal('is')
+    + Literal("is")
     + space
-    + Literal('Playing')
+    + Literal("Playing")
     + LineEnd()
 ).toStructure(MissionIsPlaying)
 
@@ -44,7 +45,7 @@ mission_has_begun = Event(
     event_time
     + mission
     + space
-    + Literal('BEGIN')
+    + Literal("BEGIN")
     + LineEnd()
 ).toStructure(MissionHasBegun)
 
@@ -53,7 +54,7 @@ mission_has_ended = Event(
     event_time
     + mission
     + space
-    + Literal('END')
+    + Literal("END")
     + LineEnd(),
 ).toStructure(MissionHasEnded)
 
@@ -65,16 +66,16 @@ mission_was_won = Event(
     + space
     + belligerent
     + space
-    + Literal('WON')
+    + Literal("WON")
     + LineEnd(),
 ).toStructure(MissionWasWon)
 
 # Example: "[8:33:05 PM] Target 3 Complete"
 target_state_has_changed = Event(
     event_time
-    + Literal('Target')
+    + Literal("Target")
     + space
-    + number.setParseAction(to_int).setResultsName('target_index')
+    + number.setParseAction(to_int).setResultsName("target_index")
     + space
     + target_end_state
     + LineEnd(),
@@ -85,7 +86,7 @@ user_has_connected = Event(
     event_time
     + callsign
     + has
-    + Literal('connected')
+    + Literal("connected")
     + LineEnd()
 ).toStructure(UserHasConnected)
 
@@ -94,7 +95,7 @@ user_has_disconnected = Event(
     event_time
     + callsign
     + has
-    + Literal('disconnected')
+    + Literal("disconnected")
     + LineEnd()
 ).toStructure(UserHasDisconnected)
 
@@ -103,11 +104,11 @@ user_has_went_to_briefing = Event(
     event_time
     + callsign
     + space
-    + Literal('entered')
+    + Literal("entered")
     + space
-    + Literal('refly')
+    + Literal("refly")
     + space
-    + Literal('menu')
+    + Literal("menu")
     + LineEnd()
 ).toStructure(UserHasWentToBriefing)
 
@@ -116,9 +117,9 @@ user_has_selected_airfield = Event(
     event_time
     + callsign
     + space
-    + Literal('selected')
+    + Literal("selected")
     + space
-    + Literal('army')
+    + Literal("army")
     + space
     + belligerent
     + event_pos
@@ -129,8 +130,26 @@ user_has_took_off = Event(
     event_time
     + pilot
     + space
-    + Literal('in')
+    + Literal("in")
     + space
-    + Literal('flight')
+    + Literal("flight")
     + event_pos
 ).toStructure(UserHasTookOff)
+
+# Example: "[8:33:05 PM] User0:Pe-8 loaded weapons '40fab100' fuel 40%"
+user_has_spawned = Event(
+    event_time
+    + pilot
+    + space
+    + Literal("loaded")
+    + space
+    + Literal("weapons")
+    + space
+    + QuotedString(quoteChar="'").setResultsName("weapons")
+    + space
+    + Literal("fuel")
+    + space
+    + number.setParseAction(to_int).setResultsName("fuel")
+    + Literal("%")
+    + LineEnd()
+).toStructure(UserHasSpawned)
