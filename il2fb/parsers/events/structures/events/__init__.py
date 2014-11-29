@@ -10,7 +10,7 @@ __all__ = (
     'MissionIsPlaying', 'MissionHasBegun', 'MissionHasEnded', 'MissionWasWon',
     'TargetStateHasChanged', 'UserHasConnected', 'UserHasDisconnected',
     'UserHasWentToBriefing', 'UserHasSelectedAirfield', 'UserHasTookOff',
-    'UserHasSpawned', 'UserHasChangedSeat',
+    'UserHasSpawned', 'UserHasChangedSeat', 'CrewMemberHasBailedOut',
 )
 
 
@@ -86,4 +86,11 @@ class UserHasChangedSeat(EventWithTime,
                          EventWithCrewMember,
                          EventWithPos,
                          Event):
+    pass
+
+
+class CrewMemberHasBailedOut(EventWithTime,
+                             EventWithCrewMember,
+                             EventWithPos,
+                             Event):
     pass

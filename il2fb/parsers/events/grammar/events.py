@@ -12,7 +12,7 @@ from ..structures.events import (
     MissionIsPlaying, MissionHasBegun, MissionHasEnded, MissionWasWon,
     TargetStateHasChanged, UserHasConnected, UserHasDisconnected,
     UserHasWentToBriefing, UserHasSelectedAirfield, UserHasTookOff,
-    UserHasSpawned, UserHasChangedSeat,
+    UserHasSpawned, UserHasChangedSeat, CrewMemberHasBailedOut,
 )
 
 
@@ -138,3 +138,11 @@ user_has_changed_seat = Event(
     + callsign.suppress()
     + event_pos
 ).toStructure(UserHasChangedSeat)
+
+# Example: "[8:33:05 PM] User0:Pe-8(0) bailed out at 100.0 200.99"
+crew_member_has_bailed_out = Event(
+    event_time
+    + crew_member
+    + " bailed out"
+    + event_pos
+).toStructure(CrewMemberHasBailedOut)
