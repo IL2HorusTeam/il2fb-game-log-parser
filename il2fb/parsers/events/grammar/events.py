@@ -5,7 +5,7 @@ from pyparsing import Combine, LineEnd, Literal, Regex, QuotedString
 from .converters import to_int
 from .helpers import (
     event_time, event_date_time, event_pos, belligerent, target_end_state,
-    callsign, pilot, crew_member,
+    callsign, pilot, crew_member, toggle_value,
 )
 from .primitives import colon, space, number
 from ..structures.events import (
@@ -13,7 +13,7 @@ from ..structures.events import (
     TargetStateHasChanged, UserHasConnected, UserHasDisconnected,
     UserHasWentToBriefing, UserHasSelectedAirfield, UserHasTookOff,
     UserHasSpawned, UserHasChangedSeat, CrewMemberHasBailedOut,
-    CrewMemberHasOpenedParachute,
+    CrewMemberHasOpenedParachute, UserHasToggledLandingLights,
 )
 
 
@@ -155,3 +155,12 @@ crew_member_has_opened_parachute = Event(
     + " successfully bailed out"
     + event_pos
 ).toStructure(CrewMemberHasOpenedParachute)
+
+# Example: "[8:33:05 PM] User0:Pe-8 turned landing lights off at 100.0 200.99"
+user_has_toggled_landing_lights = Event(
+    event_time
+    + pilot
+    + " turned landing lights "
+    + toggle_value
+    + event_pos
+).toStructure(UserHasToggledLandingLights)

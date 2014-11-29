@@ -2,7 +2,7 @@
 
 from .mixins import (
     EventWithTime, EventWithDateTime, EventWithBelligerent, EventWithCallsign,
-    EventWithPos, EventWithPilot, EventWithCrewMember,
+    EventWithPos, EventWithPilot, EventWithCrewMember, EventWithToggleValue,
 )
 
 
@@ -11,7 +11,7 @@ __all__ = (
     'TargetStateHasChanged', 'UserHasConnected', 'UserHasDisconnected',
     'UserHasWentToBriefing', 'UserHasSelectedAirfield', 'UserHasTookOff',
     'UserHasSpawned', 'UserHasChangedSeat', 'CrewMemberHasBailedOut',
-    'CrewMemberHasOpenedParachute',
+    'CrewMemberHasOpenedParachute', 'UserHasToggledLandingLights',
 )
 
 
@@ -102,3 +102,14 @@ class CrewMemberHasOpenedParachute(EventWithTime,
                                    EventWithPos,
                                    Event):
     pass
+
+
+class UserHasToggledLandingLights(EventWithTime,
+                                  EventWithPilot,
+                                  EventWithToggleValue,
+                                  EventWithPos,
+                                  Event):
+
+    def __init__(self, **kwargs):
+        super(UserHasToggledLandingLights, self).__init__(**kwargs)
+        self.value = kwargs['toggle_value']

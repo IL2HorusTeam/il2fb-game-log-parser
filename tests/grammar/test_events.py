@@ -4,14 +4,14 @@ import datetime
 
 from il2fb.commons.organization import Belligerents
 
-from il2fb.parsers.events.constants import TargetEndStates
+from il2fb.parsers.events.constants import TargetEndStates, ToggleValues
 from il2fb.parsers.events.grammar.events import (
     mission_is_playing, mission_has_begun, mission_has_ended,
     mission_was_won, target_state_has_changed, user_has_connected,
     user_has_disconnected, user_has_went_to_briefing,
     user_has_selected_airfield, user_has_took_off, user_has_spawned,
     user_has_changed_seat, crew_member_has_bailed_out,
-    crew_member_has_opened_parachute,
+    crew_member_has_opened_parachute, user_has_toggled_landing_lights,
 )
 from il2fb.parsers.events.structures import Point2D
 from il2fb.parsers.events.structures import events
@@ -179,3 +179,21 @@ class EventsGrammarTestCase(BaseTestCase):
         self.assertEqual(event.seat_number, 0)
         self.assertEqual(event.pos, Point2D(100.0, 200.99))
         self.assertInAll(events.CrewMemberHasOpenedParachute)
+
+    def test_user_has_toggled_landing_lights(self):
+        testee = user_has_toggled_landing_lights
+
+        string = "[8:33:05 PM] User0:Pe-8 turned landing lights off at 100.0 200.99"
+        event = self.string_to_event(string, testee)
+
+        self.assertIsInstance(event, events.UserHasToggledLandingLights)
+        self.assertEqual(event.time, datetime.time(20, 33, 5))
+        self.assertEqual(event.callsign, "User0")
+        self.assertEqual(event.aircraft, "Pe-8")
+        self.assertEqual(event.value, ToggleValues.OFF)
+        self.assertEqual(event.pos, Point2D(100.0, 200.99))
+        self.assertInAll(events.UserHasToggledLandingLights)
+
+        string = "[8:33:05 PM] User0:Pe-8 turned landing lights on at 100.0 200.99"
+        event = self.string_to_event(string, testee)
+        self.assertEqual(event.value, ToggleValues.ON)

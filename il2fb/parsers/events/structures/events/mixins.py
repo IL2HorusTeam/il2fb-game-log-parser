@@ -20,6 +20,7 @@ EventWithCallsign = mixin_for_attribute('callsign')
 EventWithAircraft = mixin_for_attribute('aircraft')
 EventWithSeatNumber = mixin_for_attribute('seat_number')
 EventWithPos = mixin_for_attribute('pos')
+EventWithToggleValue = mixin_for_attribute('toggle_value')
 
 
 class EventWithDateTime(EventWithDate, EventWithTime):
