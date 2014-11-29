@@ -13,6 +13,7 @@ from il2fb.parsers.events.grammar.events import (
     user_has_changed_seat, crew_member_has_bailed_out,
     crew_member_has_opened_parachute, user_has_toggled_landing_lights,
     user_has_toggled_wingtip_smokes, crew_member_was_wounded,
+    crew_member_was_heavily_wounded,
 )
 from il2fb.parsers.events.structures import Point2D
 from il2fb.parsers.events.structures import events
@@ -228,3 +229,15 @@ class EventsGrammarTestCase(BaseTestCase):
         self.assertEqual(event.seat_number, 0)
         self.assertEqual(event.pos, Point2D(100.0, 200.99))
         self.assertInAll(events.CrewMemberWasWounded)
+
+    def test_crew_member_was_heavily_wounded(self):
+        string = "[8:33:05 PM] User0:Pe-8(0) was heavily wounded at 100.0 200.99"
+        event = self.string_to_event(string, crew_member_was_heavily_wounded)
+
+        self.assertIsInstance(event, events.CrewMemberWasHeavilyWounded)
+        self.assertEqual(event.time, datetime.time(20, 33, 5))
+        self.assertEqual(event.callsign, "User0")
+        self.assertEqual(event.aircraft, "Pe-8")
+        self.assertEqual(event.seat_number, 0)
+        self.assertEqual(event.pos, Point2D(100.0, 200.99))
+        self.assertInAll(events.CrewMemberWasHeavilyWounded)

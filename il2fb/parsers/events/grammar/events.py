@@ -15,6 +15,7 @@ from ..structures.events import (
     UserHasSpawned, UserHasChangedSeat, CrewMemberHasBailedOut,
     CrewMemberHasOpenedParachute, UserHasToggledLandingLights,
     UserHasToggledWingtipSmokes, CrewMemberWasWounded,
+    CrewMemberWasHeavilyWounded,
 )
 
 
@@ -182,3 +183,11 @@ crew_member_was_wounded = Event(
     + " was wounded"
     + event_pos
 ).toStructure(CrewMemberWasWounded)
+
+# Example: "[8:33:05 PM] User0:Pe-8(0) was heavily wounded at 100.0 200.99"
+crew_member_was_heavily_wounded = Event(
+    event_time
+    + crew_member
+    + " was heavily wounded"
+    + event_pos
+).toStructure(CrewMemberWasHeavilyWounded)

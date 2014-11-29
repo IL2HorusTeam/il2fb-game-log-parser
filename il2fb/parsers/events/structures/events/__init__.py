@@ -13,6 +13,7 @@ __all__ = (
     'UserHasSpawned', 'UserHasChangedSeat', 'CrewMemberHasBailedOut',
     'CrewMemberHasOpenedParachute', 'UserHasToggledLandingLights',
     'UserHasToggledWingtipSmokes', 'CrewMemberWasWounded',
+    'CrewMemberWasHeavilyWounded',
 )
 
 
@@ -126,4 +127,11 @@ class CrewMemberWasWounded(EventWithTime,
                            EventWithCrewMember,
                            EventWithPos,
                            Event):
+    pass
+
+
+class CrewMemberWasHeavilyWounded(EventWithTime,
+                                  EventWithCrewMember,
+                                  EventWithPos,
+                                  Event):
     pass
