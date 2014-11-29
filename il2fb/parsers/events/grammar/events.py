@@ -13,6 +13,7 @@ from ..structures.events import (
     TargetStateHasChanged, UserHasConnected, UserHasDisconnected,
     UserHasWentToBriefing, UserHasSelectedAirfield, UserHasTookOff,
     UserHasSpawned, UserHasChangedSeat, CrewMemberHasBailedOut,
+    CrewMemberHasOpenedParachute,
 )
 
 
@@ -146,3 +147,11 @@ crew_member_has_bailed_out = Event(
     + " bailed out"
     + event_pos
 ).toStructure(CrewMemberHasBailedOut)
+
+# Example: "[8:33:05 PM] User0:Pe-8(0) successfully bailed out at 100.0 200.99"
+crew_member_has_opened_parachute = Event(
+    event_time
+    + crew_member
+    + " successfully bailed out"
+    + event_pos
+).toStructure(CrewMemberHasOpenedParachute)

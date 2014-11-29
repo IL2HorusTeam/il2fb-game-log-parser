@@ -11,6 +11,7 @@ __all__ = (
     'TargetStateHasChanged', 'UserHasConnected', 'UserHasDisconnected',
     'UserHasWentToBriefing', 'UserHasSelectedAirfield', 'UserHasTookOff',
     'UserHasSpawned', 'UserHasChangedSeat', 'CrewMemberHasBailedOut',
+    'CrewMemberHasOpenedParachute',
 )
 
 
@@ -93,4 +94,11 @@ class CrewMemberHasBailedOut(EventWithTime,
                              EventWithCrewMember,
                              EventWithPos,
                              Event):
+    pass
+
+
+class CrewMemberHasOpenedParachute(EventWithTime,
+                                   EventWithCrewMember,
+                                   EventWithPos,
+                                   Event):
     pass
