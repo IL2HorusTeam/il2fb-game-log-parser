@@ -10,8 +10,8 @@ from .mixins import (
 __all__ = (
     'MissionIsPlaying', 'MissionHasBegun', 'MissionHasEnded', 'MissionWasWon',
     'TargetStateHasChanged', 'HumanHasConnected', 'HumanHasDisconnected',
-    'HumanHasWentToBriefing', 'HumanHasSelectedAirfield', 'HumanHasTookOff',
-    'HumanHasSpawned', 'HumanHasToggledLandingLights',
+    'HumanHasWentToBriefing', 'HumanHasSelectedAirfield', 'HumanHasSpawned',
+    'HumanHasTookOff', 'HumanHasCrashed', 'HumanHasToggledLandingLights',
     'HumanHasToggledWingtipSmokes', 'HumanHasChangedSeat',
     'HumanCrewMemberHasBailedOut', 'HumanCrewMemberHasOpenedParachute',
     'HumanCrewMemberWasCaptured', 'HumanCrewMemberWasWounded',
@@ -85,6 +85,10 @@ class HumanHasSpawned(EventWithTime, EventWithActor, Event):
 
 
 class HumanHasTookOff(EventWithTime, EventWithActor, EventWithPos, Event):
+    pass
+
+
+class HumanHasCrashed(EventWithTime, EventWithActor, EventWithPos, Event):
     pass
 
 

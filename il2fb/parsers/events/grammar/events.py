@@ -12,8 +12,8 @@ from .primitives import colon, space, number
 from ..structures.events import (
     MissionIsPlaying, MissionHasBegun, MissionHasEnded, MissionWasWon,
     TargetStateHasChanged, HumanHasConnected, HumanHasDisconnected,
-    HumanHasWentToBriefing, HumanHasSelectedAirfield, HumanHasTookOff,
-    HumanHasSpawned, HumanHasToggledLandingLights,
+    HumanHasWentToBriefing, HumanHasSelectedAirfield, HumanHasSpawned,
+    HumanHasTookOff, HumanHasCrashed, HumanHasToggledLandingLights,
     HumanHasToggledWingtipSmokes, HumanHasChangedSeat,
     HumanCrewMemberHasBailedOut, HumanCrewMemberHasOpenedParachute,
     HumanCrewMemberWasCaptured, HumanCrewMemberWasWounded,
@@ -135,6 +135,14 @@ human_has_took_off = Event(
     + " in flight"
     + event_pos
 ).toStructure(HumanHasTookOff)
+
+# Example: "[8:33:05 PM] User0:Pe-8 crashed at 100.0 200.99"
+human_has_crashed = Event(
+    event_time
+    + human_actor
+    + " crashed"
+    + event_pos
+).toStructure(HumanHasCrashed)
 
 # Example: "[8:33:05 PM] User0:Pe-8 turned landing lights off at 100.0 200.99"
 human_has_toggled_landing_lights = Event(
