@@ -15,11 +15,11 @@ def mixin_for_attribute(attribute_name):
 
 EventWithTime = mixin_for_attribute('time')
 EventWithDate = mixin_for_attribute('date')
+EventWithBelligerent = mixin_for_attribute('belligerent')
 EventWithCallsign = mixin_for_attribute('callsign')
 EventWithAircraft = mixin_for_attribute('aircraft')
-EventWithBelligerent = mixin_for_attribute('belligerent')
-EventWithPos = mixin_for_attribute('pos')
 EventWithSeatNumber = mixin_for_attribute('seat_number')
+EventWithPos = mixin_for_attribute('pos')
 
 
 class EventWithDateTime(EventWithDate, EventWithTime):

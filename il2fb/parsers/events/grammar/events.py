@@ -24,7 +24,6 @@ class Event(Combine):
 
 
 mission = Literal("Mission")
-has = space + Literal("has") + space
 
 # Example: "[Sep 15, 2013 8:33:05 PM] Mission: PH.mis is Playing"
 mission_is_playing = Event(
@@ -33,10 +32,7 @@ mission_is_playing = Event(
     + colon
     + space
     + Regex(r".+\.mis").setResultsName("mission")
-    + space
-    + Literal("is")
-    + space
-    + Literal("Playing")
+    + " is Playing"
     + LineEnd()
 ).toStructure(MissionIsPlaying)
 
@@ -85,8 +81,7 @@ target_state_has_changed = Event(
 user_has_connected = Event(
     event_time
     + callsign
-    + has
-    + Literal("connected")
+    + " has connected"
     + LineEnd()
 ).toStructure(UserHasConnected)
 
@@ -94,8 +89,7 @@ user_has_connected = Event(
 user_has_disconnected = Event(
     event_time
     + callsign
-    + has
-    + Literal("disconnected")
+    + " has disconnected"
     + LineEnd()
 ).toStructure(UserHasDisconnected)
 
@@ -103,12 +97,7 @@ user_has_disconnected = Event(
 user_has_went_to_briefing = Event(
     event_time
     + callsign
-    + space
-    + Literal("entered")
-    + space
-    + Literal("refly")
-    + space
-    + Literal("menu")
+    + " entered refly menu"
     + LineEnd()
 ).toStructure(UserHasWentToBriefing)
 
@@ -116,11 +105,7 @@ user_has_went_to_briefing = Event(
 user_has_selected_airfield = Event(
     event_time
     + callsign
-    + space
-    + Literal("selected")
-    + space
-    + Literal("army")
-    + space
+    + " selected army "
     + belligerent
     + event_pos
 ).toStructure(UserHasSelectedAirfield)
@@ -129,10 +114,7 @@ user_has_selected_airfield = Event(
 user_has_took_off = Event(
     event_time
     + pilot
-    + space
-    + Literal("in")
-    + space
-    + Literal("flight")
+    + " in flight"
     + event_pos
 ).toStructure(UserHasTookOff)
 
@@ -140,17 +122,11 @@ user_has_took_off = Event(
 user_has_spawned = Event(
     event_time
     + pilot
-    + space
-    + Literal("loaded")
-    + space
-    + Literal("weapons")
-    + space
+    + " loaded weapons "
     + QuotedString(quoteChar="'").setResultsName("weapons")
-    + space
-    + Literal("fuel")
-    + space
+    + " fuel "
     + number.setParseAction(to_int).setResultsName("fuel")
-    + Literal("%")
+    + "%"
     + LineEnd()
 ).toStructure(UserHasSpawned)
 
