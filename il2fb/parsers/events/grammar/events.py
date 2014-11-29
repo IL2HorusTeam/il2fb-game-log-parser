@@ -2,7 +2,7 @@
 
 from pyparsing import Combine, LineEnd, Literal, Regex, QuotedString
 
-from .converters import to_int
+from .converters import to_int, to_human_aircraft
 from .helpers import (
     event_time, event_date_time, event_pos, belligerent, target_end_state,
     toggle_value, callsign, pilot, human_aggressor, crew_member,
@@ -206,6 +206,6 @@ human_crew_member_was_killed_by_human = Event(
     event_time
     + crew_member.setResultsName("victim")
     + " was killed by "
-    + human_aggressor
+    + human_aggressor.setParseAction(to_human_aircraft)
     + event_pos
 ).toStructure(HumanCrewMemberWasKilledByHuman)

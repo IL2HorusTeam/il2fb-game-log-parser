@@ -32,16 +32,26 @@ class Point2D(Base):
         return "<Point2D '{0};{1}'>".format(self.x, self.y)
 
 
-class HumanCrewMember(Base):
-    __slots__ = ['callsign', 'aircraft', 'seat_number', ]
+class HumanAircraft(Base):
+    __slots__ = ['callsign', 'aircraft', ]
 
-    def __init__(self, callsign, aircraft, seat_number):
+    def __init__(self, callsign, aircraft):
         self.callsign = callsign
         self.aircraft = aircraft
+
+    def __repr__(self):
+        return "<Human aircraft {0}:{1}>".format(self.callsign, self.aircraft)
+
+
+class HumanCrewMember(HumanAircraft):
+    __slots__ = HumanAircraft.__slots__ + ['seat_number', ]
+
+    def __init__(self, callsign, aircraft, seat_number):
+        super(HumanCrewMember, self).__init__(callsign, aircraft)
         self.seat_number = seat_number
 
     def __repr__(self):
         return (
-            "<Crew member #{0} at {1}:{2}>"
+            "<Human crew member #{0} at {1}:{2}>"
             .format(self.seat_number, self.callsign, self.aircraft)
         )

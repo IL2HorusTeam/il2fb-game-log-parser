@@ -42,7 +42,7 @@ class CommonGrammarTestCase(BaseTestCase):
         result = aircraft.parseString("Pe-8").aircraft
         self.assertEqual(result, "Pe-8")
 
-    def test_pilot(self):
+    def test_human_aircraft(self):
         result = pilot.parseString("User0:Pe-8").pilot
 
         self.assertEqual(result.callsign, "User0")
@@ -54,8 +54,12 @@ class CommonGrammarTestCase(BaseTestCase):
         self.assertEqual(result.callsign, "User1")
         self.assertEqual(result.aircraft, "Bf-109G-6_Late")
 
-    def test_victim_and_pilot_aggressor(self):
-        grammar = pilot.setResultsName("victim") + space + human_aggressor
+    def test_victim_and_aggressor(self):
+        grammar = (
+            pilot.setResultsName("victim")
+            + space
+            + human_aggressor
+        )
         result = grammar.parseString("User0:Pe-8 User1:Bf-109G-6_Late")
 
         self.assertEqual(result.victim.callsign, "User0")
