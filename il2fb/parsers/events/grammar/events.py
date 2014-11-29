@@ -14,6 +14,7 @@ from ..structures.events import (
     UserHasWentToBriefing, UserHasSelectedAirfield, UserHasTookOff,
     UserHasSpawned, UserHasChangedSeat, CrewMemberHasBailedOut,
     CrewMemberHasOpenedParachute, UserHasToggledLandingLights,
+    UserHasToggledWingtipSmokes,
 )
 
 
@@ -164,3 +165,12 @@ user_has_toggled_landing_lights = Event(
     + toggle_value
     + event_pos
 ).toStructure(UserHasToggledLandingLights)
+
+# Example: "[8:33:05 PM] User0:Pe-8 turned wingtip smokes off at 100.0 200.99"
+user_has_toggled_wingtip_smokes = Event(
+    event_time
+    + pilot
+    + " turned wingtip smokes "
+    + toggle_value
+    + event_pos
+).toStructure(UserHasToggledWingtipSmokes)

@@ -12,6 +12,7 @@ __all__ = (
     'UserHasWentToBriefing', 'UserHasSelectedAirfield', 'UserHasTookOff',
     'UserHasSpawned', 'UserHasChangedSeat', 'CrewMemberHasBailedOut',
     'CrewMemberHasOpenedParachute', 'UserHasToggledLandingLights',
+    'UserHasToggledWingtipSmokes',
 )
 
 
@@ -112,4 +113,15 @@ class UserHasToggledLandingLights(EventWithTime,
 
     def __init__(self, **kwargs):
         super(UserHasToggledLandingLights, self).__init__(**kwargs)
+        self.value = kwargs['toggle_value'].value
+
+
+class UserHasToggledWingtipSmokes(EventWithTime,
+                                  EventWithPilot,
+                                  EventWithToggleValue,
+                                  EventWithPos,
+                                  Event):
+
+    def __init__(self, **kwargs):
+        super(UserHasToggledWingtipSmokes, self).__init__(**kwargs)
         self.value = kwargs['toggle_value'].value
