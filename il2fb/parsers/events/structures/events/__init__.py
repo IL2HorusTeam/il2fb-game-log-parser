@@ -110,10 +110,7 @@ class UserHasToggledLandingLights(EventWithTime,
                                   EventWithToggleValue,
                                   EventWithPos,
                                   Event):
-
-    def __init__(self, **kwargs):
-        super(UserHasToggledLandingLights, self).__init__(**kwargs)
-        self.value = kwargs['toggle_value'].value
+    pass
 
 
 class UserHasToggledWingtipSmokes(EventWithTime,
@@ -122,6 +119,4 @@ class UserHasToggledWingtipSmokes(EventWithTime,
                                   EventWithPos,
                                   Event):
 
-    def __init__(self, **kwargs):
-        super(UserHasToggledWingtipSmokes, self).__init__(**kwargs)
-        self.value = kwargs['toggle_value'].value
+    pass
