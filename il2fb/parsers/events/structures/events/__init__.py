@@ -18,6 +18,7 @@ __all__ = (
     'HumanCrewMemberHasOpenedParachute', 'HumanCrewMemberWasCaptured',
     'HumanCrewMemberWasWounded', 'HumanCrewMemberWasHeavilyWounded',
     'HumanCrewMemberWasKilled', 'HumanCrewMemberWasKilledByHuman',
+    'HumanWasDamagedByHuman',
 )
 
 
@@ -175,6 +176,18 @@ class HumanHasDamagedHimself(EventWithTime,
 
         "[8:33:05 PM] User0:Pe-8 damaged by landscape at 100.0 200.99"
         "[8:33:05 PM] User0:Pe-8 damaged by NONAME at 100.0 200.99"
+    """
+
+
+class HumanWasDamagedByHuman(EventWithTime,
+                             EventWithVictim,
+                             EventWithAggressor,
+                             EventWithPos,
+                             Event):
+    """
+    Example::
+
+        "[8:33:05 PM] User0:Pe-8 damaged by User1:Bf-109G-6_Late at 100.0 200.99"
     """
 
 

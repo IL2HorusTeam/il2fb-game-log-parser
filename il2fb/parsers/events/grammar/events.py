@@ -5,8 +5,8 @@ from pyparsing import Combine, LineEnd, Literal, Regex, QuotedString, Or
 from .converters import to_int
 from .helpers import (
     event_time, event_date_time, event_pos, belligerent, target_end_state,
-    toggle_value, callsign, human_actor, human_aggressor, human_crew_member,
-    human_crew_member_victim,
+    toggle_value, callsign, human_actor, human_victim, human_aggressor,
+    human_crew_member, human_crew_member_victim,
 )
 from .primitives import colon, space, number
 from ..structures.events import (
@@ -14,7 +14,7 @@ from ..structures.events import (
     TargetStateHasChanged, HumanHasConnected, HumanHasDisconnected,
     HumanHasWentToBriefing, HumanHasSelectedAirfield, HumanHasSpawned,
     HumanHasTookOff, HumanHasLanded, HumanHasCrashed, HumanWasDamagedOnGround,
-    HumanHasDamagedHimself,
+    HumanHasDamagedHimself, HumanWasDamagedByHuman,
     HumanHasToggledLandingLights, HumanHasToggledWingtipSmokes,
     HumanHasChangedSeat, HumanCrewMemberHasBailedOut,
     HumanCrewMemberHasOpenedParachute, HumanCrewMemberWasCaptured,
@@ -154,6 +154,14 @@ human_has_damaged_himself = Event(
     + Or(["landscape", "NONAME"])
     + event_pos
 ).toStructure(HumanHasDamagedHimself)
+
+human_was_damaged_by_human = Event(
+    event_time
+    + human_victim
+    + " damaged by "
+    + human_aggressor
+    + event_pos
+).toStructure(HumanWasDamagedByHuman)
 
 human_has_toggled_landing_lights = Event(
     event_time
