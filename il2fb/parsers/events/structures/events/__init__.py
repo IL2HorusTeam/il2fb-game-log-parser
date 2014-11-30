@@ -14,13 +14,13 @@ __all__ = (
     'HumanHasTookOff', 'HumanHasLanded', 'HumanHasCrashed',
     'HumanWasDamagedOnGround', 'HumanHasDamagedHimself',
     'HumanHasCommittedSuicide', 'HumanWasShotDownByHuman',
-    'HumanWasShotDownByStatic',
-    'HumanHasToggledLandingLights', 'HumanHasToggledWingtipSmokes',
-    'HumanHasChangedSeat', 'HumanCrewMemberHasBailedOut',
-    'HumanCrewMemberHasOpenedParachute', 'HumanCrewMemberWasCaptured',
-    'HumanCrewMemberWasWounded', 'HumanCrewMemberWasHeavilyWounded',
-    'HumanCrewMemberWasKilled', 'HumanCrewMemberWasKilledByHuman',
-    'HumanWasDamagedByHuman',
+    'HumanWasShotDownByStatic', 'HumanHasToggledLandingLights',
+    'HumanHasToggledWingtipSmokes', 'HumanHasChangedSeat',
+    'HumanCrewMemberHasBailedOut', 'HumanCrewMemberHasOpenedParachute',
+    'HumanCrewMemberWasCaptured', 'HumanCrewMemberWasWounded',
+    'HumanCrewMemberWasHeavilyWounded', 'HumanCrewMemberWasKilled',
+    'HumanCrewMemberWasKilledByHuman', 'HumanWasDamagedByHuman',
+    'BuildingWasDestroyedByHuman',
 )
 
 
@@ -339,4 +339,16 @@ class HumanCrewMemberWasKilledByHuman(EventWithTime,
     Example::
 
         "[8:33:05 PM] User0:Pe-8(0) was killed by User1:Bf-109G-6_Late at 100.0 200.99"
+    """
+
+
+class BuildingWasDestroyedByHuman(EventWithTime,
+                                  EventWithVictim,
+                                  EventWithAggressor,
+                                  EventWithPos,
+                                  Event):
+    """
+    Example::
+
+        "[8:33:05 PM] 3do/Buildings/Finland/CenterHouse1_w/live.sim destroyed by User0:Pe-8 at 100.0 200.99"
     """

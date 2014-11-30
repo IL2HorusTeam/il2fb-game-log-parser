@@ -3,13 +3,13 @@
 from il2fb.commons.organization import Belligerents
 from pyparsing import (
     Combine, LineStart, LineEnd, Literal, CaselessLiteral, Or, Word, WordStart,
-    WordEnd, alphanums, Suppress,
+    WordEnd, alphanums, Suppress, delimitedList,
 )
 
 from ..constants import ToggleValues, TargetEndStates
 from .converters import (
-    to_int, to_pos, to_toggle_value, to_belligerent, to_target_end_state,
-    to_human_actor, to_human_crew_member,
+    to_int, to_pos, to_toggle_value, to_belligerent, to_building,
+    to_target_end_state, to_human_actor, to_human_crew_member,
 )
 from .primitives import (
     space, colon, l_bracket, r_bracket, l_paren, r_paren, number, float_number,
@@ -66,6 +66,13 @@ bridge = Combine(
 belligerent = Or([
     CaselessLiteral(x.title()) for x in Belligerents.names()
 ]).setResultsName("belligerent").setParseAction(to_belligerent)
+
+# Example: "3do/Buildings/Finland/CenterHouse1_w/live.sim"
+building = delimitedList(
+    Word(alphanums + "_-."), delim='/'
+).setResultsName("building").setParseAction(to_building)
+
+building_victim = building.setResultsName("victim")
 
 # Example: "Pe-8"
 aircraft = Word(

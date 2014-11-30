@@ -7,8 +7,8 @@ from il2fb.commons.organization import Belligerents
 from il2fb.parsers.events.constants import TargetEndStates
 from il2fb.parsers.events.grammar.events import (
     mission_is_playing, mission_has_begun, mission_has_ended,
-    mission_was_won, target_state_has_changed, human_has_connected,
-    human_has_disconnected, human_has_went_to_briefing,
+    mission_was_won, target_state_has_changed,
+    human_has_connected, human_has_disconnected, human_has_went_to_briefing,
     human_has_selected_airfield, human_has_spawned, human_has_took_off,
     human_has_landed, human_has_crashed, human_was_damaged_on_ground,
     human_has_damaged_himself, human_was_damaged_by_human,
@@ -19,6 +19,7 @@ from il2fb.parsers.events.grammar.events import (
     human_crew_member_has_opened_parachute, human_crew_member_was_captured,
     human_crew_member_was_wounded, human_crew_member_was_heavily_wounded,
     human_crew_member_was_killed, human_crew_member_was_killed_by_human,
+    building_was_destroyed_by_human,
 )
 from il2fb.parsers.events.structures import (
     Point2D, HumanActor, HumanCrewMember,
@@ -321,4 +322,14 @@ class EventsGrammarTestCase(BaseTestCase):
         self.assertEqual(event.time, datetime.time(20, 33, 5))
         self.assertEqual(event.victim, HumanCrewMember("User0", "Pe-8", 0))
         self.assertEqual(event.aggressor, HumanActor("User1", "Bf-109G-6_Late"))
+        self.assertEqual(event.pos, Point2D(100.0, 200.99))
+
+    def test_building_was_destroyed_by_human(self):
+        string = "[8:33:05 PM] 3do/Buildings/Finland/CenterHouse1_w/live.sim destroyed by User0:Pe-8 at 100.0 200.99"
+        event = self.string_to_event(string, building_was_destroyed_by_human)
+
+        self.assertIsInstance(event, events.BuildingWasDestroyedByHuman)
+        self.assertEqual(event.time, datetime.time(20, 33, 5))
+        self.assertEqual(event.victim, "CenterHouse1_w")
+        self.assertEqual(event.aggressor, HumanActor("User0", "Pe-8"))
         self.assertEqual(event.pos, Point2D(100.0, 200.99))
