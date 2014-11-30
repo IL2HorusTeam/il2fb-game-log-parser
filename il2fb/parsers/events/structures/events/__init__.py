@@ -20,7 +20,7 @@ __all__ = (
     'HumanCrewMemberWasCaptured', 'HumanCrewMemberWasWounded',
     'HumanCrewMemberWasHeavilyWounded', 'HumanCrewMemberWasKilled',
     'HumanCrewMemberWasKilledByHuman', 'HumanWasDamagedByHuman',
-    'BuildingWasDestroyedByHuman',
+    'BuildingWasDestroyedByHuman', 'TreeWasDestroyedByHuman',
 )
 
 
@@ -351,4 +351,16 @@ class BuildingWasDestroyedByHuman(EventWithTime,
     Example::
 
         "[8:33:05 PM] 3do/Buildings/Finland/CenterHouse1_w/live.sim destroyed by User0:Pe-8 at 100.0 200.99"
+    """
+
+
+class TreeWasDestroyedByHuman(EventWithTime,
+                              EventWithVictim,
+                              EventWithAggressor,
+                              EventWithPos,
+                              Event):
+    """
+    Example::
+
+        "[8:33:05 PM] 3do/Tree/Line_W/live.sim destroyed by User0:Pe-8 at 100.0 200.99"
     """

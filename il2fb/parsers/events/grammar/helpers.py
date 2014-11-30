@@ -79,6 +79,8 @@ tree = delimitedList(
     Word(alphanums + "_."), delim='/'
 ).setResultsName("tree").setParseAction(to_tree)
 
+tree_victim = tree.setResultsName("victim")
+
 # Example: "Pe-8"
 aircraft = Word(
     alphanums + "_-"
