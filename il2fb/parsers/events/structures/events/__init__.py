@@ -21,6 +21,9 @@ __all__ = (
 
 
 class Event(object):
+    """
+    Base event structure.
+    """
 
     def __init__(self, *args, **kwargs):
         super(Event, self).__init__()
@@ -30,6 +33,11 @@ class Event(object):
 
 
 class MissionIsPlaying(EventWithDateTime, Event):
+    """
+    Example::
+
+        "[Sep 15, 2013 8:33:05 PM] Mission: PH.mis is Playing"
+    """
 
     def __init__(self, **kwargs):
         super(MissionIsPlaying, self).__init__(**kwargs)
@@ -37,18 +45,35 @@ class MissionIsPlaying(EventWithDateTime, Event):
 
 
 class MissionHasBegun(EventWithTime, Event):
-    pass
+    """
+    Example::
+
+        "[8:33:05 PM] Mission BEGIN"
+    """
 
 
 class MissionHasEnded(EventWithTime, Event):
-    pass
+    """
+    Example::
+
+        "[8:33:05 PM] Mission END"
+    """
 
 
 class MissionWasWon(EventWithDateTime, EventWithBelligerent, Event):
-    pass
+    """
+    Example::
+
+        "[Sep 15, 2013 8:33:05 PM] Mission: RED WON"
+    """
 
 
 class TargetStateHasChanged(EventWithTime, Event):
+    """
+    Example::
+
+        "[8:33:05 PM] Target 3 Complete"
+    """
 
     def __init__(self, **kwargs):
         super(TargetStateHasChanged, self).__init__(**kwargs)
@@ -57,15 +82,27 @@ class TargetStateHasChanged(EventWithTime, Event):
 
 
 class HumanHasConnected(EventWithTime, EventWithCallsign, Event):
-    pass
+    """
+    Example::
+
+        "[8:33:05 PM] User0 has connected"
+    """
 
 
 class HumanHasDisconnected(EventWithTime, EventWithCallsign, Event):
-    pass
+    """
+    Example::
+
+        "[8:33:05 PM] User0 has disconnected"
+    """
 
 
 class HumanHasWentToBriefing(EventWithTime, EventWithCallsign, Event):
-    pass
+    """
+    Example::
+
+        "[8:33:05 PM] User0 entered refly menu"
+    """
 
 
 class HumanHasSelectedAirfield(EventWithTime,
@@ -73,10 +110,19 @@ class HumanHasSelectedAirfield(EventWithTime,
                                EventWithBelligerent,
                                EventWithPos,
                                Event):
-    pass
+    """
+    Example::
+
+        "[8:33:05 PM] User0 selected army Red at 100.0 200.99"
+    """
 
 
 class HumanHasSpawned(EventWithTime, EventWithActor, Event):
+    """
+    Example::
+
+        "[8:33:05 PM] User0:Pe-8 loaded weapons '40fab100' fuel 40%"
+    """
 
     def __init__(self, **kwargs):
         super(HumanHasSpawned, self).__init__(**kwargs)
@@ -85,15 +131,27 @@ class HumanHasSpawned(EventWithTime, EventWithActor, Event):
 
 
 class HumanHasTookOff(EventWithTime, EventWithActor, EventWithPos, Event):
-    pass
+    """
+    Example::
+
+        "[8:33:05 PM] User0:Pe-8 in flight at 100.0 200.99"
+    """
 
 
 class HumanHasLanded(EventWithTime, EventWithActor, EventWithPos, Event):
-    pass
+    """
+    Example::
+
+        "[8:33:05 PM] User0:Pe-8 landed at 100.0 200.99"
+    """
 
 
 class HumanHasCrashed(EventWithTime, EventWithActor, EventWithPos, Event):
-    pass
+    """
+    Example::
+
+        "[8:33:05 PM] User0:Pe-8 crashed at 100.0 200.99"
+    """
 
 
 class HumanHasToggledLandingLights(EventWithTime,
@@ -101,7 +159,11 @@ class HumanHasToggledLandingLights(EventWithTime,
                                    EventWithToggleValue,
                                    EventWithPos,
                                    Event):
-    pass
+    """
+    Example::
+
+        "[8:33:05 PM] User0:Pe-8 turned landing lights off at 100.0 200.99"
+    """
 
 
 class HumanHasToggledWingtipSmokes(EventWithTime,
@@ -110,56 +172,88 @@ class HumanHasToggledWingtipSmokes(EventWithTime,
                                    EventWithPos,
                                    Event):
 
-    pass
+    """
+    Example::
+
+        "[8:33:05 PM] User0:Pe-8 turned wingtip smokes off at 100.0 200.99"
+    """
 
 
 class HumanHasChangedSeat(EventWithTime,
                           EventWithCrewMember,
                           EventWithPos,
                           Event):
-    pass
+    """
+    Example::
+
+        "[8:33:05 PM] User0:Pe-8(0) seat occupied by User0 at 100.0 200.99"
+    """
 
 
 class HumanCrewMemberHasBailedOut(EventWithTime,
                                   EventWithCrewMember,
                                   EventWithPos,
                                   Event):
-    pass
+    """
+    Example::
+
+        "[8:33:05 PM] User0:Pe-8(0) bailed out at 100.0 200.99"
+    """
 
 
 class HumanCrewMemberHasOpenedParachute(EventWithTime,
                                         EventWithCrewMember,
                                         EventWithPos,
                                         Event):
-    pass
+    """
+    Example::
+
+        "[8:33:05 PM] User0:Pe-8(0) successfully bailed out at 100.0 200.99"
+    """
 
 
 class HumanCrewMemberWasCaptured(EventWithTime,
                                  EventWithCrewMember,
                                  EventWithPos,
                                  Event):
-    pass
+    """
+    Example::
+
+        "[8:33:05 PM] User0:Pe-8(0) was captured at 100.0 200.99"
+    """
 
 
 class HumanCrewMemberWasWounded(EventWithTime,
                                 EventWithCrewMember,
                                 EventWithPos,
                                 Event):
-    pass
+    """
+    Example::
+
+        "[8:33:05 PM] User0:Pe-8(0) was wounded at 100.0 200.99"
+    """
 
 
 class HumanCrewMemberWasHeavilyWounded(EventWithTime,
                                        EventWithCrewMember,
                                        EventWithPos,
                                        Event):
-    pass
+    """
+    Example::
+
+        "[8:33:05 PM] User0:Pe-8(0) was heavily wounded at 100.0 200.99"
+    """
 
 
 class HumanCrewMemberWasKilled(EventWithTime,
                                EventWithCrewMember,
                                EventWithPos,
                                Event):
-    pass
+    """
+    Example::
+
+        "[8:33:05 PM] User0:Pe-8(0) was killed at 100.0 200.99"
+    """
 
 
 class HumanCrewMemberWasKilledByHuman(EventWithTime,
@@ -167,4 +261,8 @@ class HumanCrewMemberWasKilledByHuman(EventWithTime,
                                       EventWithAggressor,
                                       EventWithPos,
                                       Event):
-    pass
+    """
+    Example::
+
+        "[8:33:05 PM] User0:Pe-8(0) was killed by User1:Bf-109G-6_Late at 100.0 200.99"
+    """

@@ -31,7 +31,6 @@ class Event(Combine):
 
 mission = Literal("Mission")
 
-# Example: "[Sep 15, 2013 8:33:05 PM] Mission: PH.mis is Playing"
 mission_is_playing = Event(
     event_date_time
     + mission
@@ -42,7 +41,6 @@ mission_is_playing = Event(
     + LineEnd()
 ).toStructure(MissionIsPlaying)
 
-# Example: "[8:33:05 PM] Mission BEGIN"
 mission_has_begun = Event(
     event_time
     + mission
@@ -51,7 +49,6 @@ mission_has_begun = Event(
     + LineEnd()
 ).toStructure(MissionHasBegun)
 
-# Example: "[8:33:05 PM] Mission END"
 mission_has_ended = Event(
     event_time
     + mission
@@ -60,7 +57,6 @@ mission_has_ended = Event(
     + LineEnd(),
 ).toStructure(MissionHasEnded)
 
-# Example: "[Sep 15, 2013 8:33:05 PM] Mission: RED WON"
 mission_was_won = Event(
     event_date_time
     + mission
@@ -72,7 +68,6 @@ mission_was_won = Event(
     + LineEnd(),
 ).toStructure(MissionWasWon)
 
-# Example: "[8:33:05 PM] Target 3 Complete"
 target_state_has_changed = Event(
     event_time
     + Literal("Target")
@@ -83,7 +78,6 @@ target_state_has_changed = Event(
     + LineEnd(),
 ).toStructure(TargetStateHasChanged)
 
-# Example: "[8:33:05 PM] User0 has connected"
 human_has_connected = Event(
     event_time
     + callsign
@@ -91,7 +85,6 @@ human_has_connected = Event(
     + LineEnd()
 ).toStructure(HumanHasConnected)
 
-# Example: "[8:33:05 PM] User0 has disconnected"
 human_has_disconnected = Event(
     event_time
     + callsign
@@ -99,7 +92,6 @@ human_has_disconnected = Event(
     + LineEnd()
 ).toStructure(HumanHasDisconnected)
 
-# Example: "[8:33:05 PM] User0 entered refly menu"
 human_has_went_to_briefing = Event(
     event_time
     + callsign
@@ -107,7 +99,6 @@ human_has_went_to_briefing = Event(
     + LineEnd()
 ).toStructure(HumanHasWentToBriefing)
 
-# Example: "[8:33:05 PM] User0 selected army Red at 100.0 200.99"
 human_has_selected_airfield = Event(
     event_time
     + callsign
@@ -116,7 +107,6 @@ human_has_selected_airfield = Event(
     + event_pos
 ).toStructure(HumanHasSelectedAirfield)
 
-# Example: "[8:33:05 PM] User0:Pe-8 loaded weapons '40fab100' fuel 40%"
 human_has_spawned = Event(
     event_time
     + human_actor
@@ -128,7 +118,6 @@ human_has_spawned = Event(
     + LineEnd()
 ).toStructure(HumanHasSpawned)
 
-# Example: "[8:33:05 PM] User0:Pe-8 in flight at 100.0 200.99"
 human_has_took_off = Event(
     event_time
     + human_actor
@@ -136,7 +125,6 @@ human_has_took_off = Event(
     + event_pos
 ).toStructure(HumanHasTookOff)
 
-# Example: "[8:33:05 PM] User0:Pe-8 landed at 100.0 200.99"
 human_has_landed = Event(
     event_time
     + human_actor
@@ -144,7 +132,6 @@ human_has_landed = Event(
     + event_pos
 ).toStructure(HumanHasLanded)
 
-# Example: "[8:33:05 PM] User0:Pe-8 crashed at 100.0 200.99"
 human_has_crashed = Event(
     event_time
     + human_actor
@@ -152,7 +139,6 @@ human_has_crashed = Event(
     + event_pos
 ).toStructure(HumanHasCrashed)
 
-# Example: "[8:33:05 PM] User0:Pe-8 turned landing lights off at 100.0 200.99"
 human_has_toggled_landing_lights = Event(
     event_time
     + human_actor
@@ -161,7 +147,6 @@ human_has_toggled_landing_lights = Event(
     + event_pos
 ).toStructure(HumanHasToggledLandingLights)
 
-# Example: "[8:33:05 PM] User0:Pe-8 turned wingtip smokes off at 100.0 200.99"
 human_has_toggled_wingtip_smokes = Event(
     event_time
     + human_actor
@@ -170,7 +155,6 @@ human_has_toggled_wingtip_smokes = Event(
     + event_pos
 ).toStructure(HumanHasToggledWingtipSmokes)
 
-# Example: "[8:33:05 PM] User0:Pe-8(0) seat occupied by User0 at 100.0 200.99"
 human_has_changed_seat = Event(
     event_time
     + human_crew_member
@@ -179,7 +163,6 @@ human_has_changed_seat = Event(
     + event_pos
 ).toStructure(HumanHasChangedSeat)
 
-# Example: "[8:33:05 PM] User0:Pe-8(0) bailed out at 100.0 200.99"
 human_crew_member_has_bailed_out = Event(
     event_time
     + human_crew_member
@@ -187,7 +170,6 @@ human_crew_member_has_bailed_out = Event(
     + event_pos
 ).toStructure(HumanCrewMemberHasBailedOut)
 
-# Example: "[8:33:05 PM] User0:Pe-8(0) successfully bailed out at 100.0 200.99"
 human_crew_member_has_opened_parachute = Event(
     event_time
     + human_crew_member
@@ -195,7 +177,6 @@ human_crew_member_has_opened_parachute = Event(
     + event_pos
 ).toStructure(HumanCrewMemberHasOpenedParachute)
 
-# Example: "[8:33:05 PM] User0:Pe-8(0) was captured at 100.0 200.99"
 human_crew_member_was_captured = Event(
     event_time
     + human_crew_member
@@ -203,7 +184,6 @@ human_crew_member_was_captured = Event(
     + event_pos
 ).toStructure(HumanCrewMemberWasCaptured)
 
-# Example: "[8:33:05 PM] User0:Pe-8(0) was wounded at 100.0 200.99"
 human_crew_member_was_wounded = Event(
     event_time
     + human_crew_member
@@ -211,7 +191,6 @@ human_crew_member_was_wounded = Event(
     + event_pos
 ).toStructure(HumanCrewMemberWasWounded)
 
-# Example: "[8:33:05 PM] User0:Pe-8(0) was heavily wounded at 100.0 200.99"
 human_crew_member_was_heavily_wounded = Event(
     event_time
     + human_crew_member
@@ -219,7 +198,6 @@ human_crew_member_was_heavily_wounded = Event(
     + event_pos
 ).toStructure(HumanCrewMemberWasHeavilyWounded)
 
-# Example: "[8:33:05 PM] User0:Pe-8(0) was killed at 100.0 200.99"
 human_crew_member_was_killed = Event(
     event_time
     + human_crew_member
@@ -227,7 +205,6 @@ human_crew_member_was_killed = Event(
     + event_pos
 ).toStructure(HumanCrewMemberWasKilled)
 
-# Example: "[8:33:05 PM] User0:Pe-8(0) was killed by User1:Bf-109G-6_Late at 100.0 200.99"
 human_crew_member_was_killed_by_human = Event(
     event_time
     + human_crew_member_victim
