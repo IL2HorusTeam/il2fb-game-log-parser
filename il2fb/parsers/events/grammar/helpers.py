@@ -56,6 +56,7 @@ static = Combine(
 ).setResultsName("static")
 
 static_aggressor = static.setResultsName("aggressor")
+static_victim = static.setResultsName("victim")
 
 # Example: "Bridge0"
 bridge = Combine(

@@ -21,6 +21,7 @@ __all__ = (
     'HumanCrewMemberWasHeavilyWounded', 'HumanCrewMemberWasKilled',
     'HumanCrewMemberWasKilledByHuman', 'HumanWasDamagedByHuman',
     'BuildingWasDestroyedByHuman', 'TreeWasDestroyedByHuman',
+    'StaticWasDestroyedByHuman',
 )
 
 
@@ -363,4 +364,16 @@ class TreeWasDestroyedByHuman(EventWithTime,
     Example::
 
         "[8:33:05 PM] 3do/Tree/Line_W/live.sim destroyed by User0:Pe-8 at 100.0 200.99"
+    """
+
+
+class StaticWasDestroyedByHuman(EventWithTime,
+                                EventWithVictim,
+                                EventWithAggressor,
+                                EventWithPos,
+                                Event):
+    """
+    Example::
+
+        "[8:33:05 PM] 0_Static destroyed by User0:Pe-8 at 100.0 200.99"
     """
