@@ -12,12 +12,12 @@ __all__ = (
     'TargetStateHasChanged', 'HumanHasConnected', 'HumanHasDisconnected',
     'HumanHasWentToBriefing', 'HumanHasSelectedAirfield', 'HumanHasSpawned',
     'HumanHasTookOff', 'HumanHasLanded', 'HumanHasCrashed',
-    'HumanWasDamagedOnGround', 'HumanHasToggledLandingLights',
-    'HumanHasToggledWingtipSmokes', 'HumanHasChangedSeat',
-    'HumanCrewMemberHasBailedOut', 'HumanCrewMemberHasOpenedParachute',
-    'HumanCrewMemberWasCaptured', 'HumanCrewMemberWasWounded',
-    'HumanCrewMemberWasHeavilyWounded', 'HumanCrewMemberWasKilled',
-    'HumanCrewMemberWasKilledByHuman',
+    'HumanWasDamagedOnGround', 'HumanHasDamagedHimself',
+    'HumanHasToggledLandingLights', 'HumanHasToggledWingtipSmokes',
+    'HumanHasChangedSeat', 'HumanCrewMemberHasBailedOut',
+    'HumanCrewMemberHasOpenedParachute', 'HumanCrewMemberWasCaptured',
+    'HumanCrewMemberWasWounded', 'HumanCrewMemberWasHeavilyWounded',
+    'HumanCrewMemberWasKilled', 'HumanCrewMemberWasKilledByHuman',
 )
 
 
@@ -163,6 +163,18 @@ class HumanWasDamagedOnGround(EventWithTime,
     Example::
 
         "[8:33:05 PM] User0:Pe-8 damaged on the ground at 100.0 200.99"
+    """
+
+
+class HumanHasDamagedHimself(EventWithTime,
+                             EventWithActor,
+                             EventWithPos,
+                             Event):
+    """
+    Examples::
+
+        "[8:33:05 PM] User0:Pe-8 damaged by landscape at 100.0 200.99"
+        "[8:33:05 PM] User0:Pe-8 damaged by NONAME at 100.0 200.99"
     """
 
 
