@@ -14,7 +14,7 @@ from ..structures.events import (
     TargetStateHasChanged, HumanHasConnected, HumanHasDisconnected,
     HumanHasWentToBriefing, HumanHasSelectedAirfield, HumanHasSpawned,
     HumanHasTookOff, HumanHasLanded, HumanHasCrashed, HumanWasDamagedOnGround,
-    HumanHasDamagedHimself, HumanWasDamagedByHuman,
+    HumanHasDamagedHimself, HumanWasDamagedByHuman, HumanHasCommittedSuicide,
     HumanHasToggledLandingLights, HumanHasToggledWingtipSmokes,
     HumanHasChangedSeat, HumanCrewMemberHasBailedOut,
     HumanCrewMemberHasOpenedParachute, HumanCrewMemberWasCaptured,
@@ -162,6 +162,13 @@ human_was_damaged_by_human = Event(
     + human_aggressor
     + event_pos
 ).toStructure(HumanWasDamagedByHuman)
+
+human_has_committed_suicide = Event(
+    event_time
+    + human_actor
+    + " shot down by landscape"
+    + event_pos
+).toStructure(HumanHasCommittedSuicide)
 
 human_has_toggled_landing_lights = Event(
     event_time
