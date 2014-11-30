@@ -21,7 +21,7 @@ __all__ = (
     'HumanCrewMemberWasHeavilyWounded', 'HumanCrewMemberWasKilled',
     'HumanCrewMemberWasKilledByHuman', 'HumanWasDamagedByHuman',
     'BuildingWasDestroyedByHuman', 'TreeWasDestroyedByHuman',
-    'StaticWasDestroyedByHuman',
+    'StaticWasDestroyedByHuman', 'BridgeWasDestroyedByHuman',
 )
 
 
@@ -376,4 +376,18 @@ class StaticWasDestroyedByHuman(EventWithTime,
     Example::
 
         "[8:33:05 PM] 0_Static destroyed by User0:Pe-8 at 100.0 200.99"
+    """
+
+
+class BridgeWasDestroyedByHuman(EventWithTime,
+                                EventWithVictim,
+                                EventWithAggressor,
+                                EventWithPos,
+                                Event):
+    """
+    Example::
+
+        "[8:33:05 PM]  Bridge0 destroyed by User0:Pe-8 at 100.0 200.99"
+
+    Yes, there are 2 spaces before `Bridge0`.
     """

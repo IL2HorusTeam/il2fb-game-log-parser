@@ -50,24 +50,6 @@ target_end_state = Or([
     Literal(x) for x in TargetEndStates.values()
 ]).setResultsName("target_end_state").setParseAction(to_target_end_state)
 
-# Example: "0_Static"
-static = Combine(
-    number + Literal("_Static")
-).setResultsName("static")
-
-static_aggressor = static.setResultsName("aggressor")
-static_victim = static.setResultsName("victim")
-
-# Example: "Bridge0"
-bridge = Combine(
-    Literal("Bridge") + number
-).setResultsName("bridge")
-
-# Example: "Red" or "Blue"
-belligerent = Or([
-    CaselessLiteral(x.title()) for x in Belligerents.names()
-]).setResultsName("belligerent").setParseAction(to_belligerent)
-
 # Example: "3do/Buildings/Finland/CenterHouse1_w/live.sim"
 building = delimitedList(
     Word(alphanums + "_-."), delim='/'
@@ -81,6 +63,26 @@ tree = delimitedList(
 ).setResultsName("tree").setParseAction(to_tree)
 
 tree_victim = tree.setResultsName("victim")
+
+# Example: "0_Static"
+static = Combine(
+    number + Literal("_Static")
+).setResultsName("static")
+
+static_aggressor = static.setResultsName("aggressor")
+static_victim = static.setResultsName("victim")
+
+# Example: "Bridge0"
+bridge = Combine(
+    Literal("Bridge") + number
+).setResultsName("bridge")
+
+bridge_victim = bridge.setResultsName("victim")
+
+# Example: "Red" or "Blue"
+belligerent = Or([
+    CaselessLiteral(x.title()) for x in Belligerents.names()
+]).setResultsName("belligerent").setParseAction(to_belligerent)
 
 # Example: "Pe-8"
 aircraft = Word(

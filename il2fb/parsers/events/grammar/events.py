@@ -8,6 +8,7 @@ from .helpers import (
     toggle_value, callsign, human_actor, human_victim, human_aggressor,
     human_crew_member, human_crew_member_victim, static_aggressor,
     static_victim, destroyed_by_human, building_victim, tree_victim,
+    bridge_victim,
 )
 from .primitives import colon, space, number
 from ..structures.events import (
@@ -23,7 +24,7 @@ from ..structures.events import (
     HumanCrewMemberWasWounded, HumanCrewMemberWasHeavilyWounded,
     HumanCrewMemberWasKilled, HumanCrewMemberWasKilledByHuman,
     BuildingWasDestroyedByHuman, TreeWasDestroyedByHuman,
-    StaticWasDestroyedByHuman,
+    StaticWasDestroyedByHuman, BridgeWasDestroyedByHuman,
 )
 
 
@@ -281,3 +282,10 @@ static_was_destroyed_by_human = Event(
     + static_victim
     + destroyed_by_human
 ).toStructure(StaticWasDestroyedByHuman)
+
+bridge_was_destroyed_by_human = Event(
+    event_time
+    + space
+    + bridge_victim
+    + destroyed_by_human
+).toStructure(BridgeWasDestroyedByHuman)
