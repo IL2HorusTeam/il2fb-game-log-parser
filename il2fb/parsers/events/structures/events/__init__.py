@@ -13,7 +13,7 @@ __all__ = (
     'HumanHasWentToBriefing', 'HumanHasSelectedAirfield', 'HumanHasSpawned',
     'HumanHasTookOff', 'HumanHasLanded', 'HumanHasCrashed',
     'HumanWasDamagedOnGround', 'HumanHasDamagedHimself',
-    'HumanHasCommittedSuicide',
+    'HumanHasCommittedSuicide', 'HumanWasShotDownByHuman',
     'HumanHasToggledLandingLights', 'HumanHasToggledWingtipSmokes',
     'HumanHasChangedSeat', 'HumanCrewMemberHasBailedOut',
     'HumanCrewMemberHasOpenedParachute', 'HumanCrewMemberWasCaptured',
@@ -200,6 +200,18 @@ class HumanHasCommittedSuicide(EventWithTime,
     Example::
 
         "[8:33:05 PM] User0:Pe-8 shot down by landscape at 100.0 200.99"
+    """
+
+
+class HumanWasShotDownByHuman(EventWithTime,
+                              EventWithVictim,
+                              EventWithAggressor,
+                              EventWithPos,
+                              Event):
+    """
+    Example::
+
+        "[8:33:05 PM] User0:Pe-8 shot down by User1:Bf-109G-6_Late at 100.0 200.99"
     """
 
 
