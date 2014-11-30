@@ -11,12 +11,12 @@ __all__ = (
     'MissionIsPlaying', 'MissionHasBegun', 'MissionHasEnded', 'MissionWasWon',
     'TargetStateHasChanged', 'HumanHasConnected', 'HumanHasDisconnected',
     'HumanHasWentToBriefing', 'HumanHasSelectedAirfield', 'HumanHasSpawned',
-    'HumanHasTookOff', 'HumanHasCrashed', 'HumanHasToggledLandingLights',
-    'HumanHasToggledWingtipSmokes', 'HumanHasChangedSeat',
-    'HumanCrewMemberHasBailedOut', 'HumanCrewMemberHasOpenedParachute',
-    'HumanCrewMemberWasCaptured', 'HumanCrewMemberWasWounded',
-    'HumanCrewMemberWasHeavilyWounded', 'HumanCrewMemberWasKilled',
-    'HumanCrewMemberWasKilledByHuman',
+    'HumanHasTookOff', 'HumanHasLanded', 'HumanHasCrashed',
+    'HumanHasToggledLandingLights', 'HumanHasToggledWingtipSmokes',
+    'HumanHasChangedSeat', 'HumanCrewMemberHasBailedOut',
+    'HumanCrewMemberHasOpenedParachute', 'HumanCrewMemberWasCaptured',
+    'HumanCrewMemberWasWounded', 'HumanCrewMemberWasHeavilyWounded',
+    'HumanCrewMemberWasKilled', 'HumanCrewMemberWasKilledByHuman',
 )
 
 
@@ -85,6 +85,10 @@ class HumanHasSpawned(EventWithTime, EventWithActor, Event):
 
 
 class HumanHasTookOff(EventWithTime, EventWithActor, EventWithPos, Event):
+    pass
+
+
+class HumanHasLanded(EventWithTime, EventWithActor, EventWithPos, Event):
     pass
 
 
