@@ -7,22 +7,11 @@ LOG_TIME_FORMAT = "%I:%M:%S %p"
 LOG_DATE_FORMAT = "%b %d, %Y"
 
 
-class RegexChoices(Values):
-
-    @classmethod
-    def regex_choices(cls):
-        return '|'.join(cls.values())
-
-    @classmethod
-    def list_choices(cls):
-        return ', '.join(cls.values())
-
-
-class ToggleValues(RegexChoices):
+class ToggleValues(Values):
     on = ValueConstant(True)
     off = ValueConstant(False)
 
 
-class TargetEndStates(RegexChoices):
+class TargetEndStates(Values):
     COMPLETE = ValueConstant('Complete')
     FAILED = ValueConstant('Failed')
