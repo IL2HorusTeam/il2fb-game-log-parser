@@ -55,6 +55,8 @@ static = Combine(
     number + Literal("_Static")
 ).setResultsName("static")
 
+static_aggressor = static.setResultsName("aggressor")
+
 # Example: "Bridge0"
 bridge = Combine(
     Literal("Bridge") + number

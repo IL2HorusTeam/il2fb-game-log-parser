@@ -6,7 +6,7 @@ from .converters import to_int
 from .helpers import (
     event_time, event_date_time, event_pos, belligerent, target_end_state,
     toggle_value, callsign, human_actor, human_victim, human_aggressor,
-    human_crew_member, human_crew_member_victim,
+    human_crew_member, human_crew_member_victim, static_aggressor,
 )
 from .primitives import colon, space, number
 from ..structures.events import (
@@ -15,7 +15,7 @@ from ..structures.events import (
     HumanHasWentToBriefing, HumanHasSelectedAirfield, HumanHasSpawned,
     HumanHasTookOff, HumanHasLanded, HumanHasCrashed, HumanWasDamagedOnGround,
     HumanHasDamagedHimself, HumanWasDamagedByHuman, HumanHasCommittedSuicide,
-    HumanWasShotDownByHuman,
+    HumanWasShotDownByHuman, HumanWasShotDownByStatic,
     HumanHasToggledLandingLights, HumanHasToggledWingtipSmokes,
     HumanHasChangedSeat, HumanCrewMemberHasBailedOut,
     HumanCrewMemberHasOpenedParachute, HumanCrewMemberWasCaptured,
@@ -179,6 +179,13 @@ human_was_shot_down_by_human = Event(
     + event_pos
 ).toStructure(HumanWasShotDownByHuman)
 
+human_was_shot_down_by_static = Event(
+    event_time
+    + human_victim
+    + " shot down by "
+    + static_aggressor
+    + event_pos
+).toStructure(HumanWasShotDownByStatic)
 
 human_has_toggled_landing_lights = Event(
     event_time
