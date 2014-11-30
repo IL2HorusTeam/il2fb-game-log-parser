@@ -12,11 +12,12 @@ __all__ = (
     'TargetStateHasChanged', 'HumanHasConnected', 'HumanHasDisconnected',
     'HumanHasWentToBriefing', 'HumanHasSelectedAirfield', 'HumanHasSpawned',
     'HumanHasTookOff', 'HumanHasLanded', 'HumanHasCrashed',
-    'HumanHasToggledLandingLights', 'HumanHasToggledWingtipSmokes',
-    'HumanHasChangedSeat', 'HumanCrewMemberHasBailedOut',
-    'HumanCrewMemberHasOpenedParachute', 'HumanCrewMemberWasCaptured',
-    'HumanCrewMemberWasWounded', 'HumanCrewMemberWasHeavilyWounded',
-    'HumanCrewMemberWasKilled', 'HumanCrewMemberWasKilledByHuman',
+    'HumanWasDamagedOnGround', 'HumanHasToggledLandingLights',
+    'HumanHasToggledWingtipSmokes', 'HumanHasChangedSeat',
+    'HumanCrewMemberHasBailedOut', 'HumanCrewMemberHasOpenedParachute',
+    'HumanCrewMemberWasCaptured', 'HumanCrewMemberWasWounded',
+    'HumanCrewMemberWasHeavilyWounded', 'HumanCrewMemberWasKilled',
+    'HumanCrewMemberWasKilledByHuman',
 )
 
 
@@ -151,6 +152,17 @@ class HumanHasCrashed(EventWithTime, EventWithActor, EventWithPos, Event):
     Example::
 
         "[8:33:05 PM] User0:Pe-8 crashed at 100.0 200.99"
+    """
+
+
+class HumanWasDamagedOnGround(EventWithTime,
+                              EventWithActor,
+                              EventWithPos,
+                              Event):
+    """
+    Example::
+
+        "[8:33:05 PM] User0:Pe-8 damaged on the ground at 100.0 200.99"
     """
 
 

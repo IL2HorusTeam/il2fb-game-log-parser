@@ -10,12 +10,12 @@ from il2fb.parsers.events.grammar.events import (
     mission_was_won, target_state_has_changed, human_has_connected,
     human_has_disconnected, human_has_went_to_briefing,
     human_has_selected_airfield, human_has_spawned, human_has_took_off,
-    human_has_landed, human_has_crashed, human_has_toggled_landing_lights,
-    human_has_toggled_wingtip_smokes, human_has_changed_seat,
-    human_crew_member_has_bailed_out, human_crew_member_has_opened_parachute,
-    human_crew_member_was_captured, human_crew_member_was_wounded,
-    human_crew_member_was_heavily_wounded, human_crew_member_was_killed,
-    human_crew_member_was_killed_by_human,
+    human_has_landed, human_has_crashed, human_was_damaged_on_ground,
+    human_has_toggled_landing_lights, human_has_toggled_wingtip_smokes,
+    human_has_changed_seat, human_crew_member_has_bailed_out,
+    human_crew_member_has_opened_parachute, human_crew_member_was_captured,
+    human_crew_member_was_wounded, human_crew_member_was_heavily_wounded,
+    human_crew_member_was_killed, human_crew_member_was_killed_by_human,
 )
 from il2fb.parsers.events.structures import (
     Point2D, HumanActor, HumanCrewMember,
@@ -149,6 +149,15 @@ class EventsGrammarTestCase(BaseTestCase):
         event = self.string_to_event(string, human_has_crashed)
 
         self.assertIsInstance(event, events.HumanHasCrashed)
+        self.assertEqual(event.time, datetime.time(20, 33, 5))
+        self.assertEqual(event.actor, HumanActor("User0", "Pe-8"))
+        self.assertEqual(event.pos, Point2D(100.0, 200.99))
+
+    def test_human_was_damaged_on_ground(self):
+        string = "[8:33:05 PM] User0:Pe-8 damaged on the ground at 100.0 200.99"
+        event = self.string_to_event(string, human_was_damaged_on_ground)
+
+        self.assertIsInstance(event, events.HumanWasDamagedOnGround)
         self.assertEqual(event.time, datetime.time(20, 33, 5))
         self.assertEqual(event.actor, HumanActor("User0", "Pe-8"))
         self.assertEqual(event.pos, Point2D(100.0, 200.99))

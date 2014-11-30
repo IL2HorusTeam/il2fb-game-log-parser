@@ -13,7 +13,7 @@ from ..structures.events import (
     MissionIsPlaying, MissionHasBegun, MissionHasEnded, MissionWasWon,
     TargetStateHasChanged, HumanHasConnected, HumanHasDisconnected,
     HumanHasWentToBriefing, HumanHasSelectedAirfield, HumanHasSpawned,
-    HumanHasTookOff, HumanHasLanded, HumanHasCrashed,
+    HumanHasTookOff, HumanHasLanded, HumanHasCrashed, HumanWasDamagedOnGround,
     HumanHasToggledLandingLights, HumanHasToggledWingtipSmokes,
     HumanHasChangedSeat, HumanCrewMemberHasBailedOut,
     HumanCrewMemberHasOpenedParachute, HumanCrewMemberWasCaptured,
@@ -138,6 +138,13 @@ human_has_crashed = Event(
     + " crashed"
     + event_pos
 ).toStructure(HumanHasCrashed)
+
+human_was_damaged_on_ground = Event(
+    event_time
+    + human_actor
+    + " damaged on the ground"
+    + event_pos
+).toStructure(HumanWasDamagedOnGround)
 
 human_has_toggled_landing_lights = Event(
     event_time
