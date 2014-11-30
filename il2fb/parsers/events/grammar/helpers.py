@@ -8,7 +8,7 @@ from pyparsing import (
 
 from ..constants import ToggleValues, TargetEndStates
 from .converters import (
-    to_int, to_pos, to_toggle_value, to_belligerent, to_building,
+    to_int, to_pos, to_toggle_value, to_belligerent, to_building, to_tree,
     to_target_end_state, to_human_actor, to_human_crew_member,
 )
 from .primitives import (
@@ -73,6 +73,11 @@ building = delimitedList(
 ).setResultsName("building").setParseAction(to_building)
 
 building_victim = building.setResultsName("victim")
+
+# Example: "3do/Tree/Line_W/live.sim"
+tree = delimitedList(
+    Word(alphanums + "_."), delim='/'
+).setResultsName("tree").setParseAction(to_tree)
 
 # Example: "Pe-8"
 aircraft = Word(

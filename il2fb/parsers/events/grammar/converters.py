@@ -42,11 +42,18 @@ def to_belligerent(tokens):
 
 def to_building(tokens):
     """
-    For example, from
+    For example, we will take "CenterHouse1_w" as result from
     ["3do", "Buildings", "Finland", "CenterHouse1_w", "live.sim"]
-    we will take "CenterHouse1_w" as result
     """
     return tokens.asList()[3]
+
+
+def to_tree(tokens):
+    """
+    For example, we will take "Line_W" as result from
+    ["3do", "Tree", "Line_W", "live.sim"]
+    """
+    return tokens.asList()[2]
 
 
 def to_target_end_state(tokens):

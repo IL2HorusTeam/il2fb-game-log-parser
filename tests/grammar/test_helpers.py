@@ -10,7 +10,7 @@ from il2fb.parsers.events.grammar.helpers import (
     aircraft, belligerent, bridge, callsign, destroyed_by_human,
     event_date_time, event_pos, event_time, human_aggressor, human_crew_member,
     human_actor, human, seat_number, static, target_end_state, toggle_value,
-    building,
+    building, tree,
 )
 from il2fb.parsers.events.grammar.primitives import space
 from il2fb.parsers.events.structures import (
@@ -97,6 +97,11 @@ class CommonGrammarTestCase(BaseTestCase):
         string = "3do/Buildings/Finland/CenterHouse1_w/live.sim"
         result = building.parseString(string).building
         self.assertEqual(result, "CenterHouse1_w")
+
+    def test_tree(self):
+        string = "3do/Tree/Line_W/live.sim"
+        result = tree.parseString(string).tree
+        self.assertEqual(result, "Line_W")
 
 
 class ToggleValueTestCase(BaseTestCase):
