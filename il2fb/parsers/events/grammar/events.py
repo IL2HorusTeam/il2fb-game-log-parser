@@ -289,3 +289,40 @@ bridge_was_destroyed_by_human = Event(
     + bridge_victim
     + destroyed_by_human
 ).toStructure(BridgeWasDestroyedByHuman)
+
+event = (
+    mission_is_playing
+    | mission_has_begun
+    | mission_has_ended
+    | mission_was_won
+    | mission_was_won
+    | target_state_has_changed
+    | human_has_connected
+    | human_has_disconnected
+    | human_has_went_to_briefing
+    | human_has_selected_airfield
+    | human_has_spawned
+    | human_has_took_off
+    | human_has_landed
+    | human_has_crashed
+    | human_was_damaged_on_ground
+    | human_has_damaged_himself
+    | human_was_damaged_by_human
+    | human_has_committed_suicide
+    | human_was_shot_down_by_human
+    | human_was_shot_down_by_static
+    | human_has_toggled_landing_lights
+    | human_has_toggled_wingtip_smokes
+    | human_has_changed_seat
+    | human_crew_member_has_bailed_out
+    | human_crew_member_has_opened_parachute
+    | human_crew_member_was_captured
+    | human_crew_member_was_wounded
+    | human_crew_member_was_heavily_wounded
+    | human_crew_member_was_killed
+    | human_crew_member_was_killed_by_human
+    | building_was_destroyed_by_human
+    | tree_was_destroyed_by_human
+    | static_was_destroyed_by_human
+    | bridge_was_destroyed_by_human
+)
