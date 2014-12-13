@@ -1,0 +1,150 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2014-12-13 14:55+0200\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: structures/events/__init__.py:54
+msgid "Mission is playing"
+msgstr "Миссия играет"
+
+#: structures/events/__init__.py:67
+msgid "Mission has begun"
+msgstr "Миссия началась"
+
+#: structures/events/__init__.py:76
+msgid "Mission has ended"
+msgstr "Миссия закончилась"
+
+#: structures/events/__init__.py:85
+msgid "Mission was won"
+msgstr "Миссия была выиграна"
+
+#: structures/events/__init__.py:94
+msgid "Target state has changed"
+msgstr "Состояние цели изменилось"
+
+#: structures/events/__init__.py:108
+msgid "Human has connected"
+msgstr "Человек присоединился"
+
+#: structures/events/__init__.py:117
+msgid "Human has disconnected"
+msgstr "Человек отсоединился"
+
+#: structures/events/__init__.py:126
+msgid "Human has went to briefing"
+msgstr "Человек вышел в брифинг"
+
+#: structures/events/__init__.py:139
+msgid "Human has selected airfield"
+msgstr "Человек выбрал аэродром"
+
+#: structures/events/__init__.py:148
+msgid "Human has spawned"
+msgstr "Человек появился на карте"
+
+#: structures/events/__init__.py:162
+msgid "Human has took off"
+msgstr "Человек взлетел"
+
+#: structures/events/__init__.py:171
+msgid "Human has landed"
+msgstr "Человек сел"
+
+#: structures/events/__init__.py:180
+msgid "Human has crashed"
+msgstr "Человек разбился"
+
+#: structures/events/__init__.py:192
+msgid "Human was damaged on ground"
+msgstr "Человек был поврежден на земле"
+
+#: structures/events/__init__.py:205
+msgid "Human has damaged himself"
+msgstr "Человек сам себя повредил"
+
+#: structures/events/__init__.py:218
+msgid "Human was damaged by human"
+msgstr "Человек был поврежден человеком"
+
+#: structures/events/__init__.py:230
+msgid "Human has committed suicide"
+msgstr "Человек совершил самоубийство"
+
+#: structures/events/__init__.py:243
+msgid "Human was shot down by human"
+msgstr "Человек был сбит человеком"
+
+#: structures/events/__init__.py:256
+msgid "Human was shot down by static"
+msgstr "Человек был сбит статическим объектом"
+
+#: structures/events/__init__.py:269
+msgid "Human has toggled landing lights"
+msgstr "Человек переключил посадочные фары"
+
+#: structures/events/__init__.py:283
+msgid "Human has toggled wingtip smokes"
+msgstr "Человек переключил дымы"
+
+#: structures/events/__init__.py:295
+msgid "Human has changed seat"
+msgstr "Человек сменил место члена экипажа"
+
+#: structures/events/__init__.py:307
+msgid "Human crew member has bailed out"
+msgstr "Член экипажа человека выпрыгнул с парашютом"
+
+#: structures/events/__init__.py:319
+msgid "Human crew member has opened parachute"
+msgstr "Член экипажа человека открыл парашют"
+
+#: structures/events/__init__.py:331
+msgid "Human crew member was captured"
+msgstr "Член экипажа человека был захвачен"
+
+#: structures/events/__init__.py:343
+msgid "Human crew member was wounded"
+msgstr "Член экипажа человека был ранен"
+
+#: structures/events/__init__.py:355
+msgid "Human crew member was heavily wounded"
+msgstr "Член экипажа человека был тяжело ранен"
+
+#: structures/events/__init__.py:367
+msgid "Human crew member was killed"
+msgstr "Член экипажа человека был убит"
+
+#: structures/events/__init__.py:380
+msgid "Human crew member was killed by human"
+msgstr "Член экипажа человека был убит человеком"
+
+#: structures/events/__init__.py:393
+msgid "Building was destroyed by human"
+msgstr "Здание было разрушено человеком"
+
+#: structures/events/__init__.py:406
+msgid "Tree was destroyed by human"
+msgstr "Дерево было разрушено человеком"
+
+#: structures/events/__init__.py:419
+msgid "Static was destroyed by human"
+msgstr "Статический объект был разрушен человеком"
+
+#: structures/events/__init__.py:434
+msgid "Bridge was destroyed by human"
+msgstr "Мост был разрушен человеком"

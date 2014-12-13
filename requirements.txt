@@ -8,3 +8,4 @@ candv>=1.2.0
 il2fb-commons>=0.9.8
 pyparsing>=2.0.2
 six>=1.6.1
+verboselib>=0.1.0
