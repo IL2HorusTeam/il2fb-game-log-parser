@@ -108,7 +108,7 @@ human_victim = human_actor.setResultsName("victim")
 # Example: "User:Pe-8(0)"
 human_crew_member = (
     WordStart() + human + seat_number + WordEnd()
-).setResultsName("crew_member").setParseAction(to_human_crew_member)
+).setResultsName("actor").setParseAction(to_human_crew_member)
 
 human_crew_member_victim = human_crew_member.setResultsName('victim')
 

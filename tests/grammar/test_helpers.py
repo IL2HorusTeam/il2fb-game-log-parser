@@ -75,7 +75,7 @@ class CommonGrammarTestCase(BaseTestCase):
         self.assertEqual(result, 0)
 
     def test_human_crew_member(self):
-        result = human_crew_member.parseString("User:Pe-8(0)").crew_member
+        result = human_crew_member.parseString("User:Pe-8(0)").actor
         self.assertEqual(result, HumanCrewMember("User", "Pe-8", 0))
 
     def test_static(self):

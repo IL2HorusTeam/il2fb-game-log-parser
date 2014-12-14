@@ -258,7 +258,7 @@ class EventsGrammarTestCase(BaseTestCase):
 
         self.assertIsInstance(event, events.HumanHasChangedSeat)
         self.assertEqual(event.time, datetime.time(20, 33, 5))
-        self.assertEqual(event.crew_member, HumanCrewMember("User0", "Pe-8", 0))
+        self.assertEqual(event.actor, HumanCrewMember("User0", "Pe-8", 0))
         self.assertEqual(event.pos, Point2D(100.0, 200.99))
 
     def test_human_crew_member_has_bailed_out(self):
@@ -267,7 +267,7 @@ class EventsGrammarTestCase(BaseTestCase):
 
         self.assertIsInstance(event, events.HumanCrewMemberHasBailedOut)
         self.assertEqual(event.time, datetime.time(20, 33, 5))
-        self.assertEqual(event.crew_member, HumanCrewMember("User0", "Pe-8", 0))
+        self.assertEqual(event.actor, HumanCrewMember("User0", "Pe-8", 0))
         self.assertEqual(event.pos, Point2D(100.0, 200.99))
 
     def test_human_crew_member_has_opened_parachute(self):
@@ -276,7 +276,7 @@ class EventsGrammarTestCase(BaseTestCase):
 
         self.assertIsInstance(event, events.HumanCrewMemberHasOpenedParachute)
         self.assertEqual(event.time, datetime.time(20, 33, 5))
-        self.assertEqual(event.crew_member, HumanCrewMember("User0", "Pe-8", 0))
+        self.assertEqual(event.actor, HumanCrewMember("User0", "Pe-8", 0))
         self.assertEqual(event.pos, Point2D(100.0, 200.99))
 
     def test_human_crew_member_was_captured(self):
@@ -285,7 +285,7 @@ class EventsGrammarTestCase(BaseTestCase):
 
         self.assertIsInstance(event, events.HumanCrewMemberWasCaptured)
         self.assertEqual(event.time, datetime.time(20, 33, 5))
-        self.assertEqual(event.crew_member, HumanCrewMember("User0", "Pe-8", 0))
+        self.assertEqual(event.actor, HumanCrewMember("User0", "Pe-8", 0))
         self.assertEqual(event.pos, Point2D(100.0, 200.99))
 
     def test_human_crew_member_was_wounded(self):
@@ -294,7 +294,7 @@ class EventsGrammarTestCase(BaseTestCase):
 
         self.assertIsInstance(event, events.HumanCrewMemberWasWounded)
         self.assertEqual(event.time, datetime.time(20, 33, 5))
-        self.assertEqual(event.crew_member, HumanCrewMember("User0", "Pe-8", 0))
+        self.assertEqual(event.actor, HumanCrewMember("User0", "Pe-8", 0))
         self.assertEqual(event.pos, Point2D(100.0, 200.99))
 
     def test_human_crew_member_was_heavily_wounded(self):
@@ -303,7 +303,7 @@ class EventsGrammarTestCase(BaseTestCase):
 
         self.assertIsInstance(event, events.HumanCrewMemberWasHeavilyWounded)
         self.assertEqual(event.time, datetime.time(20, 33, 5))
-        self.assertEqual(event.crew_member, HumanCrewMember("User0", "Pe-8", 0))
+        self.assertEqual(event.actor, HumanCrewMember("User0", "Pe-8", 0))
         self.assertEqual(event.pos, Point2D(100.0, 200.99))
 
     def test_human_crew_member_was_killed(self):
@@ -312,7 +312,7 @@ class EventsGrammarTestCase(BaseTestCase):
 
         self.assertIsInstance(event, events.HumanCrewMemberWasKilled)
         self.assertEqual(event.time, datetime.time(20, 33, 5))
-        self.assertEqual(event.crew_member, HumanCrewMember("User0", "Pe-8", 0))
+        self.assertEqual(event.actor, HumanCrewMember("User0", "Pe-8", 0))
         self.assertEqual(event.pos, Point2D(100.0, 200.99))
 
     def test_human_crew_member_was_killed_by_human(self):
