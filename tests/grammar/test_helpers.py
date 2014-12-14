@@ -96,12 +96,18 @@ class CommonGrammarTestCase(BaseTestCase):
     def test_building(self):
         string = "3do/Buildings/Finland/CenterHouse1_w/live.sim"
         result = building.parseString(string).building
-        self.assertEqual(result, "CenterHouse1_w")
+        self.assertEqual(result, "Finland/CenterHouse1_w")
+
+        string = "3do/Buildings/Russia/Piter/House3_W/live.sim"
+        result = building.parseString(string).building
+        self.assertEqual(result, "Russia/Piter/House3_W")
 
     def test_tree(self):
-        string = "3do/Tree/Line_W/live.sim"
-        result = tree.parseString(string).tree
-        self.assertEqual(result, "Line_W")
+        try:
+            tree.parseString("3do/Tree/Line_W/live.sim")
+        except Exception as e:
+            self.fail("Tree grammar raised a {0} unexpectedly: {1}"
+                      .format(e.__class__.__name__, e.args[0]))
 
 
 class ToggleValueTestCase(BaseTestCase):

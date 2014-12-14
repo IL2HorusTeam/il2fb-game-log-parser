@@ -3,13 +3,13 @@
 from il2fb.commons.organization import Belligerents
 from pyparsing import (
     Combine, LineStart, LineEnd, Literal, CaselessLiteral, Or, Word, WordStart,
-    WordEnd, alphanums, Suppress, delimitedList,
+    WordEnd, alphanums, Suppress, Regex,
 )
 
 from ..constants import ToggleValues, TargetEndStates
 from .converters import (
-    to_int, to_pos, to_toggle_value, to_belligerent, to_building, to_tree,
-    to_target_end_state, to_human_actor, to_human_crew_member,
+    to_int, to_pos, to_toggle_value, to_belligerent, to_target_end_state,
+    to_human_actor, to_human_crew_member,
 )
 from .primitives import (
     space, colon, l_bracket, r_bracket, l_paren, r_paren, number, float_number,
@@ -50,19 +50,16 @@ target_end_state = Or([
     Literal(x) for x in TargetEndStates.values()
 ]).setResultsName("target_end_state").setParseAction(to_target_end_state)
 
+
 # Example: "3do/Buildings/Finland/CenterHouse1_w/live.sim"
-building = delimitedList(
-    Word(alphanums + "_-."), delim='/'
-).setResultsName("building").setParseAction(to_building)
+building = Regex(
+    r"3do/Buildings/(?P<building_group>.+)/live.sim"
+).setParseAction(lambda t: t.building_group).setResultsName("building")
 
 building_victim = building.setResultsName("victim")
 
 # Example: "3do/Tree/Line_W/live.sim"
-tree = delimitedList(
-    Word(alphanums + "_."), delim='/'
-).setResultsName("tree").setParseAction(to_tree)
-
-tree_victim = tree.setResultsName("victim")
+tree = Regex(r"3do/Tree/.+/live.sim").suppress()
 
 # Example: "0_Static"
 static = Combine(

@@ -331,9 +331,15 @@ class EventsGrammarTestCase(BaseTestCase):
 
         self.assertIsInstance(event, events.BuildingWasDestroyedByHuman)
         self.assertEqual(event.time, datetime.time(20, 33, 5))
-        self.assertEqual(event.victim, "CenterHouse1_w")
+        self.assertEqual(event.victim, "Finland/CenterHouse1_w")
         self.assertEqual(event.aggressor, HumanActor("User0", "Pe-8"))
         self.assertEqual(event.pos, Point2D(100.0, 200.99))
+
+        string = "[8:33:05 PM] 3do/Buildings/Russia/Piter/House3_W/live.sim destroyed by User1:Pe-8 at 300.0 400.99"
+        event = self.string_to_event(string, building_was_destroyed_by_human)
+
+        self.assertIsInstance(event, events.BuildingWasDestroyedByHuman)
+        self.assertEqual(event.victim, "Russia/Piter/House3_W")
 
     def test_tree_was_destroyed_by_human(self):
         string = "[8:33:05 PM] 3do/Tree/Line_W/live.sim destroyed by User0:Pe-8 at 100.0 200.99"
@@ -341,7 +347,6 @@ class EventsGrammarTestCase(BaseTestCase):
 
         self.assertIsInstance(event, events.TreeWasDestroyedByHuman)
         self.assertEqual(event.time, datetime.time(20, 33, 5))
-        self.assertEqual(event.victim, "Line_W")
         self.assertEqual(event.aggressor, HumanActor("User0", "Pe-8"))
         self.assertEqual(event.pos, Point2D(100.0, 200.99))
 
