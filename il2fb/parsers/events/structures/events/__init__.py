@@ -23,6 +23,7 @@ __all__ = (
     'HumanCrewMemberWasKilledByHuman', 'HumanWasDamagedByHuman',
     'BuildingWasDestroyedByHuman', 'TreeWasDestroyedByHuman',
     'StaticWasDestroyedByHuman', 'BridgeWasDestroyedByHuman',
+    'HumanWasDamagedByStatic',
 )
 
 _ = translations.ugettext_lazy
@@ -216,6 +217,19 @@ class HumanWasDamagedByHuman(EventWithTime,
         "[8:33:05 PM] User0:Pe-8 damaged by User1:Bf-109G-6_Late at 100.0 200.99"
     """
     verbose_name = _("Human was damaged by human")
+
+
+class HumanWasDamagedByStatic(EventWithTime,
+                              EventWithVictim,
+                              EventWithAggressor,
+                              EventWithPos,
+                              Event):
+    """
+    Example::
+
+        "[8:33:05 PM] User0:Pe-8 damaged by 0_Static at 100.0 200.99"
+    """
+    verbose_name = _("Human was damaged by static")
 
 
 class HumanHasCommittedSuicide(EventWithTime,

@@ -2,6 +2,7 @@
 
 from pyparsing import Combine, LineEnd, Literal, Regex, QuotedString, Or
 
+from ..structures.events import *
 from .converters import to_int
 from .helpers import (
     event_time, event_date_time, event_pos, belligerent, target_end_state,
@@ -10,21 +11,6 @@ from .helpers import (
     static_victim, destroyed_by_human, building_victim, tree, bridge_victim,
 )
 from .primitives import colon, space, number
-from ..structures.events import (
-    MissionIsPlaying, MissionHasBegun, MissionHasEnded, MissionWasWon,
-    TargetStateHasChanged, HumanHasConnected, HumanHasDisconnected,
-    HumanHasWentToBriefing, HumanHasSelectedAirfield, HumanHasSpawned,
-    HumanHasTookOff, HumanHasLanded, HumanHasCrashed, HumanWasDamagedOnGround,
-    HumanHasDamagedHimself, HumanWasDamagedByHuman, HumanHasCommittedSuicide,
-    HumanWasShotDownByHuman, HumanWasShotDownByStatic,
-    HumanHasToggledLandingLights, HumanHasToggledWingtipSmokes,
-    HumanHasChangedSeat, HumanCrewMemberHasBailedOut,
-    HumanCrewMemberHasOpenedParachute, HumanCrewMemberWasCaptured,
-    HumanCrewMemberWasWounded, HumanCrewMemberWasHeavilyWounded,
-    HumanCrewMemberWasKilled, HumanCrewMemberWasKilledByHuman,
-    BuildingWasDestroyedByHuman, TreeWasDestroyedByHuman,
-    StaticWasDestroyedByHuman, BridgeWasDestroyedByHuman,
-)
 
 
 class Event(Combine):
@@ -167,6 +153,14 @@ human_was_damaged_by_human = Event(
     + event_pos
 ).toStructure(HumanWasDamagedByHuman)
 
+human_was_damaged_by_static = Event(
+    event_time
+    + human_victim
+    + " damaged by "
+    + static_aggressor
+    + event_pos
+).toStructure(HumanWasDamagedByStatic)
+
 human_has_committed_suicide = Event(
     event_time
     + human_actor
@@ -307,6 +301,7 @@ event = (
     | human_was_damaged_on_ground
     | human_has_damaged_himself
     | human_was_damaged_by_human
+    | human_was_damaged_by_static
     | human_has_committed_suicide
     | human_was_shot_down_by_human
     | human_was_shot_down_by_static

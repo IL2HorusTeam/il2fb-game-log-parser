@@ -36,6 +36,7 @@ class ParserTestCase(BaseTestCase):
             (events.HumanHasDamagedHimself, "[8:33:05 PM] User0:Pe-8 damaged by landscape at 100.0 200.99"),
             (events.HumanHasDamagedHimself, "[8:33:05 PM] User0:Pe-8 damaged by NONAME at 100.0 200.99"),
             (events.HumanWasDamagedByHuman, "[8:33:05 PM] User0:Pe-8 damaged by User1:Bf-109G-6_Late at 100.0 200.99"),
+            (events.HumanWasDamagedByStatic, "[8:33:05 PM] User0:Pe-8 damaged by 0_Static at 100.0 200.99"),
             (events.HumanHasCommittedSuicide, "[8:33:05 PM] User0:Pe-8 shot down by landscape at 100.0 200.99"),
             (events.HumanWasShotDownByHuman, "[8:33:05 PM] User0:Pe-8 shot down by User1:Bf-109G-6_Late at 100.0 200.99"),
             (events.HumanWasShotDownByStatic, "[8:33:05 PM] User0:Pe-8 shot down by 0_Static at 100.0 200.99"),
