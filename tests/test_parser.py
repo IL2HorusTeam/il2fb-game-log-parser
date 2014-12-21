@@ -1,6 +1,10 @@
 # -*- coding: utf-8 -*-
 
-from itertools import imap
+try:
+    from itertools import imap
+except ImportError:
+    imap = map
+
 from operator import itemgetter
 
 from il2fb.parsers.events import parse_string
