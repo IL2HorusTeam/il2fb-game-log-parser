@@ -51,7 +51,5 @@ class HumanCrewMember(HumanActor):
         self.seat_number = seat_number
 
     def __repr__(self):
-        return (
-            "<Human crew member #{0} at {1}:{2}>"
-            .format(self.seat_number, self.callsign, self.aircraft)
-        )
+        return ("<Human crew member #{0} at {1}:{2}>"
+                .format(self.seat_number, self.callsign, self.aircraft))
