@@ -38,7 +38,7 @@ class Event(object):
         self.name = self.__class__.__name__
 
     def __repr__(self):
-        return "<Event '{0}'>".format(self.__class__.__name__)
+        return "<Event '{0}'>".format(self.name)
 
     @property
     def verbose_name(self):
