@@ -1,11 +1,7 @@
 # -*- coding: utf-8 -*-
 
-try:
-    from itertools import imap
-except ImportError:
-    imap = map
-
 from operator import itemgetter
+from six.moves import map
 
 from il2fb.parsers.events import parse_string
 from il2fb.parsers.events.exceptions import EventParsingError
@@ -65,8 +61,8 @@ class ParserTestCase(BaseTestCase):
         ]
 
         # Ensure we test all known events
-        tested_events = imap(itemgetter(0), data)
-        tested_events = imap(lambda x: x.__name__, tested_events)
+        tested_events = map(itemgetter(0), data)
+        tested_events = map(lambda x: x.__name__, tested_events)
         self.assertEqual(set(tested_events), set(events.__all__))
 
         for structure, string in data:
