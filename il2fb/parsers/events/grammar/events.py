@@ -9,6 +9,7 @@ from .helpers import (
     toggle_value, callsign, human_actor, human_victim, human_aggressor,
     human_crew_member, human_crew_member_victim, static_aggressor,
     static_victim, destroyed_by_human, building_victim, tree, bridge_victim,
+    ai_aircraft_actor,
 )
 from .primitives import colon, space, number
 
@@ -283,6 +284,13 @@ bridge_was_destroyed_by_human = Event(
     + destroyed_by_human
 ).toStructure(BridgeWasDestroyedByHuman)
 
+ai_aircraft_was_despawned = Event(
+    event_time
+    + ai_aircraft_actor
+    + " removed"
+    + event_pos
+).toStructure(AIAircraftWasDespawned)
+
 event = (
     mission_is_playing
     | mission_has_begun
@@ -319,4 +327,5 @@ event = (
     | tree_was_destroyed_by_human
     | static_was_destroyed_by_human
     | bridge_was_destroyed_by_human
+    | ai_aircraft_was_despawned
 )

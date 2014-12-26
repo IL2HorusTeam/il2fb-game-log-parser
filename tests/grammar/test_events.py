@@ -21,6 +21,7 @@ from il2fb.parsers.events.grammar.events import (
     human_crew_member_was_killed, human_crew_member_was_killed_by_human,
     building_was_destroyed_by_human, tree_was_destroyed_by_human,
     static_was_destroyed_by_human, bridge_was_destroyed_by_human,
+    ai_aircraft_was_despawned,
 )
 from il2fb.parsers.events.structures import (
     Point2D, HumanActor, HumanCrewMember,
@@ -378,4 +379,13 @@ class EventsGrammarTestCase(BaseTestCase):
         self.assertEqual(event.time, datetime.time(20, 33, 5))
         self.assertEqual(event.victim, "Bridge0")
         self.assertEqual(event.aggressor, HumanActor("User0", "Pe-8"))
+        self.assertEqual(event.pos, Point2D(100.0, 200.99))
+
+    def test_ai_aircraft_was_despawned(self):
+        string = "[8:33:05 PM] Pe-8 removed at 100.0 200.99"
+        event = self.string_to_event(string, ai_aircraft_was_despawned)
+
+        self.assertIsInstance(event, events.AIAircraftWasDespawned)
+        self.assertEqual(event.time, datetime.time(20, 33, 5))
+        self.assertEqual(event.actor, "Pe-8")
         self.assertEqual(event.pos, Point2D(100.0, 200.99))

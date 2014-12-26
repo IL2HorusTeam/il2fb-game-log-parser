@@ -23,7 +23,7 @@ __all__ = (
     'HumanCrewMemberWasKilledByHuman', 'HumanWasDamagedByHuman',
     'BuildingWasDestroyedByHuman', 'TreeWasDestroyedByHuman',
     'StaticWasDestroyedByHuman', 'BridgeWasDestroyedByHuman',
-    'HumanWasDamagedByStatic',
+    'HumanWasDamagedByStatic', 'AIAircraftWasDespawned',
 )
 
 _ = translations.ugettext_lazy
@@ -446,3 +446,15 @@ class BridgeWasDestroyedByHuman(EventWithTime,
     Yes, there are 2 spaces before `Bridge0`.
     """
     verbose_name = _("Bridge was destroyed by human")
+
+
+class AIAircraftWasDespawned(EventWithTime,
+                             EventWithActor,
+                             EventWithPos,
+                             Event):
+    """
+    Example::
+
+        "[8:33:05 PM] Pe-8 removed at 100.0 200.99"
+    """
+    verbose_name = _("AI aircraft was despawned")

@@ -110,7 +110,7 @@ human_crew_member = (
     WordStart() + human + seat_number + WordEnd()
 ).setResultsName("actor").setParseAction(to_human_crew_member)
 
-human_crew_member_victim = human_crew_member.setResultsName('victim')
+human_crew_member_victim = human_crew_member.setResultsName("victim")
 
 # Example: " destroyed by User:Pe-8 at 100.0 200.99"
 destroyed_by_human = Combine(
@@ -122,3 +122,5 @@ destroyed_by_human = Combine(
     + human_aggressor
     + event_pos
 )
+
+ai_aircraft_actor = aircraft.setResultsName("actor")

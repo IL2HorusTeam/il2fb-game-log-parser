@@ -59,6 +59,8 @@ class ParserTestCase(BaseTestCase):
             (events.TreeWasDestroyedByHuman, "[8:33:05 PM] 3do/Tree/Line_W/live.sim destroyed by User0:Pe-8 at 100.0 200.99"),
             (events.StaticWasDestroyedByHuman, "[8:33:05 PM] 0_Static destroyed by User0:Pe-8 at 100.0 200.99"),
             (events.BridgeWasDestroyedByHuman, "[8:33:05 PM]  Bridge0 destroyed by User0:Pe-8 at 100.0 200.99"),
+
+            (events.AIAircraftWasDespawned, "[8:33:05 PM] Pe-8 removed at 100.0 200.99"),
         ]
 
         # Ensure we test all known events
