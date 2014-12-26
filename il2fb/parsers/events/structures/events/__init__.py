@@ -22,8 +22,9 @@ __all__ = (
     'HumanCrewMemberWasHeavilyWounded', 'HumanCrewMemberWasKilled',
     'HumanCrewMemberWasKilledByHuman', 'HumanWasDamagedByHuman',
     'BuildingWasDestroyedByHuman', 'TreeWasDestroyedByHuman',
-    'StaticWasDestroyedByHuman', 'BridgeWasDestroyedByHuman',
-    'HumanWasDamagedByStatic', 'AIAircraftWasDespawned',
+    'StaticWasDestroyed', 'StaticWasDestroyedByHuman',
+    'BridgeWasDestroyedByHuman', 'HumanWasDamagedByStatic',
+    'AIAircraftWasDespawned',
 )
 
 _ = translations.ugettext_lazy
@@ -418,6 +419,18 @@ class TreeWasDestroyedByHuman(EventWithTime,
         "[8:33:05 PM] 3do/Tree/Line_W/live.sim destroyed by User0:Pe-8 at 100.0 200.99"
     """
     verbose_name = _("Tree was destroyed by human")
+
+
+class StaticWasDestroyed(EventWithTime,
+                         EventWithVictim,
+                         EventWithPos,
+                         Event):
+    """
+    Example::
+
+        "[8:33:05 PM] 0_Static crashed at 100.0 200.99"
+    """
+    verbose_name = _("Static was destroyed")
 
 
 class StaticWasDestroyedByHuman(EventWithTime,

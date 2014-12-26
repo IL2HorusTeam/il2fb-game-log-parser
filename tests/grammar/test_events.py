@@ -20,8 +20,8 @@ from il2fb.parsers.events.grammar.events import (
     human_crew_member_was_wounded, human_crew_member_was_heavily_wounded,
     human_crew_member_was_killed, human_crew_member_was_killed_by_human,
     building_was_destroyed_by_human, tree_was_destroyed_by_human,
-    static_was_destroyed_by_human, bridge_was_destroyed_by_human,
-    ai_aircraft_was_despawned,
+    static_was_destroyed, static_was_destroyed_by_human,
+    bridge_was_destroyed_by_human, ai_aircraft_was_despawned,
 )
 from il2fb.parsers.events.structures import (
     Point2D, HumanActor, HumanCrewMember,
@@ -359,6 +359,15 @@ class EventsGrammarTestCase(BaseTestCase):
         self.assertIsInstance(event, events.TreeWasDestroyedByHuman)
         self.assertEqual(event.time, datetime.time(20, 33, 5))
         self.assertEqual(event.aggressor, HumanActor("User0", "Pe-8"))
+        self.assertEqual(event.pos, Point2D(100.0, 200.99))
+
+    def test_static_was_destroyed(self):
+        string = "[8:33:05 PM] 0_Static crashed at 100.0 200.99"
+        event = self.string_to_event(string, static_was_destroyed)
+
+        self.assertIsInstance(event, events.StaticWasDestroyed)
+        self.assertEqual(event.time, datetime.time(20, 33, 5))
+        self.assertEqual(event.victim, "0_Static")
         self.assertEqual(event.pos, Point2D(100.0, 200.99))
 
     def test_static_was_destroyed_by_human(self):

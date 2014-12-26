@@ -271,6 +271,13 @@ tree_was_destroyed_by_human = Event(
     + destroyed_by_human
 ).toStructure(TreeWasDestroyedByHuman)
 
+static_was_destroyed = Event(
+    event_time
+    + static_victim
+    + " crashed"
+    + event_pos
+).toStructure(StaticWasDestroyed)
+
 static_was_destroyed_by_human = Event(
     event_time
     + static_victim
@@ -296,8 +303,8 @@ event = (
     | mission_has_begun
     | mission_has_ended
     | mission_was_won
-    | mission_was_won
     | target_state_has_changed
+
     | human_has_connected
     | human_has_disconnected
     | human_has_went_to_briefing
@@ -316,6 +323,7 @@ event = (
     | human_has_toggled_landing_lights
     | human_has_toggled_wingtip_smokes
     | human_has_changed_seat
+
     | human_crew_member_has_bailed_out
     | human_crew_member_has_opened_parachute
     | human_crew_member_was_captured
@@ -323,9 +331,13 @@ event = (
     | human_crew_member_was_heavily_wounded
     | human_crew_member_was_killed
     | human_crew_member_was_killed_by_human
-    | building_was_destroyed_by_human
-    | tree_was_destroyed_by_human
+
+    | static_was_destroyed
     | static_was_destroyed_by_human
+
+    | building_was_destroyed_by_human
     | bridge_was_destroyed_by_human
+    | tree_was_destroyed_by_human
+
     | ai_aircraft_was_despawned
 )

@@ -55,10 +55,13 @@ class ParserTestCase(BaseTestCase):
             (events.HumanCrewMemberWasHeavilyWounded, "[8:33:05 PM] User0:Pe-8(0) was heavily wounded at 100.0 200.99"),
             (events.HumanCrewMemberWasKilled, "[8:33:05 PM] User0:Pe-8(0) was killed at 100.0 200.99"),
             (events.HumanCrewMemberWasKilledByHuman, "[8:33:05 PM] User0:Pe-8(0) was killed by User1:Bf-109G-6_Late at 100.0 200.99"),
-            (events.BuildingWasDestroyedByHuman, "[8:33:05 PM] 3do/Buildings/Finland/CenterHouse1_w/live.sim destroyed by User0:Pe-8 at 100.0 200.99"),
-            (events.TreeWasDestroyedByHuman, "[8:33:05 PM] 3do/Tree/Line_W/live.sim destroyed by User0:Pe-8 at 100.0 200.99"),
+
+            (events.StaticWasDestroyed, "[8:33:05 PM] 0_Static crashed at 100.0 200.99"),
             (events.StaticWasDestroyedByHuman, "[8:33:05 PM] 0_Static destroyed by User0:Pe-8 at 100.0 200.99"),
+
+            (events.BuildingWasDestroyedByHuman, "[8:33:05 PM] 3do/Buildings/Finland/CenterHouse1_w/live.sim destroyed by User0:Pe-8 at 100.0 200.99"),
             (events.BridgeWasDestroyedByHuman, "[8:33:05 PM]  Bridge0 destroyed by User0:Pe-8 at 100.0 200.99"),
+            (events.TreeWasDestroyedByHuman, "[8:33:05 PM] 3do/Tree/Line_W/live.sim destroyed by User0:Pe-8 at 100.0 200.99"),
 
             (events.AIAircraftWasDespawned, "[8:33:05 PM] Pe-8 removed at 100.0 200.99"),
         ]
