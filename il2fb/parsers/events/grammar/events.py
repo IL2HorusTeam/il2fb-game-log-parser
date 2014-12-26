@@ -2,7 +2,7 @@
 
 from pyparsing import Combine, LineEnd, Literal, Regex, QuotedString, Or
 
-from ..structures.events import *
+from ..structures import events
 from .converters import to_int
 from .helpers import (
     event_time, event_date_time, event_pos, belligerent, target_end_state,
@@ -31,7 +31,7 @@ mission_is_playing = Event(
     + Regex(r".+\.mis").setResultsName("mission")
     + " is Playing"
     + LineEnd()
-).toStructure(MissionIsPlaying)
+).toStructure(events.MissionIsPlaying)
 
 mission_has_begun = Event(
     event_time
@@ -39,7 +39,7 @@ mission_has_begun = Event(
     + space
     + Literal("BEGIN")
     + LineEnd()
-).toStructure(MissionHasBegun)
+).toStructure(events.MissionHasBegun)
 
 mission_has_ended = Event(
     event_time
@@ -47,7 +47,7 @@ mission_has_ended = Event(
     + space
     + Literal("END")
     + LineEnd(),
-).toStructure(MissionHasEnded)
+).toStructure(events.MissionHasEnded)
 
 mission_was_won = Event(
     event_date_time
@@ -58,7 +58,7 @@ mission_was_won = Event(
     + space
     + Literal("WON")
     + LineEnd(),
-).toStructure(MissionWasWon)
+).toStructure(events.MissionWasWon)
 
 target_state_has_changed = Event(
     event_time
@@ -68,28 +68,28 @@ target_state_has_changed = Event(
     + space
     + target_end_state
     + LineEnd(),
-).toStructure(TargetStateHasChanged)
+).toStructure(events.TargetStateHasChanged)
 
 human_has_connected = Event(
     event_time
     + callsign
     + " has connected"
     + LineEnd()
-).toStructure(HumanHasConnected)
+).toStructure(events.HumanHasConnected)
 
 human_has_disconnected = Event(
     event_time
     + callsign
     + " has disconnected"
     + LineEnd()
-).toStructure(HumanHasDisconnected)
+).toStructure(events.HumanHasDisconnected)
 
 human_has_went_to_briefing = Event(
     event_time
     + callsign
     + " entered refly menu"
     + LineEnd()
-).toStructure(HumanHasWentToBriefing)
+).toStructure(events.HumanHasWentToBriefing)
 
 human_has_selected_airfield = Event(
     event_time
@@ -97,7 +97,7 @@ human_has_selected_airfield = Event(
     + " selected army "
     + belligerent
     + event_pos
-).toStructure(HumanHasSelectedAirfield)
+).toStructure(events.HumanHasSelectedAirfield)
 
 human_has_spawned = Event(
     event_time
@@ -108,35 +108,35 @@ human_has_spawned = Event(
     + number.setParseAction(to_int).setResultsName("fuel")
     + "%"
     + LineEnd()
-).toStructure(HumanHasSpawned)
+).toStructure(events.HumanHasSpawned)
 
 human_has_took_off = Event(
     event_time
     + human_actor
     + " in flight"
     + event_pos
-).toStructure(HumanHasTookOff)
+).toStructure(events.HumanHasTookOff)
 
 human_has_landed = Event(
     event_time
     + human_actor
     + " landed"
     + event_pos
-).toStructure(HumanHasLanded)
+).toStructure(events.HumanHasLanded)
 
 human_has_crashed = Event(
     event_time
     + human_victim
     + " crashed"
     + event_pos
-).toStructure(HumanHasCrashed)
+).toStructure(events.HumanHasCrashed)
 
 human_was_damaged_on_ground = Event(
     event_time
     + human_victim
     + " damaged on the ground"
     + event_pos
-).toStructure(HumanWasDamagedOnGround)
+).toStructure(events.HumanWasDamagedOnGround)
 
 human_has_damaged_himself = Event(
     event_time
@@ -144,7 +144,7 @@ human_has_damaged_himself = Event(
     + " damaged by "
     + Or(["landscape", "NONAME"])
     + event_pos
-).toStructure(HumanHasDamagedHimself)
+).toStructure(events.HumanHasDamagedHimself)
 
 human_was_damaged_by_human = Event(
     event_time
@@ -152,7 +152,7 @@ human_was_damaged_by_human = Event(
     + " damaged by "
     + human_aggressor
     + event_pos
-).toStructure(HumanWasDamagedByHuman)
+).toStructure(events.HumanWasDamagedByHuman)
 
 human_was_damaged_by_static = Event(
     event_time
@@ -160,14 +160,14 @@ human_was_damaged_by_static = Event(
     + " damaged by "
     + static_aggressor
     + event_pos
-).toStructure(HumanWasDamagedByStatic)
+).toStructure(events.HumanWasDamagedByStatic)
 
 human_has_committed_suicide = Event(
     event_time
     + human_victim
     + " shot down by landscape"
     + event_pos
-).toStructure(HumanHasCommittedSuicide)
+).toStructure(events.HumanHasCommittedSuicide)
 
 human_was_shot_down_by_human = Event(
     event_time
@@ -175,7 +175,7 @@ human_was_shot_down_by_human = Event(
     + " shot down by "
     + human_aggressor
     + event_pos
-).toStructure(HumanWasShotDownByHuman)
+).toStructure(events.HumanWasShotDownByHuman)
 
 human_was_shot_down_by_static = Event(
     event_time
@@ -183,7 +183,7 @@ human_was_shot_down_by_static = Event(
     + " shot down by "
     + static_aggressor
     + event_pos
-).toStructure(HumanWasShotDownByStatic)
+).toStructure(events.HumanWasShotDownByStatic)
 
 human_has_toggled_landing_lights = Event(
     event_time
@@ -191,7 +191,7 @@ human_has_toggled_landing_lights = Event(
     + " turned landing lights "
     + toggle_value
     + event_pos
-).toStructure(HumanHasToggledLandingLights)
+).toStructure(events.HumanHasToggledLandingLights)
 
 human_has_toggled_wingtip_smokes = Event(
     event_time
@@ -199,7 +199,7 @@ human_has_toggled_wingtip_smokes = Event(
     + " turned wingtip smokes "
     + toggle_value
     + event_pos
-).toStructure(HumanHasToggledWingtipSmokes)
+).toStructure(events.HumanHasToggledWingtipSmokes)
 
 human_has_changed_seat = Event(
     event_time
@@ -207,49 +207,49 @@ human_has_changed_seat = Event(
     + " seat occupied by "
     + callsign.suppress()
     + event_pos
-).toStructure(HumanHasChangedSeat)
+).toStructure(events.HumanHasChangedSeat)
 
 human_crew_member_has_bailed_out = Event(
     event_time
     + human_crew_member
     + " bailed out"
     + event_pos
-).toStructure(HumanCrewMemberHasBailedOut)
+).toStructure(events.HumanCrewMemberHasBailedOut)
 
 human_crew_member_has_opened_parachute = Event(
     event_time
     + human_crew_member
     + " successfully bailed out"
     + event_pos
-).toStructure(HumanCrewMemberHasOpenedParachute)
+).toStructure(events.HumanCrewMemberHasOpenedParachute)
 
 human_crew_member_was_captured = Event(
     event_time
     + human_crew_member_victim
     + " was captured"
     + event_pos
-).toStructure(HumanCrewMemberWasCaptured)
+).toStructure(events.HumanCrewMemberWasCaptured)
 
 human_crew_member_was_wounded = Event(
     event_time
     + human_crew_member_victim
     + " was wounded"
     + event_pos
-).toStructure(HumanCrewMemberWasWounded)
+).toStructure(events.HumanCrewMemberWasWounded)
 
 human_crew_member_was_heavily_wounded = Event(
     event_time
     + human_crew_member_victim
     + " was heavily wounded"
     + event_pos
-).toStructure(HumanCrewMemberWasHeavilyWounded)
+).toStructure(events.HumanCrewMemberWasHeavilyWounded)
 
 human_crew_member_was_killed = Event(
     event_time
     + human_crew_member_victim
     + " was killed"
     + event_pos
-).toStructure(HumanCrewMemberWasKilled)
+).toStructure(events.HumanCrewMemberWasKilled)
 
 human_crew_member_was_killed_by_human = Event(
     event_time
@@ -257,46 +257,46 @@ human_crew_member_was_killed_by_human = Event(
     + " was killed by "
     + human_aggressor
     + event_pos
-).toStructure(HumanCrewMemberWasKilledByHuman)
+).toStructure(events.HumanCrewMemberWasKilledByHuman)
 
 building_was_destroyed_by_human = Event(
     event_time
     + building_victim
     + destroyed_by_human
-).toStructure(BuildingWasDestroyedByHuman)
+).toStructure(events.BuildingWasDestroyedByHuman)
 
 tree_was_destroyed_by_human = Event(
     event_time
     + tree
     + destroyed_by_human
-).toStructure(TreeWasDestroyedByHuman)
+).toStructure(events.TreeWasDestroyedByHuman)
 
 static_was_destroyed = Event(
     event_time
     + static_victim
     + " crashed"
     + event_pos
-).toStructure(StaticWasDestroyed)
+).toStructure(events.StaticWasDestroyed)
 
 static_was_destroyed_by_human = Event(
     event_time
     + static_victim
     + destroyed_by_human
-).toStructure(StaticWasDestroyedByHuman)
+).toStructure(events.StaticWasDestroyedByHuman)
 
 bridge_was_destroyed_by_human = Event(
     event_time
     + space
     + bridge_victim
     + destroyed_by_human
-).toStructure(BridgeWasDestroyedByHuman)
+).toStructure(events.BridgeWasDestroyedByHuman)
 
 ai_aircraft_was_despawned = Event(
     event_time
     + aircraft
     + " removed"
     + event_pos
-).toStructure(AIAircraftWasDespawned)
+).toStructure(events.AIAircraftWasDespawned)
 
 event = (
     mission_is_playing
@@ -305,32 +305,32 @@ event = (
     | mission_was_won
     | target_state_has_changed
 
+    | human_has_changed_seat
+    | human_has_committed_suicide
     | human_has_connected
+    | human_has_crashed
+    | human_has_damaged_himself
     | human_has_disconnected
-    | human_has_went_to_briefing
+    | human_has_landed
     | human_has_selected_airfield
     | human_has_spawned
-    | human_has_took_off
-    | human_has_landed
-    | human_has_crashed
-    | human_was_damaged_on_ground
-    | human_has_damaged_himself
-    | human_was_damaged_by_human
-    | human_was_damaged_by_static
-    | human_has_committed_suicide
-    | human_was_shot_down_by_human
-    | human_was_shot_down_by_static
     | human_has_toggled_landing_lights
     | human_has_toggled_wingtip_smokes
-    | human_has_changed_seat
+    | human_has_took_off
+    | human_has_went_to_briefing
+    | human_was_damaged_by_human
+    | human_was_damaged_by_static
+    | human_was_damaged_on_ground
+    | human_was_shot_down_by_human
+    | human_was_shot_down_by_static
 
     | human_crew_member_has_bailed_out
     | human_crew_member_has_opened_parachute
     | human_crew_member_was_captured
-    | human_crew_member_was_wounded
     | human_crew_member_was_heavily_wounded
     | human_crew_member_was_killed
     | human_crew_member_was_killed_by_human
+    | human_crew_member_was_wounded
 
     | static_was_destroyed
     | static_was_destroyed_by_human
