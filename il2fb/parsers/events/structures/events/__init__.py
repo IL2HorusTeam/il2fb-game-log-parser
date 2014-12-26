@@ -24,7 +24,7 @@ __all__ = (
     'BuildingWasDestroyedByHuman', 'TreeWasDestroyedByHuman',
     'StaticWasDestroyed', 'StaticWasDestroyedByHuman',
     'BridgeWasDestroyedByHuman', 'HumanWasDamagedByStatic',
-    'AIAircraftWasDespawned',
+    'AIAircraftHasDespawned',
 )
 
 _ = translations.ugettext_lazy
@@ -461,7 +461,7 @@ class BridgeWasDestroyedByHuman(EventWithTime,
     verbose_name = _("Bridge was destroyed by human")
 
 
-class AIAircraftWasDespawned(EventWithTime,
+class AIAircraftHasDespawned(EventWithTime,
                              EventWithAircraft,
                              EventWithPos,
                              Event):

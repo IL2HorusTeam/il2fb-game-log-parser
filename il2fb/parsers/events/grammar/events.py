@@ -291,12 +291,12 @@ bridge_was_destroyed_by_human = Event(
     + destroyed_by_human
 ).toStructure(events.BridgeWasDestroyedByHuman)
 
-ai_aircraft_was_despawned = Event(
+ai_aircraft_has_despawned = Event(
     event_time
     + aircraft
     + " removed"
     + event_pos
-).toStructure(events.AIAircraftWasDespawned)
+).toStructure(events.AIAircraftHasDespawned)
 
 event = (
     mission_is_playing
@@ -339,5 +339,5 @@ event = (
     | bridge_was_destroyed_by_human
     | tree_was_destroyed_by_human
 
-    | ai_aircraft_was_despawned
+    | ai_aircraft_has_despawned
 )
