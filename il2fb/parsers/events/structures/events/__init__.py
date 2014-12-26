@@ -9,22 +9,24 @@ from .mixins import (
 )
 
 __all__ = (
-    'MissionIsPlaying', 'MissionHasBegun', 'MissionHasEnded', 'MissionWasWon',
-    'TargetStateHasChanged', 'HumanHasConnected', 'HumanHasDisconnected',
-    'HumanHasWentToBriefing', 'HumanHasSelectedAirfield', 'HumanHasSpawned',
-    'HumanHasTookOff', 'HumanHasLanded', 'HumanHasCrashed',
-    'HumanWasDamagedOnGround', 'HumanHasDamagedHimself',
-    'HumanHasCommittedSuicide', 'HumanWasShotDownByHuman',
-    'HumanWasShotDownByStatic', 'HumanHasToggledLandingLights',
-    'HumanHasToggledWingtipSmokes', 'HumanHasChangedSeat',
-    'HumanCrewMemberHasBailedOut', 'HumanCrewMemberHasOpenedParachute',
-    'HumanCrewMemberWasCaptured', 'HumanCrewMemberWasWounded',
-    'HumanCrewMemberWasHeavilyWounded', 'HumanCrewMemberWasKilled',
-    'HumanCrewMemberWasKilledByHuman', 'HumanWasDamagedByHuman',
-    'BuildingWasDestroyedByHuman', 'TreeWasDestroyedByHuman',
-    'StaticWasDestroyed', 'StaticWasDestroyedByHuman',
-    'BridgeWasDestroyedByHuman', 'HumanWasDamagedByStatic',
     'AIAircraftHasDespawned',
+    'BridgeWasDestroyedByHumanAircraft', 'BuildingWasDestroyedByHumanAircraft',
+    'HumanAircraftWasDamagedByHumanAircraft',
+    'HumanAircraftWasDamagedByStatic', 'HumanAircraftWasDamagedOnGround',
+    'HumanAircraftWasShotDownByHumanAircraft',
+    'HumanAircraftWasShotDownByStatic', 'HumanCrewMemberHasBailedOut',
+    'HumanCrewMemberHasTouchedDown', 'HumanCrewMemberWasCaptured',
+    'HumanCrewMemberWasHeavilyWounded', 'HumanCrewMemberWasKilled',
+    'HumanCrewMemberWasKilledByHumanAircraft', 'HumanCrewMemberWasWounded',
+    'HumanHasChangedSeat', 'HumanHasDestroyedHisAircraft', 'HumanHasConnected',
+    'HumanAircraftHasCrashed', 'HumanHasDamagedHisAircraft',
+    'HumanHasDisconnected', 'HumanAircraftHasLanded',
+    'HumanHasSelectedAirfield', 'HumanAircraftHasSpawned',
+    'HumanHasToggledLandingLights', 'HumanHasToggledWingtipSmokes',
+    'HumanAircraftHasTookOff', 'HumanHasWentToBriefing', 'MissionHasBegun',
+    'MissionHasEnded', 'MissionIsPlaying', 'MissionWasWon',
+    'StaticWasDestroyed', 'StaticWasDestroyedByHumanAircraft',
+    'TargetStateWasChanged', 'TreeWasDestroyedByHumanAircraft',
 )
 
 _ = translations.ugettext_lazy
@@ -87,16 +89,16 @@ class MissionWasWon(EventWithDateTime, EventWithBelligerent, Event):
     verbose_name = _("Mission was won")
 
 
-class TargetStateHasChanged(EventWithTime, Event):
+class TargetStateWasChanged(EventWithTime, Event):
     """
     Example::
 
         "[8:33:05 PM] Target 3 Complete"
     """
-    verbose_name = _("Target state has changed")
+    verbose_name = _("Target state was changed")
 
     def __init__(self, **kwargs):
-        super(TargetStateHasChanged, self).__init__(**kwargs)
+        super(TargetStateWasChanged, self).__init__(**kwargs)
         self.target_index = kwargs['target_index']
         self.state = kwargs['target_end_state']
 
@@ -141,136 +143,6 @@ class HumanHasSelectedAirfield(EventWithTime,
     verbose_name = _("Human has selected airfield")
 
 
-class HumanHasSpawned(EventWithTime, EventWithActor, Event):
-    """
-    Example::
-
-        "[8:33:05 PM] User0:Pe-8 loaded weapons '40fab100' fuel 40%"
-    """
-    verbose_name = _("Human has spawned")
-
-    def __init__(self, **kwargs):
-        super(HumanHasSpawned, self).__init__(**kwargs)
-        self.weapons = kwargs['weapons']
-        self.fuel = kwargs['fuel']
-
-
-class HumanHasTookOff(EventWithTime, EventWithActor, EventWithPos, Event):
-    """
-    Example::
-
-        "[8:33:05 PM] User0:Pe-8 in flight at 100.0 200.99"
-    """
-    verbose_name = _("Human has took off")
-
-
-class HumanHasLanded(EventWithTime, EventWithActor, EventWithPos, Event):
-    """
-    Example::
-
-        "[8:33:05 PM] User0:Pe-8 landed at 100.0 200.99"
-    """
-    verbose_name = _("Human has landed")
-
-
-class HumanHasCrashed(EventWithTime, EventWithVictim, EventWithPos, Event):
-    """
-    Example::
-
-        "[8:33:05 PM] User0:Pe-8 crashed at 100.0 200.99"
-    """
-    verbose_name = _("Human has crashed")
-
-
-class HumanWasDamagedOnGround(EventWithTime,
-                              EventWithVictim,
-                              EventWithPos,
-                              Event):
-    """
-    Example::
-
-        "[8:33:05 PM] User0:Pe-8 damaged on the ground at 100.0 200.99"
-    """
-    verbose_name = _("Human was damaged on ground")
-
-
-class HumanHasDamagedHimself(EventWithTime,
-                             EventWithVictim,
-                             EventWithPos,
-                             Event):
-    """
-    Examples::
-
-        "[8:33:05 PM] User0:Pe-8 damaged by landscape at 100.0 200.99"
-        "[8:33:05 PM] User0:Pe-8 damaged by NONAME at 100.0 200.99"
-    """
-    verbose_name = _("Human has damaged himself")
-
-
-class HumanWasDamagedByHuman(EventWithTime,
-                             EventWithVictim,
-                             EventWithAggressor,
-                             EventWithPos,
-                             Event):
-    """
-    Example::
-
-        "[8:33:05 PM] User0:Pe-8 damaged by User1:Bf-109G-6_Late at 100.0 200.99"
-    """
-    verbose_name = _("Human was damaged by human")
-
-
-class HumanWasDamagedByStatic(EventWithTime,
-                              EventWithVictim,
-                              EventWithAggressor,
-                              EventWithPos,
-                              Event):
-    """
-    Example::
-
-        "[8:33:05 PM] User0:Pe-8 damaged by 0_Static at 100.0 200.99"
-    """
-    verbose_name = _("Human was damaged by static")
-
-
-class HumanHasCommittedSuicide(EventWithTime,
-                               EventWithVictim,
-                               EventWithPos,
-                               Event):
-    """
-    Example::
-
-        "[8:33:05 PM] User0:Pe-8 shot down by landscape at 100.0 200.99"
-    """
-    verbose_name = _("Human has committed suicide")
-
-
-class HumanWasShotDownByHuman(EventWithTime,
-                              EventWithVictim,
-                              EventWithAggressor,
-                              EventWithPos,
-                              Event):
-    """
-    Example::
-
-        "[8:33:05 PM] User0:Pe-8 shot down by User1:Bf-109G-6_Late at 100.0 200.99"
-    """
-    verbose_name = _("Human was shot down by human")
-
-
-class HumanWasShotDownByStatic(EventWithTime,
-                               EventWithVictim,
-                               EventWithAggressor,
-                               EventWithPos,
-                               Event):
-    """
-    Example::
-
-        "[8:33:05 PM] User0:Pe-8 shot down by 0_Static at 100.0 200.99"
-    """
-    verbose_name = _("Human was shot down by static")
-
-
 class HumanHasToggledLandingLights(EventWithTime,
                                    EventWithActor,
                                    EventWithToggleValue,
@@ -310,6 +182,145 @@ class HumanHasChangedSeat(EventWithTime,
     verbose_name = _("Human has changed seat")
 
 
+class HumanAircraftHasSpawned(EventWithTime, EventWithActor, Event):
+    """
+    Example::
+
+        "[8:33:05 PM] User0:Pe-8 loaded weapons '40fab100' fuel 40%"
+    """
+    verbose_name = _("Human aircraft has spawned")
+
+    def __init__(self, **kwargs):
+        super(HumanAircraftHasSpawned, self).__init__(**kwargs)
+        self.weapons = kwargs['weapons']
+        self.fuel = kwargs['fuel']
+
+
+class HumanAircraftHasTookOff(EventWithTime,
+                              EventWithActor,
+                              EventWithPos,
+                              Event):
+    """
+    Example::
+
+        "[8:33:05 PM] User0:Pe-8 in flight at 100.0 200.99"
+    """
+    verbose_name = _("Human aircraft has took off")
+
+
+class HumanAircraftHasLanded(EventWithTime,
+                             EventWithActor,
+                             EventWithPos,
+                             Event):
+    """
+    Example::
+
+        "[8:33:05 PM] User0:Pe-8 landed at 100.0 200.99"
+    """
+    verbose_name = _("Human aircraft has landed")
+
+
+class HumanAircraftHasCrashed(EventWithTime,
+                              EventWithVictim,
+                              EventWithPos,
+                              Event):
+    """
+    Example::
+
+        "[8:33:05 PM] User0:Pe-8 crashed at 100.0 200.99"
+    """
+    verbose_name = _("Human aircraft has crashed")
+
+
+class HumanHasDestroyedHisAircraft(EventWithTime,
+                                   EventWithVictim,
+                                   EventWithPos,
+                                   Event):
+    """
+    Example::
+
+        "[8:33:05 PM] User0:Pe-8 shot down by landscape at 100.0 200.99"
+    """
+    verbose_name = _("Human has destroyed his aircraft")
+
+
+class HumanHasDamagedHisAircraft(EventWithTime,
+                                 EventWithVictim,
+                                 EventWithPos,
+                                 Event):
+    """
+    Examples::
+
+        "[8:33:05 PM] User0:Pe-8 damaged by landscape at 100.0 200.99"
+        "[8:33:05 PM] User0:Pe-8 damaged by NONAME at 100.0 200.99"
+    """
+    verbose_name = _("Human has damaged his aircraft")
+
+
+class HumanAircraftWasDamagedOnGround(EventWithTime,
+                                      EventWithVictim,
+                                      EventWithPos,
+                                      Event):
+    """
+    Example::
+
+        "[8:33:05 PM] User0:Pe-8 damaged on the ground at 100.0 200.99"
+    """
+    verbose_name = _("Human aircraft was damaged on ground")
+
+
+class HumanAircraftWasDamagedByHumanAircraft(EventWithTime,
+                                             EventWithVictim,
+                                             EventWithAggressor,
+                                             EventWithPos,
+                                             Event):
+    """
+    Example::
+
+        "[8:33:05 PM] User0:Pe-8 damaged by User1:Bf-109G-6_Late at 100.0 200.99"
+    """
+    verbose_name = _("Human aircraft was damaged by human aircraft")
+
+
+class HumanAircraftWasDamagedByStatic(EventWithTime,
+                                      EventWithVictim,
+                                      EventWithAggressor,
+                                      EventWithPos,
+                                      Event):
+    """
+    Example::
+
+        "[8:33:05 PM] User0:Pe-8 damaged by 0_Static at 100.0 200.99"
+    """
+    verbose_name = _("Human aircraft was damaged by static")
+
+
+class HumanAircraftWasShotDownByHumanAircraft(EventWithTime,
+                                              EventWithVictim,
+                                              EventWithAggressor,
+                                              EventWithPos,
+                                              Event):
+    """
+    Example::
+
+        "[8:33:05 PM] User0:Pe-8 shot down by User1:Bf-109G-6_Late at 100.0 200.99"
+    """
+    verbose_name = _("Human aircraft was shot down by human aircraft")
+
+
+class HumanAircraftWasShotDownByStatic(EventWithTime,
+                                       EventWithVictim,
+                                       EventWithAggressor,
+                                       EventWithPos,
+                                       Event):
+    """
+    Example::
+
+        "[8:33:05 PM] User0:Pe-8 shot down by 0_Static at 100.0 200.99"
+    """
+    verbose_name = _("Human aircraft was shot down by static")
+
+
 class HumanCrewMemberHasBailedOut(EventWithTime,
                                   EventWithActor,
                                   EventWithPos,
@@ -322,16 +333,16 @@ class HumanCrewMemberHasBailedOut(EventWithTime,
     verbose_name = _("Human crew member has bailed out")
 
 
-class HumanCrewMemberHasOpenedParachute(EventWithTime,
-                                        EventWithActor,
-                                        EventWithPos,
-                                        Event):
+class HumanCrewMemberHasTouchedDown(EventWithTime,
+                                    EventWithActor,
+                                    EventWithPos,
+                                    Event):
     """
     Example::
 
         "[8:33:05 PM] User0:Pe-8(0) successfully bailed out at 100.0 200.99"
     """
-    verbose_name = _("Human crew member has opened parachute")
+    verbose_name = _("Human crew member has touched down")
 
 
 class HumanCrewMemberWasCaptured(EventWithTime,
@@ -382,43 +393,43 @@ class HumanCrewMemberWasKilled(EventWithTime,
     verbose_name = _("Human crew member was killed")
 
 
-class HumanCrewMemberWasKilledByHuman(EventWithTime,
-                                      EventWithVictim,
-                                      EventWithAggressor,
-                                      EventWithPos,
-                                      Event):
+class HumanCrewMemberWasKilledByHumanAircraft(EventWithTime,
+                                              EventWithVictim,
+                                              EventWithAggressor,
+                                              EventWithPos,
+                                              Event):
     """
     Example::
 
         "[8:33:05 PM] User0:Pe-8(0) was killed by User1:Bf-109G-6_Late at 100.0 200.99"
     """
-    verbose_name = _("Human crew member was killed by human")
+    verbose_name = _("Human crew member was killed by human aircraft")
 
 
-class BuildingWasDestroyedByHuman(EventWithTime,
-                                  EventWithVictim,
-                                  EventWithAggressor,
-                                  EventWithPos,
-                                  Event):
+class BuildingWasDestroyedByHumanAircraft(EventWithTime,
+                                          EventWithVictim,
+                                          EventWithAggressor,
+                                          EventWithPos,
+                                          Event):
     """
     Examples::
 
         "[8:33:05 PM] 3do/Buildings/Finland/CenterHouse1_w/live.sim destroyed by User0:Pe-8 at 100.0 200.99"
         "[8:33:05 PM] 3do/Buildings/Russia/Piter/House3_W/live.sim destroyed by User1:Pe-8 at 300.0 400.99"
     """
-    verbose_name = _("Building was destroyed by human")
+    verbose_name = _("Building was destroyed by human aircraft")
 
 
-class TreeWasDestroyedByHuman(EventWithTime,
-                              EventWithAggressor,
-                              EventWithPos,
-                              Event):
+class TreeWasDestroyedByHumanAircraft(EventWithTime,
+                                      EventWithAggressor,
+                                      EventWithPos,
+                                      Event):
     """
     Example::
 
         "[8:33:05 PM] 3do/Tree/Line_W/live.sim destroyed by User0:Pe-8 at 100.0 200.99"
     """
-    verbose_name = _("Tree was destroyed by human")
+    verbose_name = _("Tree was destroyed by human aircraft")
 
 
 class StaticWasDestroyed(EventWithTime,
@@ -433,24 +444,24 @@ class StaticWasDestroyed(EventWithTime,
     verbose_name = _("Static was destroyed")
 
 
-class StaticWasDestroyedByHuman(EventWithTime,
-                                EventWithVictim,
-                                EventWithAggressor,
-                                EventWithPos,
-                                Event):
+class StaticWasDestroyedByHumanAircraft(EventWithTime,
+                                        EventWithVictim,
+                                        EventWithAggressor,
+                                        EventWithPos,
+                                        Event):
     """
     Example::
 
         "[8:33:05 PM] 0_Static destroyed by User0:Pe-8 at 100.0 200.99"
     """
-    verbose_name = _("Static was destroyed by human")
+    verbose_name = _("Static was destroyed by human aircraft")
 
 
-class BridgeWasDestroyedByHuman(EventWithTime,
-                                EventWithVictim,
-                                EventWithAggressor,
-                                EventWithPos,
-                                Event):
+class BridgeWasDestroyedByHumanAircraft(EventWithTime,
+                                        EventWithVictim,
+                                        EventWithAggressor,
+                                        EventWithPos,
+                                        Event):
     """
     Example::
 
@@ -458,7 +469,7 @@ class BridgeWasDestroyedByHuman(EventWithTime,
 
     Yes, there are 2 spaces before `Bridge0`.
     """
-    verbose_name = _("Bridge was destroyed by human")
+    verbose_name = _("Bridge was destroyed by human aircraft")
 
 
 class AIAircraftHasDespawned(EventWithTime,
@@ -470,4 +481,4 @@ class AIAircraftHasDespawned(EventWithTime,
 
         "[8:33:05 PM] Pe-8 removed at 100.0 200.99"
     """
-    verbose_name = _("AI aircraft was despawned")
+    verbose_name = _("AI aircraft has despawned")

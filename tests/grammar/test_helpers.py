@@ -7,14 +7,15 @@ from pyparsing import ParseException
 
 from il2fb.parsers.events.constants import TargetEndStates
 from il2fb.parsers.events.grammar.helpers import (
-    aircraft, belligerent, bridge, callsign, destroyed_by_human,
-    event_date_time, event_pos, event_time, human_aggressor, human_crew_member,
-    human_actor, human, seat_number, static, target_end_state, toggle_value,
-    building, tree,
+    aircraft, belligerent, bridge, building, callsign,
+    destroyed_by_human_aircraft, event_date_time, event_pos, event_time,
+    human_aircraft, human_aircraft_actor, human_aircraft_aggressor,
+    human_crew_member, seat_number, static, target_end_state, toggle_value,
+    tree,
 )
 from il2fb.parsers.events.grammar.primitives import space
 from il2fb.parsers.events.structures import (
-    Point2D, HumanActor, HumanCrewMember,
+    Point2D, HumanAircraft, HumanCrewMember,
 )
 
 from ..base import BaseTestCase
@@ -45,30 +46,33 @@ class CommonGrammarTestCase(BaseTestCase):
         result = aircraft.parseString("Pe-8").aircraft
         self.assertEqual(result, "Pe-8")
 
-    def test_human(self):
-        result = human.parseString("User0:Pe-8")
+    def test_human_aircraft(self):
+        result = human_aircraft.parseString("User0:Pe-8")
 
         self.assertEqual(result.callsign, "User0")
         self.assertEqual(result.aircraft, "Pe-8")
 
-    def test_human_actor(self):
-        result = human_actor.parseString("User0:Pe-8").actor
-        self.assertEqual(result, HumanActor("User0", "Pe-8"))
+    def test_human_aircraft_actor(self):
+        result = human_aircraft_actor.parseString("User0:Pe-8").actor
+        self.assertEqual(result, HumanAircraft("User0", "Pe-8"))
 
-    def test_human_aggressor(self):
-        result = human_aggressor.parseString("User1:Bf-109G-6_Late").aggressor
-        self.assertEqual(result, HumanActor("User1", "Bf-109G-6_Late"))
+    def test_human_aircraft_aggressor(self):
+        testee = human_aircraft_aggressor
+        result = testee.parseString("User1:Bf-109G-6_Late").aggressor
+        self.assertEqual(result, HumanAircraft("User1", "Bf-109G-6_Late"))
 
     def test_victim_and_aggressor(self):
         grammar = (
-            human_actor.setResultsName("victim")
+            human_aircraft_actor.setResultsName("victim")
             + space
-            + human_aggressor
+            + human_aircraft_aggressor
         )
         result = grammar.parseString("User0:Pe-8 User1:Bf-109G-6_Late")
 
-        self.assertEqual(result.victim, HumanActor("User0", "Pe-8"))
-        self.assertEqual(result.aggressor, HumanActor("User1", "Bf-109G-6_Late"))
+        self.assertEqual(result.victim,
+                         HumanAircraft("User0", "Pe-8"))
+        self.assertEqual(result.aggressor,
+                         HumanAircraft("User1", "Bf-109G-6_Late"))
 
     def test_seat_number(self):
         result = seat_number.parseString("(0)").seat_number
@@ -86,11 +90,11 @@ class CommonGrammarTestCase(BaseTestCase):
         result = bridge.parseString("Bridge0").bridge
         self.assertEqual(result, "Bridge0")
 
-    def test_destroyed_by_human(self):
+    def test_destroyed_by_human_aircraft(self):
         string = " destroyed by User0:Pe-8 at 100.0 200.99"
-        result = destroyed_by_human.parseString(string)
+        result = destroyed_by_human_aircraft.parseString(string)
 
-        self.assertEqual(result.aggressor, HumanActor("User0", "Pe-8"))
+        self.assertEqual(result.aggressor, HumanAircraft("User0", "Pe-8"))
         self.assertEqual(result.pos, Point2D(100.0, 200.99))
 
     def test_building(self):

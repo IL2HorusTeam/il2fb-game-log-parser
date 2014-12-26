@@ -9,7 +9,7 @@ from pyparsing import (
 from ..constants import ToggleValues, TargetEndStates
 from .converters import (
     to_int, to_pos, to_toggle_value, to_belligerent, to_target_end_state,
-    to_human_actor, to_human_crew_member,
+    to_human_aircraft, to_human_crew_member,
 )
 from .primitives import (
     space, colon, l_bracket, r_bracket, l_paren, r_paren, number, float_number,
@@ -97,28 +97,32 @@ seat_number = (
 ).setResultsName("seat_number").setParseAction(to_int)
 
 # Example: "=XXX=User0:Pe-8"
-human = (
+human_aircraft = (
     callsign + colon.suppress() + aircraft
 )
 
-human_actor = human.setResultsName("actor").setParseAction(to_human_actor)
-human_aggressor = human_actor.setResultsName("aggressor")
-human_victim = human_actor.setResultsName("victim")
+human_aircraft_actor = (
+    human_aircraft
+    .setResultsName("actor")
+    .setParseAction(to_human_aircraft)
+)
+human_aircraft_aggressor = human_aircraft_actor.setResultsName("aggressor")
+human_aircraft_victim = human_aircraft_actor.setResultsName("victim")
 
 # Example: "User:Pe-8(0)"
 human_crew_member = (
-    WordStart() + human + seat_number + WordEnd()
+    WordStart() + human_aircraft + seat_number + WordEnd()
 ).setResultsName("actor").setParseAction(to_human_crew_member)
 
 human_crew_member_victim = human_crew_member.setResultsName("victim")
 
 # Example: " destroyed by User:Pe-8 at 100.0 200.99"
-destroyed_by_human = Combine(
+destroyed_by_human_aircraft = Combine(
     space
     + Literal("destroyed")
     + space
     + Literal("by")
     + space
-    + human_aggressor
+    + human_aircraft_aggressor
     + event_pos
 )
