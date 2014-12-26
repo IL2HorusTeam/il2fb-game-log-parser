@@ -9,7 +9,7 @@ from .helpers import (
     toggle_value, callsign, human_actor, human_victim, human_aggressor,
     human_crew_member, human_crew_member_victim, static_aggressor,
     static_victim, destroyed_by_human, building_victim, tree, bridge_victim,
-    ai_aircraft_actor,
+    aircraft,
 )
 from .primitives import colon, space, number
 
@@ -126,21 +126,21 @@ human_has_landed = Event(
 
 human_has_crashed = Event(
     event_time
-    + human_actor
+    + human_victim
     + " crashed"
     + event_pos
 ).toStructure(HumanHasCrashed)
 
 human_was_damaged_on_ground = Event(
     event_time
-    + human_actor
+    + human_victim
     + " damaged on the ground"
     + event_pos
 ).toStructure(HumanWasDamagedOnGround)
 
 human_has_damaged_himself = Event(
     event_time
-    + human_actor
+    + human_victim
     + " damaged by "
     + Or(["landscape", "NONAME"])
     + event_pos
@@ -164,7 +164,7 @@ human_was_damaged_by_static = Event(
 
 human_has_committed_suicide = Event(
     event_time
-    + human_actor
+    + human_victim
     + " shot down by landscape"
     + event_pos
 ).toStructure(HumanHasCommittedSuicide)
@@ -225,28 +225,28 @@ human_crew_member_has_opened_parachute = Event(
 
 human_crew_member_was_captured = Event(
     event_time
-    + human_crew_member
+    + human_crew_member_victim
     + " was captured"
     + event_pos
 ).toStructure(HumanCrewMemberWasCaptured)
 
 human_crew_member_was_wounded = Event(
     event_time
-    + human_crew_member
+    + human_crew_member_victim
     + " was wounded"
     + event_pos
 ).toStructure(HumanCrewMemberWasWounded)
 
 human_crew_member_was_heavily_wounded = Event(
     event_time
-    + human_crew_member
+    + human_crew_member_victim
     + " was heavily wounded"
     + event_pos
 ).toStructure(HumanCrewMemberWasHeavilyWounded)
 
 human_crew_member_was_killed = Event(
     event_time
-    + human_crew_member
+    + human_crew_member_victim
     + " was killed"
     + event_pos
 ).toStructure(HumanCrewMemberWasKilled)
@@ -293,7 +293,7 @@ bridge_was_destroyed_by_human = Event(
 
 ai_aircraft_was_despawned = Event(
     event_time
-    + ai_aircraft_actor
+    + aircraft
     + " removed"
     + event_pos
 ).toStructure(AIAircraftWasDespawned)

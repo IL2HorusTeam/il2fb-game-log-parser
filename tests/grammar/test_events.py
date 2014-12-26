@@ -156,7 +156,7 @@ class EventsGrammarTestCase(BaseTestCase):
 
         self.assertIsInstance(event, events.HumanHasCrashed)
         self.assertEqual(event.time, datetime.time(20, 33, 5))
-        self.assertEqual(event.actor, HumanActor("User0", "Pe-8"))
+        self.assertEqual(event.victim, HumanActor("User0", "Pe-8"))
         self.assertEqual(event.pos, Point2D(100.0, 200.99))
 
     def test_human_was_damaged_on_ground(self):
@@ -165,7 +165,7 @@ class EventsGrammarTestCase(BaseTestCase):
 
         self.assertIsInstance(event, events.HumanWasDamagedOnGround)
         self.assertEqual(event.time, datetime.time(20, 33, 5))
-        self.assertEqual(event.actor, HumanActor("User0", "Pe-8"))
+        self.assertEqual(event.victim, HumanActor("User0", "Pe-8"))
         self.assertEqual(event.pos, Point2D(100.0, 200.99))
 
     def test_human_has_damaged_himself(self):
@@ -174,7 +174,7 @@ class EventsGrammarTestCase(BaseTestCase):
             event = self.string_to_event(string, human_has_damaged_himself)
             self.assertIsInstance(event, events.HumanHasDamagedHimself)
             self.assertEqual(event.time, datetime.time(20, 33, 5))
-            self.assertEqual(event.actor, HumanActor("User0", "Pe-8"))
+            self.assertEqual(event.victim, HumanActor("User0", "Pe-8"))
             self.assertEqual(event.pos, Point2D(100.0, 200.99))
 
         _assert("[8:33:05 PM] User0:Pe-8 damaged by landscape at 100.0 200.99")
@@ -206,7 +206,7 @@ class EventsGrammarTestCase(BaseTestCase):
 
         self.assertIsInstance(event, events.HumanHasCommittedSuicide)
         self.assertEqual(event.time, datetime.time(20, 33, 5))
-        self.assertEqual(event.actor, HumanActor("User0", "Pe-8"))
+        self.assertEqual(event.victim, HumanActor("User0", "Pe-8"))
         self.assertEqual(event.pos, Point2D(100.0, 200.99))
 
     def test_human_was_shot_down_by_human(self):
@@ -296,7 +296,7 @@ class EventsGrammarTestCase(BaseTestCase):
 
         self.assertIsInstance(event, events.HumanCrewMemberWasCaptured)
         self.assertEqual(event.time, datetime.time(20, 33, 5))
-        self.assertEqual(event.actor, HumanCrewMember("User0", "Pe-8", 0))
+        self.assertEqual(event.victim, HumanCrewMember("User0", "Pe-8", 0))
         self.assertEqual(event.pos, Point2D(100.0, 200.99))
 
     def test_human_crew_member_was_wounded(self):
@@ -305,7 +305,7 @@ class EventsGrammarTestCase(BaseTestCase):
 
         self.assertIsInstance(event, events.HumanCrewMemberWasWounded)
         self.assertEqual(event.time, datetime.time(20, 33, 5))
-        self.assertEqual(event.actor, HumanCrewMember("User0", "Pe-8", 0))
+        self.assertEqual(event.victim, HumanCrewMember("User0", "Pe-8", 0))
         self.assertEqual(event.pos, Point2D(100.0, 200.99))
 
     def test_human_crew_member_was_heavily_wounded(self):
@@ -314,7 +314,7 @@ class EventsGrammarTestCase(BaseTestCase):
 
         self.assertIsInstance(event, events.HumanCrewMemberWasHeavilyWounded)
         self.assertEqual(event.time, datetime.time(20, 33, 5))
-        self.assertEqual(event.actor, HumanCrewMember("User0", "Pe-8", 0))
+        self.assertEqual(event.victim, HumanCrewMember("User0", "Pe-8", 0))
         self.assertEqual(event.pos, Point2D(100.0, 200.99))
 
     def test_human_crew_member_was_killed(self):
@@ -323,7 +323,7 @@ class EventsGrammarTestCase(BaseTestCase):
 
         self.assertIsInstance(event, events.HumanCrewMemberWasKilled)
         self.assertEqual(event.time, datetime.time(20, 33, 5))
-        self.assertEqual(event.actor, HumanCrewMember("User0", "Pe-8", 0))
+        self.assertEqual(event.victim, HumanCrewMember("User0", "Pe-8", 0))
         self.assertEqual(event.pos, Point2D(100.0, 200.99))
 
     def test_human_crew_member_was_killed_by_human(self):
@@ -396,5 +396,5 @@ class EventsGrammarTestCase(BaseTestCase):
 
         self.assertIsInstance(event, events.AIAircraftWasDespawned)
         self.assertEqual(event.time, datetime.time(20, 33, 5))
-        self.assertEqual(event.actor, "Pe-8")
+        self.assertEqual(event.aircraft, "Pe-8")
         self.assertEqual(event.pos, Point2D(100.0, 200.99))

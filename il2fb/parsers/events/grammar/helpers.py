@@ -122,5 +122,3 @@ destroyed_by_human = Combine(
     + human_aggressor
     + event_pos
 )
-
-ai_aircraft_actor = aircraft.setResultsName("actor")

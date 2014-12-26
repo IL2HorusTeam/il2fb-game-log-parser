@@ -5,7 +5,7 @@ from il2fb.parsers.events.utils import translations
 from .mixins import (
     EventWithTime, EventWithDateTime, EventWithBelligerent, EventWithCallsign,
     EventWithPos, EventWithActor, EventWithToggleValue, EventWithAggressor,
-    EventWithVictim,
+    EventWithVictim, EventWithAircraft,
 )
 
 __all__ = (
@@ -173,7 +173,7 @@ class HumanHasLanded(EventWithTime, EventWithActor, EventWithPos, Event):
     verbose_name = _("Human has landed")
 
 
-class HumanHasCrashed(EventWithTime, EventWithActor, EventWithPos, Event):
+class HumanHasCrashed(EventWithTime, EventWithVictim, EventWithPos, Event):
     """
     Example::
 
@@ -183,7 +183,7 @@ class HumanHasCrashed(EventWithTime, EventWithActor, EventWithPos, Event):
 
 
 class HumanWasDamagedOnGround(EventWithTime,
-                              EventWithActor,
+                              EventWithVictim,
                               EventWithPos,
                               Event):
     """
@@ -195,7 +195,7 @@ class HumanWasDamagedOnGround(EventWithTime,
 
 
 class HumanHasDamagedHimself(EventWithTime,
-                             EventWithActor,
+                             EventWithVictim,
                              EventWithPos,
                              Event):
     """
@@ -234,7 +234,7 @@ class HumanWasDamagedByStatic(EventWithTime,
 
 
 class HumanHasCommittedSuicide(EventWithTime,
-                               EventWithActor,
+                               EventWithVictim,
                                EventWithPos,
                                Event):
     """
@@ -335,7 +335,7 @@ class HumanCrewMemberHasOpenedParachute(EventWithTime,
 
 
 class HumanCrewMemberWasCaptured(EventWithTime,
-                                 EventWithActor,
+                                 EventWithVictim,
                                  EventWithPos,
                                  Event):
     """
@@ -347,7 +347,7 @@ class HumanCrewMemberWasCaptured(EventWithTime,
 
 
 class HumanCrewMemberWasWounded(EventWithTime,
-                                EventWithActor,
+                                EventWithVictim,
                                 EventWithPos,
                                 Event):
     """
@@ -359,7 +359,7 @@ class HumanCrewMemberWasWounded(EventWithTime,
 
 
 class HumanCrewMemberWasHeavilyWounded(EventWithTime,
-                                       EventWithActor,
+                                       EventWithVictim,
                                        EventWithPos,
                                        Event):
     """
@@ -371,7 +371,7 @@ class HumanCrewMemberWasHeavilyWounded(EventWithTime,
 
 
 class HumanCrewMemberWasKilled(EventWithTime,
-                               EventWithActor,
+                               EventWithVictim,
                                EventWithPos,
                                Event):
     """
@@ -462,7 +462,7 @@ class BridgeWasDestroyedByHuman(EventWithTime,
 
 
 class AIAircraftWasDespawned(EventWithTime,
-                             EventWithActor,
+                             EventWithAircraft,
                              EventWithPos,
                              Event):
     """
