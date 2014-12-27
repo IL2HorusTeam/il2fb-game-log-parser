@@ -230,6 +230,10 @@ class ParserTestCase(BaseTestCase):
                 events.AIAircraftCrewMemberHasBailedOut,
                 "[8:33:05 PM] Pe-8(0) bailed out at 100.0 200.99"
             ),
+            (
+                events.AIAircraftCrewMemberHasTouchedDown,
+                "[8:33:05 PM] Pe-8(0) successfully bailed out at 100.0 200.99"
+            ),
         ]
 
         # Ensure we test all known events

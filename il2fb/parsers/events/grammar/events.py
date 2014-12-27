@@ -370,6 +370,13 @@ ai_aircraft_crew_member_has_bailed_out = Event(
     + event_pos
 ).toStructure(events.AIAircraftCrewMemberHasBailedOut)
 
+ai_aircraft_crew_member_has_touched_down = Event(
+    event_time
+    + ai_aircraft_crew_member
+    + " successfully bailed out"
+    + event_pos
+).toStructure(events.AIAircraftCrewMemberHasTouchedDown)
+
 event = (
     # Mission-related events --------------------------------------------------
     mission_is_playing
@@ -425,8 +432,9 @@ event = (
     | ai_aircraft_was_damaged_by_ai_aircraft
     | ai_aircraft_was_damaged_on_ground
 
-    | ai_aircraft_crew_member_was_wounded
+    | ai_aircraft_crew_member_has_bailed_out
+    | ai_aircraft_crew_member_has_touched_down
     | ai_aircraft_crew_member_was_heavily_wounded
     | ai_aircraft_crew_member_was_killed
-    | ai_aircraft_crew_member_has_bailed_out
+    | ai_aircraft_crew_member_was_wounded
 )
