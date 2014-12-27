@@ -558,7 +558,7 @@ class AIAircraftHasCrashed(EventWithTime,
 
 
 class AIAircraftHasLanded(EventWithTime,
-                          EventWithVictim,
+                          EventWithActor,
                           EventWithPos,
                           Event):
     """

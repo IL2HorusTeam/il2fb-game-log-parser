@@ -531,7 +531,7 @@ class EventsGrammarTestCase(BaseTestCase):
 
         self.assertIsInstance(event, events.AIAircraftHasLanded)
         self.assertEqual(event.time, datetime.time(20, 33, 5))
-        self.assertEqual(event.victim, "Pe-8")
+        self.assertEqual(event.actor, "Pe-8")
         self.assertEqual(event.pos, Point2D(100.0, 200.99))
 
     def test_ai_aircraft_was_damaged_by_ai_aircraft(self):

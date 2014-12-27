@@ -337,7 +337,7 @@ ai_aircraft_has_crashed = Event(
 
 ai_aircraft_has_landed = Event(
     event_time
-    + ai_aircraft_victim
+    + ai_aircraft_actor
     + " landed"
     + event_pos
 ).toStructure(events.AIAircraftHasLanded)
