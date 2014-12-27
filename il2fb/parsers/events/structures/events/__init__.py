@@ -12,6 +12,7 @@ __all__ = (
     'AIAircraftHasDespawned', 'AIAircraftWasDamagedOnGround',
     'AIAircraftWasDamagedByAIAircraft', 'AIHasDamagedHisAircraft',
     'AIHasDestroyedHisAircraft', 'AIAircraftHasCrashed', 'AIAircraftHasLanded',
+    'AIAircraftCrewMemberWasKilled',
     'BridgeWasDestroyedByHumanAircraft', 'BuildingWasDestroyedByHumanAircraft',
     'HumanAircraftWasDamagedByHumanAircraft',
     'HumanAircraftWasDamagedByStatic', 'HumanAircraftWasDamagedOnGround',
@@ -327,9 +328,9 @@ class HumanAircraftWasShotDownByStatic(EventWithTime,
 
 
 class HumanAircraftCrewMemberHasBailedOut(EventWithTime,
-                                  EventWithActor,
-                                  EventWithPos,
-                                  Event):
+                                          EventWithActor,
+                                          EventWithPos,
+                                          Event):
     """
     Example::
 
@@ -339,9 +340,9 @@ class HumanAircraftCrewMemberHasBailedOut(EventWithTime,
 
 
 class HumanAircraftCrewMemberHasTouchedDown(EventWithTime,
-                                    EventWithActor,
-                                    EventWithPos,
-                                    Event):
+                                            EventWithActor,
+                                            EventWithPos,
+                                            Event):
     """
     Example::
 
@@ -351,9 +352,9 @@ class HumanAircraftCrewMemberHasTouchedDown(EventWithTime,
 
 
 class HumanAircraftCrewMemberWasCaptured(EventWithTime,
-                                 EventWithVictim,
-                                 EventWithPos,
-                                 Event):
+                                         EventWithVictim,
+                                         EventWithPos,
+                                         Event):
     """
     Example::
 
@@ -363,9 +364,9 @@ class HumanAircraftCrewMemberWasCaptured(EventWithTime,
 
 
 class HumanAircraftCrewMemberWasWounded(EventWithTime,
-                                EventWithVictim,
-                                EventWithPos,
-                                Event):
+                                        EventWithVictim,
+                                        EventWithPos,
+                                        Event):
     """
     Example::
 
@@ -375,9 +376,9 @@ class HumanAircraftCrewMemberWasWounded(EventWithTime,
 
 
 class HumanAircraftCrewMemberWasHeavilyWounded(EventWithTime,
-                                       EventWithVictim,
-                                       EventWithPos,
-                                       Event):
+                                               EventWithVictim,
+                                               EventWithPos,
+                                               Event):
     """
     Example::
 
@@ -387,9 +388,9 @@ class HumanAircraftCrewMemberWasHeavilyWounded(EventWithTime,
 
 
 class HumanAircraftCrewMemberWasKilled(EventWithTime,
-                               EventWithVictim,
-                               EventWithPos,
-                               Event):
+                                       EventWithVictim,
+                                       EventWithPos,
+                                       Event):
     """
     Example::
 
@@ -399,10 +400,10 @@ class HumanAircraftCrewMemberWasKilled(EventWithTime,
 
 
 class HumanAircraftCrewMemberWasKilledByHumanAircraft(EventWithTime,
-                                              EventWithVictim,
-                                              EventWithAggressor,
-                                              EventWithPos,
-                                              Event):
+                                                      EventWithVictim,
+                                                      EventWithAggressor,
+                                                      EventWithPos,
+                                                      Event):
     """
     Example::
 
@@ -562,3 +563,15 @@ class AIAircraftHasLanded(EventWithTime,
         "[8:33:05 PM] Pe-8 landed at 100.0 200.99"
     """
     verbose_name = _("AI aircraft has landed")
+
+
+class AIAircraftCrewMemberWasKilled(EventWithTime,
+                                    EventWithVictim,
+                                    EventWithPos,
+                                    Event):
+    """
+    Example::
+
+        "[8:33:05 PM] Pe-8(0) was killed at 100.0 200.99"
+    """
+    verbose_name = _("AI aircraft crew member was killed")

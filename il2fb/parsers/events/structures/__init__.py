@@ -63,5 +63,5 @@ class AIAircraftCrewMember(Base):
         self.seat_number = seat_number
 
     def __repr__(self):
-        return "<AI aircraft crew member {0}:{1}>".format(self.callsign,
-                                                          self.aircraft)
+        return "<AI aircraft crew member {0}:{1}>".format(self.aircraft,
+                                                          self.seat_number)
