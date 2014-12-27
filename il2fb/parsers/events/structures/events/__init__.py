@@ -11,6 +11,7 @@ from .mixins import (
 __all__ = (
     'AIAircraftHasDespawned', 'AIAircraftWasDamagedOnGround',
     'AIHasDamagedHisAircraft', 'AIAircraftHasCrashed',
+    'AIHasDestroyedHisAircraft',
     'BridgeWasDestroyedByHumanAircraft', 'BuildingWasDestroyedByHumanAircraft',
     'HumanAircraftWasDamagedByHumanAircraft',
     'HumanAircraftWasDamagedByStatic', 'HumanAircraftWasDamagedOnGround',
@@ -508,6 +509,19 @@ class AIHasDamagedHisAircraft(EventWithTime,
         "[8:33:05 PM] Pe-8 damaged by NONAME at 100.0 200.99"
     """
     verbose_name = _("AI has damaged his aircraft")
+
+
+class AIHasDestroyedHisAircraft(EventWithTime,
+                                EventWithVictim,
+                                EventWithPos,
+                                Event):
+    """
+    Examples::
+
+        "[8:33:05 PM] Pe-8 shot down by landscape at 100.0 200.99"
+        "[8:33:05 PM] Pe-8 shot down by NONAME at 100.0 200.99"
+    """
+    verbose_name = _("AI has destroyed his aircraft")
 
 
 class AIAircraftHasCrashed(EventWithTime,
