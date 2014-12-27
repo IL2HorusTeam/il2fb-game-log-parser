@@ -11,6 +11,7 @@ from il2fb.parsers.events.grammar.events import (
     ai_has_destroyed_his_aircraft, ai_aircraft_has_crashed,
     ai_aircraft_has_landed, ai_aircraft_crew_member_was_killed,
     ai_aircraft_crew_member_was_killed_in_parachute_by_ai_aircraft,
+    ai_aircraft_crew_member_parachute_was_destroyed_by_ai_aircraft,
     ai_aircraft_crew_member_was_wounded,
     ai_aircraft_crew_member_was_heavily_wounded,
     ai_aircraft_crew_member_has_bailed_out,
@@ -563,6 +564,20 @@ class EventsGrammarTestCase(BaseTestCase):
         self.assertIsInstance(
             event,
             events.AIAircraftCrewMemberWasKilledInParachuteByAIAircraft
+        )
+        self.assertEqual(event.time, datetime.time(20, 33, 5))
+        self.assertEqual(event.victim, AIAircraftCrewMember("Pe-8", 0))
+        self.assertEqual(event.pos, Point2D(100.0, 200.99))
+
+    def test_ai_aircraft_crew_member_parachute_was_destroyed_by_ai_aircraft(self):
+        string = "[8:33:05 PM] Pe-8(0) has chute destroyed by Bf-109G-6_Late at 100.0 200.99"
+        event = self.string_to_event(
+            string,
+            ai_aircraft_crew_member_parachute_was_destroyed_by_ai_aircraft
+        )
+        self.assertIsInstance(
+            event,
+            events.AIAircraftCrewMemberParachuteWasDestroyedByAIAircraft
         )
         self.assertEqual(event.time, datetime.time(20, 33, 5))
         self.assertEqual(event.victim, AIAircraftCrewMember("Pe-8", 0))
