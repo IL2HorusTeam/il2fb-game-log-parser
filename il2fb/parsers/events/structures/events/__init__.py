@@ -15,6 +15,7 @@ __all__ = (
     'AIAircraftCrewMemberWasWounded', 'AIAircraftCrewMemberWasHeavilyWounded',
     'AIAircraftCrewMemberHasBailedOut', 'AIAircraftCrewMemberHasTouchedDown',
     'AIAircraftCrewMemberWasKilled',
+    'AIAircraftCrewMemberWasKilledInParachuteByAIAircraft',
     'BridgeWasDestroyedByHumanAircraft', 'BuildingWasDestroyedByHumanAircraft',
     'HumanAircraftWasDamagedByHumanAircraft',
     'HumanAircraftWasDamagedByStatic', 'HumanAircraftWasDamagedOnGround',
@@ -577,6 +578,19 @@ class AIAircraftCrewMemberWasKilled(EventWithTime,
         "[8:33:05 PM] Pe-8(0) was killed at 100.0 200.99"
     """
     verbose_name = _("AI aircraft crew member was killed")
+
+
+class AIAircraftCrewMemberWasKilledInParachuteByAIAircraft(EventWithTime,
+                                                           EventWithVictim,
+                                                           EventWithPos,
+                                                           Event):
+    """
+    Example::
+
+        "[8:33:05 PM] Pe-8(0) was killed in his chute by Bf-109G-6_Late at 100.0 200.99"
+    """
+    verbose_name = _("AI aircraft crew member was killed in parachute "
+                     "by AI aircraft")
 
 
 class AIAircraftCrewMemberWasWounded(EventWithTime,
