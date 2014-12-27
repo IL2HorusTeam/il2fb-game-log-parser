@@ -187,6 +187,10 @@ class ParserTestCase(BaseTestCase):
                 "[8:33:05 PM] Pe-8 damaged on the ground at 100.0 200.99"
             ),
             (
+                events.AIAircraftWasDamagedByAIAircraft,
+                "[8:33:05 PM] Pe-8 damaged by Bf-109G-6_Late at 100.0 200.99"
+            ),
+            (
                 events.AIHasDamagedHisAircraft,
                 "[8:33:05 PM] Pe-8 damaged by landscape at 100.0 200.99"
             ),

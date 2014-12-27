@@ -86,6 +86,7 @@ aircraft = Word(
     alphanums + "_-"
 ).setResultsName("aircraft")
 
+aircraft_aggressor = aircraft.setResultsName("aggressor")
 aircraft_victim = aircraft.setResultsName("victim")
 
 # Example: "=XXX=User0"
