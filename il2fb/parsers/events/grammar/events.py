@@ -5,7 +5,7 @@ from pyparsing import Combine, LineEnd, Regex, QuotedString
 from ..structures import events
 from .converters import to_int
 from .helpers import (
-    ai_aircraft, ai_aircraft_aggressor, ai_aircraft_victim,
+    ai_aircraft_actor, ai_aircraft_aggressor, ai_aircraft_victim,
     ai_aircraft_crew_member, ai_aircraft_crew_member_victim, belligerent,
     bridge_victim, building_victim, callsign, event_date_time, event_pos,
     event_time, human_aircraft_actor, human_aircraft_aggressor,
@@ -292,7 +292,7 @@ bridge_was_destroyed_by_human_aircraft = Event(
 
 ai_aircraft_has_despawned = Event(
     event_time
-    + ai_aircraft
+    + ai_aircraft_actor
     + " removed"
     + event_pos
 ).toStructure(events.AIAircraftHasDespawned)

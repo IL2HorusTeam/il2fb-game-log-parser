@@ -5,7 +5,7 @@ from il2fb.parsers.events.utils import translations
 from .mixins import (
     EventWithTime, EventWithDateTime, EventWithBelligerent, EventWithCallsign,
     EventWithPos, EventWithActor, EventWithToggleValue, EventWithAggressor,
-    EventWithVictim, EventWithAircraft,
+    EventWithVictim,
 )
 
 __all__ = (
@@ -483,7 +483,7 @@ class BridgeWasDestroyedByHumanAircraft(EventWithTime,
 
 
 class AIAircraftHasDespawned(EventWithTime,
-                             EventWithAircraft,
+                             EventWithActor,
                              EventWithPos,
                              Event):
     """
@@ -583,6 +583,7 @@ class AIAircraftCrewMemberWasKilled(EventWithTime,
 
 class AIAircraftCrewMemberWasKilledInParachuteByAIAircraft(EventWithTime,
                                                            EventWithVictim,
+                                                           EventWithAggressor,
                                                            EventWithPos,
                                                            Event):
     """
@@ -596,6 +597,7 @@ class AIAircraftCrewMemberWasKilledInParachuteByAIAircraft(EventWithTime,
 
 class AIAircraftCrewMemberParachuteWasDestroyedByAIAircraft(EventWithTime,
                                                             EventWithVictim,
+                                                            EventWithAggressor,
                                                             EventWithPos,
                                                             Event):
     """
