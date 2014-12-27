@@ -349,6 +349,13 @@ ai_aircraft_crew_member_was_killed = Event(
     + event_pos
 ).toStructure(events.AIAircraftCrewMemberWasKilled)
 
+ai_aircraft_crew_member_was_wounded = Event(
+    event_time
+    + ai_aircraft_crew_member_victim
+    + " was wounded"
+    + event_pos
+).toStructure(events.AIAircraftCrewMemberWasWounded)
+
 event = (
     # Mission-related events --------------------------------------------------
     mission_is_playing
@@ -404,5 +411,6 @@ event = (
     | ai_aircraft_was_damaged_by_ai_aircraft
     | ai_aircraft_was_damaged_on_ground
 
+    | ai_aircraft_crew_member_was_wounded
     | ai_aircraft_crew_member_was_killed
 )

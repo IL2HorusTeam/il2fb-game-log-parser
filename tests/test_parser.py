@@ -215,6 +215,10 @@ class ParserTestCase(BaseTestCase):
                 "[8:33:05 PM] Pe-8 landed at 100.0 200.99"
             ),
             (
+                events.AIAircraftCrewMemberWasWounded,
+                "[8:33:05 PM] Pe-8(0) was wounded at 100.0 200.99"
+            ),
+            (
                 events.AIAircraftCrewMemberWasKilled,
                 "[8:33:05 PM] Pe-8(0) was killed at 100.0 200.99"
             ),
