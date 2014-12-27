@@ -1,15 +1,15 @@
 # -*- coding: utf-8 -*-
 
-from pyparsing import Combine, LineEnd, Regex, QuotedString, Or
+from pyparsing import Combine, LineEnd, Regex, QuotedString
 
 from ..structures import events
 from .converters import to_int
 from .helpers import (
-    aircraft, belligerent, bridge_victim, building_victim, callsign,
-    event_date_time, event_pos, event_time, human_aircraft_actor,
+    aircraft, aircraft_victim, belligerent, bridge_victim, building_victim,
+    callsign, event_date_time, event_pos, event_time, human_aircraft_actor,
     human_aircraft_aggressor, human_aircraft_victim, human_crew_member,
     human_crew_member_victim, static_aggressor, static_victim,
-    target_end_state, toggle_value, tree,
+    target_end_state, toggle_value, tree, by_himself,
 )
 from .primitives import space, number
 
@@ -122,8 +122,8 @@ human_aircraft_has_crashed = Event(
 human_has_damaged_his_aircraft = Event(
     event_time
     + human_aircraft_victim
-    + " damaged by "
-    + Or(["landscape", "NONAME"])
+    + " damaged"
+    + by_himself
     + event_pos
 ).toStructure(events.HumanHasDamagedHisAircraft)
 
@@ -296,10 +296,18 @@ ai_aircraft_has_despawned = Event(
 
 ai_aircraft_was_damaged_on_ground = Event(
     event_time
-    + aircraft
+    + aircraft_victim
     + " damaged on the ground"
     + event_pos
 ).toStructure(events.AIAircraftWasDamagedOnGround)
+
+ai_has_damaged_his_aircraft = Event(
+    event_time
+    + aircraft_victim
+    + " damaged"
+    + by_himself
+    + event_pos
+).toStructure(events.AIHasDamagedHisAircraft)
 
 event = (
     mission_is_playing
@@ -345,4 +353,5 @@ event = (
 
     | ai_aircraft_has_despawned
     | ai_aircraft_was_damaged_on_ground
+    | ai_has_damaged_his_aircraft
 )

@@ -10,7 +10,7 @@ from il2fb.parsers.events.grammar.helpers import (
     aircraft, belligerent, bridge, building, callsign,
     event_date_time, event_pos, event_time, human_aircraft,
     human_aircraft_actor, human_aircraft_aggressor, human_crew_member,
-    seat_number, static, target_end_state, toggle_value, tree,
+    seat_number, static, target_end_state, toggle_value, tree, by_himself,
 )
 from il2fb.parsers.events.grammar.primitives import space
 from il2fb.parsers.events.structures import (
@@ -102,8 +102,18 @@ class CommonGrammarTestCase(BaseTestCase):
         try:
             tree.parseString("3do/Tree/Line_W/live.sim")
         except Exception as e:
-            self.fail("Tree grammar raised a {0} unexpectedly: {1}"
-                      .format(e.__class__.__name__, e.args[0]))
+            message = e.args[0] if e.args else ""
+            self.fail("'tree' grammar raised a {0} unexpectedly: {1}"
+                      .format(e.__class__.__name__, message))
+
+    def test_by_himself(self):
+        try:
+            by_himself.parseString(" by landscape")
+            by_himself.parseString(" by NONAME")
+        except Exception as e:
+            message = e.args[0] if e.args else ""
+            self.fail("'by_himself' grammar raised a {0} unexpectedly: {1}"
+                      .format(e.__class__.__name__, message))
 
 
 class ToggleValueTestCase(BaseTestCase):

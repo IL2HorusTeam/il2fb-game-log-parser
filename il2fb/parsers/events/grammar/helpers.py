@@ -86,6 +86,8 @@ aircraft = Word(
     alphanums + "_-"
 ).setResultsName("aircraft")
 
+aircraft_victim = aircraft.setResultsName("victim")
+
 # Example: "=XXX=User0"
 callsign = Word(
     alphanums + "!#%$&)(+*-/.=<>@[]_^{}|~"
@@ -115,3 +117,5 @@ human_crew_member = (
 ).setResultsName("actor").setParseAction(to_human_crew_member)
 
 human_crew_member_victim = human_crew_member.setResultsName("victim")
+
+by_himself = space + Literal("by") + space + Or(["landscape", "NONAME"])
