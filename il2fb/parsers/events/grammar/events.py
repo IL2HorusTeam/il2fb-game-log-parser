@@ -310,6 +310,13 @@ ai_has_damaged_his_aircraft = Event(
     + event_pos
 ).toStructure(events.AIHasDamagedHisAircraft)
 
+ai_aircraft_has_crashed = Event(
+    event_time
+    + aircraft_victim
+    + " crashed"
+    + event_pos
+).toStructure(events.AIAircraftHasCrashed)
+
 event = (
     mission_is_playing
     | mission_has_begun
@@ -355,4 +362,5 @@ event = (
     | ai_aircraft_has_despawned
     | ai_aircraft_was_damaged_on_ground
     | ai_has_damaged_his_aircraft
+    | ai_aircraft_has_crashed
 )
