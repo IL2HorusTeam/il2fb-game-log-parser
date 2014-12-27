@@ -5,13 +5,13 @@ from pyparsing import Combine, LineEnd, Regex, QuotedString
 from ..structures import events
 from .converters import to_int
 from .helpers import (
-    aircraft, aircraft_aggressor, aircraft_victim, ai_aircraft_crew_member,
-    ai_aircraft_crew_member_victim, belligerent, bridge_victim,
-    building_victim, callsign, event_date_time, event_pos, event_time,
-    human_aircraft_actor, human_aircraft_aggressor, human_aircraft_victim,
-    human_aircraft_crew_member, human_aircraft_crew_member_victim,
-    static_aggressor, static_victim, target_end_state, toggle_value, tree,
-    by_himself,
+    ai_aircraft, ai_aircraft_aggressor, ai_aircraft_victim,
+    ai_aircraft_crew_member, ai_aircraft_crew_member_victim, belligerent,
+    bridge_victim, building_victim, callsign, event_date_time, event_pos,
+    event_time, human_aircraft_actor, human_aircraft_aggressor,
+    human_aircraft_victim, human_aircraft_crew_member,
+    human_aircraft_crew_member_victim, static_aggressor, static_victim,
+    target_end_state, toggle_value, tree, by_himself,
 )
 from .primitives import space, number
 
@@ -292,29 +292,29 @@ bridge_was_destroyed_by_human_aircraft = Event(
 
 ai_aircraft_has_despawned = Event(
     event_time
-    + aircraft
+    + ai_aircraft
     + " removed"
     + event_pos
 ).toStructure(events.AIAircraftHasDespawned)
 
 ai_aircraft_was_damaged_on_ground = Event(
     event_time
-    + aircraft_victim
+    + ai_aircraft_victim
     + " damaged on the ground"
     + event_pos
 ).toStructure(events.AIAircraftWasDamagedOnGround)
 
 ai_aircraft_was_damaged_by_ai_aircraft = Event(
     event_time
-    + aircraft_victim
+    + ai_aircraft_victim
     + " damaged by "
-    + aircraft_aggressor
+    + ai_aircraft_aggressor
     + event_pos
 ).toStructure(events.AIAircraftWasDamagedByAIAircraft)
 
 ai_has_damaged_his_aircraft = Event(
     event_time
-    + aircraft_victim
+    + ai_aircraft_victim
     + " damaged"
     + by_himself
     + event_pos
@@ -322,7 +322,7 @@ ai_has_damaged_his_aircraft = Event(
 
 ai_has_destroyed_his_aircraft = Event(
     event_time
-    + aircraft_victim
+    + ai_aircraft_victim
     + " shot down"
     + by_himself
     + event_pos
@@ -330,14 +330,14 @@ ai_has_destroyed_his_aircraft = Event(
 
 ai_aircraft_has_crashed = Event(
     event_time
-    + aircraft_victim
+    + ai_aircraft_victim
     + " crashed"
     + event_pos
 ).toStructure(events.AIAircraftHasCrashed)
 
 ai_aircraft_has_landed = Event(
     event_time
-    + aircraft_victim
+    + ai_aircraft_victim
     + " landed"
     + event_pos
 ).toStructure(events.AIAircraftHasLanded)
@@ -353,7 +353,7 @@ ai_aircraft_crew_member_was_killed_in_parachute_by_ai_aircraft = Event(
     event_time
     + ai_aircraft_crew_member_victim
     + " was killed in his chute by "
-    + aircraft_aggressor
+    + ai_aircraft_aggressor
     + event_pos
 ).toStructure(events.AIAircraftCrewMemberWasKilledInParachuteByAIAircraft)
 
@@ -361,7 +361,7 @@ ai_aircraft_crew_member_parachute_was_destroyed_by_ai_aircraft = Event(
     event_time
     + ai_aircraft_crew_member_victim
     + " has chute destroyed by "
-    + aircraft_aggressor
+    + ai_aircraft_aggressor
     + event_pos
 ).toStructure(events.AIAircraftCrewMemberParachuteWasDestroyedByAIAircraft)
 

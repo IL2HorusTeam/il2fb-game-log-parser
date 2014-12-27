@@ -92,8 +92,9 @@ aircraft = Word(
     alphanums + "_-"
 ).setResultsName("aircraft")
 
-aircraft_aggressor = aircraft.setResultsName("aggressor")
-aircraft_victim = aircraft.setResultsName("victim")
+ai_aircraft = aircraft
+ai_aircraft_aggressor = ai_aircraft.setResultsName("aggressor")
+ai_aircraft_victim = ai_aircraft.setResultsName("victim")
 
 # Example: "Pe-8(0)"
 ai_aircraft_crew_member = (
