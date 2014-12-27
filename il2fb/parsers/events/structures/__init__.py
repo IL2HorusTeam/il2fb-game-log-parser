@@ -53,3 +53,15 @@ class HumanCrewMember(HumanAircraft):
     def __repr__(self):
         return ("<Human crew member #{0} at {1}:{2}>"
                 .format(self.seat_number, self.callsign, self.aircraft))
+
+
+class AIAircraftCrewMember(Base):
+    __slots__ = ['aircraft', 'seat_number', ]
+
+    def __init__(self, aircraft, seat_number):
+        self.aircraft = aircraft
+        self.seat_number = seat_number
+
+    def __repr__(self):
+        return "<AI aircraft crew member {0}:{1}>".format(self.callsign,
+                                                          self.aircraft)

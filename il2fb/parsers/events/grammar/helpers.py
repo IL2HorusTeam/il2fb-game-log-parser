@@ -9,7 +9,7 @@ from pyparsing import (
 from ..constants import ToggleValues, TargetEndStates
 from .converters import (
     to_int, to_pos, to_toggle_value, to_belligerent, to_target_end_state,
-    to_human_aircraft, to_human_crew_member,
+    to_human_aircraft, to_human_crew_member, to_ai_aircraft_crew_member,
 )
 from .primitives import (
     space, colon, l_bracket, r_bracket, l_paren, r_paren, number, float_number,
@@ -81,6 +81,11 @@ belligerent = Or([
     CaselessLiteral(x.title()) for x in Belligerents.names()
 ]).setResultsName("belligerent").setParseAction(to_belligerent)
 
+# Example: "(0)"
+seat_number = (
+    l_paren.suppress() + number + r_paren.suppress()
+).setResultsName("seat_number").setParseAction(to_int)
+
 # Example: "Pe-8"
 aircraft = Word(
     alphanums + "_-"
@@ -89,15 +94,18 @@ aircraft = Word(
 aircraft_aggressor = aircraft.setResultsName("aggressor")
 aircraft_victim = aircraft.setResultsName("victim")
 
+# Example: "Pe-8(0)"
+ai_aircraft_crew_member = (
+    WordStart() + aircraft + seat_number + WordEnd()
+).setResultsName("actor").setParseAction(to_ai_aircraft_crew_member)
+
+ai_aircraft_crew_member_aggressor = ai_aircraft_crew_member.setResultsName("aggressor")
+ai_aircraft_crew_member_victim = ai_aircraft_crew_member.setResultsName("victim")
+
 # Example: "=XXX=User0"
 callsign = Word(
     alphanums + "!#%$&)(+*-/.=<>@[]_^{}|~"
 ).setResultsName("callsign")
-
-# Example: "(0)"
-seat_number = (
-    l_paren.suppress() + number + r_paren.suppress()
-).setResultsName("seat_number").setParseAction(to_int)
 
 # Example: "=XXX=User0:Pe-8"
 human_aircraft = (

@@ -7,14 +7,14 @@ from pyparsing import ParseException
 
 from il2fb.parsers.events.constants import TargetEndStates
 from il2fb.parsers.events.grammar.helpers import (
-    aircraft, belligerent, bridge, building, callsign,
+    aircraft, ai_aircraft_crew_member, belligerent, bridge, building, callsign,
     event_date_time, event_pos, event_time, human_aircraft,
     human_aircraft_actor, human_aircraft_aggressor, human_crew_member,
     seat_number, static, target_end_state, toggle_value, tree, by_himself,
 )
 from il2fb.parsers.events.grammar.primitives import space
 from il2fb.parsers.events.structures import (
-    Point2D, HumanAircraft, HumanCrewMember,
+    Point2D, HumanAircraft, HumanCrewMember, AIAircraftCrewMember,
 )
 
 from ..base import BaseTestCase
@@ -44,6 +44,10 @@ class CommonGrammarTestCase(BaseTestCase):
     def test_aircraft(self):
         result = aircraft.parseString("Pe-8").aircraft
         self.assertEqual(result, "Pe-8")
+
+    def test_ai_aircraft_crew_member(self):
+        result = ai_aircraft_crew_member.parseString("Pe-8(0)").actor
+        self.assertEqual(result, AIAircraftCrewMember("Pe-8", 0))
 
     def test_human_aircraft(self):
         result = human_aircraft.parseString("User0:Pe-8")

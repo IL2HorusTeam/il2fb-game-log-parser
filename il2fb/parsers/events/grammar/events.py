@@ -5,7 +5,8 @@ from pyparsing import Combine, LineEnd, Regex, QuotedString
 from ..structures import events
 from .converters import to_int
 from .helpers import (
-    aircraft, aircraft_aggressor, aircraft_victim, belligerent, bridge_victim,
+    aircraft, aircraft_aggressor, aircraft_victim,
+    ai_aircraft_crew_member_victim, belligerent, bridge_victim,
     building_victim, callsign, event_date_time, event_pos, event_time,
     human_aircraft_actor, human_aircraft_aggressor, human_aircraft_victim,
     human_crew_member, human_crew_member_victim, static_aggressor,
