@@ -6,7 +6,8 @@ from il2fb.commons.organization import Belligerents
 
 from il2fb.parsers.events.constants import TargetEndStates
 from il2fb.parsers.events.grammar.events import (
-    ai_aircraft_has_despawned, bridge_was_destroyed_by_human_aircraft,
+    ai_aircraft_has_despawned, ai_aircraft_was_damaged_on_ground,
+    bridge_was_destroyed_by_human_aircraft,
     building_was_destroyed_by_human_aircraft,
     human_aircraft_was_damaged_by_human_aircraft,
     human_aircraft_was_damaged_by_static,
@@ -441,6 +442,15 @@ class EventsGrammarTestCase(BaseTestCase):
         event = self.string_to_event(string, ai_aircraft_has_despawned)
 
         self.assertIsInstance(event, events.AIAircraftHasDespawned)
+        self.assertEqual(event.time, datetime.time(20, 33, 5))
+        self.assertEqual(event.aircraft, "Pe-8")
+        self.assertEqual(event.pos, Point2D(100.0, 200.99))
+
+    def test_ai_aircraft_was_damaged_on_ground(self):
+        string = "[8:33:05 PM] Pe-8 damaged on the ground at 100.0 200.99"
+        event = self.string_to_event(string, ai_aircraft_was_damaged_on_ground)
+
+        self.assertIsInstance(event, events.AIAircraftWasDamagedOnGround)
         self.assertEqual(event.time, datetime.time(20, 33, 5))
         self.assertEqual(event.aircraft, "Pe-8")
         self.assertEqual(event.pos, Point2D(100.0, 200.99))
