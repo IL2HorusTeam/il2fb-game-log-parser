@@ -186,13 +186,18 @@ class EventsGrammarTestCase(BaseTestCase):
         _assert("[8:33:05 PM] User0:Pe-8 damaged by NONAME at 100.0 200.99")
 
     def test_human_has_destroyed_his_aircraft(self):
-        string = "[8:33:05 PM] User0:Pe-8 shot down by landscape at 100.0 200.99"
-        event = self.string_to_event(string, human_has_destroyed_his_aircraft)
 
-        self.assertIsInstance(event, events.HumanHasDestroyedHisAircraft)
-        self.assertEqual(event.time, datetime.time(20, 33, 5))
-        self.assertEqual(event.victim, HumanAircraft("User0", "Pe-8"))
-        self.assertEqual(event.pos, Point2D(100.0, 200.99))
+        def _assert(string):
+            event = self.string_to_event(
+                string, human_has_destroyed_his_aircraft
+            )
+            self.assertIsInstance(event, events.HumanHasDestroyedHisAircraft)
+            self.assertEqual(event.time, datetime.time(20, 33, 5))
+            self.assertEqual(event.victim, HumanAircraft("User0", "Pe-8"))
+            self.assertEqual(event.pos, Point2D(100.0, 200.99))
+
+        _assert("[8:33:05 PM] User0:Pe-8 shot down by landscape at 100.0 200.99")
+        _assert("[8:33:05 PM] User0:Pe-8 shot down by NONAME at 100.0 200.99")
 
     def test_human_aircraft_has_spawned(self):
         string = "[8:33:05 PM] User0:Pe-8 loaded weapons '40fab100' fuel 40%"

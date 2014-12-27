@@ -130,7 +130,8 @@ human_has_damaged_his_aircraft = Event(
 human_has_destroyed_his_aircraft = Event(
     event_time
     + human_aircraft_victim
-    + " shot down by landscape"
+    + " shot down"
+    + by_himself
     + event_pos
 ).toStructure(events.HumanHasDestroyedHisAircraft)
 

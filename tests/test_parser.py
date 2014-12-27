@@ -43,10 +43,6 @@ class ParserTestCase(BaseTestCase):
                 "[8:33:05 PM] Target 4 Failed"
             ),
             (
-                events.HumanHasDestroyedHisAircraft,
-                "[8:33:05 PM] User0:Pe-8 shot down by landscape at 100.0 200.99"
-            ),
-            (
                 events.HumanHasConnected,
                 "[8:33:05 PM] User0 has connected"
             ),
@@ -61,6 +57,14 @@ class ParserTestCase(BaseTestCase):
             (
                 events.HumanHasDamagedHisAircraft,
                 "[8:33:05 PM] User0:Pe-8 damaged by NONAME at 100.0 200.99"
+            ),
+            (
+                events.HumanHasDestroyedHisAircraft,
+                "[8:33:05 PM] User0:Pe-8 shot down by landscape at 100.0 200.99"
+            ),
+            (
+                events.HumanHasDestroyedHisAircraft,
+                "[8:33:05 PM] User0:Pe-8 shot down by NONAME at 100.0 200.99"
             ),
             (
                 events.HumanHasDisconnected,
