@@ -115,14 +115,3 @@ human_crew_member = (
 ).setResultsName("actor").setParseAction(to_human_crew_member)
 
 human_crew_member_victim = human_crew_member.setResultsName("victim")
-
-# Example: " destroyed by User:Pe-8 at 100.0 200.99"
-destroyed_by_human_aircraft = Combine(
-    space
-    + Literal("destroyed")
-    + space
-    + Literal("by")
-    + space
-    + human_aircraft_aggressor
-    + event_pos
-)

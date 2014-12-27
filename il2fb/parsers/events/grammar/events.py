@@ -1,17 +1,17 @@
 # -*- coding: utf-8 -*-
 
-from pyparsing import Combine, LineEnd, Literal, Regex, QuotedString, Or
+from pyparsing import Combine, LineEnd, Regex, QuotedString, Or
 
 from ..structures import events
 from .converters import to_int
 from .helpers import (
     aircraft, belligerent, bridge_victim, building_victim, callsign,
-    destroyed_by_human_aircraft, event_date_time, event_pos, event_time,
-    human_aircraft_actor, human_aircraft_aggressor, human_aircraft_victim,
-    human_crew_member, human_crew_member_victim, static_aggressor,
-    static_victim, target_end_state, toggle_value, tree,
+    event_date_time, event_pos, event_time, human_aircraft_actor,
+    human_aircraft_aggressor, human_aircraft_victim, human_crew_member,
+    human_crew_member_victim, static_aggressor, static_victim,
+    target_end_state, toggle_value, tree,
 )
-from .primitives import colon, space, number
+from .primitives import space, number
 
 
 class Event(Combine):
@@ -21,13 +21,9 @@ class Event(Combine):
         return self.setResultsName("event").setParseAction(to_structure)
 
 
-mission = Literal("Mission")
-
 mission_is_playing = Event(
     event_date_time
-    + mission
-    + colon
-    + space
+    + "Mission: "
     + Regex(r".+\.mis").setResultsName("mission")
     + " is Playing"
     + LineEnd()
@@ -35,35 +31,27 @@ mission_is_playing = Event(
 
 mission_has_begun = Event(
     event_time
-    + mission
-    + space
-    + Literal("BEGIN")
+    + "Mission BEGIN"
     + LineEnd()
 ).toStructure(events.MissionHasBegun)
 
 mission_has_ended = Event(
     event_time
-    + mission
-    + space
-    + Literal("END")
+    + "Mission END"
     + LineEnd(),
 ).toStructure(events.MissionHasEnded)
 
 mission_was_won = Event(
     event_date_time
-    + mission
-    + colon
-    + space
+    + "Mission: "
     + belligerent
-    + space
-    + Literal("WON")
+    + " WON"
     + LineEnd(),
 ).toStructure(events.MissionWasWon)
 
 target_state_has_changed = Event(
     event_time
-    + Literal("Target")
-    + space
+    + "Target "
     + number.setParseAction(to_int).setResultsName("target_index")
     + space
     + target_end_state
@@ -262,13 +250,17 @@ human_crew_member_was_killed_by_human_aircraft = Event(
 building_was_destroyed_by_human_aircraft = Event(
     event_time
     + building_victim
-    + destroyed_by_human_aircraft
+    + " destroyed by "
+    + human_aircraft_aggressor
+    + event_pos
 ).toStructure(events.BuildingWasDestroyedByHumanAircraft)
 
 tree_was_destroyed_by_human_aircraft = Event(
     event_time
     + tree
-    + destroyed_by_human_aircraft
+    + " destroyed by "
+    + human_aircraft_aggressor
+    + event_pos
 ).toStructure(events.TreeWasDestroyedByHumanAircraft)
 
 static_was_destroyed = Event(
@@ -281,14 +273,18 @@ static_was_destroyed = Event(
 static_was_destroyed_by_human_aircraft = Event(
     event_time
     + static_victim
-    + destroyed_by_human_aircraft
+    + " destroyed by "
+    + human_aircraft_aggressor
+    + event_pos
 ).toStructure(events.StaticWasDestroyedByHumanAircraft)
 
 bridge_was_destroyed_by_human_aircraft = Event(
     event_time
     + space
     + bridge_victim
-    + destroyed_by_human_aircraft
+    + " destroyed by "
+    + human_aircraft_aggressor
+    + event_pos
 ).toStructure(events.BridgeWasDestroyedByHumanAircraft)
 
 ai_aircraft_has_despawned = Event(

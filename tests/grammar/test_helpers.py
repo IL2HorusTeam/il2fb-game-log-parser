@@ -8,10 +8,9 @@ from pyparsing import ParseException
 from il2fb.parsers.events.constants import TargetEndStates
 from il2fb.parsers.events.grammar.helpers import (
     aircraft, belligerent, bridge, building, callsign,
-    destroyed_by_human_aircraft, event_date_time, event_pos, event_time,
-    human_aircraft, human_aircraft_actor, human_aircraft_aggressor,
-    human_crew_member, seat_number, static, target_end_state, toggle_value,
-    tree,
+    event_date_time, event_pos, event_time, human_aircraft,
+    human_aircraft_actor, human_aircraft_aggressor, human_crew_member,
+    seat_number, static, target_end_state, toggle_value, tree,
 )
 from il2fb.parsers.events.grammar.primitives import space
 from il2fb.parsers.events.structures import (
@@ -89,13 +88,6 @@ class CommonGrammarTestCase(BaseTestCase):
     def test_bridge(self):
         result = bridge.parseString("Bridge0").bridge
         self.assertEqual(result, "Bridge0")
-
-    def test_destroyed_by_human_aircraft(self):
-        string = " destroyed by User0:Pe-8 at 100.0 200.99"
-        result = destroyed_by_human_aircraft.parseString(string)
-
-        self.assertEqual(result.aggressor, HumanAircraft("User0", "Pe-8"))
-        self.assertEqual(result.pos, Point2D(100.0, 200.99))
 
     def test_building(self):
         string = "3do/Buildings/Finland/CenterHouse1_w/live.sim"
