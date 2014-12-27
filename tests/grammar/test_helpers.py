@@ -9,12 +9,12 @@ from il2fb.parsers.events.constants import TargetEndStates
 from il2fb.parsers.events.grammar.helpers import (
     aircraft, ai_aircraft_crew_member, belligerent, bridge, building, callsign,
     event_date_time, event_pos, event_time, human_aircraft,
-    human_aircraft_actor, human_aircraft_aggressor, human_crew_member,
+    human_aircraft_actor, human_aircraft_aggressor, human_aircraft_crew_member,
     seat_number, static, target_end_state, toggle_value, tree, by_himself,
 )
 from il2fb.parsers.events.grammar.primitives import space
 from il2fb.parsers.events.structures import (
-    Point2D, HumanAircraft, HumanCrewMember, AIAircraftCrewMember,
+    Point2D, HumanAircraft, HumanAircraftCrewMember, AIAircraftCrewMember,
 )
 
 from ..base import BaseTestCase
@@ -81,9 +81,9 @@ class CommonGrammarTestCase(BaseTestCase):
         result = seat_number.parseString("(0)").seat_number
         self.assertEqual(result, 0)
 
-    def test_human_crew_member(self):
-        result = human_crew_member.parseString("User:Pe-8(0)").actor
-        self.assertEqual(result, HumanCrewMember("User", "Pe-8", 0))
+    def test_human_aircraft_crew_member(self):
+        result = human_aircraft_crew_member.parseString("User:Pe-8(0)").actor
+        self.assertEqual(result, HumanAircraftCrewMember("User", "Pe-8", 0))
 
     def test_static(self):
         result = static.parseString("0_Static").static

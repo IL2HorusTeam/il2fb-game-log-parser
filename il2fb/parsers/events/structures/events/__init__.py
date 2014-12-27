@@ -16,11 +16,14 @@ __all__ = (
     'HumanAircraftWasDamagedByHumanAircraft',
     'HumanAircraftWasDamagedByStatic', 'HumanAircraftWasDamagedOnGround',
     'HumanAircraftWasShotDownByHumanAircraft',
-    'HumanAircraftWasShotDownByStatic', 'HumanCrewMemberHasBailedOut',
-    'HumanCrewMemberHasTouchedDown', 'HumanCrewMemberWasCaptured',
-    'HumanCrewMemberWasHeavilyWounded', 'HumanCrewMemberWasKilled',
-    'HumanCrewMemberWasKilledByHumanAircraft', 'HumanCrewMemberWasWounded',
-    'HumanHasChangedSeat', 'HumanHasDestroyedHisAircraft', 'HumanHasConnected',
+    'HumanAircraftWasShotDownByStatic', 'HumanAircraftCrewMemberHasBailedOut',
+    'HumanAircraftCrewMemberHasTouchedDown',
+    'HumanAircraftCrewMemberWasCaptured',
+    'HumanAircraftCrewMemberWasHeavilyWounded',
+    'HumanAircraftCrewMemberWasKilled',
+    'HumanAircraftCrewMemberWasKilledByHumanAircraft',
+    'HumanAircraftCrewMemberWasWounded', 'HumanHasChangedSeat',
+    'HumanHasDestroyedHisAircraft', 'HumanHasConnected',
     'HumanAircraftHasCrashed', 'HumanHasDamagedHisAircraft',
     'HumanHasDisconnected', 'HumanAircraftHasLanded',
     'HumanHasSelectedAirfield', 'HumanAircraftHasSpawned',
@@ -323,7 +326,7 @@ class HumanAircraftWasShotDownByStatic(EventWithTime,
     verbose_name = _("Human aircraft was shot down by static")
 
 
-class HumanCrewMemberHasBailedOut(EventWithTime,
+class HumanAircraftCrewMemberHasBailedOut(EventWithTime,
                                   EventWithActor,
                                   EventWithPos,
                                   Event):
@@ -332,10 +335,10 @@ class HumanCrewMemberHasBailedOut(EventWithTime,
 
         "[8:33:05 PM] User0:Pe-8(0) bailed out at 100.0 200.99"
     """
-    verbose_name = _("Human crew member has bailed out")
+    verbose_name = _("Human aircraft crew member has bailed out")
 
 
-class HumanCrewMemberHasTouchedDown(EventWithTime,
+class HumanAircraftCrewMemberHasTouchedDown(EventWithTime,
                                     EventWithActor,
                                     EventWithPos,
                                     Event):
@@ -344,10 +347,10 @@ class HumanCrewMemberHasTouchedDown(EventWithTime,
 
         "[8:33:05 PM] User0:Pe-8(0) successfully bailed out at 100.0 200.99"
     """
-    verbose_name = _("Human crew member has touched down")
+    verbose_name = _("Human aircraft crew member has touched down")
 
 
-class HumanCrewMemberWasCaptured(EventWithTime,
+class HumanAircraftCrewMemberWasCaptured(EventWithTime,
                                  EventWithVictim,
                                  EventWithPos,
                                  Event):
@@ -356,10 +359,10 @@ class HumanCrewMemberWasCaptured(EventWithTime,
 
         "[8:33:05 PM] User0:Pe-8(0) was captured at 100.0 200.99"
     """
-    verbose_name = _("Human crew member was captured")
+    verbose_name = _("Human aircraft crew member was captured")
 
 
-class HumanCrewMemberWasWounded(EventWithTime,
+class HumanAircraftCrewMemberWasWounded(EventWithTime,
                                 EventWithVictim,
                                 EventWithPos,
                                 Event):
@@ -368,10 +371,10 @@ class HumanCrewMemberWasWounded(EventWithTime,
 
         "[8:33:05 PM] User0:Pe-8(0) was wounded at 100.0 200.99"
     """
-    verbose_name = _("Human crew member was wounded")
+    verbose_name = _("Human aircraft crew member was wounded")
 
 
-class HumanCrewMemberWasHeavilyWounded(EventWithTime,
+class HumanAircraftCrewMemberWasHeavilyWounded(EventWithTime,
                                        EventWithVictim,
                                        EventWithPos,
                                        Event):
@@ -380,10 +383,10 @@ class HumanCrewMemberWasHeavilyWounded(EventWithTime,
 
         "[8:33:05 PM] User0:Pe-8(0) was heavily wounded at 100.0 200.99"
     """
-    verbose_name = _("Human crew member was heavily wounded")
+    verbose_name = _("Human aircraft crew member was heavily wounded")
 
 
-class HumanCrewMemberWasKilled(EventWithTime,
+class HumanAircraftCrewMemberWasKilled(EventWithTime,
                                EventWithVictim,
                                EventWithPos,
                                Event):
@@ -392,10 +395,10 @@ class HumanCrewMemberWasKilled(EventWithTime,
 
         "[8:33:05 PM] User0:Pe-8(0) was killed at 100.0 200.99"
     """
-    verbose_name = _("Human crew member was killed")
+    verbose_name = _("Human aircraft crew member was killed")
 
 
-class HumanCrewMemberWasKilledByHumanAircraft(EventWithTime,
+class HumanAircraftCrewMemberWasKilledByHumanAircraft(EventWithTime,
                                               EventWithVictim,
                                               EventWithAggressor,
                                               EventWithPos,
@@ -405,7 +408,7 @@ class HumanCrewMemberWasKilledByHumanAircraft(EventWithTime,
 
         "[8:33:05 PM] User0:Pe-8(0) was killed by User1:Bf-109G-6_Late at 100.0 200.99"
     """
-    verbose_name = _("Human crew member was killed by human aircraft")
+    verbose_name = _("Human aircraft crew member was killed by human aircraft")
 
 
 class BuildingWasDestroyedByHumanAircraft(EventWithTime,

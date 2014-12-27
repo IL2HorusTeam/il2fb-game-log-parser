@@ -127,31 +127,31 @@ class ParserTestCase(BaseTestCase):
                 "[8:33:05 PM] User0:Pe-8 turned wingtip smokes on at 100.0 200.99"
             ),
             (
-                events.HumanCrewMemberHasBailedOut,
+                events.HumanAircraftCrewMemberHasBailedOut,
                 "[8:33:05 PM] User0:Pe-8(0) bailed out at 100.0 200.99"
             ),
             (
-                events.HumanCrewMemberHasTouchedDown,
+                events.HumanAircraftCrewMemberHasTouchedDown,
                 "[8:33:05 PM] User0:Pe-8(0) successfully bailed out at 100.0 200.99"
             ),
             (
-                events.HumanCrewMemberWasCaptured,
+                events.HumanAircraftCrewMemberWasCaptured,
                 "[8:33:05 PM] User0:Pe-8(0) was captured at 100.0 200.99"
             ),
             (
-                events.HumanCrewMemberWasHeavilyWounded,
+                events.HumanAircraftCrewMemberWasHeavilyWounded,
                 "[8:33:05 PM] User0:Pe-8(0) was heavily wounded at 100.0 200.99"
             ),
             (
-                events.HumanCrewMemberWasKilled,
+                events.HumanAircraftCrewMemberWasKilled,
                 "[8:33:05 PM] User0:Pe-8(0) was killed at 100.0 200.99"
             ),
             (
-                events.HumanCrewMemberWasKilledByHumanAircraft,
+                events.HumanAircraftCrewMemberWasKilledByHumanAircraft,
                 "[8:33:05 PM] User0:Pe-8(0) was killed by User1:Bf-109G-6_Late at 100.0 200.99"
             ),
             (
-                events.HumanCrewMemberWasWounded,
+                events.HumanAircraftCrewMemberWasWounded,
                 "[8:33:05 PM] User0:Pe-8(0) was wounded at 100.0 200.99"
             ),
             (

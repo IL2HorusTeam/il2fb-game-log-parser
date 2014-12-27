@@ -9,8 +9,9 @@ from .helpers import (
     ai_aircraft_crew_member_victim, belligerent, bridge_victim,
     building_victim, callsign, event_date_time, event_pos, event_time,
     human_aircraft_actor, human_aircraft_aggressor, human_aircraft_victim,
-    human_crew_member, human_crew_member_victim, static_aggressor,
-    static_victim, target_end_state, toggle_value, tree, by_himself,
+    human_aircraft_crew_member, human_aircraft_crew_member_victim,
+    static_aggressor, static_victim, target_end_state, toggle_value, tree,
+    by_himself,
 )
 from .primitives import space, number
 
@@ -193,61 +194,61 @@ human_has_toggled_wingtip_smokes = Event(
 
 human_has_changed_seat = Event(
     event_time
-    + human_crew_member
+    + human_aircraft_crew_member
     + " seat occupied by "
     + callsign.suppress()
     + event_pos
 ).toStructure(events.HumanHasChangedSeat)
 
-human_crew_member_has_bailed_out = Event(
+human_aircraft_crew_member_has_bailed_out = Event(
     event_time
-    + human_crew_member
+    + human_aircraft_crew_member
     + " bailed out"
     + event_pos
-).toStructure(events.HumanCrewMemberHasBailedOut)
+).toStructure(events.HumanAircraftCrewMemberHasBailedOut)
 
-human_crew_member_has_touched_down = Event(
+human_aircraft_crew_member_has_touched_down = Event(
     event_time
-    + human_crew_member
+    + human_aircraft_crew_member
     + " successfully bailed out"
     + event_pos
-).toStructure(events.HumanCrewMemberHasTouchedDown)
+).toStructure(events.HumanAircraftCrewMemberHasTouchedDown)
 
-human_crew_member_was_captured = Event(
+human_aircraft_crew_member_was_captured = Event(
     event_time
-    + human_crew_member_victim
+    + human_aircraft_crew_member_victim
     + " was captured"
     + event_pos
-).toStructure(events.HumanCrewMemberWasCaptured)
+).toStructure(events.HumanAircraftCrewMemberWasCaptured)
 
-human_crew_member_was_wounded = Event(
+human_aircraft_crew_member_was_wounded = Event(
     event_time
-    + human_crew_member_victim
+    + human_aircraft_crew_member_victim
     + " was wounded"
     + event_pos
-).toStructure(events.HumanCrewMemberWasWounded)
+).toStructure(events.HumanAircraftCrewMemberWasWounded)
 
-human_crew_member_was_heavily_wounded = Event(
+human_aircraft_crew_member_was_heavily_wounded = Event(
     event_time
-    + human_crew_member_victim
+    + human_aircraft_crew_member_victim
     + " was heavily wounded"
     + event_pos
-).toStructure(events.HumanCrewMemberWasHeavilyWounded)
+).toStructure(events.HumanAircraftCrewMemberWasHeavilyWounded)
 
-human_crew_member_was_killed = Event(
+human_aircraft_crew_member_was_killed = Event(
     event_time
-    + human_crew_member_victim
+    + human_aircraft_crew_member_victim
     + " was killed"
     + event_pos
-).toStructure(events.HumanCrewMemberWasKilled)
+).toStructure(events.HumanAircraftCrewMemberWasKilled)
 
-human_crew_member_was_killed_by_human_aircraft = Event(
+human_aircraft_crew_member_was_killed_by_human_aircraft = Event(
     event_time
-    + human_crew_member_victim
+    + human_aircraft_crew_member_victim
     + " was killed by "
     + human_aircraft_aggressor
     + event_pos
-).toStructure(events.HumanCrewMemberWasKilledByHumanAircraft)
+).toStructure(events.HumanAircraftCrewMemberWasKilledByHumanAircraft)
 
 building_was_destroyed_by_human_aircraft = Event(
     event_time
@@ -342,12 +343,14 @@ ai_aircraft_has_landed = Event(
 ).toStructure(events.AIAircraftHasLanded)
 
 event = (
+    # Mission-related events --------------------------------------------------
     mission_is_playing
     | mission_has_begun
     | mission_has_ended
     | mission_was_won
     | target_state_has_changed
 
+    # Human-related events ----------------------------------------------------
     | human_has_connected
     | human_has_disconnected
     | human_has_selected_airfield
@@ -368,14 +371,15 @@ event = (
     | human_aircraft_was_shot_down_by_human_aircraft
     | human_aircraft_was_shot_down_by_static
 
-    | human_crew_member_has_bailed_out
-    | human_crew_member_has_touched_down
-    | human_crew_member_was_captured
-    | human_crew_member_was_heavily_wounded
-    | human_crew_member_was_killed
-    | human_crew_member_was_killed_by_human_aircraft
-    | human_crew_member_was_wounded
+    | human_aircraft_crew_member_has_bailed_out
+    | human_aircraft_crew_member_has_touched_down
+    | human_aircraft_crew_member_was_captured
+    | human_aircraft_crew_member_was_heavily_wounded
+    | human_aircraft_crew_member_was_killed
+    | human_aircraft_crew_member_was_killed_by_human_aircraft
+    | human_aircraft_crew_member_was_wounded
 
+    # Objects-related events --------------------------------------------------
     | static_was_destroyed
     | static_was_destroyed_by_human_aircraft
 
@@ -383,8 +387,10 @@ event = (
     | bridge_was_destroyed_by_human_aircraft
     | tree_was_destroyed_by_human_aircraft
 
+    # AI-related events -------------------------------------------------------
     | ai_has_damaged_his_aircraft
     | ai_has_destroyed_his_aircraft
+
     | ai_aircraft_has_crashed
     | ai_aircraft_has_despawned
     | ai_aircraft_has_landed

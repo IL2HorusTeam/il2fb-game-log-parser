@@ -8,7 +8,7 @@ from ..constants import (
     LOG_TIME_FORMAT, LOG_DATE_FORMAT, ToggleValues, TargetEndStates,
 )
 from ..structures import (
-    Point2D, HumanAircraft, HumanCrewMember, AIAircraftCrewMember,
+    Point2D, HumanAircraft, HumanAircraftCrewMember, AIAircraftCrewMember,
 )
 
 
@@ -50,10 +50,10 @@ def to_human_aircraft(tokens):
     return HumanAircraft(tokens.callsign, tokens.aircraft)
 
 
-def to_human_crew_member(tokens):
-    return HumanCrewMember(tokens.callsign,
-                           tokens.aircraft,
-                           tokens.seat_number)
+def to_human_aircraft_crew_member(tokens):
+    return HumanAircraftCrewMember(tokens.callsign,
+                                   tokens.aircraft,
+                                   tokens.seat_number)
 
 
 def to_ai_aircraft_crew_member(tokens):

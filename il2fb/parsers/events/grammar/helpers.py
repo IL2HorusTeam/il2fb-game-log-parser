@@ -9,7 +9,8 @@ from pyparsing import (
 from ..constants import ToggleValues, TargetEndStates
 from .converters import (
     to_int, to_pos, to_toggle_value, to_belligerent, to_target_end_state,
-    to_human_aircraft, to_human_crew_member, to_ai_aircraft_crew_member,
+    to_human_aircraft, to_human_aircraft_crew_member,
+    to_ai_aircraft_crew_member,
 )
 from .primitives import (
     space, colon, l_bracket, r_bracket, l_paren, r_paren, number, float_number,
@@ -99,8 +100,10 @@ ai_aircraft_crew_member = (
     WordStart() + aircraft + seat_number + WordEnd()
 ).setResultsName("actor").setParseAction(to_ai_aircraft_crew_member)
 
-ai_aircraft_crew_member_aggressor = ai_aircraft_crew_member.setResultsName("aggressor")
-ai_aircraft_crew_member_victim = ai_aircraft_crew_member.setResultsName("victim")
+ai_aircraft_crew_member_victim = (
+    ai_aircraft_crew_member
+    .setResultsName("victim")
+)
 
 # Example: "=XXX=User0"
 callsign = Word(
@@ -121,10 +124,13 @@ human_aircraft_aggressor = human_aircraft_actor.setResultsName("aggressor")
 human_aircraft_victim = human_aircraft_actor.setResultsName("victim")
 
 # Example: "User:Pe-8(0)"
-human_crew_member = (
+human_aircraft_crew_member = (
     WordStart() + human_aircraft + seat_number + WordEnd()
-).setResultsName("actor").setParseAction(to_human_crew_member)
+).setResultsName("actor").setParseAction(to_human_aircraft_crew_member)
 
-human_crew_member_victim = human_crew_member.setResultsName("victim")
+human_aircraft_crew_member_victim = (
+    human_aircraft_crew_member
+    .setResultsName("victim")
+)
 
 by_himself = space + Literal("by") + space + Or(["landscape", "NONAME"])

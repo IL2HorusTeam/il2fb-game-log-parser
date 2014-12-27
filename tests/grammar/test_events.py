@@ -16,11 +16,14 @@ from il2fb.parsers.events.grammar.events import (
     human_aircraft_was_damaged_by_static,
     human_aircraft_was_damaged_on_ground,
     human_aircraft_was_shot_down_by_human_aircraft,
-    human_aircraft_was_shot_down_by_static, human_crew_member_has_bailed_out,
-    human_crew_member_has_touched_down, human_crew_member_was_captured,
-    human_crew_member_was_heavily_wounded, human_crew_member_was_killed,
-    human_crew_member_was_killed_by_human_aircraft,
-    human_crew_member_was_wounded, human_has_changed_seat,
+    human_aircraft_was_shot_down_by_static,
+    human_aircraft_crew_member_has_bailed_out,
+    human_aircraft_crew_member_has_touched_down,
+    human_aircraft_crew_member_was_captured,
+    human_aircraft_crew_member_was_heavily_wounded,
+    human_aircraft_crew_member_was_killed,
+    human_aircraft_crew_member_was_killed_by_human_aircraft,
+    human_aircraft_crew_member_was_wounded, human_has_changed_seat,
     human_has_destroyed_his_aircraft, human_has_connected,
     human_aircraft_has_crashed, human_has_damaged_his_aircraft,
     human_has_disconnected, human_aircraft_has_landed,
@@ -32,7 +35,7 @@ from il2fb.parsers.events.grammar.events import (
     target_state_has_changed, tree_was_destroyed_by_human_aircraft,
 )
 from il2fb.parsers.events.structures import (
-    Point2D, HumanAircraft, HumanCrewMember,
+    Point2D, HumanAircraft, HumanAircraftCrewMember,
 )
 from il2fb.parsers.events.structures import events
 
@@ -170,7 +173,9 @@ class EventsGrammarTestCase(BaseTestCase):
 
         self.assertIsInstance(event, events.HumanHasChangedSeat)
         self.assertEqual(event.time, datetime.time(20, 33, 5))
-        self.assertEqual(event.actor, HumanCrewMember("User0", "Pe-8", 0))
+        self.assertEqual(
+            event.actor, HumanAircraftCrewMember("User0", "Pe-8", 0)
+        )
         self.assertEqual(event.pos, Point2D(100.0, 200.99))
 
     def test_human_has_damaged_his_aircraft(self):
@@ -260,7 +265,9 @@ class EventsGrammarTestCase(BaseTestCase):
         )
         self.assertEqual(event.time, datetime.time(20, 33, 5))
         self.assertEqual(event.victim, HumanAircraft("User0", "Pe-8"))
-        self.assertEqual(event.aggressor, HumanAircraft("User1", "Bf-109G-6_Late"))
+        self.assertEqual(
+            event.aggressor, HumanAircraft("User1", "Bf-109G-6_Late")
+        )
         self.assertEqual(event.pos, Point2D(100.0, 200.99))
 
     def test_human_aircraft_was_damaged_by_static(self):
@@ -305,76 +312,106 @@ class EventsGrammarTestCase(BaseTestCase):
         self.assertEqual(event.aggressor, "0_Static")
         self.assertEqual(event.pos, Point2D(100.0, 200.99))
 
-    def test_human_crew_member_has_bailed_out(self):
+    def test_human_aircraft_crew_member_has_bailed_out(self):
         string = "[8:33:05 PM] User0:Pe-8(0) bailed out at 100.0 200.99"
-        event = self.string_to_event(string, human_crew_member_has_bailed_out)
-
-        self.assertIsInstance(event, events.HumanCrewMemberHasBailedOut)
-        self.assertEqual(event.time, datetime.time(20, 33, 5))
-        self.assertEqual(event.actor, HumanCrewMember("User0", "Pe-8", 0))
-        self.assertEqual(event.pos, Point2D(100.0, 200.99))
-
-    def test_human_crew_member_has_touched_down(self):
-        string = "[8:33:05 PM] User0:Pe-8(0) successfully bailed out at 100.0 200.99"
         event = self.string_to_event(
-            string, human_crew_member_has_touched_down
-        )
-
-        self.assertIsInstance(event, events.HumanCrewMemberHasTouchedDown)
-        self.assertEqual(event.time, datetime.time(20, 33, 5))
-        self.assertEqual(event.actor, HumanCrewMember("User0", "Pe-8", 0))
-        self.assertEqual(event.pos, Point2D(100.0, 200.99))
-
-    def test_human_crew_member_was_captured(self):
-        string = "[8:33:05 PM] User0:Pe-8(0) was captured at 100.0 200.99"
-        event = self.string_to_event(string, human_crew_member_was_captured)
-
-        self.assertIsInstance(event, events.HumanCrewMemberWasCaptured)
-        self.assertEqual(event.time, datetime.time(20, 33, 5))
-        self.assertEqual(event.victim, HumanCrewMember("User0", "Pe-8", 0))
-        self.assertEqual(event.pos, Point2D(100.0, 200.99))
-
-    def test_human_crew_member_was_wounded(self):
-        string = "[8:33:05 PM] User0:Pe-8(0) was wounded at 100.0 200.99"
-        event = self.string_to_event(string, human_crew_member_was_wounded)
-
-        self.assertIsInstance(event, events.HumanCrewMemberWasWounded)
-        self.assertEqual(event.time, datetime.time(20, 33, 5))
-        self.assertEqual(event.victim, HumanCrewMember("User0", "Pe-8", 0))
-        self.assertEqual(event.pos, Point2D(100.0, 200.99))
-
-    def test_human_crew_member_was_heavily_wounded(self):
-        string = "[8:33:05 PM] User0:Pe-8(0) was heavily wounded at 100.0 200.99"
-        event = self.string_to_event(
-            string, human_crew_member_was_heavily_wounded
-        )
-
-        self.assertIsInstance(event, events.HumanCrewMemberWasHeavilyWounded)
-        self.assertEqual(event.time, datetime.time(20, 33, 5))
-        self.assertEqual(event.victim, HumanCrewMember("User0", "Pe-8", 0))
-        self.assertEqual(event.pos, Point2D(100.0, 200.99))
-
-    def test_human_crew_member_was_killed(self):
-        string = "[8:33:05 PM] User0:Pe-8(0) was killed at 100.0 200.99"
-        event = self.string_to_event(string, human_crew_member_was_killed)
-
-        self.assertIsInstance(event, events.HumanCrewMemberWasKilled)
-        self.assertEqual(event.time, datetime.time(20, 33, 5))
-        self.assertEqual(event.victim, HumanCrewMember("User0", "Pe-8", 0))
-        self.assertEqual(event.pos, Point2D(100.0, 200.99))
-
-    def test_human_crew_member_was_killed_by_human_aircraft(self):
-        string = "[8:33:05 PM] User0:Pe-8(0) was killed by User1:Bf-109G-6_Late at 100.0 200.99"
-        event = self.string_to_event(
-            string, human_crew_member_was_killed_by_human_aircraft
+            string, human_aircraft_crew_member_has_bailed_out
         )
 
         self.assertIsInstance(
-            event, events.HumanCrewMemberWasKilledByHumanAircraft
+            event, events.HumanAircraftCrewMemberHasBailedOut
         )
         self.assertEqual(event.time, datetime.time(20, 33, 5))
-        self.assertEqual(event.victim, HumanCrewMember("User0", "Pe-8", 0))
-        self.assertEqual(event.aggressor, HumanAircraft("User1", "Bf-109G-6_Late"))
+        self.assertEqual(
+            event.actor, HumanAircraftCrewMember("User0", "Pe-8", 0)
+        )
+        self.assertEqual(event.pos, Point2D(100.0, 200.99))
+
+    def test_human_aircraft_crew_member_has_touched_down(self):
+        string = "[8:33:05 PM] User0:Pe-8(0) successfully bailed out at 100.0 200.99"
+        event = self.string_to_event(
+            string, human_aircraft_crew_member_has_touched_down
+        )
+
+        self.assertIsInstance(
+            event, events.HumanAircraftCrewMemberHasTouchedDown
+        )
+        self.assertEqual(event.time, datetime.time(20, 33, 5))
+        self.assertEqual(
+            event.actor, HumanAircraftCrewMember("User0", "Pe-8", 0)
+        )
+        self.assertEqual(event.pos, Point2D(100.0, 200.99))
+
+    def test_human_aircraft_crew_member_was_captured(self):
+        string = "[8:33:05 PM] User0:Pe-8(0) was captured at 100.0 200.99"
+        event = self.string_to_event(
+            string, human_aircraft_crew_member_was_captured
+        )
+
+        self.assertIsInstance(event, events.HumanAircraftCrewMemberWasCaptured)
+        self.assertEqual(event.time, datetime.time(20, 33, 5))
+        self.assertEqual(
+            event.victim, HumanAircraftCrewMember("User0", "Pe-8", 0)
+        )
+        self.assertEqual(event.pos, Point2D(100.0, 200.99))
+
+    def test_human_aircraft_crew_member_was_wounded(self):
+        string = "[8:33:05 PM] User0:Pe-8(0) was wounded at 100.0 200.99"
+        event = self.string_to_event(
+            string, human_aircraft_crew_member_was_wounded
+        )
+
+        self.assertIsInstance(event, events.HumanAircraftCrewMemberWasWounded)
+        self.assertEqual(event.time, datetime.time(20, 33, 5))
+        self.assertEqual(
+            event.victim, HumanAircraftCrewMember("User0", "Pe-8", 0)
+        )
+        self.assertEqual(event.pos, Point2D(100.0, 200.99))
+
+    def test_human_aircraft_crew_member_was_heavily_wounded(self):
+        string = "[8:33:05 PM] User0:Pe-8(0) was heavily wounded at 100.0 200.99"
+        event = self.string_to_event(
+            string, human_aircraft_crew_member_was_heavily_wounded
+        )
+
+        self.assertIsInstance(
+            event, events.HumanAircraftCrewMemberWasHeavilyWounded
+        )
+        self.assertEqual(event.time, datetime.time(20, 33, 5))
+        self.assertEqual(
+            event.victim, HumanAircraftCrewMember("User0", "Pe-8", 0)
+        )
+        self.assertEqual(event.pos, Point2D(100.0, 200.99))
+
+    def test_human_aircraft_crew_member_was_killed(self):
+        string = "[8:33:05 PM] User0:Pe-8(0) was killed at 100.0 200.99"
+        event = self.string_to_event(
+            string, human_aircraft_crew_member_was_killed
+        )
+
+        self.assertIsInstance(event, events.HumanAircraftCrewMemberWasKilled)
+        self.assertEqual(event.time, datetime.time(20, 33, 5))
+        self.assertEqual(
+            event.victim, HumanAircraftCrewMember("User0", "Pe-8", 0)
+        )
+        self.assertEqual(event.pos, Point2D(100.0, 200.99))
+
+    def test_human_aircraft_crew_member_was_killed_by_human_aircraft(self):
+        string = "[8:33:05 PM] User0:Pe-8(0) was killed by User1:Bf-109G-6_Late at 100.0 200.99"
+        event = self.string_to_event(
+            string, human_aircraft_crew_member_was_killed_by_human_aircraft
+        )
+
+        self.assertIsInstance(
+            event, events.HumanAircraftCrewMemberWasKilledByHumanAircraft
+        )
+        self.assertEqual(event.time, datetime.time(20, 33, 5))
+        self.assertEqual(
+            event.victim, HumanAircraftCrewMember("User0", "Pe-8", 0)
+        )
+        self.assertEqual(
+            event.aggressor, HumanAircraft("User1", "Bf-109G-6_Late")
+        )
         self.assertEqual(event.pos, Point2D(100.0, 200.99))
 
     def test_building_was_destroyed_by_human_aircraft(self):
