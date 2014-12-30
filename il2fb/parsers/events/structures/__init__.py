@@ -65,3 +65,18 @@ class AIAircraftCrewMember(Base):
     def __repr__(self):
         return "<AI aircraft crew member {0}:{1}>".format(self.aircraft,
                                                           self.seat_number)
+
+
+def serialize(instance):
+    if hasattr(instance, '__slots__'):
+        fields = (
+            (key, getattr(instance, key))
+            for key in instance.__slots__
+        )
+        return {key: serialize(value) for key, value in fields}
+    elif callable(instance):
+        return instance()
+    elif hasattr(instance, 'isoformat'):
+        return instance.isoformat()
+    else:
+        return instance
