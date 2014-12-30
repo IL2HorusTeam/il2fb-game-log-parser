@@ -110,7 +110,7 @@ class TargetStateWasChanged(EventWithTime, Event):
     def __init__(self, **kwargs):
         super(TargetStateWasChanged, self).__init__(**kwargs)
         self.target_index = kwargs['target_index']
-        self.state = kwargs['target_end_state']
+        self.state = kwargs['state']
 
 
 class HumanHasConnected(EventWithTime, EventWithCallsign, Event):

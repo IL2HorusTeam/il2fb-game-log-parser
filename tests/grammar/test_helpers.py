@@ -153,11 +153,11 @@ class BelligerentTestCase(BaseTestCase):
 class TargetEndStateTestCase(BaseTestCase):
 
     def test_target_end_state_is_complete(self):
-        result = target_end_state.parseString("Complete").target_end_state
+        result = target_end_state.parseString("Complete").state
         self.assertEqual(result, TARGET_END_STATES.COMPLETE)
 
     def test_target_end_state_is_failed(self):
-        result = target_end_state.parseString("Failed").target_end_state
+        result = target_end_state.parseString("Failed").state
         self.assertEqual(result, TARGET_END_STATES.FAILED)
 
     def test_target_end_state_is_invalid(self):

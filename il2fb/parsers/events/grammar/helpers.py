@@ -48,7 +48,7 @@ toggle_value = Or([
 # Example: "Complete" or "Failed"
 target_end_state = Or([
     Literal(x) for x in TARGET_END_STATES._asdict().values()
-]).setResultsName("target_end_state")
+]).setResultsName("state")
 
 
 # Example: "3do/Buildings/Finland/CenterHouse1_w/live.sim"
