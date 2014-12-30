@@ -4,9 +4,7 @@ import datetime
 
 from il2fb.commons.organization import Belligerents
 
-from ..constants import (
-    LOG_TIME_FORMAT, LOG_DATE_FORMAT, ToggleValues, TargetEndStates,
-)
+from ..constants import LOG_TIME_FORMAT, LOG_DATE_FORMAT, TOGGLE_VALUES
 from ..structures import (
     Point2D, HumanAircraft, HumanAircraftCrewMember, AIAircraftCrewMember,
 )
@@ -35,15 +33,11 @@ def to_pos(tokens):
 
 
 def to_toggle_value(tokens):
-    return ToggleValues[tokens.toggle_value]
+    return getattr(TOGGLE_VALUES, tokens.value)
 
 
 def to_belligerent(tokens):
     return Belligerents[tokens.belligerent.lower()]
-
-
-def to_target_end_state(tokens):
-    return TargetEndStates.get_by_value(tokens.target_end_state)
 
 
 def to_human_aircraft(tokens):

@@ -21,14 +21,8 @@ EventWithCallsign = mixin_for_attribute('callsign')
 EventWithActor = mixin_for_attribute('actor')
 EventWithVictim = mixin_for_attribute('victim')
 EventWithAggressor = mixin_for_attribute('aggressor')
+EventWithValue = mixin_for_attribute('value')
 
 
 class EventWithDateTime(EventWithDate, EventWithTime):
     pass
-
-
-class EventWithToggleValue(object):
-
-    def __init__(self, **kwargs):
-        super(EventWithToggleValue, self).__init__(**kwargs)
-        self.value = kwargs['toggle_value'].value

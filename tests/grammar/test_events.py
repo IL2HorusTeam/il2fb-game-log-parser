@@ -4,7 +4,7 @@ import datetime
 
 from il2fb.commons.organization import Belligerents
 
-from il2fb.parsers.events.constants import TargetEndStates
+from il2fb.parsers.events.constants import TARGET_END_STATES
 from il2fb.parsers.events.grammar.events import (
     ai_aircraft_has_despawned, ai_aircraft_was_damaged_on_ground,
     ai_aircraft_was_damaged_by_ai_aircraft, ai_has_damaged_his_aircraft,
@@ -95,7 +95,7 @@ class EventsGrammarTestCase(BaseTestCase):
         self.assertIsInstance(event, events.TargetStateWasChanged)
         self.assertEqual(event.time, datetime.time(20, 33, 5))
         self.assertEqual(event.target_index, 3)
-        self.assertEqual(event.state, TargetEndStates.COMPLETE)
+        self.assertEqual(event.state, TARGET_END_STATES.COMPLETE)
 
         string = "[8:33:05 PM] Target 4 Failed"
         event = self.string_to_event(string, testee)
@@ -103,7 +103,7 @@ class EventsGrammarTestCase(BaseTestCase):
         self.assertIsInstance(event, events.TargetStateWasChanged)
         self.assertEqual(event.time, datetime.time(20, 33, 5))
         self.assertEqual(event.target_index, 4)
-        self.assertEqual(event.state, TargetEndStates.FAILED)
+        self.assertEqual(event.state, TARGET_END_STATES.FAILED)
 
     def test_human_has_connected(self):
         string = "[8:33:05 PM] User0 has connected"

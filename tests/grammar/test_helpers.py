@@ -5,7 +5,7 @@ import datetime
 from il2fb.commons.organization import Belligerents
 from pyparsing import ParseException
 
-from il2fb.parsers.events.constants import TargetEndStates
+from il2fb.parsers.events.constants import TARGET_END_STATES
 from il2fb.parsers.events.grammar.helpers import (
     aircraft, ai_aircraft_crew_member, belligerent, bridge, building, callsign,
     event_date_time, event_pos, event_time, human_aircraft,
@@ -123,12 +123,12 @@ class CommonGrammarTestCase(BaseTestCase):
 class ToggleValueTestCase(BaseTestCase):
 
     def test_toggle_value_is_on(self):
-        result = toggle_value.parseString("on").toggle_value
-        self.assertEqual(result.value, True)
+        result = toggle_value.parseString("on").value
+        self.assertEqual(result, True)
 
     def test_toggle_value_is_off(self):
-        result = toggle_value.parseString("off").toggle_value
-        self.assertEqual(result.value, False)
+        result = toggle_value.parseString("off").value
+        self.assertEqual(result, False)
 
     def test_toggle_value_is_invalid(self):
         with self.assertRaises(ParseException):
@@ -154,11 +154,11 @@ class TargetEndStateTestCase(BaseTestCase):
 
     def test_target_end_state_is_complete(self):
         result = target_end_state.parseString("Complete").target_end_state
-        self.assertEqual(result, TargetEndStates.COMPLETE)
+        self.assertEqual(result, TARGET_END_STATES.COMPLETE)
 
     def test_target_end_state_is_failed(self):
         result = target_end_state.parseString("Failed").target_end_state
-        self.assertEqual(result, TargetEndStates.FAILED)
+        self.assertEqual(result, TARGET_END_STATES.FAILED)
 
     def test_target_end_state_is_invalid(self):
         with self.assertRaises(ParseException):

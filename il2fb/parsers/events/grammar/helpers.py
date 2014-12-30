@@ -6,11 +6,10 @@ from pyparsing import (
     WordEnd, alphanums, Suppress, Regex,
 )
 
-from ..constants import ToggleValues, TargetEndStates
+from ..constants import TOGGLE_VALUES, TARGET_END_STATES
 from .converters import (
-    to_int, to_pos, to_toggle_value, to_belligerent, to_target_end_state,
-    to_human_aircraft, to_human_aircraft_crew_member,
-    to_ai_aircraft_crew_member,
+    to_int, to_pos, to_toggle_value, to_belligerent, to_human_aircraft,
+    to_human_aircraft_crew_member, to_ai_aircraft_crew_member,
 )
 from .primitives import (
     space, colon, l_bracket, r_bracket, l_paren, r_paren, number, float_number,
@@ -43,13 +42,13 @@ event_pos = Combine(
 
 # Example: "on" or "off"
 toggle_value = Or([
-    Literal(x) for x in ToggleValues.names()
-]).setResultsName("toggle_value").setParseAction(to_toggle_value)
+    Literal(x) for x in TOGGLE_VALUES._fields
+]).setResultsName("value").setParseAction(to_toggle_value)
 
 # Example: "Complete" or "Failed"
 target_end_state = Or([
-    Literal(x) for x in TargetEndStates.values()
-]).setResultsName("target_end_state").setParseAction(to_target_end_state)
+    Literal(x) for x in TARGET_END_STATES._asdict().values()
+]).setResultsName("target_end_state")
 
 
 # Example: "3do/Buildings/Finland/CenterHouse1_w/live.sim"

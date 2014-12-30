@@ -4,7 +4,7 @@ from il2fb.parsers.events.utils import translations
 
 from .mixins import (
     EventWithTime, EventWithDateTime, EventWithBelligerent, EventWithCallsign,
-    EventWithPos, EventWithActor, EventWithToggleValue, EventWithAggressor,
+    EventWithPos, EventWithActor, EventWithValue, EventWithAggressor,
     EventWithVictim,
 )
 
@@ -155,7 +155,7 @@ class HumanHasSelectedAirfield(EventWithTime,
 
 class HumanHasToggledLandingLights(EventWithTime,
                                    EventWithActor,
-                                   EventWithToggleValue,
+                                   EventWithValue,
                                    EventWithPos,
                                    Event):
     """
@@ -168,7 +168,7 @@ class HumanHasToggledLandingLights(EventWithTime,
 
 class HumanHasToggledWingtipSmokes(EventWithTime,
                                    EventWithActor,
-                                   EventWithToggleValue,
+                                   EventWithValue,
                                    EventWithPos,
                                    Event):
 
