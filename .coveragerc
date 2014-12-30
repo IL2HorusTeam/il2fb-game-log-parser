@@ -1,9 +1,12 @@
 [run]
 source = il2fb.parsers.events
-omit = */tests/*
+omit =
+    */tests/*
+    il2fb/parsers/events/version.py
 
 [report]
 exclude_lines =
     pragma: no cover
     raise NotImplementedError
     pass
+    def __repr__
