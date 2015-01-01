@@ -4,7 +4,8 @@
 #
 #     pip install -r requirements.pip
 
-il2fb-commons>=0.9.8
+candv>=1.2.1
+il2fb-commons>=0.10.0
 pyparsing>=2.0.2
 six>=1.6.1
-verboselib>=0.1.0
+verboselib>=0.2,<0.3

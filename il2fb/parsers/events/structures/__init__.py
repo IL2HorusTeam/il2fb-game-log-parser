@@ -20,6 +20,25 @@ class Base(object):
             getattr(self, x) for x in self.__slots__
         ))
 
+    def to_primitive(self, context=None):
+        fields = ((key, getattr(self, key)) for key in self.__slots__)
+        return {
+            key: self._to_primitive(value, context)
+            for key, value in fields
+        }
+
+    @staticmethod
+    def _to_primitive(instance, context):
+        from candv import SimpleConstant
+        from il2fb.commons.organization import Regiment
+
+        if isinstance(instance, (Base, SimpleConstant, Regiment)):
+            return instance.to_primitive(context)
+        elif hasattr(instance, 'isoformat'):
+            return instance.isoformat()
+        else:
+            return instance
+
 
 class Point2D(Base):
     __slots__ = ['x', 'y', ]
@@ -65,18 +84,3 @@ class AIAircraftCrewMember(Base):
     def __repr__(self):
         return "<AI aircraft crew member {0}:{1}>".format(self.aircraft,
                                                           self.seat_number)
-
-
-def serialize(instance):
-    if hasattr(instance, '__slots__'):
-        fields = (
-            (key, getattr(instance, key))
-            for key in instance.__slots__
-        )
-        return {key: serialize(value) for key, value in fields}
-    elif callable(instance):
-        return instance()
-    elif hasattr(instance, 'isoformat'):
-        return instance.isoformat()
-    else:
-        return instance

@@ -1,5 +1,7 @@
 # -*- coding: utf-8 -*-
 
+import six
+
 from il2fb.parsers.events.utils import translations
 
 from . import Base
@@ -56,6 +58,14 @@ class Event(Base):
     @property
     def verbose_name(self):
         raise NotImplementedError
+
+    def to_primitive(self, context=None):
+        primitive = super(Event, self).to_primitive(context)
+        primitive.update({
+            'name': self.name,
+            'verbose_name': six.text_type(self.verbose_name),
+        })
+        return primitive
 
     def __repr__(self):
         return "<Event '{0}'>".format(self.name)
