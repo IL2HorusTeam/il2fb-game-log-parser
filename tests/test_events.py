@@ -6,44 +6,10 @@ import inspect
 from il2fb.commons.organization import Belligerents
 
 from il2fb.parsers.events.constants import TARGET_END_STATES
-from il2fb.parsers.events.grammar.events import (
-    ai_aircraft_has_despawned, ai_aircraft_was_damaged_on_ground,
-    ai_aircraft_was_damaged_by_ai_aircraft, ai_has_damaged_his_aircraft,
-    ai_has_destroyed_his_aircraft, ai_aircraft_has_crashed,
-    ai_aircraft_has_landed, ai_aircraft_crew_member_was_killed,
-    ai_aircraft_crew_member_was_killed_in_parachute_by_ai_aircraft,
-    ai_aircraft_crew_member_parachute_was_destroyed_by_ai_aircraft,
-    ai_aircraft_crew_member_was_wounded,
-    ai_aircraft_crew_member_was_heavily_wounded,
-    ai_aircraft_crew_member_has_bailed_out,
-    ai_aircraft_crew_member_has_touched_down,
-    bridge_was_destroyed_by_human_aircraft,
-    building_was_destroyed_by_human_aircraft,
-    human_aircraft_was_damaged_by_human_aircraft,
-    human_aircraft_was_damaged_by_static,
-    human_aircraft_was_damaged_on_ground,
-    human_aircraft_was_shot_down_by_human_aircraft,
-    human_aircraft_was_shot_down_by_static,
-    human_aircraft_crew_member_has_bailed_out,
-    human_aircraft_crew_member_has_touched_down,
-    human_aircraft_crew_member_was_captured,
-    human_aircraft_crew_member_was_heavily_wounded,
-    human_aircraft_crew_member_was_killed,
-    human_aircraft_crew_member_was_killed_by_human_aircraft,
-    human_aircraft_crew_member_was_wounded, human_has_changed_seat,
-    human_has_destroyed_his_aircraft, human_has_connected,
-    human_aircraft_has_crashed, human_has_damaged_his_aircraft,
-    human_has_disconnected, human_aircraft_has_landed,
-    human_has_selected_airfield, human_aircraft_has_spawned,
-    human_has_toggled_landing_lights, human_has_toggled_wingtip_smokes,
-    human_aircraft_has_took_off, human_has_went_to_briefing, mission_has_begun,
-    mission_has_ended, mission_is_playing, mission_was_won,
-    static_was_destroyed, static_was_destroyed_by_human_aircraft,
-    target_state_has_changed, tree_was_destroyed_by_human_aircraft,
-)
+from il2fb.parsers.events.grammar import events as grammar
 from il2fb.parsers.events.structures import (
     Point2D, HumanAircraft, HumanAircraftCrewMember, AIAircraftCrewMember,
-    events,
+    events as structures,
 )
 
 from .base import BaseTestCase
@@ -52,27 +18,27 @@ from .base import BaseTestCase
 class EventsTestCase(BaseTestCase):
 
     @staticmethod
-    def string_to_event(string, grammar):
-        return grammar.parseString(string).event
+    def string_to_event(string, event_grammar):
+        return event_grammar.parseString(string).event
 
     def test_structures_defined_in_all(self):
 
         def members_filter(element):
             name, obj = element
             return (inspect.isclass(obj)
-                    and issubclass(obj, events.Event)
-                    and obj is not events.Event)
+                    and issubclass(obj, structures.Event)
+                    and obj is not structures.Event)
 
-        structures = filter(members_filter, inspect.getmembers(events))
+        members = filter(members_filter, inspect.getmembers(structures))
 
-        for name, structure in structures:
-            self.assertIn(name, events.__all__)
+        for name, structure in members:
+            self.assertIn(name, structures.__all__)
 
     def test_mission_is_playing(self):
         string = "[Sep 15, 2013 8:33:05 PM] Mission: path/PH.mis is Playing"
-        event = self.string_to_event(string, mission_is_playing)
+        event = self.string_to_event(string, grammar.mission_is_playing)
 
-        self.assertIsInstance(event, events.MissionIsPlaying)
+        self.assertIsInstance(event, structures.MissionIsPlaying)
         self.assertEqual(event.date, datetime.date(2013, 9, 15))
         self.assertEqual(event.time, datetime.time(20, 33, 5))
         self.assertEqual(event.mission, "path/PH.mis")
@@ -89,9 +55,9 @@ class EventsTestCase(BaseTestCase):
 
     def test_mission_has_begun(self):
         string = "[8:33:05 PM] Mission BEGIN"
-        event = self.string_to_event(string, mission_has_begun)
+        event = self.string_to_event(string, grammar.mission_has_begun)
 
-        self.assertIsInstance(event, events.MissionHasBegun)
+        self.assertIsInstance(event, structures.MissionHasBegun)
         self.assertEqual(event.time, datetime.time(20, 33, 5))
         self.assertEqual(
             event.to_primitive(),
@@ -104,9 +70,9 @@ class EventsTestCase(BaseTestCase):
 
     def test_mission_has_ended(self):
         string = "[8:33:05 PM] Mission END"
-        event = self.string_to_event(string, mission_has_ended)
+        event = self.string_to_event(string, grammar.mission_has_ended)
 
-        self.assertIsInstance(event, events.MissionHasEnded)
+        self.assertIsInstance(event, structures.MissionHasEnded)
         self.assertEqual(event.time, datetime.time(20, 33, 5))
         self.assertEqual(
             event.to_primitive(),
@@ -119,9 +85,9 @@ class EventsTestCase(BaseTestCase):
 
     def test_mission_was_won(self):
         string = "[Sep 15, 2013 8:33:05 PM] Mission: RED WON"
-        event = self.string_to_event(string, mission_was_won)
+        event = self.string_to_event(string, grammar.mission_was_won)
 
-        self.assertIsInstance(event, events.MissionWasWon)
+        self.assertIsInstance(event, structures.MissionWasWon)
         self.assertEqual(event.date, datetime.date(2013, 9, 15))
         self.assertEqual(event.time, datetime.time(20, 33, 5))
         self.assertEqual(event.belligerent, Belligerents.red)
@@ -142,12 +108,12 @@ class EventsTestCase(BaseTestCase):
         )
 
     def test_target_state_has_changed(self):
-        testee = target_state_has_changed
+        testee = grammar.target_state_has_changed
 
         string = "[8:33:05 PM] Target 3 Complete"
         event = self.string_to_event(string, testee)
 
-        self.assertIsInstance(event, events.TargetStateWasChanged)
+        self.assertIsInstance(event, structures.TargetStateWasChanged)
         self.assertEqual(event.time, datetime.time(20, 33, 5))
         self.assertEqual(event.target_index, 3)
         self.assertEqual(event.state, TARGET_END_STATES.COMPLETE)
@@ -165,15 +131,15 @@ class EventsTestCase(BaseTestCase):
         string = "[8:33:05 PM] Target 3 Failed"
         event = self.string_to_event(string, testee)
 
-        self.assertIsInstance(event, events.TargetStateWasChanged)
+        self.assertIsInstance(event, structures.TargetStateWasChanged)
         self.assertEqual(event.state, TARGET_END_STATES.FAILED)
         self.assertEqual(event.to_primitive()['state'], "Failed")
 
     def test_human_has_connected(self):
         string = "[8:33:05 PM] User0 has connected"
-        event = self.string_to_event(string, human_has_connected)
+        event = self.string_to_event(string, grammar.human_has_connected)
 
-        self.assertIsInstance(event, events.HumanHasConnected)
+        self.assertIsInstance(event, structures.HumanHasConnected)
         self.assertEqual(event.time, datetime.time(20, 33, 5))
         self.assertEqual(event.callsign, "User0")
         self.assertEqual(
@@ -188,9 +154,9 @@ class EventsTestCase(BaseTestCase):
 
     def test_human_has_disconnected(self):
         string = "[8:33:05 PM] User0 has disconnected"
-        event = self.string_to_event(string, human_has_disconnected)
+        event = self.string_to_event(string, grammar.human_has_disconnected)
 
-        self.assertIsInstance(event, events.HumanHasDisconnected)
+        self.assertIsInstance(event, structures.HumanHasDisconnected)
         self.assertEqual(event.time, datetime.time(20, 33, 5))
         self.assertEqual(event.callsign, "User0")
         self.assertEqual(
@@ -205,9 +171,12 @@ class EventsTestCase(BaseTestCase):
 
     def test_human_has_selected_airfield(self):
         string = "[8:33:05 PM] User0 selected army Red at 100.0 200.99"
-        event = self.string_to_event(string, human_has_selected_airfield)
+        event = self.string_to_event(
+            string,
+            grammar.human_has_selected_airfield
+        )
 
-        self.assertIsInstance(event, events.HumanHasSelectedAirfield)
+        self.assertIsInstance(event, structures.HumanHasSelectedAirfield)
         self.assertEqual(event.time, datetime.time(20, 33, 5))
         self.assertEqual(event.callsign, "User0")
         self.assertEqual(event.belligerent, Belligerents.red)
@@ -234,9 +203,9 @@ class EventsTestCase(BaseTestCase):
 
     def test_human_has_went_to_briefing(self):
         string = "[8:33:05 PM] User0 entered refly menu"
-        event = self.string_to_event(string, human_has_went_to_briefing)
+        event = self.string_to_event(string, grammar.human_has_went_to_briefing)
 
-        self.assertIsInstance(event, events.HumanHasWentToBriefing)
+        self.assertIsInstance(event, structures.HumanHasWentToBriefing)
         self.assertEqual(event.time, datetime.time(20, 33, 5))
         self.assertEqual(event.callsign, "User0")
         self.assertEqual(
@@ -250,12 +219,12 @@ class EventsTestCase(BaseTestCase):
         )
 
     def test_human_has_toggled_landing_lights(self):
-        testee = human_has_toggled_landing_lights
+        testee = grammar.human_has_toggled_landing_lights
 
         string = "[8:33:05 PM] User0:Pe-8 turned landing lights off at 100.0 200.99"
         event = self.string_to_event(string, testee)
 
-        self.assertIsInstance(event, events.HumanHasToggledLandingLights)
+        self.assertIsInstance(event, structures.HumanHasToggledLandingLights)
         self.assertEqual(event.time, datetime.time(20, 33, 5))
         self.assertEqual(event.actor, HumanAircraft("User0", "Pe-8"))
         self.assertEqual(event.value, False)
@@ -285,12 +254,12 @@ class EventsTestCase(BaseTestCase):
         self.assertEqual(event.to_primitive()['value'], True)
 
     def test_human_has_toggled_wingtip_smokes(self):
-        testee = human_has_toggled_wingtip_smokes
+        testee = grammar.human_has_toggled_wingtip_smokes
 
         string = "[8:33:05 PM] User0:Pe-8 turned wingtip smokes off at 100.0 200.99"
         event = self.string_to_event(string, testee)
 
-        self.assertIsInstance(event, events.HumanHasToggledWingtipSmokes)
+        self.assertIsInstance(event, structures.HumanHasToggledWingtipSmokes)
         self.assertEqual(event.time, datetime.time(20, 33, 5))
         self.assertEqual(event.actor, HumanAircraft("User0", "Pe-8"))
         self.assertEqual(event.value, False)
@@ -321,12 +290,13 @@ class EventsTestCase(BaseTestCase):
 
     def test_human_has_changed_seat(self):
         string = "[8:33:05 PM] User0:Pe-8(0) seat occupied by User0 at 100.0 200.99"
-        event = self.string_to_event(string, human_has_changed_seat)
+        event = self.string_to_event(string, grammar.human_has_changed_seat)
 
-        self.assertIsInstance(event, events.HumanHasChangedSeat)
+        self.assertIsInstance(event, structures.HumanHasChangedSeat)
         self.assertEqual(event.time, datetime.time(20, 33, 5))
         self.assertEqual(
-            event.actor, HumanAircraftCrewMember("User0", "Pe-8", 0)
+            event.actor,
+            HumanAircraftCrewMember("User0", "Pe-8", 0)
         )
         self.assertEqual(event.pos, Point2D(100.0, 200.99))
         self.assertEqual(
@@ -351,9 +321,10 @@ class EventsTestCase(BaseTestCase):
 
         def _assert(string):
             event = self.string_to_event(
-                string, human_has_damaged_his_aircraft
+                string,
+                grammar.human_has_damaged_his_aircraft
             )
-            self.assertIsInstance(event, events.HumanHasDamagedHisAircraft)
+            self.assertIsInstance(event, structures.HumanHasDamagedHisAircraft)
             self.assertEqual(event.time, datetime.time(20, 33, 5))
             self.assertEqual(event.victim, HumanAircraft("User0", "Pe-8"))
             self.assertEqual(event.pos, Point2D(100.0, 200.99))
@@ -381,9 +352,13 @@ class EventsTestCase(BaseTestCase):
 
         def _assert(string):
             event = self.string_to_event(
-                string, human_has_destroyed_his_aircraft
+                string,
+                grammar.human_has_destroyed_his_aircraft
             )
-            self.assertIsInstance(event, events.HumanHasDestroyedHisAircraft)
+            self.assertIsInstance(
+                event,
+                structures.HumanHasDestroyedHisAircraft
+            )
             self.assertEqual(event.time, datetime.time(20, 33, 5))
             self.assertEqual(event.victim, HumanAircraft("User0", "Pe-8"))
             self.assertEqual(event.pos, Point2D(100.0, 200.99))
@@ -409,9 +384,12 @@ class EventsTestCase(BaseTestCase):
 
     def test_human_aircraft_has_spawned(self):
         string = "[8:33:05 PM] User0:Pe-8 loaded weapons '40fab100' fuel 40%"
-        event = self.string_to_event(string, human_aircraft_has_spawned)
+        event = self.string_to_event(
+            string,
+            grammar.human_aircraft_has_spawned
+        )
 
-        self.assertIsInstance(event, events.HumanAircraftHasSpawned)
+        self.assertIsInstance(event, structures.HumanAircraftHasSpawned)
         self.assertEqual(event.time, datetime.time(20, 33, 5))
         self.assertEqual(event.actor, HumanAircraft("User0", "Pe-8"))
         self.assertEqual(event.weapons, "40fab100")
@@ -433,9 +411,12 @@ class EventsTestCase(BaseTestCase):
 
     def test_human_aircraft_has_took_off(self):
         string = "[8:33:05 PM] User0:Pe-8 in flight at 100.0 200.99"
-        event = self.string_to_event(string, human_aircraft_has_took_off)
+        event = self.string_to_event(
+            string,
+            grammar.human_aircraft_has_took_off
+        )
 
-        self.assertIsInstance(event, events.HumanAircraftHasTookOff)
+        self.assertIsInstance(event, structures.HumanAircraftHasTookOff)
         self.assertEqual(event.time, datetime.time(20, 33, 5))
         self.assertEqual(event.actor, HumanAircraft("User0", "Pe-8"))
         self.assertEqual(event.pos, Point2D(100.0, 200.99))
@@ -458,9 +439,9 @@ class EventsTestCase(BaseTestCase):
 
     def test_human_aircraft_has_landed(self):
         string = "[8:33:05 PM] User0:Pe-8 landed at 100.0 200.99"
-        event = self.string_to_event(string, human_aircraft_has_landed)
+        event = self.string_to_event(string, grammar.human_aircraft_has_landed)
 
-        self.assertIsInstance(event, events.HumanAircraftHasLanded)
+        self.assertIsInstance(event, structures.HumanAircraftHasLanded)
         self.assertEqual(event.time, datetime.time(20, 33, 5))
         self.assertEqual(event.actor, HumanAircraft("User0", "Pe-8"))
         self.assertEqual(event.pos, Point2D(100.0, 200.99))
@@ -483,9 +464,11 @@ class EventsTestCase(BaseTestCase):
 
     def test_human_aircraft_has_crashed(self):
         string = "[8:33:05 PM] User0:Pe-8 crashed at 100.0 200.99"
-        event = self.string_to_event(string, human_aircraft_has_crashed)
-
-        self.assertIsInstance(event, events.HumanAircraftHasCrashed)
+        event = self.string_to_event(
+            string,
+            grammar.human_aircraft_has_crashed
+        )
+        self.assertIsInstance(event, structures.HumanAircraftHasCrashed)
         self.assertEqual(event.time, datetime.time(20, 33, 5))
         self.assertEqual(event.victim, HumanAircraft("User0", "Pe-8"))
         self.assertEqual(event.pos, Point2D(100.0, 200.99))
@@ -509,10 +492,13 @@ class EventsTestCase(BaseTestCase):
     def test_human_aircraft_was_damaged_on_ground(self):
         string = "[8:33:05 PM] User0:Pe-8 damaged on the ground at 100.0 200.99"
         event = self.string_to_event(
-            string, human_aircraft_was_damaged_on_ground
+            string,
+            grammar.human_aircraft_was_damaged_on_ground
         )
-
-        self.assertIsInstance(event, events.HumanAircraftWasDamagedOnGround)
+        self.assertIsInstance(
+            event,
+            structures.HumanAircraftWasDamagedOnGround
+        )
         self.assertEqual(event.time, datetime.time(20, 33, 5))
         self.assertEqual(event.victim, HumanAircraft("User0", "Pe-8"))
         self.assertEqual(event.pos, Point2D(100.0, 200.99))
@@ -536,18 +522,21 @@ class EventsTestCase(BaseTestCase):
     def test_human_aircraft_was_damaged_by_human_aircraft(self):
         string = "[8:33:05 PM] User0:Pe-8 damaged by User1:Bf-109G-6_Late at 100.0 200.99"
         event = self.string_to_event(
-            string, human_aircraft_was_damaged_by_human_aircraft
+            string,
+            grammar.human_aircraft_was_damaged_by_human_aircraft
         )
-
         self.assertIsInstance(
-            event, events.HumanAircraftWasDamagedByHumanAircraft
+            event,
+            structures.HumanAircraftWasDamagedByHumanAircraft
         )
         self.assertEqual(event.time, datetime.time(20, 33, 5))
         self.assertEqual(
-            event.victim, HumanAircraft("User0", "Pe-8")
+            event.victim,
+            HumanAircraft("User0", "Pe-8")
         )
         self.assertEqual(
-            event.aggressor, HumanAircraft("User1", "Bf-109G-6_Late")
+            event.aggressor,
+            HumanAircraft("User1", "Bf-109G-6_Late")
         )
         self.assertEqual(event.pos, Point2D(100.0, 200.99))
         self.assertEqual(
@@ -574,10 +563,13 @@ class EventsTestCase(BaseTestCase):
     def test_human_aircraft_was_damaged_by_static(self):
         string = "[8:33:05 PM] User0:Pe-8 damaged by 0_Static at 100.0 200.99"
         event = self.string_to_event(
-            string, human_aircraft_was_damaged_by_static
+            string,
+            grammar.human_aircraft_was_damaged_by_static
         )
-
-        self.assertIsInstance(event, events.HumanAircraftWasDamagedByStatic)
+        self.assertIsInstance(
+            event,
+            structures.HumanAircraftWasDamagedByStatic
+        )
         self.assertEqual(event.time, datetime.time(20, 33, 5))
         self.assertEqual(event.victim, HumanAircraft("User0", "Pe-8"))
         self.assertEqual(event.aggressor, "0_Static")
@@ -603,18 +595,20 @@ class EventsTestCase(BaseTestCase):
     def test_human_aircraft_was_shot_down_by_human_aircraft(self):
         string = "[8:33:05 PM] User0:Pe-8 shot down by User1:Bf-109G-6_Late at 100.0 200.99"
         event = self.string_to_event(
-            string, human_aircraft_was_shot_down_by_human_aircraft
+            string,
+            grammar.human_aircraft_was_shot_down_by_human_aircraft
         )
-
         self.assertIsInstance(
-            event, events.HumanAircraftWasShotDownByHumanAircraft
+            event,
+            structures.HumanAircraftWasShotDownByHumanAircraft
         )
         self.assertEqual(event.time, datetime.time(20, 33, 5))
         self.assertEqual(
             event.victim, HumanAircraft("User0", "Pe-8")
         )
         self.assertEqual(
-            event.aggressor, HumanAircraft("User1", "Bf-109G-6_Late")
+            event.aggressor,
+            HumanAircraft("User1", "Bf-109G-6_Late")
         )
         self.assertEqual(event.pos, Point2D(100.0, 200.99))
         self.assertEqual(
@@ -641,9 +635,13 @@ class EventsTestCase(BaseTestCase):
     def test_human_aircraft_was_shot_down_by_static(self):
         string = "[8:33:05 PM] User0:Pe-8 shot down by 0_Static at 100.0 200.99"
         event = self.string_to_event(
-            string, human_aircraft_was_shot_down_by_static
+            string,
+            grammar.human_aircraft_was_shot_down_by_static
         )
-        self.assertIsInstance(event, events.HumanAircraftWasShotDownByStatic)
+        self.assertIsInstance(
+            event,
+            structures.HumanAircraftWasShotDownByStatic
+        )
         self.assertEqual(event.time, datetime.time(20, 33, 5))
         self.assertEqual(event.victim, HumanAircraft("User0", "Pe-8"))
         self.assertEqual(event.aggressor, "0_Static")
@@ -669,10 +667,12 @@ class EventsTestCase(BaseTestCase):
     def test_human_aircraft_crew_member_has_bailed_out(self):
         string = "[8:33:05 PM] User0:Pe-8(0) bailed out at 100.0 200.99"
         event = self.string_to_event(
-            string, human_aircraft_crew_member_has_bailed_out
+            string,
+            grammar.human_aircraft_crew_member_has_bailed_out
         )
         self.assertIsInstance(
-            event, events.HumanAircraftCrewMemberHasBailedOut
+            event,
+            structures.HumanAircraftCrewMemberHasBailedOut
         )
         self.assertEqual(event.time, datetime.time(20, 33, 5))
         self.assertEqual(
@@ -700,14 +700,17 @@ class EventsTestCase(BaseTestCase):
     def test_human_aircraft_crew_member_has_touched_down(self):
         string = "[8:33:05 PM] User0:Pe-8(0) successfully bailed out at 100.0 200.99"
         event = self.string_to_event(
-            string, human_aircraft_crew_member_has_touched_down
+            string,
+            grammar.human_aircraft_crew_member_has_touched_down
         )
         self.assertIsInstance(
-            event, events.HumanAircraftCrewMemberHasTouchedDown
+            event,
+            structures.HumanAircraftCrewMemberHasTouchedDown
         )
         self.assertEqual(event.time, datetime.time(20, 33, 5))
         self.assertEqual(
-            event.actor, HumanAircraftCrewMember("User0", "Pe-8", 0)
+            event.actor,
+            HumanAircraftCrewMember("User0", "Pe-8", 0)
         )
         self.assertEqual(event.pos, Point2D(100.0, 200.99))
         self.assertEqual(
@@ -731,12 +734,17 @@ class EventsTestCase(BaseTestCase):
     def test_human_aircraft_crew_member_was_captured(self):
         string = "[8:33:05 PM] User0:Pe-8(0) was captured at 100.0 200.99"
         event = self.string_to_event(
-            string, human_aircraft_crew_member_was_captured
+            string,
+            grammar.human_aircraft_crew_member_was_captured
         )
-        self.assertIsInstance(event, events.HumanAircraftCrewMemberWasCaptured)
+        self.assertIsInstance(
+            event,
+            structures.HumanAircraftCrewMemberWasCaptured
+        )
         self.assertEqual(event.time, datetime.time(20, 33, 5))
         self.assertEqual(
-            event.victim, HumanAircraftCrewMember("User0", "Pe-8", 0)
+            event.victim,
+            HumanAircraftCrewMember("User0", "Pe-8", 0)
         )
         self.assertEqual(event.pos, Point2D(100.0, 200.99))
         self.assertEqual(
@@ -760,12 +768,17 @@ class EventsTestCase(BaseTestCase):
     def test_human_aircraft_crew_member_was_wounded(self):
         string = "[8:33:05 PM] User0:Pe-8(0) was wounded at 100.0 200.99"
         event = self.string_to_event(
-            string, human_aircraft_crew_member_was_wounded
+            string,
+            grammar.human_aircraft_crew_member_was_wounded
         )
-        self.assertIsInstance(event, events.HumanAircraftCrewMemberWasWounded)
+        self.assertIsInstance(
+            event,
+            structures.HumanAircraftCrewMemberWasWounded
+        )
         self.assertEqual(event.time, datetime.time(20, 33, 5))
         self.assertEqual(
-            event.victim, HumanAircraftCrewMember("User0", "Pe-8", 0)
+            event.victim,
+            HumanAircraftCrewMember("User0", "Pe-8", 0)
         )
         self.assertEqual(event.pos, Point2D(100.0, 200.99))
         self.assertEqual(
@@ -789,14 +802,17 @@ class EventsTestCase(BaseTestCase):
     def test_human_aircraft_crew_member_was_heavily_wounded(self):
         string = "[8:33:05 PM] User0:Pe-8(0) was heavily wounded at 100.0 200.99"
         event = self.string_to_event(
-            string, human_aircraft_crew_member_was_heavily_wounded
+            string,
+            grammar.human_aircraft_crew_member_was_heavily_wounded
         )
         self.assertIsInstance(
-            event, events.HumanAircraftCrewMemberWasHeavilyWounded
+            event,
+            structures.HumanAircraftCrewMemberWasHeavilyWounded
         )
         self.assertEqual(event.time, datetime.time(20, 33, 5))
         self.assertEqual(
-            event.victim, HumanAircraftCrewMember("User0", "Pe-8", 0)
+            event.victim,
+            HumanAircraftCrewMember("User0", "Pe-8", 0)
         )
         self.assertEqual(event.pos, Point2D(100.0, 200.99))
         self.assertEqual(
@@ -820,12 +836,17 @@ class EventsTestCase(BaseTestCase):
     def test_human_aircraft_crew_member_was_killed(self):
         string = "[8:33:05 PM] User0:Pe-8(0) was killed at 100.0 200.99"
         event = self.string_to_event(
-            string, human_aircraft_crew_member_was_killed
+            string,
+            grammar.human_aircraft_crew_member_was_killed
         )
-        self.assertIsInstance(event, events.HumanAircraftCrewMemberWasKilled)
+        self.assertIsInstance(
+            event,
+            structures.HumanAircraftCrewMemberWasKilled
+        )
         self.assertEqual(event.time, datetime.time(20, 33, 5))
         self.assertEqual(
-            event.victim, HumanAircraftCrewMember("User0", "Pe-8", 0)
+            event.victim,
+            HumanAircraftCrewMember("User0", "Pe-8", 0)
         )
         self.assertEqual(event.pos, Point2D(100.0, 200.99))
         self.assertEqual(
@@ -849,18 +870,21 @@ class EventsTestCase(BaseTestCase):
     def test_human_aircraft_crew_member_was_killed_by_human_aircraft(self):
         string = "[8:33:05 PM] User0:Pe-8(0) was killed by User1:Bf-109G-6_Late at 100.0 200.99"
         event = self.string_to_event(
-            string, human_aircraft_crew_member_was_killed_by_human_aircraft
+            string,
+            grammar.human_aircraft_crew_member_was_killed_by_human_aircraft
         )
-
         self.assertIsInstance(
-            event, events.HumanAircraftCrewMemberWasKilledByHumanAircraft
+            event,
+            structures.HumanAircraftCrewMemberWasKilledByHumanAircraft
         )
         self.assertEqual(event.time, datetime.time(20, 33, 5))
         self.assertEqual(
-            event.victim, HumanAircraftCrewMember("User0", "Pe-8", 0)
+            event.victim,
+            HumanAircraftCrewMember("User0", "Pe-8", 0)
         )
         self.assertEqual(
-            event.aggressor, HumanAircraft("User1", "Bf-109G-6_Late")
+            event.aggressor,
+            HumanAircraft("User1", "Bf-109G-6_Late")
         )
         self.assertEqual(event.pos, Point2D(100.0, 200.99))
         self.assertEqual(
@@ -886,13 +910,13 @@ class EventsTestCase(BaseTestCase):
         )
 
     def test_building_was_destroyed_by_human_aircraft(self):
-        string = "[8:33:05 PM] 3do/Buildings/Finland/CenterHouse1_w/live.sim destroyed by User0:Pe-8 at 100.0 200.99"
-        event = self.string_to_event(
-            string, building_was_destroyed_by_human_aircraft
-        )
+        testee = grammar.building_was_destroyed_by_human_aircraft
 
+        string = "[8:33:05 PM] 3do/Buildings/Finland/CenterHouse1_w/live.sim destroyed by User0:Pe-8 at 100.0 200.99"
+        event = self.string_to_event(string, testee)
         self.assertIsInstance(
-            event, events.BuildingWasDestroyedByHumanAircraft
+            event,
+            structures.BuildingWasDestroyedByHumanAircraft
         )
         self.assertEqual(event.time, datetime.time(20, 33, 5))
         self.assertEqual(event.victim, "Finland/CenterHouse1_w")
@@ -917,21 +941,23 @@ class EventsTestCase(BaseTestCase):
         )
 
         string = "[8:33:05 PM] 3do/Buildings/Russia/Piter/House3_W/live.sim destroyed by User1:Pe-8 at 300.0 400.99"
-        event = self.string_to_event(
-            string, building_was_destroyed_by_human_aircraft
-        )
-
+        event = self.string_to_event(string, testee)
         self.assertIsInstance(
-            event, events.BuildingWasDestroyedByHumanAircraft
+            event,
+            structures.BuildingWasDestroyedByHumanAircraft
         )
         self.assertEqual(event.victim, "Russia/Piter/House3_W")
 
     def test_tree_was_destroyed_by_human_aircraft(self):
         string = "[8:33:05 PM] 3do/Tree/Line_W/live.sim destroyed by User0:Pe-8 at 100.0 200.99"
         event = self.string_to_event(
-            string, tree_was_destroyed_by_human_aircraft
+            string,
+            grammar.tree_was_destroyed_by_human_aircraft
         )
-        self.assertIsInstance(event, events.TreeWasDestroyedByHumanAircraft)
+        self.assertIsInstance(
+            event,
+            structures.TreeWasDestroyedByHumanAircraft
+        )
         self.assertEqual(event.time, datetime.time(20, 33, 5))
         self.assertEqual(event.aggressor, HumanAircraft("User0", "Pe-8"))
         self.assertEqual(event.pos, Point2D(100.0, 200.99))
@@ -954,9 +980,9 @@ class EventsTestCase(BaseTestCase):
 
     def test_static_was_destroyed(self):
         string = "[8:33:05 PM] 0_Static crashed at 100.0 200.99"
-        event = self.string_to_event(string, static_was_destroyed)
+        event = self.string_to_event(string, grammar.static_was_destroyed)
 
-        self.assertIsInstance(event, events.StaticWasDestroyed)
+        self.assertIsInstance(event, structures.StaticWasDestroyed)
         self.assertEqual(event.time, datetime.time(20, 33, 5))
         self.assertEqual(event.victim, "0_Static")
         self.assertEqual(event.pos, Point2D(100.0, 200.99))
@@ -977,9 +1003,13 @@ class EventsTestCase(BaseTestCase):
     def test_static_was_destroyed_by_human_aircraft(self):
         string = "[8:33:05 PM] 0_Static destroyed by User0:Pe-8 at 100.0 200.99"
         event = self.string_to_event(
-            string, static_was_destroyed_by_human_aircraft
+            string,
+            grammar.static_was_destroyed_by_human_aircraft
         )
-        self.assertIsInstance(event, events.StaticWasDestroyedByHumanAircraft)
+        self.assertIsInstance(
+            event,
+            structures.StaticWasDestroyedByHumanAircraft
+        )
         self.assertEqual(event.time, datetime.time(20, 33, 5))
         self.assertEqual(event.victim, "0_Static")
         self.assertEqual(event.aggressor, HumanAircraft("User0", "Pe-8"))
@@ -1005,9 +1035,13 @@ class EventsTestCase(BaseTestCase):
     def test_bridge_was_destroyed_by_human_aircraft(self):
         string = "[8:33:05 PM]  Bridge0 destroyed by User0:Pe-8 at 100.0 200.99"
         event = self.string_to_event(
-            string, bridge_was_destroyed_by_human_aircraft
+            string,
+            grammar.bridge_was_destroyed_by_human_aircraft
         )
-        self.assertIsInstance(event, events.BridgeWasDestroyedByHumanAircraft)
+        self.assertIsInstance(
+            event,
+            structures.BridgeWasDestroyedByHumanAircraft
+        )
         self.assertEqual(event.time, datetime.time(20, 33, 5))
         self.assertEqual(event.victim, "Bridge0")
         self.assertEqual(event.aggressor, HumanAircraft("User0", "Pe-8"))
@@ -1032,9 +1066,9 @@ class EventsTestCase(BaseTestCase):
 
     def test_ai_aircraft_has_despawned(self):
         string = "[8:33:05 PM] Pe-8 removed at 100.0 200.99"
-        event = self.string_to_event(string, ai_aircraft_has_despawned)
+        event = self.string_to_event(string, grammar.ai_aircraft_has_despawned)
 
-        self.assertIsInstance(event, events.AIAircraftHasDespawned)
+        self.assertIsInstance(event, structures.AIAircraftHasDespawned)
         self.assertEqual(event.time, datetime.time(20, 33, 5))
         self.assertEqual(event.actor, "Pe-8")
         self.assertEqual(event.pos, Point2D(100.0, 200.99))
@@ -1054,9 +1088,12 @@ class EventsTestCase(BaseTestCase):
 
     def test_ai_aircraft_was_damaged_on_ground(self):
         string = "[8:33:05 PM] Pe-8 damaged on the ground at 100.0 200.99"
-        event = self.string_to_event(string, ai_aircraft_was_damaged_on_ground)
+        event = self.string_to_event(
+            string,
+            grammar.ai_aircraft_was_damaged_on_ground
+        )
 
-        self.assertIsInstance(event, events.AIAircraftWasDamagedOnGround)
+        self.assertIsInstance(event, structures.AIAircraftWasDamagedOnGround)
         self.assertEqual(event.time, datetime.time(20, 33, 5))
         self.assertEqual(event.victim, "Pe-8")
         self.assertEqual(event.pos, Point2D(100.0, 200.99))
@@ -1077,8 +1114,12 @@ class EventsTestCase(BaseTestCase):
     def test_ai_has_damaged_his_aircraft(self):
 
         def _assert(string):
-            event = self.string_to_event(string, ai_has_damaged_his_aircraft)
-            self.assertIsInstance(event, events.AIHasDamagedHisAircraft)
+            event = self.string_to_event(
+                string,
+                grammar.ai_has_damaged_his_aircraft
+            )
+
+            self.assertIsInstance(event, structures.AIHasDamagedHisAircraft)
             self.assertEqual(event.time, datetime.time(20, 33, 5))
             self.assertEqual(event.victim, "Pe-8")
             self.assertEqual(event.pos, Point2D(100.0, 200.99))
@@ -1103,8 +1144,12 @@ class EventsTestCase(BaseTestCase):
     def test_ai_has_destroyed_his_aircraft(self):
 
         def _assert(string):
-            event = self.string_to_event(string, ai_has_destroyed_his_aircraft)
-            self.assertIsInstance(event, events.AIHasDestroyedHisAircraft)
+            event = self.string_to_event(
+                string,
+                grammar.ai_has_destroyed_his_aircraft
+            )
+
+            self.assertIsInstance(event, structures.AIHasDestroyedHisAircraft)
             self.assertEqual(event.time, datetime.time(20, 33, 5))
             self.assertEqual(event.victim, "Pe-8")
             self.assertEqual(event.pos, Point2D(100.0, 200.99))
@@ -1127,9 +1172,9 @@ class EventsTestCase(BaseTestCase):
 
     def test_ai_aircraft_has_crashed(self):
         string = "[8:33:05 PM] Pe-8 crashed at 100.0 200.99"
-        event = self.string_to_event(string, ai_aircraft_has_crashed)
+        event = self.string_to_event(string, grammar.ai_aircraft_has_crashed)
 
-        self.assertIsInstance(event, events.AIAircraftHasCrashed)
+        self.assertIsInstance(event, structures.AIAircraftHasCrashed)
         self.assertEqual(event.time, datetime.time(20, 33, 5))
         self.assertEqual(event.victim, "Pe-8")
         self.assertEqual(event.pos, Point2D(100.0, 200.99))
@@ -1149,9 +1194,9 @@ class EventsTestCase(BaseTestCase):
 
     def test_ai_aircraft_has_landed(self):
         string = "[8:33:05 PM] Pe-8 landed at 100.0 200.99"
-        event = self.string_to_event(string, ai_aircraft_has_landed)
+        event = self.string_to_event(string, grammar.ai_aircraft_has_landed)
 
-        self.assertIsInstance(event, events.AIAircraftHasLanded)
+        self.assertIsInstance(event, structures.AIAircraftHasLanded)
         self.assertEqual(event.time, datetime.time(20, 33, 5))
         self.assertEqual(event.actor, "Pe-8")
         self.assertEqual(event.pos, Point2D(100.0, 200.99))
@@ -1172,9 +1217,13 @@ class EventsTestCase(BaseTestCase):
     def test_ai_aircraft_was_damaged_by_ai_aircraft(self):
         string = "[8:33:05 PM] Pe-8 damaged by Bf-109G-6_Late at 100.0 200.99"
         event = self.string_to_event(
-            string, ai_aircraft_was_damaged_by_ai_aircraft
+            string,
+            grammar.ai_aircraft_was_damaged_by_ai_aircraft
         )
-        self.assertIsInstance(event, events.AIAircraftWasDamagedByAIAircraft)
+        self.assertIsInstance(
+            event,
+            structures.AIAircraftWasDamagedByAIAircraft
+        )
         self.assertEqual(event.time, datetime.time(20, 33, 5))
         self.assertEqual(event.victim, "Pe-8")
         self.assertEqual(event.aggressor, "Bf-109G-6_Late")
@@ -1197,9 +1246,10 @@ class EventsTestCase(BaseTestCase):
     def test_ai_aircraft_crew_member_was_killed(self):
         string = "[8:33:05 PM] Pe-8(0) was killed at 100.0 200.99"
         event = self.string_to_event(
-            string, ai_aircraft_crew_member_was_killed
+            string,
+            grammar.ai_aircraft_crew_member_was_killed
         )
-        self.assertIsInstance(event, events.AIAircraftCrewMemberWasKilled)
+        self.assertIsInstance(event, structures.AIAircraftCrewMemberWasKilled)
         self.assertEqual(event.time, datetime.time(20, 33, 5))
         self.assertEqual(event.victim, AIAircraftCrewMember("Pe-8", 0))
         self.assertEqual(event.pos, Point2D(100.0, 200.99))
@@ -1224,11 +1274,11 @@ class EventsTestCase(BaseTestCase):
         string = "[8:33:05 PM] Pe-8(0) was killed in his chute by Bf-109G-6_Late at 100.0 200.99"
         event = self.string_to_event(
             string,
-            ai_aircraft_crew_member_was_killed_in_parachute_by_ai_aircraft
+            grammar.ai_aircraft_crew_member_was_killed_in_parachute_by_ai_aircraft
         )
         self.assertIsInstance(
             event,
-            events.AIAircraftCrewMemberWasKilledInParachuteByAIAircraft
+            structures.AIAircraftCrewMemberWasKilledInParachuteByAIAircraft
         )
         self.assertEqual(event.time, datetime.time(20, 33, 5))
         self.assertEqual(event.victim, AIAircraftCrewMember("Pe-8", 0))
@@ -1256,11 +1306,11 @@ class EventsTestCase(BaseTestCase):
         string = "[8:33:05 PM] Pe-8(0) has chute destroyed by Bf-109G-6_Late at 100.0 200.99"
         event = self.string_to_event(
             string,
-            ai_aircraft_crew_member_parachute_was_destroyed_by_ai_aircraft
+            grammar.ai_aircraft_crew_member_parachute_was_destroyed_by_ai_aircraft
         )
         self.assertIsInstance(
             event,
-            events.AIAircraftCrewMemberParachuteWasDestroyedByAIAircraft
+            structures.AIAircraftCrewMemberParachuteWasDestroyedByAIAircraft
         )
         self.assertEqual(event.time, datetime.time(20, 33, 5))
         self.assertEqual(event.victim, AIAircraftCrewMember("Pe-8", 0))
@@ -1287,9 +1337,10 @@ class EventsTestCase(BaseTestCase):
     def test_ai_aircraft_crew_member_was_wounded(self):
         string = "[8:33:05 PM] Pe-8(0) was wounded at 100.0 200.99"
         event = self.string_to_event(
-            string, ai_aircraft_crew_member_was_wounded
+            string,
+            grammar.ai_aircraft_crew_member_was_wounded
         )
-        self.assertIsInstance(event, events.AIAircraftCrewMemberWasWounded)
+        self.assertIsInstance(event, structures.AIAircraftCrewMemberWasWounded)
         self.assertEqual(event.time, datetime.time(20, 33, 5))
         self.assertEqual(event.victim, AIAircraftCrewMember("Pe-8", 0))
         self.assertEqual(event.pos, Point2D(100.0, 200.99))
@@ -1313,10 +1364,11 @@ class EventsTestCase(BaseTestCase):
     def test_ai_aircraft_crew_member_was_heavily_wounded(self):
         string = "[8:33:05 PM] Pe-8(0) was heavily wounded at 100.0 200.99"
         event = self.string_to_event(
-            string, ai_aircraft_crew_member_was_heavily_wounded
+            string,
+            grammar.ai_aircraft_crew_member_was_heavily_wounded
         )
         self.assertIsInstance(
-            event, events.AIAircraftCrewMemberWasHeavilyWounded
+            event, structures.AIAircraftCrewMemberWasHeavilyWounded
         )
         self.assertEqual(event.time, datetime.time(20, 33, 5))
         self.assertEqual(event.victim, AIAircraftCrewMember("Pe-8", 0))
@@ -1341,10 +1393,11 @@ class EventsTestCase(BaseTestCase):
     def test_ai_aircraft_crew_member_has_bailed_out(self):
         string = "[8:33:05 PM] Pe-8(0) bailed out at 100.0 200.99"
         event = self.string_to_event(
-            string, ai_aircraft_crew_member_has_bailed_out
+            string,
+            grammar.ai_aircraft_crew_member_has_bailed_out
         )
         self.assertIsInstance(
-            event, events.AIAircraftCrewMemberHasBailedOut
+            event, structures.AIAircraftCrewMemberHasBailedOut
         )
         self.assertEqual(event.time, datetime.time(20, 33, 5))
         self.assertEqual(event.actor, AIAircraftCrewMember("Pe-8", 0))
@@ -1369,10 +1422,11 @@ class EventsTestCase(BaseTestCase):
     def test_ai_aircraft_crew_member_has_touched_down(self):
         string = "[8:33:05 PM] Pe-8(0) successfully bailed out at 100.0 200.99"
         event = self.string_to_event(
-            string, ai_aircraft_crew_member_has_touched_down
+            string,
+            grammar.ai_aircraft_crew_member_has_touched_down
         )
         self.assertIsInstance(
-            event, events.AIAircraftCrewMemberHasTouchedDown
+            event, structures.AIAircraftCrewMemberHasTouchedDown
         )
         self.assertEqual(event.time, datetime.time(20, 33, 5))
         self.assertEqual(event.actor, AIAircraftCrewMember("Pe-8", 0))
