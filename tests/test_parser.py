@@ -111,6 +111,10 @@ class ParserTestCase(BaseTestCase):
                 "[8:33:05 PM] User0:Pe-8 shot down by 0_Static at 100.0 200.99"
             ),
             (
+                events.HumanAircraftWasShotDownByAIAircraft,
+                "[8:33:05 PM] User0:Pe-8 shot down by Bf-109G-6_Late at 100.0 200.99"
+            ),
+            (
                 events.HumanHasToggledLandingLights,
                 "[8:33:05 PM] User0:Pe-8 turned landing lights off at 100.0 200.99"
             ),

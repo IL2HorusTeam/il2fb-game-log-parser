@@ -176,6 +176,14 @@ human_aircraft_was_shot_down_by_static = Event(
     + event_pos
 ).toStructure(events.HumanAircraftWasShotDownByStatic)
 
+human_aircraft_was_shot_down_by_ai_aircraft = Event(
+    event_time
+    + human_aircraft_victim
+    + " shot down by "
+    + ai_aircraft_aggressor
+    + event_pos
+).toStructure(events.HumanAircraftWasShotDownByAIAircraft)
+
 human_has_toggled_landing_lights = Event(
     event_time
     + human_aircraft_actor
@@ -401,6 +409,7 @@ ai_aircraft_crew_member_has_touched_down = Event(
     + event_pos
 ).toStructure(events.AIAircraftCrewMemberHasTouchedDown)
 
+# Grammar order matters!
 event = (
     # Mission-related events --------------------------------------------------
     mission_is_playing
@@ -429,6 +438,7 @@ event = (
     | human_aircraft_was_damaged_on_ground
     | human_aircraft_was_shot_down_by_human_aircraft
     | human_aircraft_was_shot_down_by_static
+    | human_aircraft_was_shot_down_by_ai_aircraft
 
     | human_aircraft_crew_member_has_bailed_out
     | human_aircraft_crew_member_has_touched_down
