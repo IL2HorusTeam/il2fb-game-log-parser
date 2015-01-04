@@ -99,6 +99,10 @@ class ParserTestCase(BaseTestCase):
                 "[8:33:05 PM] User0:Pe-8 damaged by 0_Static at 100.0 200.99"
             ),
             (
+                events.HumanAircraftWasDamagedByAIAircraft,
+                "[8:33:05 PM] User0:Pe-8 damaged by Bf-109G-6_Late at 100.0 200.99"
+            ),
+            (
                 events.HumanAircraftWasDamagedOnGround,
                 "[8:33:05 PM] User0:Pe-8 damaged on the ground at 100.0 200.99"
             ),
