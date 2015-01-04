@@ -250,6 +250,14 @@ human_aircraft_crew_member_was_killed_by_human_aircraft = Event(
     + event_pos
 ).toStructure(events.HumanAircraftCrewMemberWasKilledByHumanAircraft)
 
+human_aircraft_crew_member_was_killed_by_static = Event(
+    event_time
+    + human_aircraft_crew_member_victim
+    + " was killed by "
+    + static_aggressor
+    + event_pos
+).toStructure(events.HumanAircraftCrewMemberWasKilledByStatic)
+
 building_was_destroyed_by_human_aircraft = Event(
     event_time
     + building_victim
@@ -428,6 +436,7 @@ event = (
     | human_aircraft_crew_member_was_heavily_wounded
     | human_aircraft_crew_member_was_killed
     | human_aircraft_crew_member_was_killed_by_human_aircraft
+    | human_aircraft_crew_member_was_killed_by_static
     | human_aircraft_crew_member_was_wounded
 
     # Objects-related events --------------------------------------------------

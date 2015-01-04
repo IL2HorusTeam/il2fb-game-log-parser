@@ -909,6 +909,42 @@ class EventsTestCase(BaseTestCase):
             }
         )
 
+    def test_human_aircraft_crew_member_was_killed_by_static(self):
+        string = "[8:33:05 PM] User0:Pe-8(0) was killed by 0_Static at 100.0 200.99"
+        event = self.string_to_event(
+            string,
+            grammar.human_aircraft_crew_member_was_killed_by_static
+        )
+        self.assertIsInstance(
+            event,
+            structures.HumanAircraftCrewMemberWasKilledByStatic
+        )
+        self.assertEqual(event.time, datetime.time(20, 33, 5))
+        self.assertEqual(
+            event.victim,
+            HumanAircraftCrewMember("User0", "Pe-8", 0)
+        )
+        self.assertEqual(event.aggressor, "0_Static")
+        self.assertEqual(event.pos, Point2D(100.0, 200.99))
+        self.assertEqual(
+            event.to_primitive(),
+            {
+                'time': "20:33:05",
+                'victim': {
+                    'callsign': "User0",
+                    'aircraft': "Pe-8",
+                    'seat_number': 0,
+                },
+                'aggressor': "0_Static",
+                'pos': {
+                    'x': 100.0,
+                    'y': 200.99,
+                },
+                'name': "HumanAircraftCrewMemberWasKilledByStatic",
+                'verbose_name': "Human aircraft crew member was killed by static",
+            }
+        )
+
     def test_building_was_destroyed_by_human_aircraft(self):
         testee = grammar.building_was_destroyed_by_human_aircraft
 
