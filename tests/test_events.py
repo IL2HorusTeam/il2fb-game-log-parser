@@ -1048,6 +1048,32 @@ class EventsTestCase(BaseTestCase):
         )
         self.assertEqual(event.victim, "Russia/Piter/House3_W")
 
+    def test_building_was_destroyed_by_static(self):
+        string = "[8:33:05 PM] 3do/Buildings/Finland/CenterHouse1_w/live.sim destroyed by 0_Static at 100.0 200.99"
+        event = self.string_to_event(
+            string,
+            grammar.building_was_destroyed_by_static
+        )
+        self.assertIsInstance(event, structures.BuildingWasDestroyedByStatic)
+        self.assertEqual(event.time, datetime.time(20, 33, 5))
+        self.assertEqual(event.victim, "Finland/CenterHouse1_w")
+        self.assertEqual(event.aggressor, "0_Static")
+        self.assertEqual(event.pos, Point2D(100.0, 200.99))
+        self.assertEqual(
+            event.to_primitive(),
+            {
+                'time': "20:33:05",
+                'victim': "Finland/CenterHouse1_w",
+                'aggressor': "0_Static",
+                'pos': {
+                    'x': 100.0,
+                    'y': 200.99,
+                },
+                'name': "BuildingWasDestroyedByStatic",
+                'verbose_name': "Building was destroyed by static",
+            }
+        )
+
     def test_tree_was_destroyed_by_human_aircraft(self):
 
         def _assert(string):
