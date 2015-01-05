@@ -175,6 +175,10 @@ class ParserTestCase(BaseTestCase):
                 "[8:33:05 PM] 0_Static crashed at 100.0 200.99"
             ),
             (
+                events.StaticWasDestroyedByStatic,
+                "[8:33:05 PM] 0_Static destroyed by 1_Static at 100.0 200.99"
+            ),
+            (
                 events.StaticWasDestroyedByHumanAircraft,
                 "[8:33:05 PM] 0_Static destroyed by User0:Pe-8 at 100.0 200.99"
             ),

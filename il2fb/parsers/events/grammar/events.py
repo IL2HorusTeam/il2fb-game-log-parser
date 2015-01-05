@@ -23,6 +23,7 @@ class Event(Combine):
         return self.setResultsName("event").setParseAction(to_structure)
 
 
+# Mission-related events ------------------------------------------------------
 mission_is_playing = Event(
     event_date_time
     + "Mission: "
@@ -60,6 +61,7 @@ target_state_has_changed = Event(
     + LineEnd(),
 ).toStructure(events.TargetStateWasChanged)
 
+# Human-related events --------------------------------------------------------
 human_has_connected = Event(
     event_time
     + callsign
@@ -274,6 +276,7 @@ human_aircraft_crew_member_was_killed_by_static = Event(
     + event_pos
 ).toStructure(events.HumanAircraftCrewMemberWasKilledByStatic)
 
+# Objects-related events ------------------------------------------------------
 building_was_destroyed_by_human_aircraft = Event(
     event_time
     + building_victim
@@ -297,6 +300,14 @@ static_was_destroyed = Event(
     + event_pos
 ).toStructure(events.StaticWasDestroyed)
 
+static_was_destroyed_by_static = Event(
+    event_time
+    + static_victim
+    + " destroyed by "
+    + static_aggressor
+    + event_pos
+).toStructure(events.StaticWasDestroyedByStatic)
+
 static_was_destroyed_by_human_aircraft = Event(
     event_time
     + static_victim
@@ -314,6 +325,7 @@ bridge_was_destroyed_by_human_aircraft = Event(
     + event_pos
 ).toStructure(events.BridgeWasDestroyedByHumanAircraft)
 
+# AI aircraft-related events --------------------------------------------------
 ai_aircraft_has_despawned = Event(
     event_time
     + ai_aircraft_actor
@@ -492,6 +504,7 @@ event = (
 
     # Objects-related events --------------------------------------------------
     | static_was_destroyed
+    | static_was_destroyed_by_static
     | static_was_destroyed_by_human_aircraft
 
     | building_was_destroyed_by_human_aircraft
