@@ -1074,6 +1074,32 @@ class EventsTestCase(BaseTestCase):
             }
         )
 
+    def test_building_was_destroyed_by_ai_aircraft(self):
+        string = "[8:33:05 PM] 3do/Buildings/Finland/CenterHouse1_w/live.sim destroyed by Bf-109G-6_Late at 100.0 200.99"
+        event = self.string_to_event(
+            string,
+            grammar.building_was_destroyed_by_ai_aircraft
+        )
+        self.assertIsInstance(event, structures.BuildingWasDestroyedByAIAircraft)
+        self.assertEqual(event.time, datetime.time(20, 33, 5))
+        self.assertEqual(event.victim, "Finland/CenterHouse1_w")
+        self.assertEqual(event.aggressor, "Bf-109G-6_Late")
+        self.assertEqual(event.pos, Point2D(100.0, 200.99))
+        self.assertEqual(
+            event.to_primitive(),
+            {
+                'time': "20:33:05",
+                'victim': "Finland/CenterHouse1_w",
+                'aggressor': "Bf-109G-6_Late",
+                'pos': {
+                    'x': 100.0,
+                    'y': 200.99,
+                },
+                'name': "BuildingWasDestroyedByAIAircraft",
+                'verbose_name': "Building was destroyed by AI aircraft",
+            }
+        )
+
     def test_tree_was_destroyed_by_human_aircraft(self):
 
         def _assert(string):
