@@ -422,9 +422,10 @@ class BuildingWasDestroyedByHumanAircraft(Event):
 
 class TreeWasDestroyedByHumanAircraft(Event):
     """
-    Example::
+    Examples::
 
         "[8:33:05 PM] 3do/Tree/Line_W/live.sim destroyed by User0:Pe-8 at 100.0 200.99"
+        "[8:33:05 PM] 3do/Tree/Line_W/mono.sim destroyed by User0:Pe-8 at 100.0 200.99"
     """
     __slots__ = ['time', 'aggressor', 'pos', ]
     verbose_name = _("Tree was destroyed by human aircraft")

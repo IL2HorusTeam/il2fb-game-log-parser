@@ -59,7 +59,7 @@ building = Regex(
 building_victim = building.setResultsName("victim")
 
 # Example: "3do/Tree/Line_W/live.sim"
-tree = Regex(r"3do/Tree/.+/live.sim").suppress()
+tree = Regex(r"3do/Tree/.+/(live|mono).sim").suppress()
 
 # Example: "0_Static"
 static = Combine(

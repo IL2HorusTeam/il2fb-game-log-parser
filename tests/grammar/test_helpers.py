@@ -105,6 +105,7 @@ class CommonGrammarTestCase(BaseTestCase):
     def test_tree(self):
         try:
             tree.parseString("3do/Tree/Line_W/live.sim")
+            tree.parseString("3do/Tree/Line_W/mono.sim")
         except Exception as e:
             message = e.args[0] if e.args else ""
             self.fail("'tree' grammar raised a {0} unexpectedly: {1}"
