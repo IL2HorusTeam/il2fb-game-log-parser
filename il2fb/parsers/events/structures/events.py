@@ -12,6 +12,7 @@ __all__ = (
     'AIAircraftWasDamagedByAIAircraft', 'AIHasDamagedHisAircraft',
     'AIHasDestroyedHisAircraft', 'AIAircraftHasCrashed', 'AIAircraftHasLanded',
     'AIAircraftWasShotDownByStatic', 'AIAircraftWasDamagedByHumanAircraft',
+    'AIAircraftWasShotDownByHumanAircraft',
     'AIAircraftCrewMemberWasWounded', 'AIAircraftCrewMemberWasHeavilyWounded',
     'AIAircraftCrewMemberHasBailedOut', 'AIAircraftCrewMemberHasTouchedDown',
     'AIAircraftCrewMemberWasKilled', 'AIAircraftCrewMemberWasKilledByStatic',
@@ -484,7 +485,7 @@ class AIAircraftWasDamagedByHumanAircraft(Event):
     """
     Example::
 
-        "[8:33:05 PM] Pe-8 damaged by Bf-109G-6_Late:User1 at 100.0 200.99"
+        "[8:33:05 PM] Pe-8 damaged by User1:Bf-109G-6_Late at 100.0 200.99"
     """
     __slots__ = ['time', 'victim', 'aggressor', 'pos', ]
     verbose_name = _("AI aircraft was damaged by human aircraft")
@@ -530,6 +531,16 @@ class AIAircraftHasCrashed(Event):
     """
     __slots__ = ['time', 'victim', 'pos', ]
     verbose_name = _("AI aircraft has crashed")
+
+
+class AIAircraftWasShotDownByHumanAircraft(Event):
+    """
+    Example::
+
+        "[8:33:05 PM] Pe-8 shot down by User1:Bf-109G-6_Late at 100.0 200.99"
+    """
+    __slots__ = ['time', 'victim', 'aggressor', 'pos', ]
+    verbose_name = _("AI aircraft was shot down by human aircraft")
 
 
 class AIAircraftWasShotDownByStatic(Event):
