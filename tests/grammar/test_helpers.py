@@ -98,7 +98,7 @@ class CommonGrammarTestCase(BaseTestCase):
         result = building.parseString(string).building
         self.assertEqual(result, "Finland/CenterHouse1_w")
 
-        string = "3do/Buildings/Russia/Piter/House3_W/live.sim"
+        string = "3do/Buildings/Russia/Piter/House3_W/mono.sim"
         result = building.parseString(string).building
         self.assertEqual(result, "Russia/Piter/House3_W")
 

@@ -1040,7 +1040,7 @@ class EventsTestCase(BaseTestCase):
             }
         )
 
-        string = "[8:33:05 PM] 3do/Buildings/Russia/Piter/House3_W/live.sim destroyed by User1:Pe-8 at 300.0 400.99"
+        string = "[8:33:05 PM] 3do/Buildings/Russia/Piter/House3_W/mono.sim destroyed by User1:Pe-8 at 300.0 400.99"
         event = self.string_to_event(string, testee)
         self.assertIsInstance(
             event,

@@ -53,7 +53,7 @@ target_end_state = Or([
 
 # Example: "3do/Buildings/Finland/CenterHouse1_w/live.sim"
 building = Regex(
-    r"3do/Buildings/(?P<building_group>.+)/live.sim"
+    r"3do/Buildings/(?P<building_group>.+)/(live|mono).sim"
 ).setParseAction(lambda t: t.building_group).setResultsName("building")
 
 building_victim = building.setResultsName("victim")
