@@ -183,6 +183,10 @@ class ParserTestCase(BaseTestCase):
                 "[8:33:05 PM] 0_Static destroyed by User0:Pe-8 at 100.0 200.99"
             ),
             (
+                events.StaticWasDestroyedByAIAircraft,
+                "[8:33:05 PM] 0_Static destroyed by Pe-8 at 100.0 200.99"
+            ),
+            (
                 events.BuildingWasDestroyedByHumanAircraft,
                 "[8:33:05 PM] 3do/Buildings/Finland/CenterHouse1_w/live.sim destroyed by User0:Pe-8 at 100.0 200.99"
             ),

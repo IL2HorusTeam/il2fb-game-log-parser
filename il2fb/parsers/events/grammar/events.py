@@ -316,6 +316,14 @@ static_was_destroyed_by_human_aircraft = Event(
     + event_pos
 ).toStructure(events.StaticWasDestroyedByHumanAircraft)
 
+static_was_destroyed_by_ai_aircraft = Event(
+    event_time
+    + static_victim
+    + " destroyed by "
+    + ai_aircraft_aggressor
+    + event_pos
+).toStructure(events.StaticWasDestroyedByAIAircraft)
+
 bridge_was_destroyed_by_human_aircraft = Event(
     event_time
     + space
@@ -505,6 +513,7 @@ event = (
     # Objects-related events --------------------------------------------------
     | static_was_destroyed
     | static_was_destroyed_by_static
+    | static_was_destroyed_by_ai_aircraft
     | static_was_destroyed_by_human_aircraft
 
     | building_was_destroyed_by_human_aircraft

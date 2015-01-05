@@ -40,8 +40,8 @@ __all__ = (
     'HumanAircraftHasTookOff', 'HumanHasWentToBriefing', 'MissionHasBegun',
     'MissionHasEnded', 'MissionIsPlaying', 'MissionWasWon',
     'StaticWasDestroyed', 'StaticWasDestroyedByStatic',
-    'StaticWasDestroyedByHumanAircraft', 'TargetStateWasChanged',
-    'TreeWasDestroyedByHumanAircraft',
+    'StaticWasDestroyedByAIAircraft', 'StaticWasDestroyedByHumanAircraft',
+    'TargetStateWasChanged', 'TreeWasDestroyedByHumanAircraft',
 )
 
 _ = translations.ugettext_lazy
@@ -458,6 +458,16 @@ class StaticWasDestroyedByHumanAircraft(Event):
     """
     __slots__ = ['time', 'victim', 'aggressor', 'pos', ]
     verbose_name = _("Static was destroyed by human aircraft")
+
+
+class StaticWasDestroyedByAIAircraft(Event):
+    """
+    Example::
+
+        "[8:33:05 PM] 0_Static destroyed by Pe-8 at 100.0 200.99"
+    """
+    __slots__ = ['time', 'victim', 'aggressor', 'pos', ]
+    verbose_name = _("Static was destroyed by AI aircraft")
 
 
 class BridgeWasDestroyedByHumanAircraft(Event):
