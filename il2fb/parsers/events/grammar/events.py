@@ -328,6 +328,14 @@ ai_aircraft_was_damaged_on_ground = Event(
     + event_pos
 ).toStructure(events.AIAircraftWasDamagedOnGround)
 
+ai_aircraft_was_damaged_by_human_aircraft = Event(
+    event_time
+    + ai_aircraft_victim
+    + " damaged by "
+    + human_aircraft_aggressor
+    + event_pos
+).toStructure(events.AIAircraftWasDamagedByHumanAircraft)
+
 ai_aircraft_was_damaged_by_ai_aircraft = Event(
     event_time
     + ai_aircraft_victim
@@ -489,6 +497,7 @@ event = (
     | ai_aircraft_has_crashed
     | ai_aircraft_has_despawned
     | ai_aircraft_has_landed
+    | ai_aircraft_was_damaged_by_human_aircraft
     | ai_aircraft_was_damaged_by_ai_aircraft
     | ai_aircraft_was_damaged_on_ground
     | ai_aircraft_was_shot_down_by_static
