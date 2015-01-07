@@ -399,7 +399,6 @@ moving_unit_member_was_destroyed_by_moving_unit_member = Event(
     + event_pos
 ).toStructure(events.MovingUnitMemberWasDestroyedByMovingUnitMember)
 
-
 # AI aircraft-related events --------------------------------------------------
 ai_aircraft_has_despawned = Event(
     event_time

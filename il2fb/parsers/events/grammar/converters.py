@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 
 import datetime
+import six
 
 from il2fb.commons.organization import Belligerents
 
@@ -56,5 +57,5 @@ def to_ai_aircraft_crew_member(tokens):
 
 
 def to_moving_unit_member(tokens):
-    kwargs = tokens.asDict().values()[0].asDict()
+    kwargs = six.next(six.itervalues(tokens.asDict())).asDict()
     return MovingUnitMember(**kwargs)
