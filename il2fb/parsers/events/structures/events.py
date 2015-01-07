@@ -47,6 +47,7 @@ __all__ = (
     'StaticWasDestroyedByMovingUnit', 'TargetStateWasChanged',
     'TreeWasDestroyedByHumanAircraft', 'TreeWasDestroyedByStatic',
     'MovingUnitMemberWasDestroyedByAIAircraft',
+    'MovingUnitMemberWasDestroyedByMovingUnit',
 )
 
 _ = translations.ugettext_lazy
@@ -550,6 +551,16 @@ class MovingUnitMemberWasDestroyedByAIAircraft(Event):
     """
     __slots__ = ['time', 'victim', 'aggressor', 'pos', ]
     verbose_name = _("Moving unit member was destroyed by AI aircraft")
+
+
+class MovingUnitMemberWasDestroyedByMovingUnit(Event):
+    """
+    Example::
+
+        "[8:33:05 PM] 0_Chief0 destroyed by 1_Chief at 100.0 200.99"
+    """
+    __slots__ = ['time', 'victim', 'aggressor', 'pos', ]
+    verbose_name = _("Moving unit member was destroyed by moving unit")
 
 
 class AIAircraftHasDespawned(Event):

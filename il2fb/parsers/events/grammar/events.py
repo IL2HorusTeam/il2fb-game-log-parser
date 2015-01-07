@@ -383,6 +383,14 @@ moving_unit_member_was_destroyed_by_ai_aircraft = Event(
     + event_pos
 ).toStructure(events.MovingUnitMemberWasDestroyedByAIAircraft)
 
+moving_unit_member_was_destroyed_by_moving_unit = Event(
+    event_time
+    + moving_unit_member_victim
+    + " destroyed by "
+    + moving_unit_aggressor
+    + event_pos
+).toStructure(events.MovingUnitMemberWasDestroyedByMovingUnit)
+
 # AI aircraft-related events --------------------------------------------------
 ai_aircraft_has_despawned = Event(
     event_time
@@ -586,6 +594,7 @@ event = (
     | tree_was_destroyed_by_static
 
     # Moving unit-related events ----------------------------------------------
+    | moving_unit_member_was_destroyed_by_moving_unit
     | moving_unit_member_was_destroyed_by_ai_aircraft
 
     # AI aircraft-related events ----------------------------------------------
