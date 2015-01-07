@@ -11,7 +11,7 @@ from .helpers import (
     event_time, human_aircraft_actor, human_aircraft_aggressor,
     human_aircraft_victim, human_aircraft_crew_member,
     human_aircraft_crew_member_victim, static_aggressor, static_victim,
-    target_end_state, toggle_value, tree, by_himself,
+    target_end_state, toggle_value, tree, by_himself, moving_unit_aggressor,
 )
 from .primitives import space, number
 
@@ -340,6 +340,14 @@ static_was_destroyed_by_human_aircraft = Event(
     + event_pos
 ).toStructure(events.StaticWasDestroyedByHumanAircraft)
 
+static_was_destroyed_moving_unit = Event(
+    event_time
+    + static_victim
+    + " destroyed by "
+    + moving_unit_aggressor
+    + event_pos
+).toStructure(events.StaticWasDestroyedByMovingUnit)
+
 static_was_destroyed_by_ai_aircraft = Event(
     event_time
     + static_victim
@@ -538,6 +546,7 @@ event = (
     | static_was_destroyed
     | static_was_destroyed_by_human_aircraft
     | static_was_destroyed_by_static
+    | static_was_destroyed_moving_unit
     | static_was_destroyed_by_ai_aircraft
 
     | building_was_destroyed_by_human_aircraft
