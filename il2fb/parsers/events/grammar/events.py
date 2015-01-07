@@ -12,7 +12,7 @@ from .helpers import (
     human_aircraft_victim, human_aircraft_crew_member,
     human_aircraft_crew_member_victim, static_aggressor, static_victim,
     target_end_state, toggle_value, tree, by_himself, moving_unit_aggressor,
-    moving_unit_member_aggressor,
+    moving_unit_member_aggressor, moving_unit_member_victim,
 )
 from .primitives import space, number
 
@@ -374,6 +374,15 @@ bridge_was_destroyed_by_human_aircraft = Event(
     + event_pos
 ).toStructure(events.BridgeWasDestroyedByHumanAircraft)
 
+# Moving unit-related events --------------------------------------------------
+moving_unit_member_was_destroyed_by_ai_aircraft = Event(
+    event_time
+    + moving_unit_member_victim
+    + " destroyed by "
+    + ai_aircraft_aggressor
+    + event_pos
+).toStructure(events.MovingUnitMemberWasDestroyedByAIAircraft)
+
 # AI aircraft-related events --------------------------------------------------
 ai_aircraft_has_despawned = Event(
     event_time
@@ -575,6 +584,9 @@ event = (
 
     | tree_was_destroyed_by_human_aircraft
     | tree_was_destroyed_by_static
+
+    # Moving unit-related events ----------------------------------------------
+    | moving_unit_member_was_destroyed_by_ai_aircraft
 
     # AI aircraft-related events ----------------------------------------------
     | ai_has_damaged_his_aircraft
