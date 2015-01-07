@@ -9,7 +9,7 @@ from il2fb.parsers.events.constants import TARGET_END_STATES
 from il2fb.parsers.events.grammar import events as grammar
 from il2fb.parsers.events.structures import (
     Point2D, HumanAircraft, HumanAircraftCrewMember, AIAircraftCrewMember,
-    events as structures,
+    MovingUnitMember, events as structures,
 )
 
 from .base import BaseTestCase
@@ -1645,6 +1645,39 @@ class EventsTestCase(BaseTestCase):
                 },
                 'name': "AIAircraftWasShotDownByStatic",
                 'verbose_name': "AI aircraft was shot down by static",
+            }
+        )
+
+    def test_ai_aircraft_was_shot_down_moving_unit_member(self):
+        string = "[8:33:05 PM] Pe-8 shot down by 0_Chief0 at 100.0 200.99"
+        event = self.string_to_event(
+            string,
+            grammar.ai_aircraft_was_shot_down_by_moving_unit_member
+        )
+        self.assertIsInstance(
+            event,
+            structures.AIAircraftWasShotDownByMovingUnitMember
+        )
+        self.assertEqual(event.time, datetime.time(20, 33, 5))
+        self.assertEqual(event.victim, "Pe-8")
+        self.assertEqual(event.aggressor, MovingUnitMember("0_Chief", 0))
+        self.assertEqual(event.pos, Point2D(100.0, 200.99))
+        self.assertEqual(
+            event.to_primitive(),
+            {
+                'time': "20:33:05",
+                'victim': "Pe-8",
+                'aggressor': {
+                    'moving_unit': "0_Chief",
+                    'index': 0,
+                },
+                'pos': {
+                    'x': 100.0,
+                    'y': 200.99,
+                },
+                'name': "AIAircraftWasShotDownByMovingUnitMember",
+                'verbose_name': "AI aircraft was shot down by moving unit "
+                                "member",
             }
         )
 

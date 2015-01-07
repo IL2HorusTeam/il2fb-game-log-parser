@@ -12,6 +12,7 @@ from .helpers import (
     human_aircraft_victim, human_aircraft_crew_member,
     human_aircraft_crew_member_victim, static_aggressor, static_victim,
     target_end_state, toggle_value, tree, by_himself, moving_unit_aggressor,
+    moving_unit_member_aggressor,
 )
 from .primitives import space, number
 
@@ -450,6 +451,14 @@ ai_aircraft_was_shot_down_by_static = Event(
     + event_pos
 ).toStructure(events.AIAircraftWasShotDownByStatic)
 
+ai_aircraft_was_shot_down_by_moving_unit_member = Event(
+    event_time
+    + ai_aircraft_victim
+    + " shot down by "
+    + moving_unit_member_aggressor
+    + event_pos
+).toStructure(events.AIAircraftWasShotDownByMovingUnitMember)
+
 ai_aircraft_crew_member_was_killed = Event(
     event_time
     + ai_aircraft_crew_member_victim
@@ -579,6 +588,7 @@ event = (
     | ai_aircraft_was_damaged_on_ground
     | ai_aircraft_was_shot_down_by_human_aircraft
     | ai_aircraft_was_shot_down_by_static
+    | ai_aircraft_was_shot_down_by_moving_unit_member
 
     | ai_aircraft_crew_member_has_bailed_out
     | ai_aircraft_crew_member_has_touched_down

@@ -56,5 +56,5 @@ def to_ai_aircraft_crew_member(tokens):
 
 
 def to_moving_unit_member(tokens):
-    return MovingUnitMember(tokens.moving_unit_member.moving_unit,
-                            tokens.moving_unit_member.index)
+    kwargs = tokens.asDict().values()[0].asDict()
+    return MovingUnitMember(**kwargs)
