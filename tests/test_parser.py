@@ -195,24 +195,16 @@ class ParserTestCase(BaseTestCase):
                 "[8:33:05 PM] 3do/Buildings/Finland/CenterHouse1_w/live.sim destroyed by User0:Pe-8 at 100.0 200.99"
             ),
             (
-                events.BuildingWasDestroyedByHumanAircraft,
-                "[8:33:05 PM] 3do/Buildings/Russia/Piter/House3_W/mono.sim destroyed by User0:Pe-8 at 100.0 200.99"
-            ),
-            (
                 events.BuildingWasDestroyedByStatic,
                 "[8:33:05 PM] 3do/Buildings/Finland/CenterHouse1_w/live.sim destroyed by 0_Static at 100.0 200.99"
-            ),
-            (
-                events.BuildingWasDestroyedByStatic,
-                "[8:33:05 PM] 3do/Buildings/Russia/Piter/House3_W/mono.sim destroyed by 0_Static at 100.0 200.99"
             ),
             (
                 events.BuildingWasDestroyedByAIAircraft,
                 "[8:33:05 PM] 3do/Buildings/Finland/CenterHouse1_w/live.sim destroyed by Bf-109G-6_Late at 100.0 200.99"
             ),
             (
-                events.BuildingWasDestroyedByAIAircraft,
-                "[8:33:05 PM] 3do/Buildings/Russia/Piter/House3_W/mono.sim destroyed by Bf-109G-6_Late at 100.0 200.99"
+                events.BuildingWasDestroyedByMovingUnit,
+                "[8:33:05 PM] 3do/Buildings/Finland/CenterHouse1_w/live.sim destroyed by 0_Chief at 100.0 200.99"
             ),
             (
                 events.BridgeWasDestroyedByHumanAircraft,
@@ -223,16 +215,8 @@ class ParserTestCase(BaseTestCase):
                 "[8:33:05 PM] 3do/Tree/Line_W/live.sim destroyed by User0:Pe-8 at 100.0 200.99"
             ),
             (
-                events.TreeWasDestroyedByHumanAircraft,
-                "[8:33:05 PM] 3do/Tree/Line_W/mono.sim destroyed by User0:Pe-8 at 100.0 200.99"
-            ),
-            (
                 events.TreeWasDestroyedByStatic,
                 "[8:33:05 PM] 3do/Tree/Line_W/live.sim destroyed by 0_Static at 100.0 200.99"
-            ),
-            (
-                events.TreeWasDestroyedByStatic,
-                "[8:33:05 PM] 3do/Tree/Line_W/mono.sim destroyed by 0_Static at 100.0 200.99"
             ),
             (
                 events.AIAircraftHasDespawned,

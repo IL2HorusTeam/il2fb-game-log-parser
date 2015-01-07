@@ -20,6 +20,7 @@ __all__ = (
     'AIAircraftCrewMemberParachuteWasDestroyedByAIAircraft',
     'BridgeWasDestroyedByHumanAircraft', 'BuildingWasDestroyedByHumanAircraft',
     'BuildingWasDestroyedByStatic', 'BuildingWasDestroyedByAIAircraft',
+    'BuildingWasDestroyedByMovingUnit',
     'HumanAircraftWasDamagedByHumanAircraft',
     'HumanAircraftWasDamagedByStatic', 'HumanAircraftWasDamagedByAIAircraft',
     'HumanAircraftWasDamagedOnGround',
@@ -431,6 +432,17 @@ class BuildingWasDestroyedByStatic(Event):
     """
     __slots__ = ['time', 'victim', 'aggressor', 'pos', ]
     verbose_name = _("Building was destroyed by static")
+
+
+class BuildingWasDestroyedByMovingUnit(Event):
+    """
+    Examples::
+
+        "[8:33:05 PM] 3do/Buildings/Finland/CenterHouse1_w/live.sim destroyed by 0_Chief at 100.0 200.99"
+        "[8:33:05 PM] 3do/Buildings/Russia/Piter/House3_W/mono.sim destroyed by 0_Chief at 300.0 400.99"
+    """
+    __slots__ = ['time', 'victim', 'aggressor', 'pos', ]
+    verbose_name = _("Building was destroyed by moving unit")
 
 
 class BuildingWasDestroyedByAIAircraft(Event):

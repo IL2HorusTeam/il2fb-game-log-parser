@@ -1080,7 +1080,10 @@ class EventsTestCase(BaseTestCase):
             string,
             grammar.building_was_destroyed_by_ai_aircraft
         )
-        self.assertIsInstance(event, structures.BuildingWasDestroyedByAIAircraft)
+        self.assertIsInstance(
+            event,
+            structures.BuildingWasDestroyedByAIAircraft
+        )
         self.assertEqual(event.time, datetime.time(20, 33, 5))
         self.assertEqual(event.victim, "Finland/CenterHouse1_w")
         self.assertEqual(event.aggressor, "Bf-109G-6_Late")
@@ -1097,6 +1100,35 @@ class EventsTestCase(BaseTestCase):
                 },
                 'name': "BuildingWasDestroyedByAIAircraft",
                 'verbose_name': "Building was destroyed by AI aircraft",
+            }
+        )
+
+    def test_building_was_destroyed_by_moving_unit(self):
+        string = "[8:33:05 PM] 3do/Buildings/Finland/CenterHouse1_w/live.sim destroyed by 0_Chief at 100.0 200.99"
+        event = self.string_to_event(
+            string,
+            grammar.building_was_destroyed_by_moving_unit
+        )
+        self.assertIsInstance(
+            event,
+            structures.BuildingWasDestroyedByMovingUnit
+        )
+        self.assertEqual(event.time, datetime.time(20, 33, 5))
+        self.assertEqual(event.victim, "Finland/CenterHouse1_w")
+        self.assertEqual(event.aggressor, "0_Chief")
+        self.assertEqual(event.pos, Point2D(100.0, 200.99))
+        self.assertEqual(
+            event.to_primitive(),
+            {
+                'time': "20:33:05",
+                'victim': "Finland/CenterHouse1_w",
+                'aggressor': "0_Chief",
+                'pos': {
+                    'x': 100.0,
+                    'y': 200.99,
+                },
+                'name': "BuildingWasDestroyedByMovingUnit",
+                'verbose_name': "Building was destroyed by moving unit",
             }
         )
 

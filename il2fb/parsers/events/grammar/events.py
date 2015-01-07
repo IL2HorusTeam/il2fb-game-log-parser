@@ -301,6 +301,14 @@ building_was_destroyed_by_ai_aircraft = Event(
     + event_pos
 ).toStructure(events.BuildingWasDestroyedByAIAircraft)
 
+building_was_destroyed_by_moving_unit = Event(
+    event_time
+    + building_victim
+    + " destroyed by "
+    + moving_unit_aggressor
+    + event_pos
+).toStructure(events.BuildingWasDestroyedByMovingUnit)
+
 tree_was_destroyed_by_human_aircraft = Event(
     event_time
     + tree
@@ -551,6 +559,7 @@ event = (
 
     | building_was_destroyed_by_human_aircraft
     | building_was_destroyed_by_static
+    | building_was_destroyed_by_moving_unit
     | building_was_destroyed_by_ai_aircraft
 
     | bridge_was_destroyed_by_human_aircraft
