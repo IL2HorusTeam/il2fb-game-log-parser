@@ -7,6 +7,7 @@ from il2fb.commons.organization import Belligerents
 from ..constants import LOG_TIME_FORMAT, LOG_DATE_FORMAT, TOGGLE_VALUES
 from ..structures import (
     Point2D, HumanAircraft, HumanAircraftCrewMember, AIAircraftCrewMember,
+    MovingUnitMember,
 )
 
 
@@ -52,3 +53,8 @@ def to_human_aircraft_crew_member(tokens):
 
 def to_ai_aircraft_crew_member(tokens):
     return AIAircraftCrewMember(tokens.aircraft, tokens.seat_number)
+
+
+def to_moving_unit_member(tokens):
+    return MovingUnitMember(tokens.moving_unit_member.moving_unit,
+                            tokens.moving_unit_member.index)

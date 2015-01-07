@@ -11,11 +11,12 @@ from il2fb.parsers.events.grammar.helpers import (
     event_date_time, event_pos, event_time, human_aircraft,
     human_aircraft_actor, human_aircraft_aggressor, human_aircraft_crew_member,
     seat_number, static, target_end_state, toggle_value, tree, by_himself,
-    moving_unit,
+    moving_unit, moving_unit_member,
 )
 from il2fb.parsers.events.grammar.primitives import space
 from il2fb.parsers.events.structures import (
     Point2D, HumanAircraft, HumanAircraftCrewMember, AIAircraftCrewMember,
+    MovingUnitMember,
 )
 
 from ..base import BaseTestCase
@@ -124,6 +125,10 @@ class CommonGrammarTestCase(BaseTestCase):
     def test_moving_unit(self):
         result = moving_unit.parseString("0_Chief").moving_unit
         self.assertEqual(result, "0_Chief")
+
+    def test_moving_unit_member(self):
+        result = moving_unit_member.parseString("0_Chief0").moving_unit_member
+        self.assertEqual(result, MovingUnitMember("0_Chief", 0))
 
 
 class ToggleValueTestCase(BaseTestCase):

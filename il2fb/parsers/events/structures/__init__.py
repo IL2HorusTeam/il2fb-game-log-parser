@@ -84,3 +84,15 @@ class AIAircraftCrewMember(Base):
     def __repr__(self):
         return "<AI aircraft crew member {0}:{1}>".format(self.aircraft,
                                                           self.seat_number)
+
+
+class MovingUnitMember(Base):
+    __slots__ = ['moving_unit', 'index', ]
+
+    def __init__(self, moving_unit, index):
+        self.moving_unit = moving_unit
+        self.index = index
+
+    def __repr__(self):
+        return "<Moving unit member {0}:{1}>".format(self.moving_unit,
+                                                     self.index)
