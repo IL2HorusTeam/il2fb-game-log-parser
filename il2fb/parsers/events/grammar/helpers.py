@@ -69,6 +69,14 @@ static = Combine(
 static_aggressor = static.setResultsName("aggressor")
 static_victim = static.setResultsName("victim")
 
+# Example: "0_Chief"
+moving_unit = Combine(
+    number + Literal("_Chief")
+).setResultsName("moving_unit")
+
+moving_unit_aggressor = moving_unit.setResultsName("aggressor")
+moving_unit_victim = moving_unit.setResultsName("victim")
+
 # Example: "Bridge0"
 bridge = Combine(
     Literal("Bridge") + number

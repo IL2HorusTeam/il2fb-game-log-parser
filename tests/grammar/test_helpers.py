@@ -11,6 +11,7 @@ from il2fb.parsers.events.grammar.helpers import (
     event_date_time, event_pos, event_time, human_aircraft,
     human_aircraft_actor, human_aircraft_aggressor, human_aircraft_crew_member,
     seat_number, static, target_end_state, toggle_value, tree, by_himself,
+    moving_unit,
 )
 from il2fb.parsers.events.grammar.primitives import space
 from il2fb.parsers.events.structures import (
@@ -119,6 +120,10 @@ class CommonGrammarTestCase(BaseTestCase):
             message = e.args[0] if e.args else ""
             self.fail("'by_himself' grammar raised a {0} unexpectedly: {1}"
                       .format(e.__class__.__name__, message))
+
+    def test_moving_unit(self):
+        result = moving_unit.parseString("0_Chief").moving_unit
+        self.assertEqual(result, "0_Chief")
 
 
 class ToggleValueTestCase(BaseTestCase):
