@@ -2,149 +2,338 @@
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
-#
-#, fuzzy
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-12-13 14:55+0200\n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
-"Language-Team: LANGUAGE <LL@li.org>\n"
-"Language: \n"
+"POT-Creation-Date: 2015-01-07 15:39+0200\n"
+"PO-Revision-Date: \n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"Language: ru\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: structures/events/__init__.py:54
+#: structures/events.py:94
 msgid "Mission is playing"
 msgstr "Миссия играет"
 
-#: structures/events/__init__.py:67
+#: structures/events.py:104
 msgid "Mission has begun"
 msgstr "Миссия началась"
 
-#: structures/events/__init__.py:76
+#: structures/events.py:114
 msgid "Mission has ended"
 msgstr "Миссия закончилась"
 
-#: structures/events/__init__.py:85
+#: structures/events.py:124
 msgid "Mission was won"
 msgstr "Миссия была выиграна"
 
-#: structures/events/__init__.py:94
-msgid "Target state has changed"
+#: structures/events.py:134
+#, fuzzy
+msgid "Target state was changed"
 msgstr "Состояние цели изменилось"
 
-#: structures/events/__init__.py:108
+#: structures/events.py:144
 msgid "Human has connected"
 msgstr "Человек присоединился"
 
-#: structures/events/__init__.py:117
+#: structures/events.py:154
 msgid "Human has disconnected"
 msgstr "Человек отсоединился"
 
-#: structures/events/__init__.py:126
+#: structures/events.py:164
 msgid "Human has went to briefing"
 msgstr "Человек вышел в брифинг"
 
-#: structures/events/__init__.py:139
+#: structures/events.py:174
 msgid "Human has selected airfield"
 msgstr "Человек выбрал аэродром"
 
-#: structures/events/__init__.py:148
-msgid "Human has spawned"
-msgstr "Человек появился на карте"
-
-#: structures/events/__init__.py:162
-msgid "Human has took off"
-msgstr "Человек взлетел"
-
-#: structures/events/__init__.py:171
-msgid "Human has landed"
-msgstr "Человек сел"
-
-#: structures/events/__init__.py:180
-msgid "Human has crashed"
-msgstr "Человек разбился"
-
-#: structures/events/__init__.py:192
-msgid "Human was damaged on ground"
-msgstr "Человек был поврежден на земле"
-
-#: structures/events/__init__.py:205
-msgid "Human has damaged himself"
-msgstr "Человек сам себя повредил"
-
-#: structures/events/__init__.py:218
-msgid "Human was damaged by human"
-msgstr "Человек был поврежден человеком"
-
-#: structures/events/__init__.py:230
-msgid "Human has committed suicide"
-msgstr "Человек совершил самоубийство"
-
-#: structures/events/__init__.py:243
-msgid "Human was shot down by human"
-msgstr "Человек был сбит человеком"
-
-#: structures/events/__init__.py:256
-msgid "Human was shot down by static"
-msgstr "Человек был сбит статическим объектом"
-
-#: structures/events/__init__.py:269
+#: structures/events.py:184
 msgid "Human has toggled landing lights"
 msgstr "Человек переключил посадочные фары"
 
-#: structures/events/__init__.py:283
+#: structures/events.py:195
 msgid "Human has toggled wingtip smokes"
 msgstr "Человек переключил дымы"
 
-#: structures/events/__init__.py:295
+#: structures/events.py:205
 msgid "Human has changed seat"
 msgstr "Человек сменил место члена экипажа"
 
-#: structures/events/__init__.py:307
-msgid "Human crew member has bailed out"
+#: structures/events.py:215
+#, fuzzy
+msgid "Human aircraft has spawned"
+msgstr "Человек появился на карте"
+
+#: structures/events.py:225
+#, fuzzy
+msgid "Human aircraft has took off"
+msgstr "Человек взлетел"
+
+#: structures/events.py:235
+#, fuzzy
+msgid "Human aircraft has landed"
+msgstr "Человек сел"
+
+#: structures/events.py:245
+#, fuzzy
+msgid "Human aircraft has crashed"
+msgstr "Человек разбился"
+
+#: structures/events.py:255
+#, fuzzy
+msgid "Human has destroyed his aircraft"
+msgstr "Человек выбрал аэродром"
+
+#: structures/events.py:266
+#, fuzzy
+msgid "Human has damaged his aircraft"
+msgstr "Человек сам себя повредил"
+
+#: structures/events.py:276
+#, fuzzy
+msgid "Human aircraft was damaged on ground"
+msgstr "Человек был поврежден на земле"
+
+#: structures/events.py:286
+#, fuzzy
+msgid "Human aircraft was damaged by human aircraft"
+msgstr "Человек был поврежден человеком"
+
+#: structures/events.py:296
+#, fuzzy
+msgid "Human aircraft was damaged by static"
+msgstr "Человек был поврежден человеком"
+
+#: structures/events.py:306
+#, fuzzy
+msgid "Human aircraft was damaged by AI aircraft"
+msgstr "Человек был поврежден человеком"
+
+#: structures/events.py:316
+#, fuzzy
+msgid "Human aircraft was shot down by human aircraft"
+msgstr "Человек был сбит человеком"
+
+#: structures/events.py:326
+#, fuzzy
+msgid "Human aircraft was shot down by static"
+msgstr "Человек был сбит статическим объектом"
+
+#: structures/events.py:336
+#, fuzzy
+msgid "Human aircraft was shot down by AI aircraft"
+msgstr "Человек был сбит статическим объектом"
+
+#: structures/events.py:346
+#, fuzzy
+msgid "Human aircraft crew member has bailed out"
 msgstr "Член экипажа человека выпрыгнул с парашютом"
 
-#: structures/events/__init__.py:319
-msgid "Human crew member has opened parachute"
-msgstr "Член экипажа человека открыл парашют"
-
-#: structures/events/__init__.py:331
-msgid "Human crew member was captured"
-msgstr "Член экипажа человека был захвачен"
-
-#: structures/events/__init__.py:343
-msgid "Human crew member was wounded"
+#: structures/events.py:356
+#, fuzzy
+msgid "Human aircraft crew member has touched down"
 msgstr "Член экипажа человека был ранен"
 
-#: structures/events/__init__.py:355
-msgid "Human crew member was heavily wounded"
+#: structures/events.py:366
+#, fuzzy
+msgid "Human aircraft crew member was captured"
+msgstr "Член экипажа человека был захвачен"
+
+#: structures/events.py:376
+#, fuzzy
+msgid "Human aircraft crew member was wounded"
+msgstr "Член экипажа человека был ранен"
+
+#: structures/events.py:386
+#, fuzzy
+msgid "Human aircraft crew member was heavily wounded"
 msgstr "Член экипажа человека был тяжело ранен"
 
-#: structures/events/__init__.py:367
-msgid "Human crew member was killed"
+#: structures/events.py:396
+#, fuzzy
+msgid "Human aircraft crew member was killed"
 msgstr "Член экипажа человека был убит"
 
-#: structures/events/__init__.py:380
-msgid "Human crew member was killed by human"
+#: structures/events.py:406
+#, fuzzy
+msgid "Human aircraft crew member was killed by human aircraft"
 msgstr "Член экипажа человека был убит человеком"
 
-#: structures/events/__init__.py:393
-msgid "Building was destroyed by human"
+#: structures/events.py:416
+#, fuzzy
+msgid "Human aircraft crew member was killed by static"
+msgstr "Член экипажа человека был убит человеком"
+
+#: structures/events.py:427
+#, fuzzy
+msgid "Building was destroyed by human aircraft"
 msgstr "Здание было разрушено человеком"
 
-#: structures/events/__init__.py:406
-msgid "Tree was destroyed by human"
+#: structures/events.py:438
+#, fuzzy
+msgid "Building was destroyed by static"
+msgstr "Здание было разрушено человеком"
+
+#: structures/events.py:449
+#, fuzzy
+msgid "Building was destroyed by moving unit"
+msgstr "Здание было разрушено человеком"
+
+#: structures/events.py:460
+#, fuzzy
+msgid "Building was destroyed by AI aircraft"
+msgstr "Здание было разрушено человеком"
+
+#: structures/events.py:471
+#, fuzzy
+msgid "Tree was destroyed by human aircraft"
 msgstr "Дерево было разрушено человеком"
 
-#: structures/events/__init__.py:419
-msgid "Static was destroyed by human"
+#: structures/events.py:482
+#, fuzzy
+msgid "Tree was destroyed by static"
+msgstr "Дерево было разрушено человеком"
+
+#: structures/events.py:492
+#, fuzzy
+msgid "Static was destroyed"
 msgstr "Статический объект был разрушен человеком"
 
-#: structures/events/__init__.py:434
-msgid "Bridge was destroyed by human"
+#: structures/events.py:502
+#, fuzzy
+msgid "Static was destroyed by static"
+msgstr "Статический объект был разрушен человеком"
+
+#: structures/events.py:512
+#, fuzzy
+msgid "Static was destroyed by moving unit"
+msgstr "Статический объект был разрушен человеком"
+
+#: structures/events.py:522
+#, fuzzy
+msgid "Static was destroyed by human aircraft"
+msgstr "Статический объект был разрушен человеком"
+
+#: structures/events.py:532
+#, fuzzy
+msgid "Static was destroyed by AI aircraft"
+msgstr "Статический объект был разрушен человеком"
+
+#: structures/events.py:544
+#, fuzzy
+msgid "Bridge was destroyed by human aircraft"
 msgstr "Мост был разрушен человеком"
+
+#: structures/events.py:554
+msgid "Moving unit member was destroyed by AI aircraft"
+msgstr ""
+
+#: structures/events.py:564
+#, fuzzy
+msgid "Moving unit member was destroyed by moving unit"
+msgstr "Мост был разрушен человеком"
+
+#: structures/events.py:574
+msgid "Moving unit member was destroyed by moving unit member"
+msgstr ""
+
+#: structures/events.py:584
+#, fuzzy
+msgid "AI aircraft has despawned"
+msgstr "Человек появился на карте"
+
+#: structures/events.py:594
+#, fuzzy
+msgid "AI aircraft was damaged on ground"
+msgstr "Человек был поврежден на земле"
+
+#: structures/events.py:604
+#, fuzzy
+msgid "AI aircraft was damaged by human aircraft"
+msgstr "Человек был поврежден человеком"
+
+#: structures/events.py:614
+msgid "AI aircraft was damaged by AI aircraft"
+msgstr ""
+
+#: structures/events.py:625
+#, fuzzy
+msgid "AI has damaged his aircraft"
+msgstr "Человек сам себя повредил"
+
+#: structures/events.py:636
+msgid "AI has destroyed his aircraft"
+msgstr ""
+
+#: structures/events.py:646
+#, fuzzy
+msgid "AI aircraft has crashed"
+msgstr "Человек разбился"
+
+#: structures/events.py:656
+#, fuzzy
+msgid "AI aircraft was shot down by human aircraft"
+msgstr "Человек был сбит человеком"
+
+#: structures/events.py:666
+#, fuzzy
+msgid "AI aircraft was shot down by static"
+msgstr "Человек был сбит статическим объектом"
+
+#: structures/events.py:676
+msgid "AI aircraft was shot down by moving unit member"
+msgstr ""
+
+#: structures/events.py:686
+#, fuzzy
+msgid "AI aircraft has landed"
+msgstr "Человек сел"
+
+#: structures/events.py:696
+#, fuzzy
+msgid "AI aircraft crew member was killed"
+msgstr "Член экипажа человека был убит"
+
+#: structures/events.py:706
+#, fuzzy
+msgid "AI aircraft crew member was killed by static"
+msgstr "Член экипажа человека был убит человеком"
+
+#: structures/events.py:716
+msgid "AI aircraft crew member was killed in parachute by AI aircraft"
+msgstr ""
+
+#: structures/events.py:727
+msgid "AI aircraft crew member's parachute was destroyed by AI aircraft"
+msgstr ""
+
+#: structures/events.py:738
+#, fuzzy
+msgid "AI aircraft crew member was wounded"
+msgstr "Член экипажа человека был ранен"
+
+#: structures/events.py:748
+#, fuzzy
+msgid "AI aircraft crew member was heavily wounded"
+msgstr "Член экипажа человека был тяжело ранен"
+
+#: structures/events.py:758
+#, fuzzy
+msgid "AI aircraft crew member has bailed out"
+msgstr "Член экипажа человека выпрыгнул с парашютом"
+
+#: structures/events.py:768
+#, fuzzy
+msgid "AI aircraft crew member has touched down"
+msgstr "Член экипажа человека выпрыгнул с парашютом"
+
+#~ msgid "Human has committed suicide"
+#~ msgstr "Человек совершил самоубийство"
+
+#~ msgid "Human crew member has opened parachute"
+#~ msgstr "Член экипажа человека открыл парашют"
