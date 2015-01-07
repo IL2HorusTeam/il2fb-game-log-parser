@@ -8,9 +8,9 @@ IL-2 FB Events Parser
 Parse log file (or single line) from IL-2 FB dedicated server and produce
 information about events.
 
-  **Note**: Currently mostly all events can be parsed. AI-related events still
-  need to be studied, so that's why this is beta version.
+State of translations:
 
+|Translations|
 
 .. |Build Status| image:: http://img.shields.io/travis/IL2HorusTeam/il2fb-events-parser.svg?style=flat&branch=master
    :target: https://travis-ci.org/IL2HorusTeam/il2fb-events-parser
@@ -36,6 +36,8 @@ information about events.
 .. |Requirements| image:: https://requires.io/github/IL2HorusTeam/il2fb-events-parser/requirements.svg?branch=master&style=flat
     :target: https://requires.io/github/IL2HorusTeam/il2fb-events-parser/requirements/?branch=master
     :alt: Requirements Status
-
+.. |Translations| image:: https://www.transifex.com/projects/p/il2fb-events-parser/resource/il2fb-events-parserpot/chart/image_png
+    :target: https://www.transifex.com/projects/p/il2fb-events-parser/
+    :alt: Status of translations
 
 .. _read the docs: http://il2fb-events-parser.readthedocs.org/
