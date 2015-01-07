@@ -227,6 +227,10 @@ class ParserTestCase(BaseTestCase):
                 "[8:33:05 PM] 0_Chief0 destroyed by 1_Chief at 100.0 200.99"
             ),
             (
+                events.MovingUnitMemberWasDestroyedByMovingUnitMember,
+                "[8:33:05 PM] 0_Chief0 destroyed by 1_Chief0 at 100.0 200.99"
+            ),
+            (
                 events.AIAircraftHasDespawned,
                 "[8:33:05 PM] Pe-8 removed at 100.0 200.99"
             ),
