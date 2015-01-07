@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-01-07 15:39+0200\n"
+"POT-Creation-Date: 2015-01-07 16:22+0200\n"
 "PO-Revision-Date: \n"
 "Last-Translator: \n"
 "Language-Team: \n"
@@ -171,114 +171,118 @@ msgstr ""
 msgid "Tree was destroyed by static"
 msgstr ""
 
-#: structures/events.py:492
+#: structures/events.py:493
+msgid "Tree was destroyed by AI aircraft"
+msgstr ""
+
+#: structures/events.py:503
 msgid "Static was destroyed"
 msgstr ""
 
-#: structures/events.py:502
+#: structures/events.py:513
 msgid "Static was destroyed by static"
 msgstr ""
 
-#: structures/events.py:512
+#: structures/events.py:523
 msgid "Static was destroyed by moving unit"
 msgstr ""
 
-#: structures/events.py:522
+#: structures/events.py:533
 msgid "Static was destroyed by human aircraft"
 msgstr ""
 
-#: structures/events.py:532
+#: structures/events.py:543
 msgid "Static was destroyed by AI aircraft"
 msgstr ""
 
-#: structures/events.py:544
+#: structures/events.py:555
 msgid "Bridge was destroyed by human aircraft"
 msgstr ""
 
-#: structures/events.py:554
+#: structures/events.py:565
 msgid "Moving unit member was destroyed by AI aircraft"
 msgstr ""
 
-#: structures/events.py:564
+#: structures/events.py:575
 msgid "Moving unit member was destroyed by moving unit"
 msgstr ""
 
-#: structures/events.py:574
+#: structures/events.py:585
 msgid "Moving unit member was destroyed by moving unit member"
 msgstr ""
 
-#: structures/events.py:584
+#: structures/events.py:595
 msgid "AI aircraft has despawned"
 msgstr ""
 
-#: structures/events.py:594
+#: structures/events.py:605
 msgid "AI aircraft was damaged on ground"
 msgstr ""
 
-#: structures/events.py:604
+#: structures/events.py:615
 msgid "AI aircraft was damaged by human aircraft"
 msgstr ""
 
-#: structures/events.py:614
+#: structures/events.py:625
 msgid "AI aircraft was damaged by AI aircraft"
 msgstr ""
 
-#: structures/events.py:625
+#: structures/events.py:636
 msgid "AI has damaged his aircraft"
 msgstr ""
 
-#: structures/events.py:636
+#: structures/events.py:647
 msgid "AI has destroyed his aircraft"
 msgstr ""
 
-#: structures/events.py:646
+#: structures/events.py:657
 msgid "AI aircraft has crashed"
 msgstr ""
 
-#: structures/events.py:656
+#: structures/events.py:667
 msgid "AI aircraft was shot down by human aircraft"
 msgstr ""
 
-#: structures/events.py:666
+#: structures/events.py:677
 msgid "AI aircraft was shot down by static"
 msgstr ""
 
-#: structures/events.py:676
+#: structures/events.py:687
 msgid "AI aircraft was shot down by moving unit member"
 msgstr ""
 
-#: structures/events.py:686
+#: structures/events.py:697
 msgid "AI aircraft has landed"
 msgstr ""
 
-#: structures/events.py:696
+#: structures/events.py:707
 msgid "AI aircraft crew member was killed"
 msgstr ""
 
-#: structures/events.py:706
+#: structures/events.py:717
 msgid "AI aircraft crew member was killed by static"
 msgstr ""
 
-#: structures/events.py:716
+#: structures/events.py:727
 msgid "AI aircraft crew member was killed in parachute by AI aircraft"
 msgstr ""
 
-#: structures/events.py:727
+#: structures/events.py:738
 msgid "AI aircraft crew member's parachute was destroyed by AI aircraft"
 msgstr ""
 
-#: structures/events.py:738
+#: structures/events.py:749
 msgid "AI aircraft crew member was wounded"
 msgstr ""
 
-#: structures/events.py:748
+#: structures/events.py:759
 msgid "AI aircraft crew member was heavily wounded"
 msgstr ""
 
-#: structures/events.py:758
+#: structures/events.py:769
 msgid "AI aircraft crew member has bailed out"
 msgstr ""
 
-#: structures/events.py:768
+#: structures/events.py:779
 msgid "AI aircraft crew member has touched down"
 msgstr ""

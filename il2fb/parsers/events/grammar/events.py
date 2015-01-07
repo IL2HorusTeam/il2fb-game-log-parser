@@ -326,6 +326,14 @@ tree_was_destroyed_by_static = Event(
     + event_pos
 ).toStructure(events.TreeWasDestroyedByStatic)
 
+tree_was_destroyed_by_ai_aircraft = Event(
+    event_time
+    + tree
+    + " destroyed by "
+    + ai_aircraft_aggressor
+    + event_pos
+).toStructure(events.TreeWasDestroyedByAIAircraft)
+
 static_was_destroyed = Event(
     event_time
     + static_victim
@@ -600,6 +608,7 @@ event = (
 
     | tree_was_destroyed_by_human_aircraft
     | tree_was_destroyed_by_static
+    | tree_was_destroyed_by_ai_aircraft
 
     # Moving unit-related events ----------------------------------------------
     | moving_unit_member_was_destroyed_by_moving_unit_member

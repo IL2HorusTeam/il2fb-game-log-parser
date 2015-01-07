@@ -1197,6 +1197,38 @@ class EventsTestCase(BaseTestCase):
         _assert("[8:33:05 PM] 3do/Tree/Line_W/live.sim destroyed by 0_Static at 100.0 200.99")
         _assert("[8:33:05 PM] 3do/Tree/Line_W/mono.sim destroyed by 0_Static at 100.0 200.99")
 
+    def test_tree_was_destroyed_by_ai_aircraft(self):
+
+        def _assert(string):
+            event = self.string_to_event(
+                string,
+                grammar.tree_was_destroyed_by_ai_aircraft
+            )
+            self.assertIsInstance(
+                event,
+                structures.TreeWasDestroyedByAIAircraft
+            )
+            self.assertEqual(event.time, datetime.time(20, 33, 5))
+            self.assertEqual(event.aggressor, "Pe-8")
+            self.assertEqual(event.pos, Point2D(100.0, 200.99))
+            self.assertEqual(
+                event.to_primitive(),
+                {
+                    'time': "20:33:05",
+                    'aggressor': "Pe-8",
+                    'pos': {
+                        'x': 100.0,
+                        'y': 200.99,
+                    },
+                    'name': "TreeWasDestroyedByAIAircraft",
+                    'verbose_name': "Tree was destroyed by AI aircraft",
+                }
+            )
+
+        _assert("[8:33:05 PM] 3do/Tree/Line_W/live.sim destroyed by Pe-8 at 100.0 200.99")
+        _assert("[8:33:05 PM] 3do/Tree/Line_W/mono.sim destroyed by Pe-8 at 100.0 200.99")
+
+
     def test_static_was_destroyed(self):
         string = "[8:33:05 PM] 0_Static crashed at 100.0 200.99"
         event = self.string_to_event(string, grammar.static_was_destroyed)
