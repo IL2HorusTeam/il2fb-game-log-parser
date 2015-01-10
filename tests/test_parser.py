@@ -315,6 +315,10 @@ class ParserTestCase(BaseTestCase):
                 "[8:33:05 PM] Pe-8(0) was killed by Bf-109G-6_Late at 100.0 200.99"
             ),
             (
+                events.AIAircraftCrewMemberWasKilledByMovingUnitMember,
+                "[8:33:05 PM] Pe-8(0) was killed by 0_Chief0 at 100.0 200.99"
+            ),
+            (
                 events.AIAircraftCrewMemberWasKilledInParachuteByAIAircraft,
                 "[8:33:05 PM] Pe-8(0) was killed in his chute by Bf-109G-6_Late at 100.0 200.99"
             ),
