@@ -1769,7 +1769,7 @@ class EventsTestCase(BaseTestCase):
             }
         )
 
-    def test_ai_aircraft_crew_member_was_by_static(self):
+    def test_ai_aircraft_crew_member_was_killed_by_static(self):
         string = "[8:33:05 PM] Pe-8(0) was killed by 0_Static at 100.0 200.99"
         event = self.string_to_event(
             string,
@@ -1798,6 +1798,39 @@ class EventsTestCase(BaseTestCase):
                 },
                 'name': "AIAircraftCrewMemberWasKilledByStatic",
                 'verbose_name': "AI aircraft crew member was killed by static",
+            }
+        )
+
+    def test_ai_aircraft_crew_member_was_killed_by_ai_aircraft(self):
+        string = "[8:33:05 PM] Pe-8(0) was killed by Bf-109G-6_Late at 100.0 200.99"
+        event = self.string_to_event(
+            string,
+            grammar.ai_aircraft_crew_member_was_killed_by_ai_aircraft
+        )
+        self.assertIsInstance(
+            event,
+            structures.AIAircraftCrewMemberWasKilledByAIAircraft
+        )
+        self.assertEqual(event.time, datetime.time(20, 33, 5))
+        self.assertEqual(event.victim, AIAircraftCrewMember("Pe-8", 0))
+        self.assertEqual(event.aggressor, "Bf-109G-6_Late")
+        self.assertEqual(event.pos, Point2D(100.0, 200.99))
+        self.assertEqual(
+            event.to_primitive(),
+            {
+                'time': "20:33:05",
+                'victim': {
+                    'aircraft': "Pe-8",
+                    'seat_number': 0,
+                },
+                'aggressor': "Bf-109G-6_Late",
+                'pos': {
+                    'x': 100.0,
+                    'y': 200.99,
+                },
+                'name': "AIAircraftCrewMemberWasKilledByAIAircraft",
+                'verbose_name': "AI aircraft crew member was killed by "
+                                "AI aircraft",
             }
         )
 
