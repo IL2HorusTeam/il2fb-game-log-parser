@@ -1862,7 +1862,8 @@ class EventsTestCase(BaseTestCase):
                     'y': 200.99,
                 },
                 'name': "AIAircraftCrewMemberWasKilledInParachuteByAIAircraft",
-                'verbose_name': "AI aircraft crew member was killed in parachute by AI aircraft",
+                'verbose_name': "AI aircraft crew member was killed in "
+                                "parachute by AI aircraft",
             }
         )
 
@@ -1894,7 +1895,39 @@ class EventsTestCase(BaseTestCase):
                     'y': 200.99,
                 },
                 'name': "AIAircraftCrewMemberParachuteWasDestroyedByAIAircraft",
-                'verbose_name': "AI aircraft crew member's parachute was destroyed by AI aircraft",
+                'verbose_name': "AI aircraft crew member's parachute was "
+                                "destroyed by AI aircraft",
+            }
+        )
+
+    def test_ai_aircraft_crew_member_parachute_was_destroyed(self):
+        string = "[8:33:05 PM] Pe-8(0) has chute destroyed by at 100.0 200.99"
+        event = self.string_to_event(
+            string,
+            grammar.ai_aircraft_crew_member_parachute_was_destroyed
+        )
+        self.assertIsInstance(
+            event,
+            structures.AIAircraftCrewMemberParachuteWasDestroyed
+        )
+        self.assertEqual(event.time, datetime.time(20, 33, 5))
+        self.assertEqual(event.victim, AIAircraftCrewMember("Pe-8", 0))
+        self.assertEqual(event.pos, Point2D(100.0, 200.99))
+        self.assertEqual(
+            event.to_primitive(),
+            {
+                'time': "20:33:05",
+                'victim': {
+                    'aircraft': "Pe-8",
+                    'seat_number': 0,
+                },
+                'pos': {
+                    'x': 100.0,
+                    'y': 200.99,
+                },
+                'name': "AIAircraftCrewMemberParachuteWasDestroyed",
+                'verbose_name': "AI aircraft crew member's parachute was "
+                                "destroyed",
             }
         )
 
