@@ -2099,6 +2099,39 @@ class EventsTestCase(BaseTestCase):
             }
         )
 
+    def test_moving_unit_was_destroyed_by_moving_unit_member(self):
+        string = "[8:33:05 PM] 0_Chief destroyed by 1_Chief0 at 100.0 200.99"
+        event = self.string_to_event(
+            string,
+            grammar.moving_unit_was_destroyed_by_moving_unit_member
+        )
+        self.assertIsInstance(
+            event,
+            structures.MovingUnitWasDestroyedByMovingUnitMember
+        )
+        self.assertEqual(event.time, datetime.time(20, 33, 5))
+        self.assertEqual(event.victim, "0_Chief")
+        self.assertEqual(event.aggressor, MovingUnitMember("1_Chief", 0))
+        self.assertEqual(event.pos, Point2D(100.0, 200.99))
+        self.assertEqual(
+            event.to_primitive(),
+            {
+                'time': "20:33:05",
+                'victim': "0_Chief",
+                'aggressor': {
+                    'moving_unit': "1_Chief",
+                    'index': 0,
+                },
+                'pos': {
+                    'x': 100.0,
+                    'y': 200.99,
+                },
+                'name': "MovingUnitWasDestroyedByMovingUnitMember",
+                'verbose_name': "Moving unit was destroyed by moving unit "
+                                "member",
+            }
+        )
+
     def test_moving_unit_member_was_destroyed_by_ai_aircraft(self):
         string = "[8:33:05 PM] 0_Chief0 destroyed by Pe-8 at 100.0 200.99"
         event = self.string_to_event(

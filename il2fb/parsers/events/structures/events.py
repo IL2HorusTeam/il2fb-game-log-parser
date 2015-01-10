@@ -51,6 +51,7 @@ __all__ = (
     'StaticWasDestroyedByMovingUnit', 'TargetStateWasChanged',
     'TreeWasDestroyedByHumanAircraft', 'TreeWasDestroyedByStatic',
     'TreeWasDestroyedByAIAircraft', 'TreeWasDestroyed',
+    'MovingUnitWasDestroyedByMovingUnitMember',
     'MovingUnitMemberWasDestroyedByAIAircraft',
     'MovingUnitMemberWasDestroyedByHumanAircraft',
     'MovingUnitMemberWasDestroyedByMovingUnit',
@@ -570,6 +571,16 @@ class BridgeWasDestroyedByHumanAircraft(Event):
     """
     __slots__ = ['time', 'victim', 'aggressor', 'pos', ]
     verbose_name = _("Bridge was destroyed by human aircraft")
+
+
+class MovingUnitWasDestroyedByMovingUnitMember(Event):
+    """
+    Example::
+
+        "[8:33:05 PM] 0_Chief destroyed by 1_Chief0 at 100.0 200.99"
+    """
+    __slots__ = ['time', 'victim', 'aggressor', 'pos', ]
+    verbose_name = _("Moving unit was destroyed by moving unit member")
 
 
 class MovingUnitMemberWasDestroyedByAIAircraft(Event):
