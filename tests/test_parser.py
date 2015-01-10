@@ -279,6 +279,10 @@ class ParserTestCase(BaseTestCase):
                 "[8:33:05 PM] Pe-8 shot down by User1:Bf-109G-6_Late at 100.0 200.99"
             ),
             (
+                events.AIAircraftWasShotDownByAIAircraft,
+                "[8:33:05 PM] Pe-8 shot down by Bf-109G-6_Late at 100.0 200.99"
+            ),
+            (
                 events.AIAircraftWasShotDownByStatic,
                 "[8:33:05 PM] Pe-8 shot down by 0_Static at 100.0 200.99"
             ),
