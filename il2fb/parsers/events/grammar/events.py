@@ -391,6 +391,14 @@ bridge_was_destroyed_by_human_aircraft = Event(
 ).toStructure(events.BridgeWasDestroyedByHumanAircraft)
 
 # Moving unit-related events --------------------------------------------------
+moving_unit_was_destroyed_by_moving_unit = Event(
+    event_time
+    + moving_unit_victim
+    + " destroyed by "
+    + moving_unit_aggressor
+    + event_pos
+).toStructure(events.MovingUnitWasDestroyedByMovingUnit)
+
 moving_unit_was_destroyed_by_moving_unit_member = Event(
     event_time
     + moving_unit_victim
@@ -668,6 +676,7 @@ event = (
 
     # Moving unit-related events ----------------------------------------------
     | moving_unit_was_destroyed_by_moving_unit_member
+    | moving_unit_was_destroyed_by_moving_unit
     | moving_unit_member_was_destroyed_by_moving_unit_member
     | moving_unit_member_was_destroyed_by_moving_unit
     | moving_unit_member_was_destroyed_by_human_aircraft

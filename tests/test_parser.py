@@ -227,6 +227,10 @@ class ParserTestCase(BaseTestCase):
                 "[8:33:05 PM] 3do/Tree/Line_W/live.sim destroyed by at 100.0 200.99"
             ),
             (
+                events.MovingUnitWasDestroyedByMovingUnit,
+                "[8:33:05 PM] 0_Chief destroyed by 1_Chief at 100.0 200.99"
+            ),
+            (
                 events.MovingUnitWasDestroyedByMovingUnitMember,
                 "[8:33:05 PM] 0_Chief destroyed by 1_Chief0 at 100.0 200.99"
             ),
