@@ -2041,6 +2041,35 @@ class EventsTestCase(BaseTestCase):
             }
         )
 
+    def test_ai_aircraft_crew_member_was_captured(self):
+        string = "[8:33:05 PM] Pe-8(0) was captured at 100.0 200.99"
+        event = self.string_to_event(
+            string,
+            grammar.ai_aircraft_crew_member_was_captured
+        )
+        self.assertIsInstance(
+            event, structures.AIAircraftCrewMemberWasCaptured
+        )
+        self.assertEqual(event.time, datetime.time(20, 33, 5))
+        self.assertEqual(event.victim, AIAircraftCrewMember("Pe-8", 0))
+        self.assertEqual(event.pos, Point2D(100.0, 200.99))
+        self.assertEqual(
+            event.to_primitive(),
+            {
+                'time': "20:33:05",
+                'victim': {
+                    'aircraft': "Pe-8",
+                    'seat_number': 0,
+                },
+                'pos': {
+                    'x': 100.0,
+                    'y': 200.99,
+                },
+                'name': "AIAircraftCrewMemberWasCaptured",
+                'verbose_name': "AI aircraft crew member was captured",
+            }
+        )
+
     def test_ai_aircraft_crew_member_has_bailed_out(self):
         string = "[8:33:05 PM] Pe-8(0) bailed out at 100.0 200.99"
         event = self.string_to_event(

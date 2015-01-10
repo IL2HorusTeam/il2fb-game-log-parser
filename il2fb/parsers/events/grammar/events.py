@@ -608,6 +608,13 @@ ai_aircraft_crew_member_was_heavily_wounded = Event(
     + event_pos
 ).toStructure(events.AIAircraftCrewMemberWasHeavilyWounded)
 
+ai_aircraft_crew_member_was_captured = Event(
+    event_time
+    + ai_aircraft_crew_member_victim
+    + " was captured"
+    + event_pos
+).toStructure(events.AIAircraftCrewMemberWasCaptured)
+
 ai_aircraft_crew_member_has_bailed_out = Event(
     event_time
     + ai_aircraft_crew_member
@@ -709,6 +716,7 @@ event = (
     | ai_aircraft_crew_member_has_bailed_out
     | ai_aircraft_crew_member_has_touched_down
     | ai_aircraft_crew_member_was_heavily_wounded
+    | ai_aircraft_crew_member_was_captured
     | ai_aircraft_crew_member_was_killed
     | ai_aircraft_crew_member_was_killed_by_static
     | ai_aircraft_crew_member_was_killed_by_moving_unit_member
