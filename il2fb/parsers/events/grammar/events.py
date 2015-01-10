@@ -555,6 +555,14 @@ ai_aircraft_crew_member_was_killed_by_static = Event(
     + event_pos
 ).toStructure(events.AIAircraftCrewMemberWasKilledByStatic)
 
+ai_aircraft_crew_member_was_killed_by_human_aircraft = Event(
+    event_time
+    + ai_aircraft_crew_member_victim
+    + " was killed by "
+    + human_aircraft_aggressor
+    + event_pos
+).toStructure(events.AIAircraftCrewMemberWasKilledByHumanAircraft)
+
 ai_aircraft_crew_member_was_killed_by_ai_aircraft = Event(
     event_time
     + ai_aircraft_crew_member_victim
@@ -720,6 +728,7 @@ event = (
     | ai_aircraft_crew_member_was_killed
     | ai_aircraft_crew_member_was_killed_by_static
     | ai_aircraft_crew_member_was_killed_by_moving_unit_member
+    | ai_aircraft_crew_member_was_killed_by_human_aircraft
     | ai_aircraft_crew_member_was_killed_by_ai_aircraft
     | ai_aircraft_crew_member_was_killed_in_parachute_by_ai_aircraft
     | ai_aircraft_crew_member_parachute_was_destroyed_by_ai_aircraft
