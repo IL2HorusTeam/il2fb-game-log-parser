@@ -6,7 +6,7 @@ python:
   - '3.4'
 install:
   - pip install -e . --use-mirrors
-  - pip install coverage coveralls nose scrutinizer-ocular
+  - pip install coverage coveralls nose profilehooks scrutinizer-ocular
 script:
   - coverage run `which nosetests` --nocapture
 after_success:

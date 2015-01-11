@@ -600,7 +600,7 @@ class MovingUnitWasDestroyedByStatic(Event):
     """
     Example::
 
-        "[8:33:05 PM] 0_Chief0 destroyed by 0_Static at 100.0 200.99"
+        "[8:33:05 PM] 0_Chief destroyed by 0_Static at 100.0 200.99"
     """
     __slots__ = ['time', 'victim', 'aggressor', 'pos', ]
     verbose_name = _("Moving unit was destroyed by static")
