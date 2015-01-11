@@ -36,7 +36,7 @@ State of translations:
 .. |Requirements| image:: https://requires.io/github/IL2HorusTeam/il2fb-events-parser/requirements.svg?branch=master&style=flat
     :target: https://requires.io/github/IL2HorusTeam/il2fb-events-parser/requirements/?branch=master
     :alt: Requirements Status
-.. |Translations| image:: https://www.transifex.com/projects/p/il2fb-events-parser/resource/il2fb-events-parserpot/chart/image_png
+.. |Translations| image:: https://www.transifex.com/projects/p/il2fb-events-parser/resource/il2fb-events-parserpo/chart/image_png
     :target: https://www.transifex.com/projects/p/il2fb-events-parser/
     :alt: Status of translations
 

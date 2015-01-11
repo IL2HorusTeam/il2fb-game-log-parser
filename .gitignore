@@ -31,9 +31,6 @@ nosetests.xml
 *.lprof
 htmlcov
 
-# Translations
-*.mo
-
 # Mr Developer
 .mr.developer.cfg
 .project
