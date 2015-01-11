@@ -20,9 +20,13 @@ from .primitives import space, number
 
 class Event(Combine):
 
+    structure = None
+
     def toStructure(self, structure):
         to_structure = lambda tokens: structure(**tokens.event)
-        return self.setResultsName("event").setParseAction(to_structure)
+        grammar = self.setResultsName("event").setParseAction(to_structure)
+        grammar.structure = structure
+        return grammar
 
 
 # Mission-related events ------------------------------------------------------
@@ -637,101 +641,101 @@ ai_aircraft_crew_member_has_touched_down = Event(
     + event_pos
 ).toStructure(events.AIAircraftCrewMemberHasTouchedDown)
 
-# Grammar order matters!
-event = (
+# Order of grammar rules ------------------------------------------------------
+rules = (
     # Mission-related events --------------------------------------------------
-    mission_is_playing
-    | mission_has_begun
-    | mission_has_ended
-    | mission_was_won
-    | target_state_has_changed
+    mission_is_playing,
+    mission_has_begun,
+    mission_has_ended,
+    mission_was_won,
+    target_state_has_changed,
 
     # Human-related events ----------------------------------------------------
-    | human_has_connected
-    | human_has_disconnected
-    | human_has_selected_airfield
-    | human_has_went_to_briefing
-    | human_has_changed_seat
-    | human_has_toggled_landing_lights
-    | human_has_toggled_wingtip_smokes
-    | human_has_damaged_his_aircraft
-    | human_has_destroyed_his_aircraft
+    human_has_connected,
+    human_has_disconnected,
+    human_has_selected_airfield,
+    human_has_went_to_briefing,
+    human_has_changed_seat,
+    human_has_toggled_landing_lights,
+    human_has_toggled_wingtip_smokes,
+    human_has_damaged_his_aircraft,
+    human_has_destroyed_his_aircraft,
 
-    | human_aircraft_has_crashed
-    | human_aircraft_has_landed
-    | human_aircraft_has_spawned
-    | human_aircraft_has_took_off
-    | human_aircraft_was_damaged_on_ground
-    | human_aircraft_was_damaged_by_human_aircraft
-    | human_aircraft_was_damaged_by_static
-    | human_aircraft_was_damaged_by_ai_aircraft
-    | human_aircraft_was_shot_down_by_human_aircraft
-    | human_aircraft_was_shot_down_by_static
-    | human_aircraft_was_shot_down_by_ai_aircraft
+    human_aircraft_has_crashed,
+    human_aircraft_has_landed,
+    human_aircraft_has_spawned,
+    human_aircraft_has_took_off,
+    human_aircraft_was_damaged_on_ground,
+    human_aircraft_was_damaged_by_human_aircraft,
+    human_aircraft_was_damaged_by_static,
+    human_aircraft_was_damaged_by_ai_aircraft,
+    human_aircraft_was_shot_down_by_human_aircraft,
+    human_aircraft_was_shot_down_by_static,
+    human_aircraft_was_shot_down_by_ai_aircraft,
 
-    | human_aircraft_crew_member_has_bailed_out
-    | human_aircraft_crew_member_has_touched_down
-    | human_aircraft_crew_member_was_captured
-    | human_aircraft_crew_member_was_heavily_wounded
-    | human_aircraft_crew_member_was_killed
-    | human_aircraft_crew_member_was_killed_by_human_aircraft
-    | human_aircraft_crew_member_was_killed_by_static
-    | human_aircraft_crew_member_was_wounded
+    human_aircraft_crew_member_has_bailed_out,
+    human_aircraft_crew_member_has_touched_down,
+    human_aircraft_crew_member_was_captured,
+    human_aircraft_crew_member_was_heavily_wounded,
+    human_aircraft_crew_member_was_killed,
+    human_aircraft_crew_member_was_killed_by_human_aircraft,
+    human_aircraft_crew_member_was_killed_by_static,
+    human_aircraft_crew_member_was_wounded,
 
     # Objects-related events --------------------------------------------------
-    | static_was_destroyed
-    | static_was_destroyed_by_human_aircraft
-    | static_was_destroyed_by_static
-    | static_was_destroyed_moving_unit
-    | static_was_destroyed_by_ai_aircraft
+    static_was_destroyed,
+    static_was_destroyed_by_human_aircraft,
+    static_was_destroyed_by_static,
+    static_was_destroyed_moving_unit,
+    static_was_destroyed_by_ai_aircraft,
 
-    | building_was_destroyed_by_human_aircraft
-    | building_was_destroyed_by_static
-    | building_was_destroyed_by_moving_unit
-    | building_was_destroyed_by_ai_aircraft
+    building_was_destroyed_by_human_aircraft,
+    building_was_destroyed_by_static,
+    building_was_destroyed_by_moving_unit,
+    building_was_destroyed_by_ai_aircraft,
 
-    | bridge_was_destroyed_by_human_aircraft
+    bridge_was_destroyed_by_human_aircraft,
 
-    | tree_was_destroyed
-    | tree_was_destroyed_by_human_aircraft
-    | tree_was_destroyed_by_static
-    | tree_was_destroyed_by_ai_aircraft
+    tree_was_destroyed,
+    tree_was_destroyed_by_human_aircraft,
+    tree_was_destroyed_by_static,
+    tree_was_destroyed_by_ai_aircraft,
 
     # Moving unit-related events ----------------------------------------------
-    | moving_unit_was_destroyed_by_moving_unit_member
-    | moving_unit_was_destroyed_by_moving_unit
-    | moving_unit_was_destroyed_by_static
-    | moving_unit_member_was_destroyed_by_moving_unit_member
-    | moving_unit_member_was_destroyed_by_moving_unit
-    | moving_unit_member_was_destroyed_by_human_aircraft
-    | moving_unit_member_was_destroyed_by_ai_aircraft
+    moving_unit_was_destroyed_by_moving_unit_member,
+    moving_unit_was_destroyed_by_moving_unit,
+    moving_unit_was_destroyed_by_static,
+    moving_unit_member_was_destroyed_by_moving_unit_member,
+    moving_unit_member_was_destroyed_by_moving_unit,
+    moving_unit_member_was_destroyed_by_human_aircraft,
+    moving_unit_member_was_destroyed_by_ai_aircraft,
 
     # AI aircraft-related events ----------------------------------------------
-    | ai_has_damaged_his_aircraft
-    | ai_has_destroyed_his_aircraft
+    ai_has_damaged_his_aircraft,
+    ai_has_destroyed_his_aircraft,
 
-    | ai_aircraft_has_crashed
-    | ai_aircraft_has_despawned
-    | ai_aircraft_has_landed
-    | ai_aircraft_was_damaged_by_human_aircraft
-    | ai_aircraft_was_damaged_by_ai_aircraft
-    | ai_aircraft_was_damaged_on_ground
-    | ai_aircraft_was_shot_down_by_human_aircraft
-    | ai_aircraft_was_shot_down_by_static
-    | ai_aircraft_was_shot_down_by_moving_unit_member
-    | ai_aircraft_was_shot_down_by_ai_aircraft
+    ai_aircraft_has_crashed,
+    ai_aircraft_has_despawned,
+    ai_aircraft_has_landed,
+    ai_aircraft_was_damaged_by_human_aircraft,
+    ai_aircraft_was_damaged_by_ai_aircraft,
+    ai_aircraft_was_damaged_on_ground,
+    ai_aircraft_was_shot_down_by_human_aircraft,
+    ai_aircraft_was_shot_down_by_static,
+    ai_aircraft_was_shot_down_by_moving_unit_member,
+    ai_aircraft_was_shot_down_by_ai_aircraft,
 
-    | ai_aircraft_crew_member_has_bailed_out
-    | ai_aircraft_crew_member_has_touched_down
-    | ai_aircraft_crew_member_was_heavily_wounded
-    | ai_aircraft_crew_member_was_captured
-    | ai_aircraft_crew_member_was_killed
-    | ai_aircraft_crew_member_was_killed_by_static
-    | ai_aircraft_crew_member_was_killed_by_moving_unit_member
-    | ai_aircraft_crew_member_was_killed_by_human_aircraft
-    | ai_aircraft_crew_member_was_killed_by_ai_aircraft
-    | ai_aircraft_crew_member_was_killed_in_parachute_by_ai_aircraft
-    | ai_aircraft_crew_member_parachute_was_destroyed_by_ai_aircraft
-    | ai_aircraft_crew_member_parachute_was_destroyed
-    | ai_aircraft_crew_member_was_wounded
+    ai_aircraft_crew_member_has_bailed_out,
+    ai_aircraft_crew_member_has_touched_down,
+    ai_aircraft_crew_member_was_heavily_wounded,
+    ai_aircraft_crew_member_was_captured,
+    ai_aircraft_crew_member_was_killed,
+    ai_aircraft_crew_member_was_killed_by_static,
+    ai_aircraft_crew_member_was_killed_by_moving_unit_member,
+    ai_aircraft_crew_member_was_killed_by_human_aircraft,
+    ai_aircraft_crew_member_was_killed_by_ai_aircraft,
+    ai_aircraft_crew_member_was_killed_in_parachute_by_ai_aircraft,
+    ai_aircraft_crew_member_parachute_was_destroyed_by_ai_aircraft,
+    ai_aircraft_crew_member_parachute_was_destroyed,
+    ai_aircraft_crew_member_was_wounded,
 )

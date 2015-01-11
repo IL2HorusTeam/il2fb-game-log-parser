@@ -37,5 +37,5 @@ class ParsersTestCase(BaseTestCase):
         except EventParsingError:
             pass
         else:
-            self.fail("Parsing '{0}' was expected to raise {1}"
-                      .format(string), EventParsingError.__name__)
+            self.fail("Parsing \"{0}\" was expected to raise EventParsingError"
+                      .format(string))
