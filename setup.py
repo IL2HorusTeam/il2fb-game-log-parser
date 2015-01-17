@@ -32,6 +32,8 @@ setup(
     author_email='oblovatniy@gmail.com',
     packages=[
         'il2fb.parsers.events',
+        'il2fb.parsers.events.grammar',
+        'il2fb.parsers.events.structures',
     ],
     namespace_packages=[
         'il2fb',
