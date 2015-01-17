@@ -21,7 +21,7 @@ exec(open(version_file).read())
 setup(
     name='il2fb-events-parser',
     version=VERSION,
-    description="Parser of IL-2 FB Dedicated Server events.",
+    description="Parse events from log produced by IL-2 FB Dedicated Server",
     long_description=README,
     keywords=[
         'il2', 'il-2', 'fb', 'forgotten battles', 'parser', 'events', 'server',
