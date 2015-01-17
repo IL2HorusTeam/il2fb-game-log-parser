@@ -3,6 +3,7 @@
 from pyparsing import Combine, LineEnd, Regex, QuotedString
 
 from ..structures import events
+
 from .converters import to_int
 from .helpers import (
     ai_aircraft_actor, ai_aircraft_aggressor, ai_aircraft_victim,
@@ -641,8 +642,8 @@ ai_aircraft_crew_member_has_touched_down = Event(
     + event_pos
 ).toStructure(events.AIAircraftCrewMemberHasTouchedDown)
 
-# Order of grammar rules ------------------------------------------------------
-rules = (
+# BE CAREFUL! Order of rules matters!
+all_rules = (
     # Mission-related events --------------------------------------------------
     mission_is_playing,
     mission_has_begun,
