@@ -45,7 +45,7 @@ bug report which will be
 Known events
 ------------
 
-This library supportes the vast majority of events produced by dedicated
+This library supports the vast majority of events produced by dedicated
 server.
 
 To see their list, go to the `demo page`_ and click

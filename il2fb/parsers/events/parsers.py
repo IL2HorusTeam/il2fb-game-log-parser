@@ -50,7 +50,7 @@ def parse_string_safely(string):
 class SelectiveEventsParser(EventsParser):
 
     def __init__(self, rules, condition):
-        rules = filter(condition, all_rules)
+        rules = list(filter(condition, all_rules))
         super(SelectiveEventsParser, self).__init__(rules)
 
     def parse_string(self, string):
