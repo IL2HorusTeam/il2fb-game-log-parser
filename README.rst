@@ -177,7 +177,7 @@ Here, ``parse_string()`` method of our parser will work same way as
 
 
 Explicitly tell which events you are NOT interested in
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 If you are not interested only in some events, you can exclude them using
 ``ExclusiveEventsParser``:
