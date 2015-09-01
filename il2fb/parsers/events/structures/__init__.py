@@ -7,6 +7,7 @@ class Base(object):
     def __eq__(self, other):
         if not isinstance(other, self.__class__):
             return NotImplemented
+
         return all([
             getattr(self, x) == getattr(other, x)
             for x in self.__slots__

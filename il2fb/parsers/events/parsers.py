@@ -61,12 +61,12 @@ class SelectiveEventsParser(EventsParser):
 class InclusiveEventsParser(SelectiveEventsParser):
 
     def __init__(self, includes):
-        condition = lambda x: x.structure in includes
-        super(InclusiveEventsParser, self).__init__(includes, condition)
+        super(InclusiveEventsParser, self).__init__(
+            includes, condition=lambda x: x.structure in includes)
 
 
 class ExclusiveEventsParser(SelectiveEventsParser):
 
     def __init__(self, excludes):
-        condition = lambda x: x.structure not in excludes
-        super(ExclusiveEventsParser, self).__init__(excludes, condition)
+        super(ExclusiveEventsParser, self).__init__(
+            excludes, condition=lambda x: x.structure not in excludes)
