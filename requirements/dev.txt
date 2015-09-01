@@ -1,0 +1,6 @@
+bpython==0.13
+sphinx
+tox
+yolk
+
+-r test.txt

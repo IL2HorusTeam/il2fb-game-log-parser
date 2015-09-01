@@ -1,13 +1,17 @@
+=====================
 IL-2 FB Events Parser
 =====================
 
-|PyPI package| |PyPI downloads| |License|
+|pypi_package| |pypi_downloads| |python_versions| |docs| |license|
 
-|Build Status| |Coverage Status| |Code Review| |Health| |Quality| |Requirements|
+|unix_build| |windows_build| |coverage_status|
+
+|codeclimate| |codacy| |quality| |health| |requirements|
+
 
 L10N state:
 
-|Translations|
+|translations|
 
 
 **Table of contents**
@@ -111,7 +115,7 @@ event with invalid data:
 
 Current list of supported events is rather full, but ``EventParsingError`` is
 quite possible, because server's events are undocumented and this library may
-do not know all of them.
+do not know about all of them.
 
 In case you need to catch this error, its full name is
 ``il2fb.parsers.events.exceptions.EventParsingError``.
@@ -225,31 +229,54 @@ This idea seems to be nice and useful, but maybe it's just a premature
 optimization.
 
 
-.. |Build Status| image:: http://img.shields.io/travis/IL2HorusTeam/il2fb-events-parser.svg?style=flat&branch=master
+.. |unix_build| image:: https://travis-ci.org/IL2HorusTeam/il2fb-events-parser.svg?branch=master
    :target: https://travis-ci.org/IL2HorusTeam/il2fb-events-parser
-.. |Coverage Status| image:: http://img.shields.io/coveralls/IL2HorusTeam/il2fb-events-parser.svg?style=flat&branch=master
-   :target: https://coveralls.io/r/IL2HorusTeam/il2fb-events-parser?branch=master
-.. |PyPI package| image:: http://img.shields.io/pypi/v/il2fb-events-parser.svg?style=flat
-   :target: http://badge.fury.io/py/il2fb-events-parser/
-.. |PyPI downloads| image:: http://img.shields.io/pypi/dm/il2fb-events-parser.svg?style=flat
-   :target: https://crate.io/packages/il2fb-events-parser/
-.. |Docs| image:: https://readthedocs.org/projects/il2fb-events-parser/badge/?version=latest&style=flat
-   :target: `read the docs`_
-.. |License| image:: https://img.shields.io/badge/license-LGPLv3-brightgreen.svg?style=flat
-   :target: https://github.com/IL2HorusTeam/il2fb-events-parser/blob/master/LICENSE
-.. |Code Review| image:: https://www.codacy.com/project/badge/4c79f2cb39234620bce5d4c49a54be52
-    :target: https://www.codacy.com/public/IL2HorusTeam/il2fbmissionparser/dashboard
+
+.. |windows_build| image:: https://ci.appveyor.com/api/projects/status/a47k677tr59bd5wg/branch/master?svg=true
+    :target: https://ci.appveyor.com/project/oblalex/il2fb-events-parser
+    :alt: Build status of the master branch on Windows
+
+.. |coverage_status| image:: http://codecov.io/github/IL2HorusTeam/il2fb-events-parser/coverage.svg?branch=master
+    :target: http://codecov.io/github/IL2HorusTeam/il2fb-events-parser?branch=master
+    :alt: Test coverage
+
+.. |codeclimate| image:: https://codeclimate.com/github/IL2HorusTeam/il2fb-events-parser/badges/gpa.svg
+   :target: https://codeclimate.com/github/IL2HorusTeam/il2fb-events-parser
+   :alt: Code Climate
+
+.. |codacy| image:: https://api.codacy.com/project/badge/c0385f01ffa545dea3a52a51cfc53221
+    :target: https://www.codacy.com/app/oblalex/il2fb-events-parser
     :alt: Codacy Code Review
-.. |Health| image:: https://landscape.io/github/IL2HorusTeam/il2fb-events-parser/master/landscape.png?style=flat
-   :target: https://landscape.io/github/IL2HorusTeam/il2fb-events-parser/master
-   :alt: Code Health
-.. |Quality| image:: https://scrutinizer-ci.com/g/IL2HorusTeam/il2fb-events-parser/badges/quality-score.png?b=master&style=flat
+
+.. |quality| image:: https://scrutinizer-ci.com/g/IL2HorusTeam/il2fb-events-parser/badges/quality-score.png?b=master
    :target: https://scrutinizer-ci.com/g/IL2HorusTeam/il2fb-events-parser/?branch=master
    :alt: Scrutinizer Code Quality
-.. |Requirements| image:: https://requires.io/github/IL2HorusTeam/il2fb-events-parser/requirements.svg?branch=master&style=flat
-    :target: https://requires.io/github/IL2HorusTeam/il2fb-events-parser/requirements/?branch=master
-    :alt: Requirements Status
-.. |Translations| image:: https://www.transifex.com/projects/p/il2fb-events-parser/resource/il2fb-events-parserpo/chart/image_png
+
+.. |health| image:: https://landscape.io/github/IL2HorusTeam/il2fb-events-parser/master/landscape.svg?style=flat
+   :target: https://landscape.io/github/IL2HorusTeam/il2fb-events-parser/master
+   :alt: Code Health
+
+.. |pypi_package| image:: http://img.shields.io/pypi/v/il2fb-events-parser.svg?style=flat
+   :target: http://badge.fury.io/py/il2fb-events-parser/
+
+.. |pypi_downloads| image:: http://img.shields.io/pypi/dm/il2fb-events-parser.svg?style=flat
+   :target: https://crate.io/packages/il2fb-events-parser/
+
+.. |python_versions| image:: https://img.shields.io/badge/Python-2.7,3.4-brightgreen.svg?style=flat
+   :alt: Supported versions of Python
+
+.. |docs| image:: https://readthedocs.org/projects/il2fb-events-parser/badge/?version=latest
+    :target: https://readthedocs.org/projects/il2fb-events-parser/?badge=latest
+    :alt: Documentation Status
+
+.. |license| image:: https://img.shields.io/badge/license-LGPLv3-blue.svg?style=flat
+   :target: https://github.com/IL2HorusTeam/il2fb-events-parser/blob/master/LICENSE
+
+.. |requirements| image:: https://requires.io/github/IL2HorusTeam/il2fb-events-parser/requirements.svg?branch=master
+     :target: https://requires.io/github/IL2HorusTeam/il2fb-events-parser/requirements/?branch=master
+     :alt: Requirements Status
+
+.. |translations| image:: https://www.transifex.com/projects/p/il2fb-events-parser/resource/il2fb-events-parserpo/chart/image_png
     :target: https://www.transifex.com/projects/p/il2fb-events-parser/
     :alt: Status of translations
 

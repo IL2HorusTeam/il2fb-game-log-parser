@@ -1,8 +1,7 @@
 [run]
-source = il2fb.parsers.events
+source = il2fb/parsers/events
 omit =
     */tests/*
-    il2fb/parsers/events/version.py
 
 [report]
 exclude_lines =

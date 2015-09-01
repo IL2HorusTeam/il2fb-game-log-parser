@@ -5,7 +5,9 @@
 #     pip install -r requirements.pip
 
 candv>=1.2.1
-il2fb-commons>=0.10.0
 pyparsing>=2.0.2
 six>=1.6.1
 verboselib>=0.2,<0.3
+
+# il2fb-commons>=0.11.0.dev0
+-e git+https://github.com/IL2HorusTeam/il2fb-commons.git#egg=il2fb-commons
