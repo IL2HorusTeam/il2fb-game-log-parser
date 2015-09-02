@@ -282,5 +282,5 @@ optimization.
 
 .. _read the docs: http://il2fb-events-parser.readthedocs.org/
 
-.. _demo page: https://il2fb-events-parser-demo.herokuapp.com/
+.. _demo page: http://il2horusteam.github.io/il2fb-events-parser/
 .. _visit project's demo page: `demo page`_
