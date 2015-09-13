@@ -256,8 +256,8 @@ optimization.
    :target: https://landscape.io/github/IL2HorusTeam/il2fb-events-parser/master
    :alt: Code Health
    
-.. |code_issues| image:: https://www.quantifiedcode.com/api/v1/project/876978f2d56f4ac88f50f8d271545083/badge.svg
-     :target: https://www.quantifiedcode.com/app/project/876978f2d56f4ac88f50f8d271545083
+.. |code_issues| image:: https://www.quantifiedcode.com/api/v1/project/49c826961bd54c14a5ca1959e07d05c1/badge.svg
+     :target: https://www.quantifiedcode.com/app/project/49c826961bd54c14a5ca1959e07d05c1
      :alt: Code issues
 
 .. |pypi_package| image:: http://img.shields.io/pypi/v/il2fb-events-parser.svg?style=flat
