@@ -4,11 +4,12 @@ import datetime
 import inspect
 
 from il2fb.commons.organization import Belligerents
+from il2fb.commons.spatial import Point2D
 
 from il2fb.parsers.events.constants import TARGET_END_STATES
 from il2fb.parsers.events.grammar import events as grammar
 from il2fb.parsers.events.structures import (
-    Point2D, HumanAircraft, HumanAircraftCrewMember, AIAircraftCrewMember,
+    HumanAircraft, HumanAircraftCrewMember, AIAircraftCrewMember,
     MovingUnitMember, events as structures,
 )
 

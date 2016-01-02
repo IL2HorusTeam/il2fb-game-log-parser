@@ -2,8 +2,10 @@
 
 import datetime
 
-from il2fb.commons.organization import Belligerents
 from pyparsing import ParseException
+
+from il2fb.commons.organization import Belligerents
+from il2fb.commons.spatial import Point2D
 
 from il2fb.parsers.events.constants import TARGET_END_STATES
 from il2fb.parsers.events.grammar.helpers import (
@@ -15,7 +17,7 @@ from il2fb.parsers.events.grammar.helpers import (
 )
 from il2fb.parsers.events.grammar.primitives import space
 from il2fb.parsers.events.structures import (
-    Point2D, HumanAircraft, HumanAircraftCrewMember, AIAircraftCrewMember,
+    HumanAircraft, HumanAircraftCrewMember, AIAircraftCrewMember,
     MovingUnitMember,
 )
 

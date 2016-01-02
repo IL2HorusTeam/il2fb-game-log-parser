@@ -4,10 +4,11 @@ import datetime
 import six
 
 from il2fb.commons.organization import Belligerents
+from il2fb.commons.spatial import Point2D
 
 from ..constants import LOG_TIME_FORMAT, LOG_DATE_FORMAT, TOGGLE_VALUES
 from ..structures import (
-    Point2D, HumanAircraft, HumanAircraftCrewMember, AIAircraftCrewMember,
+    HumanAircraft, HumanAircraftCrewMember, AIAircraftCrewMember,
     MovingUnitMember,
 )
 

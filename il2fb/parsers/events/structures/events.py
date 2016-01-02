@@ -4,7 +4,7 @@ import six
 
 from il2fb.parsers.events.utils import translations
 
-from . import Base
+from il2fb.commons.structures import BaseStructure
 
 
 __all__ = (
@@ -64,9 +64,9 @@ __all__ = (
 _ = translations.ugettext_lazy
 
 
-class Event(Base):
+class Event(BaseStructure):
     """
-    Base event structure.
+    BaseStructure event structure.
     """
 
     def __init__(self, **kwargs):

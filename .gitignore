@@ -27,6 +27,7 @@ pip-log.txt
 .coverage
 .coveralls.yml
 .tox
+.cache
 nosetests.xml
 *.lprof
 htmlcov
