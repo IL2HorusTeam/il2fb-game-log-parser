@@ -15,7 +15,7 @@ __all__ = (
 class EventsParser(object):
 
     def __init__(self, rules=None):
-        self._rules = rules or all_rules
+        self._rules = rules if rules is not None else all_rules
 
     def parse_string(self, string, ignore_errors=False):
         for rule in self._rules:
