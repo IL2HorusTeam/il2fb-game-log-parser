@@ -6,7 +6,7 @@ IL-2 FB Events Parser
 
 |unix_build| |windows_build| |coverage_status|
 
-|codeclimate| |codacy| |quality| |health| |requirements|
+|code_issues| |codeclimate| |codacy| |quality| |health| |requirements|
 
 
 L10N state:
@@ -255,6 +255,10 @@ optimization.
 .. |health| image:: https://landscape.io/github/IL2HorusTeam/il2fb-events-parser/master/landscape.svg?style=flat
    :target: https://landscape.io/github/IL2HorusTeam/il2fb-events-parser/master
    :alt: Code Health
+   
+.. |code_issues| image:: https://www.quantifiedcode.com/api/v1/project/49c826961bd54c14a5ca1959e07d05c1/badge.svg
+     :target: https://www.quantifiedcode.com/app/project/49c826961bd54c14a5ca1959e07d05c1
+     :alt: Code issues
 
 .. |pypi_package| image:: http://img.shields.io/pypi/v/il2fb-events-parser.svg?style=flat
    :target: http://badge.fury.io/py/il2fb-events-parser/
