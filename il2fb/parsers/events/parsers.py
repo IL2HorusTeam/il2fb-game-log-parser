@@ -7,8 +7,8 @@ from .grammar.events import all_rules
 
 
 __all__ = (
-    'parse_string', 'parse_string_safely',
-    'InclusiveEventsParser', 'ExclusiveEventsParser',
+    'EventsParser', 'SelectiveEventsParser', 'InclusiveEventsParser',
+    'ExclusiveEventsParser',
 )
 
 
@@ -34,17 +34,6 @@ class EventsParser(object):
         if not ignore_errors:
             raise EventParsingError("No grammar was found for string \"{0}\""
                                     .format(string))
-
-
-__parser = EventsParser()
-
-
-def parse_string(string):
-    return __parser.parse_string(string)
-
-
-def parse_string_safely(string):
-    return __parser.parse_string(string, ignore_errors=True)
 
 
 class SelectiveEventsParser(EventsParser):

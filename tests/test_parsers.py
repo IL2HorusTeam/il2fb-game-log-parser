@@ -1,8 +1,7 @@
 # -*- coding: utf-8 -*-
 
 from il2fb.parsers.events import (
-    parse_string, parse_string_safely, InclusiveEventsParser,
-    ExclusiveEventsParser,
+    EventsParser, InclusiveEventsParser, ExclusiveEventsParser,
 )
 from il2fb.parsers.events.exceptions import EventParsingError
 from il2fb.parsers.events.structures import events
@@ -10,7 +9,7 @@ from il2fb.parsers.events.structures import events
 from .base import BaseTestCase
 
 
-class ParsersTestCase(BaseTestCase):
+class EventsParserBaseTestCase(BaseTestCase):
 
     def setUp(self):
         self.structures = (getattr(events, name) for name in events.__all__)
@@ -23,16 +22,23 @@ class ParsersTestCase(BaseTestCase):
             if x.startswith('"') and x.endswith('"')
         )
 
+
+class EventsParserTestCase(EventsParserBaseTestCase):
+
+    def setUp(self):
+        super(EventsParserTestCase, self).setUp()
+        self.parser = EventsParser()
+
     def test_parse_string(self):
         for structure in self.structures:
             for example in self.get_event_examples(structure):
-                event = parse_string(example)
+                event = self.parser.parse_string(example)
                 self.assertIsInstance(event, structure)
 
     def test_parse_string_with_unexpected_data(self):
         string = "foo bar baz quz"
         try:
-            parse_string(string)
+            self.parser.parse_string(string)
         except EventParsingError:
             pass
         else:
@@ -42,7 +48,7 @@ class ParsersTestCase(BaseTestCase):
     def test_parse_string_with_invalid_data(self):
         string = "[99:99:99 PM] Mission BEGIN"
         try:
-            parse_string(string)
+            self.parser.parse_string(string)
         except ValueError:
             pass
         else:
@@ -50,8 +56,11 @@ class ParsersTestCase(BaseTestCase):
                       .format(string))
 
     def test_parse_string_safely(self):
-        self.assertIsNone(parse_string_safely("foo bar baz quz"))
-        self.assertIsNone(parse_string_safely("[99:99:99 PM] Mission BEGIN"))
+        self.assertIsNone(self.parser.parse_string("foo bar baz quz", ignore_errors=True))
+        self.assertIsNone(self.parser.parse_string("[99:99:99 PM] Mission BEGIN", ignore_errors=True))
+
+
+class InclusiveEventsParserTestCase(EventsParserBaseTestCase):
 
     def test_inclusive_events_parser(self):
         includes = [events.HumanHasConnected, events.HumanHasSelectedAirfield]
@@ -67,6 +76,9 @@ class ParsersTestCase(BaseTestCase):
 
         self.assertIsNone(parser.parse_string("foo bar baz quz"))
         self.assertIsNone(parser.parse_string("[99:99:99 PM] Mission BEGIN"))
+
+
+class ExclusiveEventsParserTestCase(EventsParserBaseTestCase):
 
     def test_exclusive_events_parser(self):
         excludes = [
