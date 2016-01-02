@@ -76,12 +76,13 @@ Basic usage
 ~~~~~~~~~~~
 
 If you need to be able to parse all events this library knows about, use
-``parse_string()``:
+``EventsParser.parse_string()``:
 
 .. code-block:: python
 
-  from il2fb.parsers.events import parse_string
-  event = parse_string("[8:33:05 PM] User0 has connected")
+  from il2fb.parsers.events import EventsParser
+  parser = EventsParser()
+  event = parser.parse_string("[8:33:05 PM] User0 has connected")
   print(event)
   # <Event 'HumanHasConnected'>
   event.time
@@ -104,11 +105,11 @@ event with invalid data:
 
 .. code-block:: python
 
-  parse_string("foo bar")
+  parser.parse_string("foo bar")
   # Traceback (most recent call last):
   # ...
   # EventParsingError: No grammar was found for string "foo bar"
-  parse_string("[99:99:99 PM] Mission BEGIN")
+  parser.parse_string("[99:99:99 PM] Mission BEGIN")
   # Traceback (most recent call last):
   # ...
   # ValueError: time data '99:99:99 PM' does not match format '%I:%M:%S %p'
@@ -127,12 +128,13 @@ created by dedicated server.
 Safe usage
 ~~~~~~~~~~
 
-You may use ``parse_string_safely()`` if you don't care about any exceptions:
+You may set flag ``ignore_errors=True`` if you don't care about any exceptions:
 
 .. code-block:: python
 
-  from il2fb.parsers.events import parse_string_safely
-  event = parse_string_safely("foo bar")
+  from il2fb.parsers.events import EventsParser
+  parser = EventsParser()
+  event = parser.parse_string("foo bar", ignore_errors=True)
   event is None
   # True
 
@@ -176,8 +178,7 @@ To do so, you will need to use ``InclusiveEventsParser``:
   parser.parse_string("[8:33:05 PM] User0 has disconnected")
   # None
 
-Here, ``parse_string()`` method of our parser will work same way as
-``parse_string_safely()`` function.
+Here, ``parse_string()`` method of our parser will explicitly ignore errors.
 
 
 Explicitly tell which events you are NOT interested in
@@ -203,8 +204,8 @@ If you are not interested only in some events, you can exclude them using
   parser.parse_string("[8:33:05 PM] 3do/Tree/Line_W/live.sim destroyed by User0:Pe-8 at 100.0 200.99")
   # None
 
-Just like in case of ``InclusiveEventsParser``, ``parse_string()`` will work
-same way as ``parse_string_safely()`` function.
+Just like in case of ``InclusiveEventsParser``, ``parse_string()`` will
+explicitly ignore errors.
 
 
 Ideas for future
@@ -255,7 +256,7 @@ optimization.
 .. |health| image:: https://landscape.io/github/IL2HorusTeam/il2fb-events-parser/master/landscape.svg?style=flat
    :target: https://landscape.io/github/IL2HorusTeam/il2fb-events-parser/master
    :alt: Code Health
-   
+
 .. |code_issues| image:: https://www.quantifiedcode.com/api/v1/project/49c826961bd54c14a5ca1959e07d05c1/badge.svg
      :target: https://www.quantifiedcode.com/app/project/49c826961bd54c14a5ca1959e07d05c1
      :alt: Code issues
