@@ -310,10 +310,10 @@ $(document).ready(function() {
   }
 
   /* API IO -----------------------------------------------------------------*/
-  var ws_api = new WebSocket("wss://il2fb-demo-services.herokuapp.com/api/v1/events-parser/parse")
-  , rest_api = "https://il2fb-demo-services.herokuapp.com/api/v1/events-parser/data"
-  // var ws_api = new WebSocket("ws://127.0.0.1:5000/api/v1/events-parser/parse")
-  // , rest_api = "http://127.0.0.1:5000/api/v1/events-parser/data"
+  // var ws_api = new WebSocket("wss://il2fb-demo-services.herokuapp.com/api/v1/events-parser/parse")
+  // , rest_api = "https://il2fb-demo-services.herokuapp.com/api/v1/events-parser/data"
+  var ws_api = new WebSocket("ws://127.0.0.1:5000/api/v1/events-parser/parse")
+  , rest_api = "http://127.0.0.1:5000/api/v1/events-parser/data"
 
   window.onbeforeunload = function() {
     ws_api.onclose = function() {}  // disable onclose handler first
@@ -404,7 +404,7 @@ $(document).ready(function() {
                   var description = "New " + render_issue(data.issue) + " was reported."
                   details.find('h4').after($("<p>", {html: description}))
                 } else {
-                  on_error(data.message)
+                  on_error(data.detail)
                 }
 
                 on_confirmed()
@@ -437,7 +437,7 @@ $(document).ready(function() {
                   var description = details.find('p:first')
                   description.html(description.html() + " We have reopened it just now.")
                 } else {
-                  on_error(data.message)
+                  on_error(data.detail)
                 }
 
                 on_confirmed()
@@ -485,7 +485,7 @@ $(document).ready(function() {
             details.append($(render_similar(data.similar)))
             details.append($(render_traceback(data.traceback)))
           } else {
-            on_error(data.message)
+            on_error(data.detail)
           }
 
           show_details.show()
