@@ -112,7 +112,10 @@ $(document).ready(function() {
 
   stream_input.autosize()
 
-  $('#supported_events_link').magnificPopup({type:'inline', midClick: true})
+  $('#supported_events_link').magnificPopup({
+    type: 'inline'
+    , midClick: true
+  })
 
   function scroll_to_element(element, delay) {
     $('html, body').animate({scrollTop: element.offset().top}, delay || 0)
@@ -569,29 +572,42 @@ $(document).ready(function() {
   }
 
   /* Load initial data ------------------------------------------------------*/
-  $.getJSON(rest_api, function(result) {
-    test_data = ""
-
-    var ol = $('div#supported_events_popup>ol')
-    for (var i = 0; i < result.supported_events.length; i++) {
-        // Insert info about event into popup
-        var data = result.supported_events[i]
-        , name = data[0]
-        , description = data[1]
-
-        ol.append($("<li>", {text: name, title: description}))
-
-        // Update test data
-        examples = description.split('\n')
-        for (var j = 0; j < examples.length; j++) {
-          var s = examples[j]
-          if (s.startsWith('"') && s.endsWith('"')) {
-            s = s.slice(1, s.length - 1)
-            test_data += (i > 0) ? "\n" + s : s
-          }
-        }
+  $.magnificPopup.open({
+    items: {
+      src: rest_api
     }
-  })
+    , type: 'ajax'
+    , modal: true
+    , cursor: 'mfp-ajax-cur'
+    , callbacks: {
+      parseAjax: function(response) {
+        test_data = ""
+        result = response.data
+
+        var ol = $('div#supported_events_popup>ol')
+        for (var i = 0; i < result.supported_events.length; i++) {
+            // Insert info about event into popup
+            var data = result.supported_events[i]
+            , name = data[0]
+            , description = data[1]
+
+            ol.append($("<li>", {text: name, title: description}))
+
+            // Update test data
+            examples = description.split('\n')
+            for (var j = 0; j < examples.length; j++) {
+              var s = examples[j]
+              if (s.startsWith('"') && s.endsWith('"')) {
+                s = s.slice(1, s.length - 1)
+                test_data += (i > 0) ? "\n" + s : s
+              }
+            }
+        }
+        $.magnificPopup.close()
+      }
+    }
+  });
+
 })
 </script>
 
