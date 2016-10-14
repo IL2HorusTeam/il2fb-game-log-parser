@@ -5,7 +5,7 @@
 #     pip install -r requirements/dist.txt
 
 candv>=1.2.1
-pyparsing>=2.0.2
+pyparsing==2.1.5
 six>=1.6.1
 verboselib>=0.2,<0.3
 

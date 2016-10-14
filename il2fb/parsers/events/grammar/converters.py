@@ -58,5 +58,5 @@ def to_ai_aircraft_crew_member(tokens):
 
 
 def to_moving_unit_member(tokens):
-    kwargs = six.next(six.itervalues(tokens.asDict())).asDict()
+    kwargs = six.next(six.itervalues(tokens.asDict()))
     return MovingUnitMember(**kwargs)
