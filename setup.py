@@ -30,9 +30,10 @@ with open(os.path.join(__here__, 'requirements', 'dist.txt')) as f:
 
 README = open(os.path.join(__here__, 'README.rst')).read()
 
+
 setup(
     name='il2fb-events-parser',
-    version='1.0.0.dev1',
+    version='1.1.0.dev0',
     description="Parse events from log produced by IL-2 FB Dedicated Server",
     long_description=README,
     keywords=[
@@ -44,8 +45,6 @@ setup(
     author_email='oblovatniy@gmail.com',
     packages=[
         'il2fb.parsers.events',
-        'il2fb.parsers.events.grammar',
-        'il2fb.parsers.events.structures',
     ],
     namespace_packages=[
         'il2fb',

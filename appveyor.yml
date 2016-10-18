@@ -16,4 +16,4 @@ install:
   - "%PYTHON%/Scripts/pip.exe install -r ./requirements/ci.txt"
   - "%PYTHON%/Scripts/pip.exe install -e ."
 test_script:
-  - "%PYTHON%/Scripts/py.test"
+  - "%PYTHON%/Scripts/py.test ./tests"
