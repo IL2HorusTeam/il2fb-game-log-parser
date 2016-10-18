@@ -1,4 +1,4 @@
-# -*- coding: utf-8 -*-
+# coding: utf-8
 #
 # IL-2 FB Events Parser documentation build configuration file, created by
 # sphinx-quickstart on Sat Nov 22 10:43:38 2014.

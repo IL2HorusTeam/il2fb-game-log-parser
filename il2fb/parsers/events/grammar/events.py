@@ -1,4 +1,4 @@
-# -*- coding: utf-8 -*-
+# coding: utf-8
 
 from pyparsing import Combine, LineEnd, Regex, QuotedString
 
