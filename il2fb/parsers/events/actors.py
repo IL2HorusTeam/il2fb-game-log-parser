@@ -7,11 +7,21 @@ class Actor(BaseStructure):
     pass
 
 
-class HumanAircraft(Actor):
-    __slots__ = ['callsign', 'aircraft', ]
+class Human(Actor):
+    __slots__ = ['callsign', ]
+
+    def __init__(self, callsign):
+        self.callsign = callsign
+
+    def __repr__(self):
+        return "<Human {0}>".format(self.callsign)
+
+
+class HumanAircraft(Human):
+    __slots__ = Human.__slots__ + ['aircraft', ]
 
     def __init__(self, callsign, aircraft):
-        self.callsign = callsign
+        super(HumanAircraft, self).__init__(callsign)
         self.aircraft = aircraft
 
     def __repr__(self):

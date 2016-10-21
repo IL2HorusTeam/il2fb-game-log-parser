@@ -122,7 +122,7 @@ class TargetStateWasChangedTestCase(unittest.TestCase):
         )
         self.assertIsInstance(event, events.TargetStateWasChanged)
         self.assertEqual(event.time, datetime.time(20, 33, 5))
-        self.assertEqual(event.target_index, 3)
+        self.assertEqual(event.index, 3)
         self.assertEqual(
             event.state,
             events.TargetStateWasChanged.STATES.COMPLETE,
@@ -134,7 +134,7 @@ class TargetStateWasChangedTestCase(unittest.TestCase):
         )
         self.assertIsInstance(event, events.TargetStateWasChanged)
         self.assertEqual(event.time, datetime.time(20, 33, 5))
-        self.assertEqual(event.target_index, 3)
+        self.assertEqual(event.index, 3)
         self.assertEqual(
             event.state,
             events.TargetStateWasChanged.STATES.FAILED,
@@ -143,14 +143,14 @@ class TargetStateWasChangedTestCase(unittest.TestCase):
     def test_to_primitive_complete(self):
         event = events.TargetStateWasChanged(
             time=datetime.time(20, 33, 5),
-            target_index=3,
+            index=3,
             state=events.TargetStateWasChanged.STATES.COMPLETE,
         )
         self.assertEqual(
             event.to_primitive(),
             {
                 'time': "20:33:05",
-                'target_index': 3,
+                'index': 3,
                 'state': 'Complete',
                 'name': "TargetStateWasChanged",
                 'verbose_name': "Target state was changed",
@@ -160,14 +160,14 @@ class TargetStateWasChangedTestCase(unittest.TestCase):
     def test_to_primitive_failed(self):
         event = events.TargetStateWasChanged(
             time=datetime.time(20, 33, 5),
-            target_index=3,
+            index=3,
             state=events.TargetStateWasChanged.STATES.FAILED,
         )
         self.assertEqual(
             event.to_primitive(),
             {
                 'time': "20:33:05",
-                'target_index': 3,
+                'index': 3,
                 'state': 'Failed',
                 'name': "TargetStateWasChanged",
                 'verbose_name': "Target state was changed",
@@ -183,18 +183,20 @@ class HumanHasConnectedTestCase(unittest.TestCase):
         )
         self.assertIsInstance(event, events.HumanHasConnected)
         self.assertEqual(event.time, datetime.time(20, 33, 5))
-        self.assertEqual(event.callsign, "User0")
+        self.assertEqual(event.actor, actors.Human("User0"))
 
     def test_to_primitive(self):
         event = events.HumanHasConnected(
             time=datetime.time(20, 33, 5),
-            callsign="User0",
+            actor=actors.Human("User0"),
         )
         self.assertEqual(
             event.to_primitive(),
             {
                 'time': "20:33:05",
-                'callsign': "User0",
+                'actor': {
+                    'callsign': "User0",
+                },
                 'name': "HumanHasConnected",
                 'verbose_name': "Human has connected",
             }
@@ -209,18 +211,20 @@ class HumanHasDisconnectedTestCase(unittest.TestCase):
         )
         self.assertIsInstance(event, events.HumanHasDisconnected)
         self.assertEqual(event.time, datetime.time(20, 33, 5))
-        self.assertEqual(event.callsign, "User0")
+        self.assertEqual(event.actor, actors.Human("User0"))
 
     def test_to_primitive(self):
         event = events.HumanHasDisconnected(
             time=datetime.time(20, 33, 5),
-            callsign="User0",
+            actor=actors.Human("User0"),
         )
         self.assertEqual(
             event.to_primitive(),
             {
                 'time': "20:33:05",
-                'callsign': "User0",
+                'actor': {
+                    'callsign': "User0",
+                },
                 'name': "HumanHasDisconnected",
                 'verbose_name': "Human has disconnected",
             }
@@ -235,14 +239,14 @@ class HumanHasSelectedAirfieldTestCase(unittest.TestCase):
         )
         self.assertIsInstance(event, events.HumanHasSelectedAirfield)
         self.assertEqual(event.time, datetime.time(20, 33, 5))
-        self.assertEqual(event.callsign, "User0")
+        self.assertEqual(event.actor, actors.Human("User0"))
         self.assertEqual(event.belligerent, Belligerents.red)
         self.assertEqual(event.pos, Point2D(100.0, 200.99))
 
     def test_to_primitive(self):
         event = events.HumanHasSelectedAirfield(
             time=datetime.time(20, 33, 5),
-            callsign="User0",
+            actor=actors.Human("User0"),
             belligerent=Belligerents.red,
             pos=Point2D(100.0, 200.99),
         )
@@ -250,7 +254,9 @@ class HumanHasSelectedAirfieldTestCase(unittest.TestCase):
             event.to_primitive(),
             {
                 'time': "20:33:05",
-                'callsign': "User0",
+                'actor': {
+                    'callsign': "User0",
+                },
                 'belligerent': {
                     'value': 1,
                     'name': 'red',
@@ -310,18 +316,20 @@ class HumanHasWentToBriefingTestCase(unittest.TestCase):
         )
         self.assertIsInstance(event, events.HumanHasWentToBriefing)
         self.assertEqual(event.time, datetime.time(20, 33, 5))
-        self.assertEqual(event.callsign, "User0")
+        self.assertEqual(event.actor, actors.Human("User0"))
 
     def test_to_primitive(self):
         event = events.HumanHasWentToBriefing(
             time=datetime.time(20, 33, 5),
-            callsign="User0",
+            actor=actors.Human("User0"),
         )
         self.assertEqual(
             event.to_primitive(),
             {
                 'time': "20:33:05",
-                'callsign': "User0",
+                'actor': {
+                    'callsign': "User0",
+                },
                 'name': "HumanHasWentToBriefing",
                 'verbose_name': "Human has went to briefing",
             }
@@ -737,5 +745,52 @@ class HumanAircraftWasDamagedOnGroundTestCase(unittest.TestCase):
                 },
                 'name': "HumanAircraftWasDamagedOnGround",
                 'verbose_name': "Human aircraft was damaged on the ground",
+            }
+        )
+
+
+class HumanAircraftWasDamagedByHumanAircraftTestCase(unittest.TestCase):
+
+    def test_from_s(self):
+        event = events.HumanAircraftWasDamagedByHumanAircraft.from_s(
+            "[8:33:05 PM] User0:Pe-8 damaged by User1:Bf-109G-6_Late at 100.0 200.99"
+        )
+        self.assertIsInstance(event, events.HumanAircraftWasDamagedByHumanAircraft)
+        self.assertEqual(event.time, datetime.time(20, 33, 5))
+        self.assertEqual(
+            event.actor,
+            actors.HumanAircraft("User0", "Pe-8")
+        )
+        self.assertEqual(
+            event.attacker,
+            actors.HumanAircraft("User1", "Bf-109G-6_Late")
+        )
+        self.assertEqual(event.pos, Point2D(100.0, 200.99))
+
+    def test_to_primitive(self):
+        event = events.HumanAircraftWasDamagedByHumanAircraft(
+            time=datetime.time(20, 33, 5),
+            actor=actors.HumanAircraft("User0", "Pe-8"),
+            attacker=actors.HumanAircraft("User1", "Bf-109G-6_Late"),
+            pos=Point2D(100.0, 200.99),
+        )
+        self.assertEqual(
+            event.to_primitive(),
+            {
+                'time': "20:33:05",
+                'actor': {
+                    'callsign': "User0",
+                    'aircraft': "Pe-8",
+                },
+                'attacker': {
+                    'callsign': "User1",
+                    'aircraft': "Bf-109G-6_Late",
+                },
+                'pos': {
+                    'x': 100.0,
+                    'y': 200.99,
+                },
+                'name': "HumanAircraftWasDamagedByHumanAircraft",
+                'verbose_name': "Human aircraft was damaged by human aircraft",
             }
         )
