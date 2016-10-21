@@ -522,6 +522,35 @@ class HumanAircraftHasTookOff(Event):
     )
 
 
+class HumanAircraftHasLanded(Event):
+    """
+    Example:
+
+        "[8:33:05 PM] User0:Pe-8 landed at 100.0 200.99"
+
+    """
+    __slots__ = ['time', 'actor', 'pos', ]
+
+    verbose_name = _("Human aircraft has landed")
+    matcher = make_matcher(
+        "{time_prefix}"  # 'time' group regex placeholder
+        "{actor_group}"  # 'actor' group regex placeholder
+        "\s"             # single whitespace
+        "landed"         #
+        "{pos_suffix}"   # 'pos' group regex placeholder
+        .format(
+            time_prefix=rx.TIME_PREFIX,
+            actor_group=rx.HUMAN_AIRCRAFT_GROUP,
+            pos_suffix=rx.POS_SUFFIX,
+        )
+    )
+    transformers = (
+        tx.transform_time,
+        tx.human_aircraft_as_actor,
+        tx.transform_pos,
+    )
+
+
 class HumanHasDamagedOwnAircraft(Event):
     """
     Examples:
