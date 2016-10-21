@@ -580,6 +580,43 @@ class HumanAircraftHasCrashed(Event):
     )
 
 
+class HumanHasDestroyedOwnAircraft(Event):
+    """
+    Examples:
+
+        "[8:33:05 PM] User0:Pe-8 shot down by landscape at 100.0 200.99"
+        "[8:33:05 PM] User0:Pe-8 shot down by NONAME at 100.0 200.99"
+
+    """
+    __slots__ = ['time', 'actor', 'pos', ]
+
+    verbose_name = _("Human has destroyed own aircraft")
+    matcher = make_matcher(
+        "{time_prefix}"  # 'time' group regex placeholder
+        "{actor_group}"  # 'actor' group regex placeholder
+        "\s"             # single whitespace
+        "shot"           #
+        "\s"             # single whitespace
+        "down"           #
+        "\s"             # single whitespace
+        "by"             #
+        "\s"             # single whitespace
+        "{himself}"      # 'himself' regex placeholder
+        "{pos_suffix}"   # 'pos' group regex placeholder
+        .format(
+            time_prefix=rx.TIME_PREFIX,
+            actor_group=rx.HUMAN_AIRCRAFT_GROUP,
+            himself=rx.HIMSELF,
+            pos_suffix=rx.POS_SUFFIX,
+        )
+    )
+    transformers = (
+        tx.transform_time,
+        tx.human_aircraft_as_actor,
+        tx.transform_pos,
+    )
+
+
 class HumanHasDamagedOwnAircraft(Event):
     """
     Examples:
