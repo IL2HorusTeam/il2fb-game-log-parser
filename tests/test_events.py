@@ -227,32 +227,6 @@ class HumanHasDisconnectedTestCase(unittest.TestCase):
         )
 
 
-class HumanHasWentToBriefingTestCase(unittest.TestCase):
-
-    def test_from_s(self):
-        event = events.HumanHasWentToBriefing.from_s(
-            "[8:33:05 PM] User0 entered refly menu"
-        )
-        self.assertIsInstance(event, events.HumanHasWentToBriefing)
-        self.assertEqual(event.time, datetime.time(20, 33, 5))
-        self.assertEqual(event.callsign, "User0")
-
-    def test_to_primitive(self):
-        event = events.HumanHasWentToBriefing(
-            time=datetime.time(20, 33, 5),
-            callsign="User0",
-        )
-        self.assertEqual(
-            event.to_primitive(),
-            {
-                'time': "20:33:05",
-                'callsign': "User0",
-                'name': "HumanHasWentToBriefing",
-                'verbose_name': "Human has went to briefing",
-            }
-        )
-
-
 class HumanHasSelectedAirfieldTestCase(unittest.TestCase):
 
     def test_from_s(self):
@@ -289,6 +263,67 @@ class HumanHasSelectedAirfieldTestCase(unittest.TestCase):
                 },
                 'name': "HumanHasSelectedAirfield",
                 'verbose_name': "Human has selected airfield",
+            }
+        )
+
+
+class HumanAircraftHasSpawnedTestCase(unittest.TestCase):
+
+    def test_from_s(self):
+        event = events.HumanAircraftHasSpawned.from_s(
+            "[8:33:05 PM] User0:Pe-8 loaded weapons '40fab100' fuel 40%"
+        )
+        self.assertIsInstance(event, events.HumanAircraftHasSpawned)
+        self.assertEqual(event.time, datetime.time(20, 33, 5))
+        self.assertEqual(event.actor, actors.HumanAircraft("User0", "Pe-8"))
+        self.assertEqual(event.weapons, "40fab100")
+        self.assertEqual(event.fuel, 40)
+
+    def test_to_primitive(self):
+        event = events.HumanAircraftHasSpawned(
+            time=datetime.time(20, 33, 5),
+            actor=actors.HumanAircraft("User0", "Pe-8"),
+            weapons="40fab100",
+            fuel=40,
+        )
+        self.assertEqual(
+            event.to_primitive(),
+            {
+                'time': "20:33:05",
+                'actor': {
+                    'callsign': "User0",
+                    'aircraft': "Pe-8",
+                },
+                'weapons': "40fab100",
+                'fuel': 40,
+                'name': "HumanAircraftHasSpawned",
+                'verbose_name': "Human aircraft has spawned",
+            }
+        )
+
+
+class HumanHasWentToBriefingTestCase(unittest.TestCase):
+
+    def test_from_s(self):
+        event = events.HumanHasWentToBriefing.from_s(
+            "[8:33:05 PM] User0 entered refly menu"
+        )
+        self.assertIsInstance(event, events.HumanHasWentToBriefing)
+        self.assertEqual(event.time, datetime.time(20, 33, 5))
+        self.assertEqual(event.callsign, "User0")
+
+    def test_to_primitive(self):
+        event = events.HumanHasWentToBriefing(
+            time=datetime.time(20, 33, 5),
+            callsign="User0",
+        )
+        self.assertEqual(
+            event.to_primitive(),
+            {
+                'time': "20:33:05",
+                'callsign': "User0",
+                'name': "HumanHasWentToBriefing",
+                'verbose_name': "Human has went to briefing",
             }
         )
 
@@ -449,14 +484,14 @@ class HumanHasChangedSeatTestCase(unittest.TestCase):
         self.assertEqual(event.time, datetime.time(20, 33, 5))
         self.assertEqual(
             event.actor,
-            actors.HumanCrewMember("User0", "Pe-8", 0)
+            actors.HumanAircraftCrewMember("User0", "Pe-8", 0)
         )
         self.assertEqual(event.pos, Point2D(100.0, 200.99))
 
     def test_to_primitive(self):
         event = events.HumanHasChangedSeat(
             time=datetime.time(20, 33, 5),
-            actor=actors.HumanCrewMember("User0", "Pe-8", 0),
+            actor=actors.HumanAircraftCrewMember("User0", "Pe-8", 0),
             pos=Point2D(100.0, 200.99),
         )
         self.assertEqual(

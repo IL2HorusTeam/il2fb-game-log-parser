@@ -137,7 +137,7 @@ SEAT_GROUP = """
                  # any ending of a string
 """
 
-HUMAN_CREW_MEMBER_GROUP = """
+HUMAN_AIRCRAFT_CREW_MEMBER_GROUP = """
 # Capture pilot's callsign, aircraft and seat number. E.g.:
 #
 # " User:Pe-8(0) "

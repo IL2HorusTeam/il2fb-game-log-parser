@@ -276,36 +276,6 @@ class HumanHasDisconnected(Event):
     )
 
 
-class HumanHasWentToBriefing(Event):
-    """
-    Example:
-
-        "[8:33:05 PM] User0 entered refly menu"
-
-    """
-    __slots__ = ['time', 'callsign', ]
-
-    verbose_name = _("Human has went to briefing")
-    matcher = make_matcher(
-        "{time_prefix}"     # 'time' group regex placeholder
-        "{callsign_group}"  # 'callsign' group regex placeholder
-        "\s"                # single whitespace
-        "entered"           #
-        "\s"                # single whitespace
-        "refly"             #
-        "\s"                # single whitespace
-        "menu"              #
-        "$"                 # end of string
-        .format(
-            time_prefix=rx.TIME_PREFIX,
-            callsign_group=rx.HUMAN_CALLSIGN_GROUP,
-        )
-    )
-    transformers = (
-        tx.transform_time,
-    )
-
-
 class HumanHasSelectedAirfield(Event):
     """
     Example:
@@ -337,6 +307,79 @@ class HumanHasSelectedAirfield(Event):
         tx.transform_time,
         tx.transform_belligerent,
         tx.transform_pos,
+    )
+
+
+class HumanAircraftHasSpawned(Event):
+    """
+    Example:
+
+        "[8:33:05 PM] User0:Pe-8 loaded weapons '40fab100' fuel 40%"
+
+    """
+    __slots__ = ['time', 'actor', 'weapons', 'fuel', ]
+
+    verbose_name = _("Human aircraft has spawned")
+    matcher = make_matcher(
+        "{time_prefix}"  # 'time' group regex placeholder
+        "{actor_group}"  # 'actor' group regex placeholder
+        "\s"             # single whitespace
+        "loaded"         #
+        "\s"             # single whitespace
+        "weapons"        #
+        "\s"             # single whitespace
+        "\'"             # opening single quote
+        "(?P<weapons>"   # 'weapons' group start
+        "    \S+"        # one or more non-whitespace characters
+        ")"              # 'weapons' group end
+        "\'"             # closing single quote
+        "\s"             # single whitespace
+        "fuel"           #
+        "\s"             # single whitespace
+        "(?P<fuel>"      # 'fuel' group start
+        "    \d{{2,3}}"  # 2 or 3 digits for fuel percentage
+        ")"              # 'fuel' group end
+        "%"              # percent sign
+        "$"
+        .format(
+            time_prefix=rx.TIME_PREFIX,
+            actor_group=rx.HUMAN_AIRCRAFT_GROUP,
+        )
+    )
+    transformers = (
+        tx.transform_time,
+        tx.human_aircraft_as_actor,
+        functools.partial(tx.transform_int, field_name='fuel'),
+    )
+
+
+class HumanHasWentToBriefing(Event):
+    """
+    Example:
+
+        "[8:33:05 PM] User0 entered refly menu"
+
+    """
+    __slots__ = ['time', 'callsign', ]
+
+    verbose_name = _("Human has went to briefing")
+    matcher = make_matcher(
+        "{time_prefix}"     # 'time' group regex placeholder
+        "{callsign_group}"  # 'callsign' group regex placeholder
+        "\s"                # single whitespace
+        "entered"           #
+        "\s"                # single whitespace
+        "refly"             #
+        "\s"                # single whitespace
+        "menu"              #
+        "$"                 # end of string
+        .format(
+            time_prefix=rx.TIME_PREFIX,
+            callsign_group=rx.HUMAN_CALLSIGN_GROUP,
+        )
+    )
+    transformers = (
+        tx.transform_time,
     )
 
 
@@ -436,14 +479,14 @@ class HumanHasChangedSeat(Event):
         "{pos_suffix}"   # 'pos' group regex placeholder
         .format(
             time_prefix=rx.TIME_PREFIX,
-            actor_group=rx.HUMAN_CREW_MEMBER_GROUP,
+            actor_group=rx.HUMAN_AIRCRAFT_CREW_MEMBER_GROUP,
             callsign=rx.HUMAN_CALLSIGN,
             pos_suffix=rx.POS_SUFFIX,
         )
     )
     transformers = (
         tx.transform_time,
-        tx.human_crew_member_as_actor,
+        tx.human_aircraft_crew_member_as_actor,
         tx.transform_pos,
     )
 

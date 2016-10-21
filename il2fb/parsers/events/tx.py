@@ -9,7 +9,7 @@ import datetime
 from il2fb.commons.organization import Belligerents
 from il2fb.commons.spatial import Point2D
 
-from .actors import HumanAircraft, HumanCrewMember
+from .actors import HumanAircraft, HumanAircraftCrewMember
 from .constants import LOG_TIME_FORMAT, LOG_DATE_FORMAT
 
 
@@ -50,8 +50,8 @@ def human_aircraft_as_actor(data):
     )
 
 
-def human_crew_member_as_actor(data):
-    data['actor'] = HumanCrewMember(
+def human_aircraft_crew_member_as_actor(data):
+    data['actor'] = HumanAircraftCrewMember(
         data.pop('callsign'),
         data.pop('aircraft'),
         int(data.pop('seat_number')),
