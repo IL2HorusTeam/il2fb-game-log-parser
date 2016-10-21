@@ -714,3 +714,38 @@ class HumanAircraftWasDamagedByHumanAircraft(Event):
         tx.human_aircraft_as_attacker,
         tx.transform_pos,
     )
+
+
+class HumanAircraftWasDamagedByStationaryUnit(Event):
+    """
+    Example:
+
+        "[8:33:05 PM] User0:Pe-8 damaged by 0_Static at 100.0 200.99"
+
+    """
+    __slots__ = ['time', 'actor', 'attacker', 'pos', ]
+
+    verbose_name = _("Human aircraft was damaged by stationary unit")
+    matcher = rx.matcher(
+        "{time}"      # 'time' group regex placeholder
+        "{actor}"     # 'actor' group regex placeholder
+        "\s"          # single whitespace
+        "damaged"     #
+        "\s"          # single whitespace
+        "by"          #
+        "\s"          # single whitespace
+        "{attacker}"  # 'attacker' group regex placeholder
+        "{pos}"       # 'pos' group regex placeholder
+        .format(
+            time=rx.TIME_GROUP_PREFIX,
+            actor=rx.HUMAN_AIRCRAFT_ACTOR_GROUP,
+            attacker=rx.STATIONARY_UNIT_ATTACKER_GROUP,
+            pos=rx.POS_GROUP_SUFFIX,
+        )
+    )
+    transformers = (
+        tx.transform_time,
+        tx.human_aircraft_as_actor,
+        tx.stationary_unit_as_attacker,
+        tx.transform_pos,
+    )

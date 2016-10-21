@@ -42,15 +42,28 @@ class HumanAircraftCrewMember(HumanAircraft):
         )
 
 
-class AIMovingUnitMember(Actor):
-    __slots__ = ['unit_id', 'index', ]
+class Unit(Actor):
+    __slots__ = ['id', ]
 
-    def __init__(self, unit_id, index):
-        self.unit_id = unit_id
+    def __init__(self, id):
+        self.id = id
+
+    def __repr__(self):
+        return "<Unit {0}>".format(self.id)
+
+
+class StationaryUnit(Unit):
+
+    def __repr__(self):
+        return "<Stationary unit {0}>".format(self.id)
+
+
+class MovingUnitMember(Unit):
+    __slots__ = Unit.__slots__ + ['index', ]
+
+    def __init__(self, id, index):
+        super(MovingUnitMember, self).__init__(id)
         self.index = index
 
     def __repr__(self):
-        return (
-            "<Moving unit member {0}:{1}>"
-            .format(self.unit_id, self.index)
-        )
+        return "<Moving unit member {0}:{1}>".format(self.id, self.index)

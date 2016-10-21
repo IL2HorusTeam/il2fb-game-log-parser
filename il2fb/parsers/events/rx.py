@@ -90,6 +90,29 @@ DATE_TIME_GROUP_PREFIX = """
     time_group=TIME_GROUP,
 )
 
+POS_GROUP_SUFFIX = """
+# Capture map position of an event. E.g.:
+#
+# "Something has happened at 100.0 200.99"
+#
+# "100.0" will be captured into 'pos_x' group,
+# "200.99" will be captured into 'pos_y' group.
+         # any beginning of a string
+\s       # single whitespace
+at       #
+\s       # single whitespace
+{pos_x}  # 'pos_x' regex placeholder
+\s       # single whitespace
+{pos_y}  # 'pos_y' regex placeholder
+$        # end of a string
+""".format(
+    pos_x=named_group('pos_x', FLOAT),
+    pos_y=named_group('pos_y', FLOAT),
+)
+
+TARGET_STATE_GROUP = named_group('state', choices(TARGET_STATES))
+TOGGLE_VALUE_GROUP = named_group('value', choices(TOGGLE_VALUES))
+
 BELLIGERENT_GROUP = named_group('belligerent', NON_WHITESPACES)
 
 CALLSIGN = NON_WHITESPACES
@@ -120,25 +143,8 @@ HUMAN_AIRCRAFT_CREW_MEMBER_ACTOR_GROUP = HUMAN_AIRCRAFT_CREW_MEMBER_GROUP_TEMPlA
     seat_number=SEAT_NUMBER_ACTOR_GROUP,
 )
 
-POS_GROUP_SUFFIX = """
-# Capture map position of an event. E.g.:
-#
-# "Something has happened at 100.0 200.99"
-#
-# "100.0" will be captured into 'pos_x' group,
-# "200.99" will be captured into 'pos_y' group.
-         # any beginning of a string
-\s       # single whitespace
-at       #
-\s       # single whitespace
-{pos_x}  # 'pos_x' regex placeholder
-\s       # single whitespace
-{pos_y}  # 'pos_y' regex placeholder
-$        # end of a string
-""".format(
-    pos_x=named_group('pos_x', FLOAT),
-    pos_y=named_group('pos_y', FLOAT),
+STATIONARY_UNIT = "{0}_Static".format(NUMBER)
+STATIONARY_UNIT_ATTACKER_GROUP = named_group(
+    'attacker_stationary_unit',
+    STATIONARY_UNIT,
 )
-
-TARGET_STATE_GROUP = named_group('state', choices(TARGET_STATES))
-TOGGLE_VALUE_GROUP = named_group('value', choices(TOGGLE_VALUES))

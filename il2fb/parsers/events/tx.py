@@ -9,7 +9,7 @@ import datetime
 from il2fb.commons.organization import Belligerents
 from il2fb.commons.spatial import Point2D
 
-from .actors import Human, HumanAircraft, HumanAircraftCrewMember
+from . import actors
 from .constants import LOG_TIME_FORMAT, LOG_DATE_FORMAT
 
 
@@ -44,28 +44,34 @@ def transform_float(data, field_name):
 
 
 def human_as_actor(data):
-    data['actor'] = Human(
+    data['actor'] = actors.Human(
         data.pop('actor_callsign'),
     )
 
 
 def human_aircraft_as_actor(data):
-    data['actor'] = HumanAircraft(
+    data['actor'] = actors.HumanAircraft(
         data.pop('actor_callsign'),
         data.pop('actor_aircraft'),
     )
 
 
 def human_aircraft_as_attacker(data):
-    data['attacker'] = HumanAircraft(
+    data['attacker'] = actors.HumanAircraft(
         data.pop('attacker_callsign'),
         data.pop('attacker_aircraft'),
     )
 
 
 def human_aircraft_crew_member_as_actor(data):
-    data['actor'] = HumanAircraftCrewMember(
+    data['actor'] = actors.HumanAircraftCrewMember(
         data.pop('actor_callsign'),
         data.pop('actor_aircraft'),
         int(data.pop('actor_seat_number')),
+    )
+
+
+def stationary_unit_as_attacker(data):
+    data['attacker'] = actors.StationaryUnit(
+        data.pop('attacker_stationary_unit'),
     )
