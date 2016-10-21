@@ -1,10 +1,14 @@
 # coding: utf-8
+"""
+Regex primitives.
+
+"""
 
 from .constants import TOGGLE_VALUES, TARGET_END_STATES
 
 
 TIME_GROUP = """
-# Capturing raw time stamp. E.g.:
+# Capture raw time stamp. E.g.:
 #
 # "foo 8:33:05 PM bar"
 #
@@ -23,7 +27,7 @@ TIME_GROUP = """
 """
 
 TIME_PREFIX = """
-# Capture event's time stamp. E.g.:
+# Capture event's time stamp prefix. E.g.:
 #
 # "[8:33:05 PM] foo"
 #
@@ -39,7 +43,7 @@ TIME_PREFIX = """
 )
 
 DATE_TIME_PREFIX = """
-# Capture event's datetime stamp. E.g.:
+# Capture event's datetime stamp prefix. E.g.:
 #
 # "[Sep 15, 2013 8:33:05 PM] foo"
 #
@@ -101,7 +105,7 @@ HUMAN_CALLSIGN_GROUP = """
 )
 
 HUMAN_AIRCRAFT_GROUP = """
-# Capturing pilot's callsign and aircraft. E.g.:
+# Capture pilot's callsign and aircraft. E.g.:
 #
 # "  User:Pe-8   "
 #
@@ -119,7 +123,7 @@ HUMAN_AIRCRAFT_GROUP = """
 )
 
 SEAT_GROUP = """
-# Capturing seat number. E.g.:
+# Capture seat number. E.g.:
 #
 # "Pe-8(0) seat occupied"
 #
@@ -134,7 +138,7 @@ SEAT_GROUP = """
 """
 
 HUMAN_CREW_MEMBER_GROUP = """
-# Capturing pilot's callsign, aircraft and seat number. E.g.:
+# Capture pilot's callsign, aircraft and seat number. E.g.:
 #
 # " User:Pe-8(0) "
 #
@@ -191,7 +195,7 @@ TARGET_END_STATE_GROUP = """
 )
 
 TOGGLE_VALUE_GROUP = """
-# Capturing toggle value. E.g.:
+# Capture toggle value. E.g.:
 #
 # "something is on"
 #
@@ -204,3 +208,10 @@ TOGGLE_VALUE_GROUP = """
 """.format(
     values="|".join(TOGGLE_VALUES)
 )
+
+HIMSELF = """
+# Detect that actor has done something destructive to own aircraft.
+                    # any beginning of a string
+(landscape|NONAME)  # self-flag
+                    # any ending of a string
+"""

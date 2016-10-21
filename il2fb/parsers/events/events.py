@@ -446,3 +446,38 @@ class HumanHasChangedSeat(Event):
         tx.human_crew_member_as_actor,
         tx.transform_pos,
     )
+
+
+class HumanHasDamagedOwnAircraft(Event):
+    """
+    Examples:
+
+        "[8:33:05 PM] User0:Pe-8 damaged by landscape at 100.0 200.99"
+        "[8:33:05 PM] User0:Pe-8 damaged by NONAME at 100.0 200.99"
+
+    """
+    __slots__ = ['time', 'actor', 'pos', ]
+
+    verbose_name = _("Human has damaged own aircraft")
+    matcher = make_matcher(
+        "{time_prefix}"  # 'time' group regex placeholder
+        "{actor_group}"  # 'actor' group regex placeholder
+        "\s"             # single whitespace
+        "damaged"        #
+        "\s"             # single whitespace
+        "by"             #
+        "\s"             # single whitespace
+        "{himself}"      # 'himself' regex placeholder
+        "{pos_suffix}"   # 'pos' group regex placeholder
+        .format(
+            time_prefix=rx.TIME_PREFIX,
+            actor_group=rx.HUMAN_AIRCRAFT_GROUP,
+            himself=rx.HIMSELF,
+            pos_suffix=rx.POS_SUFFIX,
+        )
+    )
+    transformers = (
+        tx.transform_time,
+        tx.human_aircraft_as_actor,
+        tx.transform_pos,
+    )
