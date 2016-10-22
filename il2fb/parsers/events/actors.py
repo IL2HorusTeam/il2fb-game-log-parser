@@ -14,7 +14,7 @@ class Human(Actor):
         self.callsign = callsign
 
     def __repr__(self):
-        return "<Human {0}>".format(self.callsign)
+        return "<Human '{0}'>".format(self.callsign)
 
 
 class HumanAircraft(Human):
@@ -25,7 +25,7 @@ class HumanAircraft(Human):
         self.aircraft = aircraft
 
     def __repr__(self):
-        return "<Human aircraft {0}:{1}>".format(self.callsign, self.aircraft)
+        return "<Human aircraft '{0}:{1}'>".format(self.callsign, self.aircraft)
 
 
 class HumanAircraftCrewMember(HumanAircraft):
@@ -37,9 +37,20 @@ class HumanAircraftCrewMember(HumanAircraft):
 
     def __repr__(self):
         return (
-            "<Human aircraft crew member #{0} at {1}:{2}>"
+            "<Human aircraft crew member #{0} in '{1}:{2}'>"
             .format(self.seat_number, self.callsign, self.aircraft)
         )
+
+
+class AIAircraft(Actor):
+    __slots__ = ['flight', 'index', ]
+
+    def __init__(self, flight, index):
+        self.flight = flight
+        self.index = index
+
+    def __repr__(self):
+        return "<AI aircraft #{0} in '{1}'>".format(self.index, self.flight)
 
 
 class Unit(Actor):
@@ -49,13 +60,13 @@ class Unit(Actor):
         self.id = id
 
     def __repr__(self):
-        return "<Unit {0}>".format(self.id)
+        return "<Unit '{0}'>".format(self.id)
 
 
 class StationaryUnit(Unit):
 
     def __repr__(self):
-        return "<Stationary unit {0}>".format(self.id)
+        return "<Stationary unit '{0}'>".format(self.id)
 
 
 class MovingUnitMember(Unit):
@@ -66,4 +77,4 @@ class MovingUnitMember(Unit):
         self.index = index
 
     def __repr__(self):
-        return "<Moving unit member {0}:{1}>".format(self.id, self.index)
+        return "<Moving unit member #{0} in '{1}'>".format(self.index, self.id)

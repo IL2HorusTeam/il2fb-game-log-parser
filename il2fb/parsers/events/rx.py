@@ -143,6 +143,15 @@ HUMAN_AIRCRAFT_CREW_MEMBER_ACTOR_GROUP = HUMAN_AIRCRAFT_CREW_MEMBER_GROUP_TEMPlA
     seat_number=SEAT_NUMBER_ACTOR_GROUP,
 )
 
+FLIGHT = NON_WHITESPACES
+INDEX = NUMBER
+
+AI_AIRCRAFT_GROUP_TEMPLATE = "{flight}{index}"
+AI_AIRCRAFT_ATTACKER_GROUP = AI_AIRCRAFT_GROUP_TEMPLATE.format(
+    flight=named_group('attacker_flight', FLIGHT),
+    index=named_group('attacker_index', INDEX),
+)
+
 STATIONARY_UNIT = "{0}_Static".format(NUMBER)
 STATIONARY_UNIT_ATTACKER_GROUP = named_group(
     'attacker_stationary_unit',
