@@ -163,6 +163,12 @@ STATIONARY_UNIT_ATTACKER_GROUP = named_group(
     STATIONARY_UNIT,
 )
 
+MOVING_UNIT = "{0}_Chief".format(NUMBER)
+MOVING_UNIT_ATTACKER_GROUP = named_group(
+    'attacker_moving_unit',
+    MOVING_UNIT,
+)
+
 BUILDING = ANYTHING
 BUILDING_ACTOR = named_group('actor_building', BUILDING)
 

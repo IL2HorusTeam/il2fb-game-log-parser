@@ -71,8 +71,14 @@ class StationaryUnit(Unit):
         return "<Stationary unit '{0}'>".format(self.id)
 
 
-class MovingUnitMember(Unit):
-    __slots__ = Unit.__slots__ + ['index', ]
+class MovingUnit(Unit):
+
+    def __repr__(self):
+        return "<Moving unit '{0}'>".format(self.id)
+
+
+class MovingUnitMember(MovingUnit):
+    __slots__ = MovingUnit.__slots__ + ['index', ]
 
     def __init__(self, id, index):
         super(MovingUnitMember, self).__init__(id)
