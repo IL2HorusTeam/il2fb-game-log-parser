@@ -169,13 +169,18 @@ MOVING_UNIT_ATTACKER_GROUP = named_group(
     MOVING_UNIT,
 )
 
+OBJECT_NAMES = group(choices(['live', 'mono']))
+
 BUILDING = ANYTHING
 BUILDING_ACTOR = named_group('actor_building', BUILDING)
 
 BUILDING_GROUP_TEMPLATE = (
     "3do/Buildings/{{building}}/{names}.sim"
-    .format(
-        names=group(choices(['live', 'mono'])),
-    )
+    .format(names=OBJECT_NAMES)
 )
 BUILDING_ACTOR_GROUP = BUILDING_GROUP_TEMPLATE.format(building=BUILDING_ACTOR)
+
+TREE = (
+    "3do/Tree/Line_W/{names}.sim"
+    .format(names=OBJECT_NAMES)
+)

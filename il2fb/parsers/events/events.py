@@ -1163,9 +1163,10 @@ class HumanAircraftCrewMemberWasKilledByStationaryUnit(Event):
 
 class BuildingWasDestroyedByHumanAircraft(Event):
     """
-    Example:
+    Examples:
 
         "[8:33:05 PM] 3do/Buildings/Finland/CenterHouse1_w/live.sim destroyed by User0:Pe-8 at 100.0 200.99"
+        "[8:33:05 PM] 3do/Buildings/Russia/Piter/House3_W/mono.sim destroyed by User1:Pe-8 at 300.0 400.99"
 
     """
     __slots__ = ['time', 'actor', 'attacker', 'pos', ]
@@ -1198,9 +1199,10 @@ class BuildingWasDestroyedByHumanAircraft(Event):
 
 class BuildingWasDestroyedByStationaryUnit(Event):
     """
-    Example:
+    Examples:
 
         "[8:33:05 PM] 3do/Buildings/Finland/CenterHouse1_w/live.sim destroyed by 0_Static at 100.0 200.99"
+        "[8:33:05 PM] 3do/Buildings/Russia/Piter/House3_W/mono.sim destroyed by 1_Static at 300.0 400.99"
 
     """
     __slots__ = ['time', 'actor', 'attacker', 'pos', ]
@@ -1233,9 +1235,10 @@ class BuildingWasDestroyedByStationaryUnit(Event):
 
 class BuildingWasDestroyedByMovingUnit(Event):
     """
-    Example:
+    Examples:
 
         "[8:33:05 PM] 3do/Buildings/Finland/CenterHouse1_w/live.sim destroyed by 0_Chief at 100.0 200.99"
+        "[8:33:05 PM] 3do/Buildings/Russia/Piter/House3_W/mono.sim destroyed by 1_Chief at 300.0 400.99"
 
     """
     __slots__ = ['time', 'actor', 'attacker', 'pos', ]
@@ -1268,9 +1271,10 @@ class BuildingWasDestroyedByMovingUnit(Event):
 
 class BuildingWasDestroyedByAIAircraft(Event):
     """
-    Example:
+    Examples:
 
         "[8:33:05 PM] 3do/Buildings/Finland/CenterHouse1_w/live.sim destroyed by r01000 at 100.0 200.99"
+        "[8:33:05 PM] 3do/Buildings/Russia/Piter/House3_W/mono.sim destroyed by r01001 at 300.0 400.99"
 
     """
     __slots__ = ['time', 'actor', 'attacker', 'pos', ]
@@ -1297,5 +1301,40 @@ class BuildingWasDestroyedByAIAircraft(Event):
         tx.transform_time,
         tx.building_as_actor,
         tx.ai_aircraft_as_attacker,
+        tx.transform_pos,
+    )
+
+
+class TreeWasDestroyedByHumanAircraft(Event):
+    """
+    Examples:
+
+        "[8:33:05 PM] 3do/Tree/Line_W/live.sim destroyed by User0:Pe-8 at 100.0 200.99"
+        "[8:33:05 PM] 3do/Tree/Line_W/mono.sim destroyed by User0:Pe-8 at 100.0 200.99"
+
+    """
+    __slots__ = ['time', 'attacker', 'pos', ]
+
+    verbose_name = _("Tree was destroyed by human aircraft")
+    matcher = rx.matcher(
+        "{time}"      # 'time' regex group placeholder
+        "{tree}"      # 'actor' regex group placeholder
+        "\s"          # single whitespace
+        "destroyed"   #
+        "\s"          # single whitespace
+        "by"          #
+        "\s"          # single whitespace
+        "{attacker}"  # 'attacker' regex group placeholder
+        "{pos}"       # 'pos' regex group placeholder
+        .format(
+            time=rx.TIME_GROUP_PREFIX,
+            tree=rx.TREE,
+            attacker=rx.HUMAN_AIRCRAFT_ATTACKER_GROUP,
+            pos=rx.POS_GROUP_SUFFIX,
+        )
+    )
+    transformers = (
+        tx.transform_time,
+        tx.human_aircraft_as_attacker,
         tx.transform_pos,
     )
