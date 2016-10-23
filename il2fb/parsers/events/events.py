@@ -81,10 +81,10 @@ class MissionIsPlaying(Event):
 
     verbose_name = _("Mission is playing")
     matcher = rx.matcher(
-        "{datetime}"  # 'datetime' group regex placeholder
+        "{datetime}"  # 'datetime' regex group placeholder
         "Mission:"    #
         "\s"          # single whitespace
-        "{mission}"   # 'mission' group regex placeholder
+        "{mission}"   # 'mission' regex group placeholder
         "\s"          # single whitespace
         "is"          #
         "\s"          # single whitespace
@@ -112,7 +112,7 @@ class MissionHasBegun(Event):
 
     verbose_name = _("Mission has begun")
     matcher = rx.matcher(
-        "{time}"   # 'time' group regex placeholder
+        "{time}"   # 'time' regex group placeholder
         "Mission"  #
         "\s"       # single whitespace
         "BEGIN"    #
@@ -137,7 +137,7 @@ class MissionHasEnded(Event):
 
     verbose_name = _("Mission has ended")
     matcher = rx.matcher(
-        "{time}"   # 'time' group regex placeholder
+        "{time}"   # 'time' regex group placeholder
         "Mission"  #
         "\s"       # single whitespace
         "END"      #
@@ -162,10 +162,10 @@ class MissionWasWon(Event):
 
     verbose_name = _("Mission was won")
     matcher = rx.matcher(
-        "{datetime}"     # 'datetime' group regex placeholder
+        "{datetime}"     # 'datetime' regex group placeholder
         "Mission:"       #
         "\s"             # single whitespace
-        "{belligerent}"  # 'belligerent' group regex placeholder
+        "{belligerent}"  # 'belligerent' regex group placeholder
         "\s"             # single whitespace
         "WON"            #
         "$"              # end of string
@@ -193,12 +193,12 @@ class TargetStateWasChanged(Event):
     verbose_name = _("Target state was changed")
     STATES = TARGET_STATES
     matcher = rx.matcher(
-        "{time}"   # 'time' group regex placeholder
+        "{time}"   # 'time' regex group placeholder
         "Target"   #
         "\s"       # single whitespace
-        "{index}"  # 'index' group regex placeholder
+        "{index}"  # 'index' regex group placeholder
         "\s"       # single whitespace
-        "{state}"  # 'state' group regex placeholder
+        "{state}"  # 'state' regex group placeholder
         "$"        # end of string
         .format(
             time=rx.TIME_GROUP_PREFIX,
@@ -223,8 +223,8 @@ class HumanHasConnected(Event):
 
     verbose_name = _("Human has connected")
     matcher = rx.matcher(
-        "{time}"     # 'time' group regex placeholder
-        "{actor}"    # 'actor' group regex placeholder
+        "{time}"     # 'time' regex group placeholder
+        "{actor}"    # 'actor' regex group placeholder
         "\s"         # single whitespace
         "has"        #
         "\s"         # single whitespace
@@ -252,8 +252,8 @@ class HumanHasDisconnected(Event):
 
     verbose_name = _("Human has disconnected")
     matcher = rx.matcher(
-        "{time}"        # 'time' group regex placeholder
-        "{actor}"       # 'actor' group regex placeholder
+        "{time}"        # 'time' regex group placeholder
+        "{actor}"       # 'actor' regex group placeholder
         "\s"            # single whitespace
         "has"           #
         "\s"            # single whitespace
@@ -281,15 +281,15 @@ class HumanHasSelectedAirfield(Event):
 
     verbose_name = _("Human has selected airfield")
     matcher = rx.matcher(
-        "{time}"         # 'time' group regex placeholder
-        "{actor}"        # 'actor' group regex placeholder
+        "{time}"         # 'time' regex group placeholder
+        "{actor}"        # 'actor' regex group placeholder
         "\s"             # single whitespace
         "selected"       #
         "\s"             # single whitespace
         "army"           #
         "\s"             # single whitespace
-        "{belligerent}"  # 'belligerent' group regex placeholder
-        "{pos}"          # 'pos' group regex placeholder
+        "{belligerent}"  # 'belligerent' regex group placeholder
+        "{pos}"          # 'pos' regex group placeholder
         .format(
             time=rx.TIME_GROUP_PREFIX,
             actor=rx.HUMAN_ACTOR_GROUP,
@@ -316,20 +316,20 @@ class HumanAircraftHasSpawned(Event):
 
     verbose_name = _("Human aircraft has spawned")
     matcher = rx.matcher(
-        "{time}"     # 'time' group regex placeholder
-        "{actor}"    # 'actor' group regex placeholder
+        "{time}"     # 'time' regex group placeholder
+        "{actor}"    # 'actor' regex group placeholder
         "\s"         # single whitespace
         "loaded"     #
         "\s"         # single whitespace
         "weapons"    #
         "\s"         # single whitespace
         "\'"         # opening single quote
-        "{weapons}"  # 'weapons' group regex placeholder
+        "{weapons}"  # 'weapons' regex group placeholder
         "\'"         # closing single quote
         "\s"         # single whitespace
         "fuel"       #
         "\s"         # single whitespace
-        "{fuel}"     # 'fuel' group regex placeholder
+        "{fuel}"     # 'fuel' regex group placeholder
         "%"          # percent sign
         "$"          # end of string
         .format(
@@ -357,8 +357,8 @@ class HumanHasWentToBriefing(Event):
 
     verbose_name = _("Human has went to briefing")
     matcher = rx.matcher(
-        "{time}"   # 'time' group regex placeholder
-        "{actor}"  # 'actor' group regex placeholder
+        "{time}"   # 'time' regex group placeholder
+        "{actor}"  # 'actor' regex group placeholder
         "\s"       # single whitespace
         "entered"  #
         "\s"       # single whitespace
@@ -388,8 +388,8 @@ class HumanHasToggledLandingLights(Event):
 
     verbose_name = _("Human has toggled landing lights")
     matcher = rx.matcher(
-        "{time}"   # 'time' group regex placeholder
-        "{actor}"  # 'actor' group regex placeholder
+        "{time}"   # 'time' regex group placeholder
+        "{actor}"  # 'actor' regex group placeholder
         "\s"       # single whitespace
         "turned"   #
         "\s"       # single whitespace
@@ -397,8 +397,8 @@ class HumanHasToggledLandingLights(Event):
         "\s"       # single whitespace
         "lights"   #
         "\s"       # single whitespace
-        "{value}"  # 'value' group regex placeholder
-        "{pos}"    # 'pos' group regex placeholder
+        "{value}"  # 'value' regex group placeholder
+        "{pos}"    # 'pos' regex group placeholder
         .format(
             time=rx.TIME_GROUP_PREFIX,
             actor=rx.HUMAN_AIRCRAFT_ACTOR_GROUP,
@@ -424,8 +424,8 @@ class HumanHasToggledWingtipSmokes(Event):
 
     verbose_name = _("Human has toggled wingtip smokes")
     matcher = rx.matcher(
-        "{time}"   # 'time' group regex placeholder
-        "{actor}"  # 'actor' group regex placeholder
+        "{time}"   # 'time' regex group placeholder
+        "{actor}"  # 'actor' regex group placeholder
         "\s"       # single whitespace
         "turned"   #
         "\s"       # single whitespace
@@ -433,8 +433,8 @@ class HumanHasToggledWingtipSmokes(Event):
         "\s"       # single whitespace
         "smokes"   #
         "\s"       # single whitespace
-        "{value}"  # 'value' group regex placeholder
-        "{pos}"    # 'pos' group regex placeholder
+        "{value}"  # 'value' regex group placeholder
+        "{pos}"    # 'pos' regex group placeholder
         .format(
             time=rx.TIME_GROUP_PREFIX,
             actor=rx.HUMAN_AIRCRAFT_ACTOR_GROUP,
@@ -460,8 +460,8 @@ class HumanHasChangedSeat(Event):
 
     verbose_name = _("Human has changed seat")
     matcher = rx.matcher(
-        "{time}"      # 'time' group regex placeholder
-        "{actor}"     # 'actor' group regex placeholder
+        "{time}"      # 'time' regex group placeholder
+        "{actor}"     # 'actor' regex group placeholder
         "\s"          # single whitespace
         "seat"        #
         "\s"          # single whitespace
@@ -470,7 +470,7 @@ class HumanHasChangedSeat(Event):
         "by"          #
         "\s"          # single whitespace
         "{callsign}"  # 'callsign' regex placeholder
-        "{pos}"       # 'pos' group regex placeholder
+        "{pos}"       # 'pos' regex group placeholder
         .format(
             time=rx.TIME_GROUP_PREFIX,
             actor=rx.HUMAN_AIRCRAFT_CREW_MEMBER_ACTOR_GROUP,
@@ -496,13 +496,13 @@ class HumanAircraftHasTookOff(Event):
 
     verbose_name = _("Human aircraft has took off")
     matcher = rx.matcher(
-        "{time}"   # 'time' group regex placeholder
-        "{actor}"  # 'actor' group regex placeholder
+        "{time}"   # 'time' regex group placeholder
+        "{actor}"  # 'actor' regex group placeholder
         "\s"       # single whitespace
         "in"       #
         "\s"       # single whitespace
         "flight"   #
-        "{pos}"    # 'pos' group regex placeholder
+        "{pos}"    # 'pos' regex group placeholder
         .format(
             time=rx.TIME_GROUP_PREFIX,
             actor=rx.HUMAN_AIRCRAFT_ACTOR_GROUP,
@@ -527,11 +527,11 @@ class HumanAircraftHasLanded(Event):
 
     verbose_name = _("Human aircraft has landed")
     matcher = rx.matcher(
-        "{time}"   # 'time' group regex placeholder
-        "{actor}"  # 'actor' group regex placeholder
+        "{time}"   # 'time' regex group placeholder
+        "{actor}"  # 'actor' regex group placeholder
         "\s"       # single whitespace
         "landed"   #
-        "{pos}"    # 'pos' group regex placeholder
+        "{pos}"    # 'pos' regex group placeholder
         .format(
             time=rx.TIME_GROUP_PREFIX,
             actor=rx.HUMAN_AIRCRAFT_ACTOR_GROUP,
@@ -556,11 +556,11 @@ class HumanAircraftHasCrashed(Event):
 
     verbose_name = _("Human aircraft has crashed")
     matcher = rx.matcher(
-        "{time}"   # 'time' group regex placeholder
-        "{actor}"  # 'actor' group regex placeholder
+        "{time}"   # 'time' regex group placeholder
+        "{actor}"  # 'actor' regex group placeholder
         "\s"       # single whitespace
         "crashed"  #
-        "{pos}"    # 'pos' group regex placeholder
+        "{pos}"    # 'pos' regex group placeholder
         .format(
             time=rx.TIME_GROUP_PREFIX,
             actor=rx.HUMAN_AIRCRAFT_ACTOR_GROUP,
@@ -586,8 +586,8 @@ class HumanHasDestroyedOwnAircraft(Event):
 
     verbose_name = _("Human has destroyed own aircraft")
     matcher = rx.matcher(
-        "{time}"     # 'time' group regex placeholder
-        "{actor}"    # 'actor' group regex placeholder
+        "{time}"     # 'time' regex group placeholder
+        "{actor}"    # 'actor' regex group placeholder
         "\s"         # single whitespace
         "shot"       #
         "\s"         # single whitespace
@@ -596,7 +596,7 @@ class HumanHasDestroyedOwnAircraft(Event):
         "by"         #
         "\s"         # single whitespace
         "{himself}"  # 'himself' regex placeholder
-        "{pos}"      # 'pos' group regex placeholder
+        "{pos}"      # 'pos' regex group placeholder
         .format(
             time=rx.TIME_GROUP_PREFIX,
             actor=rx.HUMAN_AIRCRAFT_ACTOR_GROUP,
@@ -623,15 +623,15 @@ class HumanHasDamagedOwnAircraft(Event):
 
     verbose_name = _("Human has damaged own aircraft")
     matcher = rx.matcher(
-        "{time}"     # 'time' group regex placeholder
-        "{actor}"    # 'actor' group regex placeholder
+        "{time}"     # 'time' regex group placeholder
+        "{actor}"    # 'actor' regex group placeholder
         "\s"         # single whitespace
         "damaged"    #
         "\s"         # single whitespace
         "by"         #
         "\s"         # single whitespace
         "{himself}"  # 'himself' regex placeholder
-        "{pos}"      # 'pos' group regex placeholder
+        "{pos}"      # 'pos' regex group placeholder
         .format(
             time=rx.TIME_GROUP_PREFIX,
             actor=rx.HUMAN_AIRCRAFT_ACTOR_GROUP,
@@ -657,8 +657,8 @@ class HumanAircraftWasDamagedOnGround(Event):
 
     verbose_name = _("Human aircraft was damaged on the ground")
     matcher = rx.matcher(
-        "{time}"   # 'time' group regex placeholder
-        "{actor}"  # 'actor' group regex placeholder
+        "{time}"   # 'time' regex group placeholder
+        "{actor}"  # 'actor' regex group placeholder
         "\s"       # single whitespace
         "damaged"  #
         "\s"       # single whitespace
@@ -667,7 +667,7 @@ class HumanAircraftWasDamagedOnGround(Event):
         "the"      #
         "\s"       # single whitespace
         "ground"   #
-        "{pos}"    # 'pos' group regex placeholder
+        "{pos}"    # 'pos' regex group placeholder
         .format(
             time=rx.TIME_GROUP_PREFIX,
             actor=rx.HUMAN_AIRCRAFT_ACTOR_GROUP,
@@ -692,15 +692,15 @@ class HumanAircraftWasDamagedByHumanAircraft(Event):
 
     verbose_name = _("Human aircraft was damaged by human aircraft")
     matcher = rx.matcher(
-        "{time}"      # 'time' group regex placeholder
-        "{actor}"     # 'actor' group regex placeholder
+        "{time}"      # 'time' regex group placeholder
+        "{actor}"     # 'actor' regex group placeholder
         "\s"          # single whitespace
         "damaged"     #
         "\s"          # single whitespace
         "by"          #
         "\s"          # single whitespace
-        "{attacker}"  # 'attacker' group regex placeholder
-        "{pos}"       # 'pos' group regex placeholder
+        "{attacker}"  # 'attacker' regex group placeholder
+        "{pos}"       # 'pos' regex group placeholder
         .format(
             time=rx.TIME_GROUP_PREFIX,
             actor=rx.HUMAN_AIRCRAFT_ACTOR_GROUP,
@@ -727,15 +727,15 @@ class HumanAircraftWasDamagedByStationaryUnit(Event):
 
     verbose_name = _("Human aircraft was damaged by stationary unit")
     matcher = rx.matcher(
-        "{time}"      # 'time' group regex placeholder
-        "{actor}"     # 'actor' group regex placeholder
+        "{time}"      # 'time' regex group placeholder
+        "{actor}"     # 'actor' regex group placeholder
         "\s"          # single whitespace
         "damaged"     #
         "\s"          # single whitespace
         "by"          #
         "\s"          # single whitespace
-        "{attacker}"  # 'attacker' group regex placeholder
-        "{pos}"       # 'pos' group regex placeholder
+        "{attacker}"  # 'attacker' regex group placeholder
+        "{pos}"       # 'pos' regex group placeholder
         .format(
             time=rx.TIME_GROUP_PREFIX,
             actor=rx.HUMAN_AIRCRAFT_ACTOR_GROUP,
@@ -762,15 +762,15 @@ class HumanAircraftWasDamagedByAIAircraft(Event):
 
     verbose_name = _("Human aircraft was damaged by AI aircraft")
     matcher = rx.matcher(
-        "{time}"      # 'time' group regex placeholder
-        "{actor}"     # 'actor' group regex placeholder
+        "{time}"      # 'time' regex group placeholder
+        "{actor}"     # 'actor' regex group placeholder
         "\s"          # single whitespace
         "damaged"     #
         "\s"          # single whitespace
         "by"          #
         "\s"          # single whitespace
-        "{attacker}"  # 'attacker' group regex placeholder
-        "{pos}"       # 'pos' group regex placeholder
+        "{attacker}"  # 'attacker' regex group placeholder
+        "{pos}"       # 'pos' regex group placeholder
         .format(
             time=rx.TIME_GROUP_PREFIX,
             actor=rx.HUMAN_AIRCRAFT_ACTOR_GROUP,
@@ -797,8 +797,8 @@ class HumanAircraftWasShotDownByHumanAircraft(Event):
 
     verbose_name = _("Human aircraft was shot down by human aircraft")
     matcher = rx.matcher(
-        "{time}"      # 'time' group regex placeholder
-        "{actor}"     # 'actor' group regex placeholder
+        "{time}"      # 'time' regex group placeholder
+        "{actor}"     # 'actor' regex group placeholder
         "\s"          # single whitespace
         "shot"        #
         "\s"          # single whitespace
@@ -806,8 +806,8 @@ class HumanAircraftWasShotDownByHumanAircraft(Event):
         "\s"          # single whitespace
         "by"          #
         "\s"          # single whitespace
-        "{attacker}"  # 'attacker' group regex placeholder
-        "{pos}"       # 'pos' group regex placeholder
+        "{attacker}"  # 'attacker' regex group placeholder
+        "{pos}"       # 'pos' regex group placeholder
         .format(
             time=rx.TIME_GROUP_PREFIX,
             actor=rx.HUMAN_AIRCRAFT_ACTOR_GROUP,
@@ -834,8 +834,8 @@ class HumanAircraftWasShotDownByStationaryUnit(Event):
 
     verbose_name = _("Human aircraft was shot down by stationary unit")
     matcher = rx.matcher(
-        "{time}"      # 'time' group regex placeholder
-        "{actor}"     # 'actor' group regex placeholder
+        "{time}"      # 'time' regex group placeholder
+        "{actor}"     # 'actor' regex group placeholder
         "\s"          # single whitespace
         "shot"        #
         "\s"          # single whitespace
@@ -843,8 +843,8 @@ class HumanAircraftWasShotDownByStationaryUnit(Event):
         "\s"          # single whitespace
         "by"          #
         "\s"          # single whitespace
-        "{attacker}"  # 'attacker' group regex placeholder
-        "{pos}"       # 'pos' group regex placeholder
+        "{attacker}"  # 'attacker' regex group placeholder
+        "{pos}"       # 'pos' regex group placeholder
         .format(
             time=rx.TIME_GROUP_PREFIX,
             actor=rx.HUMAN_AIRCRAFT_ACTOR_GROUP,
@@ -871,8 +871,8 @@ class HumanAircraftWasShotDownByAIAircraft(Event):
 
     verbose_name = _("Human aircraft was shot down by AI aircraft")
     matcher = rx.matcher(
-        "{time}"      # 'time' group regex placeholder
-        "{actor}"     # 'actor' group regex placeholder
+        "{time}"      # 'time' regex group placeholder
+        "{actor}"     # 'actor' regex group placeholder
         "\s"          # single whitespace
         "shot"        #
         "\s"          # single whitespace
@@ -880,8 +880,8 @@ class HumanAircraftWasShotDownByAIAircraft(Event):
         "\s"          # single whitespace
         "by"          #
         "\s"          # single whitespace
-        "{attacker}"  # 'attacker' group regex placeholder
-        "{pos}"       # 'pos' group regex placeholder
+        "{attacker}"  # 'attacker' regex group placeholder
+        "{pos}"       # 'pos' regex group placeholder
         .format(
             time=rx.TIME_GROUP_PREFIX,
             actor=rx.HUMAN_AIRCRAFT_ACTOR_GROUP,
@@ -908,13 +908,13 @@ class HumanAircraftCrewMemberHasBailedOut(Event):
 
     verbose_name = _("Human aircraft crew member has bailed out")
     matcher = rx.matcher(
-        "{time}"   # 'time' group regex placeholder
-        "{actor}"  # 'actor' group regex placeholder
+        "{time}"   # 'time' regex group placeholder
+        "{actor}"  # 'actor' regex group placeholder
         "\s"       # single whitespace
         "bailed"   #
         "\s"       # single whitespace
         "out"      #
-        "{pos}"    # 'pos' group regex placeholder
+        "{pos}"    # 'pos' regex group placeholder
         .format(
             time=rx.TIME_GROUP_PREFIX,
             actor=rx.HUMAN_AIRCRAFT_CREW_MEMBER_ACTOR_GROUP,
@@ -939,15 +939,15 @@ class HumanAircraftCrewMemberHasLanded(Event):
 
     verbose_name = _("Human aircraft crew member has landed")
     matcher = rx.matcher(
-        "{time}"        # 'time' group regex placeholder
-        "{actor}"       # 'actor' group regex placeholder
+        "{time}"        # 'time' regex group placeholder
+        "{actor}"       # 'actor' regex group placeholder
         "\s"            # single whitespace
         "successfully"  #
         "\s"            # single whitespace
         "bailed"        #
         "\s"            # single whitespace
         "out"           #
-        "{pos}"         # 'pos' group regex placeholder
+        "{pos}"         # 'pos' regex group placeholder
         .format(
             time=rx.TIME_GROUP_PREFIX,
             actor=rx.HUMAN_AIRCRAFT_CREW_MEMBER_ACTOR_GROUP,
@@ -972,13 +972,13 @@ class HumanAircraftCrewMemberWasCaptured(Event):
 
     verbose_name = _("Human aircraft crew member was captured")
     matcher = rx.matcher(
-        "{time}"    # 'time' group regex placeholder
-        "{actor}"   # 'actor' group regex placeholder
+        "{time}"    # 'time' regex group placeholder
+        "{actor}"   # 'actor' regex group placeholder
         "\s"        # single whitespace
         "was"       #
         "\s"        # single whitespace
         "captured"  #
-        "{pos}"     # 'pos' group regex placeholder
+        "{pos}"     # 'pos' regex group placeholder
         .format(
             time=rx.TIME_GROUP_PREFIX,
             actor=rx.HUMAN_AIRCRAFT_CREW_MEMBER_ACTOR_GROUP,
@@ -1003,13 +1003,13 @@ class HumanAircraftCrewMemberWasWounded(Event):
 
     verbose_name = _("Human aircraft crew member was wounded")
     matcher = rx.matcher(
-        "{time}"   # 'time' group regex placeholder
-        "{actor}"  # 'actor' group regex placeholder
+        "{time}"   # 'time' regex group placeholder
+        "{actor}"  # 'actor' regex group placeholder
         "\s"       # single whitespace
         "was"      #
         "\s"       # single whitespace
         "wounded"  #
-        "{pos}"    # 'pos' group regex placeholder
+        "{pos}"    # 'pos' regex group placeholder
         .format(
             time=rx.TIME_GROUP_PREFIX,
             actor=rx.HUMAN_AIRCRAFT_CREW_MEMBER_ACTOR_GROUP,
@@ -1034,15 +1034,15 @@ class HumanAircraftCrewMemberWasHeavilyWounded(Event):
 
     verbose_name = _("Human aircraft crew member was heavily wounded")
     matcher = rx.matcher(
-        "{time}"   # 'time' group regex placeholder
-        "{actor}"  # 'actor' group regex placeholder
+        "{time}"   # 'time' regex group placeholder
+        "{actor}"  # 'actor' regex group placeholder
         "\s"       # single whitespace
         "was"      #
         "\s"       # single whitespace
         "heavily"  #
         "\s"       # single whitespace
         "wounded"  #
-        "{pos}"    # 'pos' group regex placeholder
+        "{pos}"    # 'pos' regex group placeholder
         .format(
             time=rx.TIME_GROUP_PREFIX,
             actor=rx.HUMAN_AIRCRAFT_CREW_MEMBER_ACTOR_GROUP,
@@ -1067,13 +1067,13 @@ class HumanAircraftCrewMemberWasKilled(Event):
 
     verbose_name = _("Human aircraft crew member was killed")
     matcher = rx.matcher(
-        "{time}"   # 'time' group regex placeholder
-        "{actor}"  # 'actor' group regex placeholder
+        "{time}"   # 'time' regex group placeholder
+        "{actor}"  # 'actor' regex group placeholder
         "\s"       # single whitespace
         "was"      #
         "\s"       # single whitespace
         "killed"   #
-        "{pos}"    # 'pos' group regex placeholder
+        "{pos}"    # 'pos' regex group placeholder
         .format(
             time=rx.TIME_GROUP_PREFIX,
             actor=rx.HUMAN_AIRCRAFT_CREW_MEMBER_ACTOR_GROUP,
@@ -1083,5 +1083,42 @@ class HumanAircraftCrewMemberWasKilled(Event):
     transformers = (
         tx.transform_time,
         tx.human_aircraft_crew_member_as_actor,
+        tx.transform_pos,
+    )
+
+
+class HumanAircraftCrewMemberWasKilledByHumanAircraft(Event):
+    """
+    Example:
+
+        "[8:33:05 PM] User0:Pe-8(0) was killed by User1:Bf-109G-6_Late at 100.0 200.99"
+
+    """
+    __slots__ = ['time', 'actor', 'attacker', 'pos', ]
+
+    verbose_name = _("Human aircraft crew member was killed by human aircraft")
+    matcher = rx.matcher(
+        "{time}"      # 'time' regex group placeholder
+        "{actor}"     # 'actor' regex group placeholder
+        "\s"          # single whitespace
+        "was"         #
+        "\s"          # single whitespace
+        "killed"      #
+        "\s"          # single whitespace
+        "by"          #
+        "\s"          # single whitespace
+        "{attacker}"  # 'attacker' regex group placeholder
+        "{pos}"       # 'pos' regex group placeholder
+        .format(
+            time=rx.TIME_GROUP_PREFIX,
+            actor=rx.HUMAN_AIRCRAFT_CREW_MEMBER_ACTOR_GROUP,
+            attacker=rx.HUMAN_AIRCRAFT_ATTACKER_GROUP,
+            pos=rx.POS_GROUP_SUFFIX,
+        )
+    )
+    transformers = (
+        tx.transform_time,
+        tx.human_aircraft_crew_member_as_actor,
+        tx.human_aircraft_as_attacker,
         tx.transform_pos,
     )

@@ -50,9 +50,9 @@ TIME_GROUP_PREFIX = """
 #
 # "8:33:05 PM" will be captured into 'time' group.
 ^             # beginning of a string
-\[            # left time wrapper
+\[            # opening brackets
 {time_group}  # 'time_group' regex placeholder
-\]            # right time wrapper
+\]            # closing brackets
 \s+           # one or more whitespaces
               # any ending of a string
 """.format(
