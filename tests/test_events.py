@@ -1594,3 +1594,37 @@ class TreeWasDestroyedTestCase(unittest.TestCase):
                 'verbose_name': "Tree was destroyed",
             }
         )
+
+
+class StationaryUnitWasDestroyedTestCase(unittest.TestCase):
+
+    def test_from_s(self):
+        event = events.StationaryUnitWasDestroyed.from_s(
+            "[8:33:05 PM] 0_Static crashed at 100.0 200.99"
+        )
+        self.assertIsInstance(event, events.StationaryUnitWasDestroyed)
+        self.assertEqual(event.time, datetime.time(20, 33, 5))
+        self.assertEqual(event.actor, actors.StationaryUnit("0_Static"))
+        self.assertEqual(event.pos, Point2D(100.0, 200.99))
+
+    def test_to_primitive(self):
+        event = events.StationaryUnitWasDestroyed(
+            time=datetime.time(20, 33, 5),
+            actor=actors.StationaryUnit("0_Static"),
+            pos=Point2D(100.0, 200.99),
+        )
+        self.assertEqual(
+            event.to_primitive(),
+            {
+                'time': "20:33:05",
+                'actor': {
+                    'id': "0_Static",
+                },
+                'pos': {
+                    'x': 100.0,
+                    'y': 200.99,
+                },
+                'name': "StationaryUnitWasDestroyed",
+                'verbose_name': "Stationary unit was destroyed",
+            }
+        )

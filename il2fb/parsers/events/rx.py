@@ -158,6 +158,10 @@ AI_AIRCRAFT_ATTACKER_GROUP = AI_AIRCRAFT_GROUP_TEMPLATE.format(
 )
 
 STATIONARY_UNIT = "{0}_Static".format(NUMBER)
+STATIONARY_UNIT_ACTOR_GROUP = named_group(
+    'actor_stationary_unit',
+    STATIONARY_UNIT,
+)
 STATIONARY_UNIT_ATTACKER_GROUP = named_group(
     'attacker_stationary_unit',
     STATIONARY_UNIT,
@@ -172,13 +176,13 @@ MOVING_UNIT_ATTACKER_GROUP = named_group(
 OBJECT_NAMES = group(choices(['live', 'mono']))
 
 BUILDING = ANYTHING
-BUILDING_ACTOR = named_group('actor_building', BUILDING)
-
 BUILDING_GROUP_TEMPLATE = (
     "3do/Buildings/{{building}}/{names}.sim"
     .format(names=OBJECT_NAMES)
 )
-BUILDING_ACTOR_GROUP = BUILDING_GROUP_TEMPLATE.format(building=BUILDING_ACTOR)
+BUILDING_ACTOR_GROUP = BUILDING_GROUP_TEMPLATE.format(
+    building=named_group('actor_building', BUILDING),
+)
 
 TREE = (
     "3do/Tree/Line_W/{names}.sim"

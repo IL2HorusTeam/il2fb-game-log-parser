@@ -1422,13 +1422,13 @@ class TreeWasDestroyed(Event):
 
     verbose_name = _("Tree was destroyed")
     matcher = rx.matcher(
-        "{time}"      # 'time' regex group placeholder
-        "{tree}"      # 'actor' regex group placeholder
-        "\s"          # single whitespace
-        "destroyed"   #
-        "\s"          # single whitespace
-        "by"          #
-        "{pos}"       # 'pos' regex group placeholder
+        "{time}"     # 'time' regex group placeholder
+        "{tree}"     # 'actor' regex group placeholder
+        "\s"         # single whitespace
+        "destroyed"  #
+        "\s"         # single whitespace
+        "by"         #
+        "{pos}"      # 'pos' regex group placeholder
         .format(
             time=rx.TIME_GROUP_PREFIX,
             tree=rx.TREE,
@@ -1437,5 +1437,34 @@ class TreeWasDestroyed(Event):
     )
     transformers = (
         tx.transform_time,
+        tx.transform_pos,
+    )
+
+
+class StationaryUnitWasDestroyed(Event):
+    """
+    Example:
+
+        "[8:33:05 PM] 0_Static crashed at 100.0 200.99"
+
+    """
+    __slots__ = ['time', 'actor', 'pos', ]
+
+    verbose_name = _("Stationary unit was destroyed")
+    matcher = rx.matcher(
+        "{time}"   # 'time' regex group placeholder
+        "{actor}"  # 'actor' regex group placeholder
+        "\s"       # single whitespace
+        "crashed"  #
+        "{pos}"    # 'pos' regex group placeholder
+        .format(
+            time=rx.TIME_GROUP_PREFIX,
+            actor=rx.STATIONARY_UNIT_ACTOR_GROUP,
+            pos=rx.POS_GROUP_SUFFIX,
+        )
+    )
+    transformers = (
+        tx.transform_time,
+        tx.stationary_unit_as_actor,
         tx.transform_pos,
     )
