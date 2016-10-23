@@ -1408,3 +1408,34 @@ class TreeWasDestroyedByAIAircraft(Event):
         tx.ai_aircraft_as_attacker,
         tx.transform_pos,
     )
+
+
+class TreeWasDestroyed(Event):
+    """
+    Examples:
+
+        "[8:33:05 PM] 3do/Tree/Line_W/live.sim destroyed by at 100.0 200.99"
+        "[8:33:05 PM] 3do/Tree/Line_W/mono.sim destroyed by at 100.0 200.99"
+
+    """
+    __slots__ = ['time', 'pos', ]
+
+    verbose_name = _("Tree was destroyed")
+    matcher = rx.matcher(
+        "{time}"      # 'time' regex group placeholder
+        "{tree}"      # 'actor' regex group placeholder
+        "\s"          # single whitespace
+        "destroyed"   #
+        "\s"          # single whitespace
+        "by"          #
+        "{pos}"       # 'pos' regex group placeholder
+        .format(
+            time=rx.TIME_GROUP_PREFIX,
+            tree=rx.TREE,
+            pos=rx.POS_GROUP_SUFFIX,
+        )
+    )
+    transformers = (
+        tx.transform_time,
+        tx.transform_pos,
+    )
