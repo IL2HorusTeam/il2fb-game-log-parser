@@ -4,7 +4,9 @@ from il2fb.commons.structures import BaseStructure
 
 
 class Actor(BaseStructure):
-    pass
+
+    def __repr__(self):
+        return "<Actor>"
 
 
 class Human(Actor):
@@ -78,3 +80,13 @@ class MovingUnitMember(Unit):
 
     def __repr__(self):
         return "<Moving unit member #{0} in '{1}'>".format(self.index, self.id)
+
+
+class Building(Actor):
+    __slots__ = ['name', ]
+
+    def __init__(self, name):
+        self.name = name
+
+    def __repr__(self):
+        return "<Building '{0}'>".format(self.name)

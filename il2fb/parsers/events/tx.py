@@ -82,3 +82,9 @@ def stationary_unit_as_attacker(data):
     data['attacker'] = actors.StationaryUnit(
         data.pop('attacker_stationary_unit'),
     )
+
+
+def building_as_actor(data):
+    data['actor'] = actors.Building(
+        data.pop('actor_building'),
+    )

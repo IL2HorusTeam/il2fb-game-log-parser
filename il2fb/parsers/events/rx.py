@@ -25,6 +25,7 @@ def choices(values):
     return "|".join(values)
 
 
+ANYTHING = ".+"
 WHITESPACE = "\s"
 NON_WHITESPACES = "\S+"
 NUMBER = "\d+"
@@ -161,3 +162,14 @@ STATIONARY_UNIT_ATTACKER_GROUP = named_group(
     'attacker_stationary_unit',
     STATIONARY_UNIT,
 )
+
+BUILDING = ANYTHING
+BUILDING_ACTOR = named_group('actor_building', BUILDING)
+
+BUILDING_GROUP_TEMPLATE = (
+    "3do/Buildings/{{building}}/{names}.sim"
+    .format(
+        names=group(choices(['live', 'mono'])),
+    )
+)
+BUILDING_ACTOR_GROUP = BUILDING_GROUP_TEMPLATE.format(building=BUILDING_ACTOR)
