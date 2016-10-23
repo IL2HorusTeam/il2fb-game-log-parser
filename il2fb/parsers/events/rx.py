@@ -115,13 +115,19 @@ TOGGLE_VALUE_GROUP = named_group('value', choices(TOGGLE_VALUES))
 
 BELLIGERENT_GROUP = named_group('belligerent', NON_WHITESPACES)
 
+INDEX = NUMBER
+INDEX_ACTOR_GROUP = named_group('actor_index', INDEX)
+INDEX_ATTACKER_GROUP = named_group('attacker_index', INDEX)
+
 CALLSIGN = NON_WHITESPACES
 HIMSELF = group(choices(['landscape', 'NONAME']))
 
 HUMAN_ACTOR_GROUP = named_group('actor_callsign', CALLSIGN)
+HUMAN_ATTACKER_GROUP = named_group('attacker_callsign', CALLSIGN)
 
 AIRCRAFT = NON_WHITESPACES
 AIRCRAFT_ACTOR_GROUP = named_group('actor_aircraft', AIRCRAFT)
+AIRCRAFT_ATTACKER_GROUP = named_group('attacker_aircraft', AIRCRAFT)
 
 HUMAN_AIRCRAFT_GROUP_TEMPLATE = "{callsign}:{aircraft}"
 HUMAN_AIRCRAFT_ACTOR_GROUP = HUMAN_AIRCRAFT_GROUP_TEMPLATE.format(
@@ -129,27 +135,25 @@ HUMAN_AIRCRAFT_ACTOR_GROUP = HUMAN_AIRCRAFT_GROUP_TEMPLATE.format(
     aircraft=AIRCRAFT_ACTOR_GROUP,
 )
 HUMAN_AIRCRAFT_ATTACKER_GROUP = HUMAN_AIRCRAFT_GROUP_TEMPLATE.format(
-    callsign=named_group('attacker_callsign', CALLSIGN),
-    aircraft=named_group('attacker_aircraft', AIRCRAFT),
+    callsign=HUMAN_ATTACKER_GROUP,
+    aircraft=AIRCRAFT_ATTACKER_GROUP,
 )
 
-SEAT_NUMBER = NUMBER
-SEAT_NUMBER_ACTOR_GROUP = named_group('actor_seat_number', SEAT_NUMBER)
-
-HUMAN_AIRCRAFT_CREW_MEMBER_GROUP_TEMPlATE = "{callsign}:{aircraft}\({seat_number}\)"
+HUMAN_AIRCRAFT_CREW_MEMBER_GROUP_TEMPlATE = "{callsign}:{aircraft}\({index}\)"
 HUMAN_AIRCRAFT_CREW_MEMBER_ACTOR_GROUP = HUMAN_AIRCRAFT_CREW_MEMBER_GROUP_TEMPlATE.format(
     callsign=HUMAN_ACTOR_GROUP,
     aircraft=AIRCRAFT_ACTOR_GROUP,
-    seat_number=SEAT_NUMBER_ACTOR_GROUP,
+    index=INDEX_ACTOR_GROUP,
 )
 
-FLIGHT = NON_WHITESPACES
-INDEX = NUMBER
+AI_FLIGHT = NON_WHITESPACES
+AI_FLIGHT_ACTOR_GROUP = named_group('actor_flight', AI_FLIGHT)
+AI_FLIGHT_ATTACKER_GROUP = named_group('attacker_flight', AI_FLIGHT)
 
 AI_AIRCRAFT_GROUP_TEMPLATE = "{flight}{index}"
 AI_AIRCRAFT_ATTACKER_GROUP = AI_AIRCRAFT_GROUP_TEMPLATE.format(
-    flight=named_group('attacker_flight', FLIGHT),
-    index=named_group('attacker_index', INDEX),
+    flight=AI_FLIGHT_ATTACKER_GROUP,
+    index=INDEX_ATTACKER_GROUP,
 )
 
 STATIONARY_UNIT = "{0}_Static".format(NUMBER)

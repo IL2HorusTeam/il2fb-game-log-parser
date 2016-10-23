@@ -29,16 +29,16 @@ class HumanAircraft(Human):
 
 
 class HumanAircraftCrewMember(HumanAircraft):
-    __slots__ = HumanAircraft.__slots__ + ['seat_number', ]
+    __slots__ = HumanAircraft.__slots__ + ['index', ]
 
-    def __init__(self, callsign, aircraft, seat_number):
+    def __init__(self, callsign, aircraft, index):
         super(HumanAircraftCrewMember, self).__init__(callsign, aircraft)
-        self.seat_number = seat_number
+        self.index = index
 
     def __repr__(self):
         return (
             "<Human aircraft crew member #{0} in '{1}:{2}'>"
-            .format(self.seat_number, self.callsign, self.aircraft)
+            .format(self.index, self.callsign, self.aircraft)
         )
 
 

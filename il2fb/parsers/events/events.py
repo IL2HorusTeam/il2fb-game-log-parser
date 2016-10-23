@@ -895,3 +895,34 @@ class HumanAircraftWasShotDownByAIAircraft(Event):
         tx.ai_aircraft_as_attacker,
         tx.transform_pos,
     )
+
+
+class HumanAircraftCrewMemberHasBailedOut(Event):
+    """
+    Example:
+
+        "[8:33:05 PM] User0:Pe-8(0) bailed out at 100.0 200.99"
+
+    """
+    __slots__ = ['time', 'actor', 'pos', ]
+
+    verbose_name = _("Human aircraft crew member has bailed out")
+    matcher = rx.matcher(
+        "{time}"   # 'time' group regex placeholder
+        "{actor}"  # 'actor' group regex placeholder
+        "\s"       # single whitespace
+        "bailed"   #
+        "\s"       # single whitespace
+        "out"      #
+        "{pos}"    # 'pos' group regex placeholder
+        .format(
+            time=rx.TIME_GROUP_PREFIX,
+            actor=rx.HUMAN_AIRCRAFT_CREW_MEMBER_ACTOR_GROUP,
+            pos=rx.POS_GROUP_SUFFIX,
+        )
+    )
+    transformers = (
+        tx.transform_time,
+        tx.human_aircraft_crew_member_as_actor,
+        tx.transform_pos,
+    )

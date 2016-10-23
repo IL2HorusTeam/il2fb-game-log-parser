@@ -509,7 +509,7 @@ class HumanHasChangedSeatTestCase(unittest.TestCase):
                 'actor': {
                     'callsign': "User0",
                     'aircraft': "Pe-8",
-                    'seat_number': 0,
+                    'index': 0,
                 },
                 'pos': {
                     'x': 100.0,
@@ -1001,5 +1001,41 @@ class HumanAircraftWasShotDownByAIAircraftTestCase(unittest.TestCase):
                 },
                 'name': "HumanAircraftWasShotDownByAIAircraft",
                 'verbose_name': "Human aircraft was shot down by AI aircraft",
+            }
+        )
+
+
+class HumanAircraftCrewMemberHasBailedOutTestCase(unittest.TestCase):
+
+    def test_from_s(self):
+        event = events.HumanAircraftCrewMemberHasBailedOut.from_s(
+            "[8:33:05 PM] User0:Pe-8(0) bailed out at 100.0 200.99"
+        )
+        self.assertIsInstance(event, events.HumanAircraftCrewMemberHasBailedOut)
+        self.assertEqual(event.time, datetime.time(20, 33, 5))
+        self.assertEqual(event.actor, actors.HumanAircraftCrewMember("User0", "Pe-8", 0))
+        self.assertEqual(event.pos, Point2D(100.0, 200.99))
+
+    def test_to_primitive(self):
+        event = events.HumanAircraftCrewMemberHasBailedOut(
+            time=datetime.time(20, 33, 5),
+            actor=actors.HumanAircraftCrewMember("User0", "Pe-8", 0),
+            pos=Point2D(100.0, 200.99),
+        )
+        self.assertEqual(
+            event.to_primitive(),
+            {
+                'time': "20:33:05",
+                'actor': {
+                    'callsign': "User0",
+                    'aircraft': "Pe-8",
+                    'index': 0,
+                },
+                'pos': {
+                    'x': 100.0,
+                    'y': 200.99,
+                },
+                'name': "HumanAircraftCrewMemberHasBailedOut",
+                'verbose_name': "Human aircraft crew member has bailed out",
             }
         )

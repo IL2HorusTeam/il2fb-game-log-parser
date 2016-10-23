@@ -67,7 +67,7 @@ def human_aircraft_crew_member_as_actor(data):
     data['actor'] = actors.HumanAircraftCrewMember(
         data.pop('actor_callsign'),
         data.pop('actor_aircraft'),
-        int(data.pop('actor_seat_number')),
+        int(data.pop('actor_index')),
     )
 
 
