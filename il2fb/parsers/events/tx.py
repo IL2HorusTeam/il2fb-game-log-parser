@@ -85,6 +85,14 @@ def ai_aircraft_as_attacker(data):
     )
 
 
+def ai_aircraft_crew_member_as_actor(data):
+    data['actor'] = actors.AIAircraftCrewMember(
+        data.pop('actor_flight'),
+        int(data.pop('actor_aircraft')),
+        int(data.pop('actor_index')),
+    )
+
+
 def stationary_unit_as_actor(data):
     data['actor'] = actors.StationaryUnit(
         data.pop('actor_stationary_unit'),

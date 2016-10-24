@@ -55,6 +55,20 @@ class AIAircraft(Actor):
         return "<AI aircraft '{0}:{1}'>".format(self.flight, self.aircraft)
 
 
+class AIAircraftCrewMember(AIAircraft):
+    __slots__ = AIAircraft.__slots__ + ['index', ]
+
+    def __init__(self, flight, aircraft, index):
+        super(AIAircraftCrewMember, self).__init__(flight, aircraft)
+        self.index = index
+
+    def __repr__(self):
+        return (
+            "<AI aircraft crew member #{0} in '{1}:{2}'>"
+            .format(self.index, self.flight, self.aircraft)
+        )
+
+
 class Unit(Actor):
     __slots__ = ['id', ]
 
