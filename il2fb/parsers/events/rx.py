@@ -168,10 +168,8 @@ STATIONARY_UNIT_ATTACKER_GROUP = named_group(
 )
 
 MOVING_UNIT = "{0}_Chief".format(NUMBER)
-MOVING_UNIT_ATTACKER_GROUP = named_group(
-    'attacker_moving_unit',
-    MOVING_UNIT,
-)
+MOVING_UNIT_ACTOR_GROUP = named_group('actor_moving_unit', MOVING_UNIT)
+MOVING_UNIT_ATTACKER_GROUP = named_group('attacker_moving_unit', MOVING_UNIT)
 
 BRIDGE = "Bridge{0}".format(NUMBER)
 BRIDGE_ACTOR_GROUP = named_group('actor_bridge', BRIDGE)
@@ -187,7 +185,4 @@ BUILDING_ACTOR_GROUP = BUILDING_GROUP_TEMPLATE.format(
     building=named_group('actor_building', BUILDING),
 )
 
-TREE = (
-    "3do/Tree/Line_W/{names}.sim"
-    .format(names=OBJECT_NAMES)
-)
+TREE = "3do/Tree/Line_W/{names}.sim".format(names=OBJECT_NAMES)
