@@ -100,3 +100,9 @@ def building_as_actor(data):
     data['actor'] = actors.Building(
         data.pop('actor_building'),
     )
+
+
+def bridge_as_actor(data):
+    data['actor'] = actors.Bridge(
+        data.pop('actor_bridge'),
+    )

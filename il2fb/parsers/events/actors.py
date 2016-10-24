@@ -96,3 +96,13 @@ class Building(Actor):
 
     def __repr__(self):
         return "<Building '{0}'>".format(self.name)
+
+
+class Bridge(Actor):
+    __slots__ = ['id', ]
+
+    def __init__(self, id):
+        self.id = id
+
+    def __repr__(self):
+        return "<Bridge '{0}'>".format(self.id)

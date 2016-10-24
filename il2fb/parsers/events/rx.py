@@ -173,6 +173,9 @@ MOVING_UNIT_ATTACKER_GROUP = named_group(
     MOVING_UNIT,
 )
 
+BRIDGE = "Bridge{0}".format(NUMBER)
+BRIDGE_ACTOR_GROUP = named_group('actor_bridge', BRIDGE)
+
 OBJECT_NAMES = group(choices(['live', 'mono']))
 
 BUILDING = ANYTHING
