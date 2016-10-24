@@ -2303,3 +2303,47 @@ class AIHasDamagedOwnAircraftTestCase(unittest.TestCase):
                 'verbose_name': "AI has damaged own aircraft",
             }
         )
+
+
+class AIHasDestroyedOwnAircraftTestCase(unittest.TestCase):
+
+    def test_from_s_by_landscape(self):
+        event = events.AIHasDestroyedOwnAircraft.from_s(
+            "[8:33:05 PM] r01000 shot down by landscape at 100.0 200.99"
+        )
+        self.assertIsInstance(event, events.AIHasDestroyedOwnAircraft)
+        self.assertEqual(event.time, datetime.time(20, 33, 5))
+        self.assertEqual(event.actor, actors.AIAircraft("r0100", 0))
+        self.assertEqual(event.pos, Point2D(100.0, 200.99))
+
+    def test_from_s_by_noname(self):
+        event = events.AIHasDestroyedOwnAircraft.from_s(
+            "[8:33:05 PM] r01000 shot down by NONAME at 100.0 200.99"
+        )
+        self.assertIsInstance(event, events.AIHasDestroyedOwnAircraft)
+        self.assertEqual(event.time, datetime.time(20, 33, 5))
+        self.assertEqual(event.actor, actors.AIAircraft("r0100", 0))
+        self.assertEqual(event.pos, Point2D(100.0, 200.99))
+
+    def test_to_primitive(self):
+        event = events.AIHasDestroyedOwnAircraft(
+            time=datetime.time(20, 33, 5),
+            actor=actors.AIAircraft("r0100", 0),
+            pos=Point2D(100.0, 200.99),
+        )
+        self.assertEqual(
+            event.to_primitive(),
+            {
+                'time': "20:33:05",
+                'actor': {
+                    'flight': "r0100",
+                    'index': 0,
+                },
+                'pos': {
+                    'x': 100.0,
+                    'y': 200.99,
+                },
+                'name': "AIHasDestroyedOwnAircraft",
+                'verbose_name': "AI has destroyed own aircraft",
+            }
+        )

@@ -2057,3 +2057,40 @@ class AIHasDamagedOwnAircraft(Event):
         tx.ai_aircraft_as_actor,
         tx.transform_pos,
     )
+
+
+class AIHasDestroyedOwnAircraft(Event):
+    """
+    Examples:
+
+        "[8:33:05 PM] r01000 shot down by landscape at 100.0 200.99"
+        "[8:33:05 PM] r01000 shot down by NONAME at 100.0 200.99"
+
+    """
+    __slots__ = ['time', 'actor', 'pos', ]
+
+    verbose_name = _("AI has destroyed own aircraft")
+    matcher = rx.matcher(
+        "{time}"     # 'time' regex group placeholder
+        "{actor}"    # 'actor' regex group placeholder
+        "\s"         # single whitespace
+        "shot"       #
+        "\s"         # single whitespace
+        "down"       #
+        "\s"         # single whitespace
+        "by"         #
+        "\s"         # single whitespace
+        "{himself}"  # 'himself' regex group placeholder
+        "{pos}"      # 'pos' regex group placeholder
+        .format(
+            time=rx.TIME_GROUP_PREFIX,
+            actor=rx.AI_AIRCRAFT_ACTOR_GROUP,
+            himself=rx.HIMSELF,
+            pos=rx.POS_GROUP_SUFFIX,
+        )
+    )
+    transformers = (
+        tx.transform_time,
+        tx.ai_aircraft_as_actor,
+        tx.transform_pos,
+    )
