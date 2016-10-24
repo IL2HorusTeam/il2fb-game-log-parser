@@ -2226,3 +2226,40 @@ class AIAircraftWasShotDownByAIAircraft(Event):
         tx.ai_aircraft_as_attacker,
         tx.transform_pos,
     )
+
+
+class AIAircraftWasShotDownByStationaryUnit(Event):
+    """
+    Example:
+
+        "[8:33:05 PM] r01000 shot down by 0_Static at 100.0 200.99"
+
+    """
+    __slots__ = ['time', 'actor', 'attacker', 'pos', ]
+
+    verbose_name = _("AI aircraft was shot down by stationary unit")
+    matcher = rx.matcher(
+        "{time}"      # 'time' regex group placeholder
+        "{actor}"     # 'actor' regex group placeholder
+        "\s"          # single whitespace
+        "shot"        #
+        "\s"          # single whitespace
+        "down"        #
+        "\s"          # single whitespace
+        "by"          #
+        "\s"          # single whitespace
+        "{attacker}"  # 'attacker' regex group placeholder
+        "{pos}"       # 'pos' regex group placeholder
+        .format(
+            time=rx.TIME_GROUP_PREFIX,
+            actor=rx.AI_AIRCRAFT_ACTOR_GROUP,
+            attacker=rx.STATIONARY_UNIT_ATTACKER_GROUP,
+            pos=rx.POS_GROUP_SUFFIX,
+        )
+    )
+    transformers = (
+        tx.transform_time,
+        tx.ai_aircraft_as_actor,
+        tx.stationary_unit_as_attacker,
+        tx.transform_pos,
+    )
