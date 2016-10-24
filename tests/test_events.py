@@ -2177,3 +2177,44 @@ class AIAircraftWasDamagedOnGroundTestCase(unittest.TestCase):
                 'verbose_name': "AI aircraft was damaged on the ground",
             }
         )
+
+
+class AIAircraftWasDamagedByHumanAircraftTestCase(unittest.TestCase):
+
+    def test_from_s(self):
+        event = events.AIAircraftWasDamagedByHumanAircraft.from_s(
+            "[8:33:05 PM] r01000 damaged by User1:Bf-109G-6_Late at 100.0 200.99"
+        )
+        self.assertIsInstance(event, events.AIAircraftWasDamagedByHumanAircraft)
+        self.assertEqual(event.time, datetime.time(20, 33, 5))
+        self.assertEqual(event.actor, actors.AIAircraft("r0100", 0))
+        self.assertEqual(event.attacker, actors.HumanAircraft("User1", "Bf-109G-6_Late"))
+        self.assertEqual(event.pos, Point2D(100.0, 200.99))
+
+    def test_to_primitive(self):
+        event = events.AIAircraftWasDamagedByHumanAircraft(
+            time=datetime.time(20, 33, 5),
+            actor=actors.AIAircraft("r0100", 0),
+            attacker=actors.HumanAircraft("User1", "Bf-109G-6_Late"),
+            pos=Point2D(100.0, 200.99),
+        )
+        self.assertEqual(
+            event.to_primitive(),
+            {
+                'time': "20:33:05",
+                'actor': {
+                    'flight': "r0100",
+                    'index': 0,
+                },
+                'attacker': {
+                    'callsign': "User1",
+                    'aircraft': "Bf-109G-6_Late",
+                },
+                'pos': {
+                    'x': 100.0,
+                    'y': 200.99,
+                },
+                'name': "AIAircraftWasDamagedByHumanAircraft",
+                'verbose_name': "AI aircraft was damaged by human aircraft",
+            }
+        )
