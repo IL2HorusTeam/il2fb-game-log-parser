@@ -1622,7 +1622,6 @@ class BridgeWasDestroyedByHumanAircraft(Event):
     verbose_name = _("Bridge was destroyed by human aircraft")
     matcher = rx.matcher(
         "{time}"      # 'time' regex group placeholder
-        "\s"          # extra whitespace for bridges
         "{actor}"     # 'actor' regex group placeholder
         "\s"          # single whitespace
         "destroyed"   #
@@ -1906,6 +1905,41 @@ class AIAircraftHasDespawned(Event):
         "{actor}"  # 'actor' regex group placeholder
         "\s"       # single whitespace
         "removed"  #
+        "{pos}"    # 'pos' regex group placeholder
+        .format(
+            time=rx.TIME_GROUP_PREFIX,
+            actor=rx.AI_AIRCRAFT_ACTOR_GROUP,
+            pos=rx.POS_GROUP_SUFFIX,
+        )
+    )
+    transformers = (
+        tx.transform_time,
+        tx.ai_aircraft_as_actor,
+        tx.transform_pos,
+    )
+
+
+class AIAircraftWasDamagedOnGround(Event):
+    """
+    Example:
+
+        "[8:33:05 PM] r01000 damaged on the ground at 100.0 200.99"
+
+    """
+    __slots__ = ['time', 'actor', 'pos', ]
+
+    verbose_name = _("AI aircraft was damaged on the ground")
+    matcher = rx.matcher(
+        "{time}"   # 'time' regex group placeholder
+        "{actor}"  # 'actor' regex group placeholder
+        "\s"       # single whitespace
+        "damaged"  #
+        "\s"       # single whitespace
+        "on"       #
+        "\s"       # single whitespace
+        "the"      #
+        "\s"       # single whitespace
+        "ground"   #
         "{pos}"    # 'pos' regex group placeholder
         .format(
             time=rx.TIME_GROUP_PREFIX,
