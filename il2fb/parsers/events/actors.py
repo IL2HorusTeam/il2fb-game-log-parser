@@ -45,14 +45,14 @@ class HumanAircraftCrewMember(HumanAircraft):
 
 
 class AIAircraft(Actor):
-    __slots__ = ['flight', 'index', ]
+    __slots__ = ['flight', 'aircraft', ]
 
-    def __init__(self, flight, index):
+    def __init__(self, flight, aircraft):
         self.flight = flight
-        self.index = index
+        self.aircraft = aircraft
 
     def __repr__(self):
-        return "<AI aircraft #{0} in '{1}'>".format(self.index, self.flight)
+        return "<AI aircraft '{0}:{1}'>".format(self.flight, self.aircraft)
 
 
 class Unit(Actor):

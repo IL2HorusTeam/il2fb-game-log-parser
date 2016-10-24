@@ -74,14 +74,14 @@ def human_aircraft_crew_member_as_actor(data):
 def ai_aircraft_as_actor(data):
     data['actor'] = actors.AIAircraft(
         data.pop('actor_flight'),
-        int(data.pop('actor_index')),
+        int(data.pop('actor_aircraft')),
     )
 
 
 def ai_aircraft_as_attacker(data):
     data['attacker'] = actors.AIAircraft(
         data.pop('attacker_flight'),
-        int(data.pop('attacker_index')),
+        int(data.pop('attacker_aircraft')),
     )
 
 

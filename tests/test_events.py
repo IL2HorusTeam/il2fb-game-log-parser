@@ -865,7 +865,7 @@ class HumanAircraftWasDamagedByAIAircraftTestCase(unittest.TestCase):
                 },
                 'attacker': {
                     'flight': "r0100",
-                    'index': 0,
+                    'aircraft': 0,
                 },
                 'pos': {
                     'x': 100.0,
@@ -993,7 +993,7 @@ class HumanAircraftWasShotDownByAIAircraftTestCase(unittest.TestCase):
                 },
                 'attacker': {
                     'flight': "r0100",
-                    'index': 0,
+                    'aircraft': 0,
                 },
                 'pos': {
                     'x': 100.0,
@@ -1451,7 +1451,7 @@ class BuildingWasDestroyedByAIAircraftTestCase(unittest.TestCase):
                 },
                 'attacker': {
                     'flight': "r0100",
-                    'index': 0,
+                    'aircraft': 0,
                 },
                 'pos': {
                     'x': 100.0,
@@ -1555,7 +1555,7 @@ class TreeWasDestroyedByAIAircraftTestCase(unittest.TestCase):
                 'time': "20:33:05",
                 'attacker': {
                     'flight': "r0100",
-                    'index': 0,
+                    'aircraft': 0,
                 },
                 'pos': {
                     'x': 100.0,
@@ -1776,7 +1776,7 @@ class StationaryUnitWasDestroyedByAIAircraftTestCase(unittest.TestCase):
                 },
                 'attacker': {
                     'flight': "r0100",
-                    'index': 0,
+                    'aircraft': 0,
                 },
                 'pos': {
                     'x': 100.0,
@@ -1975,7 +1975,7 @@ class MovingUnitMemberWasDestroyedByAIAircraftTestCase(unittest.TestCase):
                 },
                 'attacker': {
                     'flight': "r0100",
-                    'index': 0,
+                    'aircraft': 0,
                 },
                 'pos': {
                     'x': 100.0,
@@ -2132,7 +2132,7 @@ class AIAircraftHasDespawnedTestCase(unittest.TestCase):
                 'time': "20:33:05",
                 'actor': {
                     'flight': "r0100",
-                    'index': 0,
+                    'aircraft': 0,
                 },
                 'pos': {
                     'x': 100.0,
@@ -2167,7 +2167,7 @@ class AIAircraftWasDamagedOnGroundTestCase(unittest.TestCase):
                 'time': "20:33:05",
                 'actor': {
                     'flight': "r0100",
-                    'index': 0,
+                    'aircraft': 0,
                 },
                 'pos': {
                     'x': 100.0,
@@ -2204,7 +2204,7 @@ class AIAircraftWasDamagedByHumanAircraftTestCase(unittest.TestCase):
                 'time': "20:33:05",
                 'actor': {
                     'flight': "r0100",
-                    'index': 0,
+                    'aircraft': 0,
                 },
                 'attacker': {
                     'callsign': "User1",
@@ -2245,11 +2245,11 @@ class AIAircraftWasDamagedByAIAircraftTestCase(unittest.TestCase):
                 'time': "20:33:05",
                 'actor': {
                     'flight': "r0100",
-                    'index': 0,
+                    'aircraft': 0,
                 },
                 'attacker': {
                     'flight': "r0100",
-                    'index': 1,
+                    'aircraft': 1,
                 },
                 'pos': {
                     'x': 100.0,
@@ -2293,7 +2293,7 @@ class AIHasDamagedOwnAircraftTestCase(unittest.TestCase):
                 'time': "20:33:05",
                 'actor': {
                     'flight': "r0100",
-                    'index': 0,
+                    'aircraft': 0,
                 },
                 'pos': {
                     'x': 100.0,
@@ -2337,7 +2337,7 @@ class AIHasDestroyedOwnAircraftTestCase(unittest.TestCase):
                 'time': "20:33:05",
                 'actor': {
                     'flight': "r0100",
-                    'index': 0,
+                    'aircraft': 0,
                 },
                 'pos': {
                     'x': 100.0,
@@ -2372,7 +2372,7 @@ class AIAircraftHasLandedTestCase(unittest.TestCase):
                 'time': "20:33:05",
                 'actor': {
                     'flight': "r0100",
-                    'index': 0,
+                    'aircraft': 0,
                 },
                 'pos': {
                     'x': 100.0,
@@ -2407,7 +2407,7 @@ class AIAircraftHasCrashedTestCase(unittest.TestCase):
                 'time': "20:33:05",
                 'actor': {
                     'flight': "r0100",
-                    'index': 0,
+                    'aircraft': 0,
                 },
                 'pos': {
                     'x': 100.0,
@@ -2444,7 +2444,7 @@ class AIAircraftWasShotDownByHumanAircraftTestCase(unittest.TestCase):
                 'time': "20:33:05",
                 'actor': {
                     'flight': "r0100",
-                    'index': 0,
+                    'aircraft': 0,
                 },
                 'attacker': {
                     'callsign': "User1",
@@ -2485,11 +2485,11 @@ class AIAircraftWasShotDownByAIAircraftTestCase(unittest.TestCase):
                 'time': "20:33:05",
                 'actor': {
                     'flight': "r0100",
-                    'index': 0,
+                    'aircraft': 0,
                 },
                 'attacker': {
                     'flight': "r0100",
-                    'index': 1,
+                    'aircraft': 1,
                 },
                 'pos': {
                     'x': 100.0,
@@ -2526,7 +2526,7 @@ class AIAircraftWasShotDownByStationaryUnitTestCase(unittest.TestCase):
                 'time': "20:33:05",
                 'actor': {
                     'flight': "r0100",
-                    'index': 0,
+                    'aircraft': 0,
                 },
                 'attacker': {
                     'id': "0_Static",
@@ -2566,7 +2566,7 @@ class AIAircraftWasShotDownByMovingUnitMemberTestCase(unittest.TestCase):
                 'time': "20:33:05",
                 'actor': {
                     'flight': "r0100",
-                    'index': 0,
+                    'aircraft': 0,
                 },
                 'attacker': {
                     'id': "0_Chief",
