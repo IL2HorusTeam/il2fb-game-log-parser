@@ -102,6 +102,13 @@ def moving_unit_as_attacker(data):
     )
 
 
+def moving_unit_member_as_actor(data):
+    data['actor'] = actors.MovingUnitMember(
+        data.pop('actor_moving_unit'),
+        int(data.pop('actor_index')),
+    )
+
+
 def moving_unit_member_as_attacker(data):
     data['attacker'] = actors.MovingUnitMember(
         data.pop('attacker_moving_unit'),
