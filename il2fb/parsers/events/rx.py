@@ -171,6 +171,12 @@ MOVING_UNIT = "{0}_Chief".format(NUMBER)
 MOVING_UNIT_ACTOR_GROUP = named_group('actor_moving_unit', MOVING_UNIT)
 MOVING_UNIT_ATTACKER_GROUP = named_group('attacker_moving_unit', MOVING_UNIT)
 
+MOVING_UNIT_MEMBER_GROUP_TEMPLATE = "{moving_unit}{index}"
+MOVING_UNIT_MEMBER_ATTACKER_GROUP = MOVING_UNIT_MEMBER_GROUP_TEMPLATE.format(
+    moving_unit=MOVING_UNIT_ATTACKER_GROUP,
+    index=INDEX_ATTACKER_GROUP,
+)
+
 BRIDGE = "Bridge{0}".format(NUMBER)
 BRIDGE_ACTOR_GROUP = named_group('actor_bridge', BRIDGE)
 
