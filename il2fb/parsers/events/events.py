@@ -2054,3 +2054,29 @@ class AIAircraftCrewMemberParachuteWasDestroyedByAIAircraft(Event):
         tx.ai_aircraft_as_attacker,
         tx.transform_pos,
     )
+
+
+class AIAircraftCrewMemberParachuteWasDestroyed(Event):
+    """
+    Example:
+
+        "[8:33:05 PM] r01000(0) has chute destroyed at 100.0 200.99"
+
+    """
+    __slots__ = ['time', 'actor', 'pos', ]
+
+    verbose_name = _("AI aircraft crew member's parachute was destroyed")
+    matcher = rx.matcher(
+        "{time}{actor}{s}has{s}chute{s}destroyed{pos}"
+        .format(
+            time=rx.TIME_GROUP_PREFIX,
+            actor=rx.AI_AIRCRAFT_CREW_MEMBER_ACTOR_GROUP,
+            pos=rx.POS_GROUP_SUFFIX,
+            s=rx.WHITESPACE,
+        )
+    )
+    transformers = (
+        tx.transform_time,
+        tx.ai_aircraft_crew_member_as_actor,
+        tx.transform_pos,
+    )
