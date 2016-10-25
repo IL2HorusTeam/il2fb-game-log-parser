@@ -406,6 +406,33 @@ class HumanHasChangedSeat(Event):
     )
 
 
+class HumanIsTryingToTakeSeat(Event):
+    """
+    Example:
+
+        "[8:33:05 PM] User0 is trying to occupy seat USN_VF_51A020(0)"
+
+    """
+    __slots__ = ['time', 'actor', 'seat', ]
+
+    verbose_name = _("Human is trying to take seat")
+    matcher = rx.matcher(
+        "{time}{actor}{s}is{s}trying{s}to{s}occupy{s}seat{s}{seat}{end}"
+        .format(
+            time=rx.TIME_GROUP_PREFIX,
+            actor=rx.HUMAN_ACTOR_GROUP,
+            seat=rx.AI_AIRCRAFT_CREW_MEMBER_ACTOR_GROUP,
+            s=rx.WHITESPACE,
+            end=rx.END_OF_STRING,
+        )
+    )
+    transformers = (
+        tx.transform_time,
+        tx.human_as_actor,
+        tx.ai_aircraft_crew_member_as_seat,
+    )
+
+
 class HumanAircraftHasTookOff(Event):
     """
     Example:

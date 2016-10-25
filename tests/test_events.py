@@ -521,6 +521,41 @@ class HumanHasChangedSeatTestCase(unittest.TestCase):
         )
 
 
+class HumanIsTryingToTakeSeatTestCase(unittest.TestCase):
+
+    def test_from_s(self):
+        event = events.HumanIsTryingToTakeSeat.from_s(
+            "[8:33:05 PM] User0 is trying to occupy seat USN_VF_51A020(0)"
+        )
+        self.assertIsInstance(event, events.HumanIsTryingToTakeSeat)
+        self.assertEqual(event.time, datetime.time(20, 33, 5))
+        self.assertEqual(event.actor, actors.Human("User0"))
+        self.assertEqual(event.seat, actors.AIAircraftCrewMember("USN_VF_51A02", 0, 0))
+
+    def test_to_primitive(self):
+        event = events.HumanIsTryingToTakeSeat(
+            time=datetime.time(20, 33, 5),
+            actor=actors.Human("User0"),
+            seat=actors.AIAircraftCrewMember("USN_VF_51A02", 0, 0),
+        )
+        self.assertEqual(
+            event.to_primitive(),
+            {
+                'time': "20:33:05",
+                'actor': {
+                    'callsign': "User0",
+                },
+                'seat': {
+                    'flight': "USN_VF_51A02",
+                    'aircraft': 0,
+                    'index': 0,
+                },
+                'name': "HumanIsTryingToTakeSeat",
+                'verbose_name': "Human is trying to take seat",
+            }
+        )
+
+
 class HumanAircraftHasTookOffTestCase(unittest.TestCase):
 
     def test_from_s(self):

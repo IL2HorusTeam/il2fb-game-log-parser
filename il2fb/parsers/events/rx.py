@@ -9,8 +9,8 @@ import re
 from .constants import TOGGLE_VALUES, TARGET_STATES
 
 
-def matcher(s):
-    return re.compile(s, re.VERBOSE).match
+def matcher(pattern):
+    return re.compile(pattern, re.VERBOSE).match
 
 
 def group(expression):
