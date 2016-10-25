@@ -63,6 +63,13 @@ def human_aircraft_as_attacker(data):
     )
 
 
+def human_aircraft_as_assistant(data):
+    data['assistant'] = actors.HumanAircraft(
+        data.pop('assistant_callsign'),
+        data.pop('assistant_aircraft'),
+    )
+
+
 def human_aircraft_crew_member_as_actor(data):
     data['actor'] = actors.HumanAircraftCrewMember(
         data.pop('actor_callsign'),

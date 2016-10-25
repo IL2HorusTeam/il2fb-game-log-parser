@@ -77,11 +77,9 @@ CALLSIGN = NON_WHITESPACES
 HIMSELF = group(choices(['landscape', 'NONAME']))
 
 HUMAN_ACTOR_GROUP = named_group('actor_callsign', CALLSIGN)
-HUMAN_ATTACKER_GROUP = named_group('attacker_callsign', CALLSIGN)
 
 AIRCRAFT = NON_WHITESPACES
 AIRCRAFT_ACTOR_GROUP = named_group('actor_aircraft', AIRCRAFT)
-AIRCRAFT_ATTACKER_GROUP = named_group('attacker_aircraft', AIRCRAFT)
 
 HUMAN_AIRCRAFT_GROUP_TEMPLATE = "{callsign}:{aircraft}"
 HUMAN_AIRCRAFT_ACTOR_GROUP = HUMAN_AIRCRAFT_GROUP_TEMPLATE.format(
@@ -89,8 +87,12 @@ HUMAN_AIRCRAFT_ACTOR_GROUP = HUMAN_AIRCRAFT_GROUP_TEMPLATE.format(
     aircraft=AIRCRAFT_ACTOR_GROUP,
 )
 HUMAN_AIRCRAFT_ATTACKER_GROUP = HUMAN_AIRCRAFT_GROUP_TEMPLATE.format(
-    callsign=HUMAN_ATTACKER_GROUP,
-    aircraft=AIRCRAFT_ATTACKER_GROUP,
+    callsign=named_group('attacker_callsign', CALLSIGN),
+    aircraft=named_group('attacker_aircraft', AIRCRAFT),
+)
+HUMAN_AIRCRAFT_ASSISTANT_GROUP = HUMAN_AIRCRAFT_GROUP_TEMPLATE.format(
+    callsign=named_group('assistant_callsign', CALLSIGN),
+    aircraft=named_group('assistant_aircraft', AIRCRAFT),
 )
 
 HUMAN_AIRCRAFT_CREW_MEMBER_GROUP_TEMPlATE = "{callsign}:{aircraft}\({index}\)"
