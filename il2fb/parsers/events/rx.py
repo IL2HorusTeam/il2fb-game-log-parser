@@ -102,11 +102,9 @@ HUMAN_AIRCRAFT_CREW_MEMBER_ACTOR_GROUP = HUMAN_AIRCRAFT_CREW_MEMBER_GROUP_TEMPlA
 
 AI_FLIGHT = NON_WHITESPACES
 AI_FLIGHT_ACTOR_GROUP = named_group('actor_flight', AI_FLIGHT)
-AI_FLIGHT_ATTACKER_GROUP = named_group('attacker_flight', AI_FLIGHT)
 
 AI_AIRCRAFT_INDEX = NUMBER
 AI_AIRCRAFT_INDEX_ACTOR_GROUP = named_group('actor_aircraft', AI_AIRCRAFT_INDEX)
-AI_AIRCRAFT_INDEX_ATTACKER_GROUP = named_group('attacker_aircraft', AI_AIRCRAFT_INDEX)
 
 AI_AIRCRAFT_GROUP_TEMPLATE = "{flight}{aircraft}"
 AI_AIRCRAFT_ACTOR_GROUP = AI_AIRCRAFT_GROUP_TEMPLATE.format(
@@ -114,8 +112,12 @@ AI_AIRCRAFT_ACTOR_GROUP = AI_AIRCRAFT_GROUP_TEMPLATE.format(
     aircraft=AI_AIRCRAFT_INDEX_ACTOR_GROUP,
 )
 AI_AIRCRAFT_ATTACKER_GROUP = AI_AIRCRAFT_GROUP_TEMPLATE.format(
-    flight=AI_FLIGHT_ATTACKER_GROUP,
-    aircraft=AI_AIRCRAFT_INDEX_ATTACKER_GROUP,
+    flight=named_group('attacker_flight', AI_FLIGHT),
+    aircraft=named_group('attacker_aircraft', AI_AIRCRAFT_INDEX),
+)
+AI_AIRCRAFT_ASSISTANT_GROUP = AI_AIRCRAFT_GROUP_TEMPLATE.format(
+    flight=named_group('assistant_flight', AI_FLIGHT),
+    aircraft=named_group('assistant_aircraft', AI_AIRCRAFT_INDEX),
 )
 
 AI_AIRCRAFT_CREW_MEMBER_GROUP_TEMPlATE = "{flight}{aircraft}\({index}\)"
