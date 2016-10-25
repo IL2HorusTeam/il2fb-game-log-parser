@@ -1690,6 +1690,48 @@ class HumanAircraftCrewMemberWasKilledByStationaryUnitTestCase(unittest.TestCase
         )
 
 
+class HumanAircraftCrewMemberWasKilledByMovingUnitMemberTestCase(unittest.TestCase):
+
+    def test_from_s(self):
+        event = events.HumanAircraftCrewMemberWasKilledByMovingUnitMember.from_s(
+            "[8:33:05 PM] User0:Pe-8(0) was killed by 0_Chief0 at 100.0 200.99"
+        )
+        self.assertIsInstance(event, events.HumanAircraftCrewMemberWasKilledByMovingUnitMember)
+        self.assertEqual(event.time, datetime.time(20, 33, 5))
+        self.assertEqual(event.actor, actors.HumanAircraftCrewMember("User0", "Pe-8", 0))
+        self.assertEqual(event.attacker, actors.MovingUnitMember("0_Chief", 0))
+        self.assertEqual(event.pos, Point2D(100.0, 200.99))
+
+    def test_to_primitive(self):
+        event = events.HumanAircraftCrewMemberWasKilledByMovingUnitMember(
+            time=datetime.time(20, 33, 5),
+            actor=actors.HumanAircraftCrewMember("User0", "Pe-8", 0),
+            attacker=actors.MovingUnitMember("0_Chief", 0),
+            pos=Point2D(100.0, 200.99),
+        )
+        self.assertEqual(
+            event.to_primitive(),
+            {
+                'time': "20:33:05",
+                'actor': {
+                    'callsign': "User0",
+                    'aircraft': "Pe-8",
+                    'index': 0,
+                },
+                'attacker': {
+                    'id': "0_Chief",
+                    'index': 0,
+                },
+                'pos': {
+                    'x': 100.0,
+                    'y': 200.99,
+                },
+                'name': "HumanAircraftCrewMemberWasKilledByMovingUnitMember",
+                'verbose_name': "Human aircraft crew member was killed by moving unit member",
+            }
+        )
+
+
 class BuildingWasDestroyedByHumanAircraftTestCase(unittest.TestCase):
 
     def test_from_s(self):
