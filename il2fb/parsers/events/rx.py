@@ -21,8 +21,8 @@ def named_group(group_name, expression):
     return "(?P<{0}>{1})".format(group_name, expression)
 
 
-def choices(values):
-    return "|".join(values)
+def choices(values, delimiter="|"):
+    return delimiter.join(values)
 
 
 ANYTHING = ".+"
