@@ -2004,7 +2004,7 @@ class AIAircraftCrewMemberWasKilledInParachuteByAIAircraft(Event):
     """
     Example:
 
-        "[8:33:05 PM] r01000(0) was killed by r01001 at 100.0 200.99"
+        "[8:33:05 PM] r01000(0) was killed in his chute by r01001 at 100.0 200.99"
 
     """
     __slots__ = ['time', 'actor', 'attacker', 'pos', ]
@@ -2012,6 +2012,34 @@ class AIAircraftCrewMemberWasKilledInParachuteByAIAircraft(Event):
     verbose_name = _("AI aircraft crew member was killed in parachute by AI aircraft")
     matcher = rx.matcher(
         "{time}{actor}{s}was{s}killed{s}in{s}his{s}chute{s}by{s}{attacker}{pos}"
+        .format(
+            time=rx.TIME_GROUP_PREFIX,
+            actor=rx.AI_AIRCRAFT_CREW_MEMBER_ACTOR_GROUP,
+            attacker=rx.AI_AIRCRAFT_ATTACKER_GROUP,
+            pos=rx.POS_GROUP_SUFFIX,
+            s=rx.WHITESPACE,
+        )
+    )
+    transformers = (
+        tx.transform_time,
+        tx.ai_aircraft_crew_member_as_actor,
+        tx.ai_aircraft_as_attacker,
+        tx.transform_pos,
+    )
+
+
+class AIAircraftCrewMemberParachuteWasDestroyedByAIAircraft(Event):
+    """
+    Example:
+
+        "[8:33:05 PM] r01000(0) has chute destroyed by r01001 at 100.0 200.99"
+
+    """
+    __slots__ = ['time', 'actor', 'attacker', 'pos', ]
+
+    verbose_name = _("AI aircraft crew member's parachute was destroyed by AI aircraft")
+    matcher = rx.matcher(
+        "{time}{actor}{s}has{s}chute{s}destroyed{s}by{s}{attacker}{pos}"
         .format(
             time=rx.TIME_GROUP_PREFIX,
             actor=rx.AI_AIRCRAFT_CREW_MEMBER_ACTOR_GROUP,
