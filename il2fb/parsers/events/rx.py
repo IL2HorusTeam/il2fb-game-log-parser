@@ -27,88 +27,41 @@ def choices(values):
 
 ANYTHING = ".+"
 WHITESPACE = "\s"
-NON_WHITESPACES = "\S+"
-NUMBER = "\d+"
+WHITESPACES = "{0}+".format(WHITESPACE)
+NON_WHITESPACE = "\S"
+NON_WHITESPACES = "{0}+".format(NON_WHITESPACE)
+DIGIT = "\d"
+NUMBER = "{0}+".format(DIGIT)
 FLOAT = "{0}.{0}".format(NUMBER)
+START_OF_STRING = "^"
+END_OF_STRING = "$"
 
-
-TIME = """
-\d{1,2}  # 1 or 2 digits for hours (e.g. 8, 08 or 18)
-:        # hours-minutes separator
-\d{2}    # 2 digits for minutes
-:        # minutes-seconds separator
-\d{2}    # 2 digits for seconds
-\s       # single whitespace
-[AP]M    # day period (e.g. AM or PM)
-"""
-
+#: Example: "[8:33:05 PM]"
+TIME = "\d{1,2}:\d{2}:\d{2}\s[AP]M"
 TIME_GROUP = named_group('time', TIME)
-
-TIME_GROUP_PREFIX = """
-# Capture event's time stamp prefix. E.g.:
-#
-# "[8:33:05 PM] foo"
-#
-# "8:33:05 PM" will be captured into 'time' group.
-^             # beginning of a string
-\[            # opening brackets
-{time_group}  # 'time_group' regex placeholder
-\]            # closing brackets
-\s+           # one or more whitespaces
-              # any ending of a string
-""".format(
+TIME_GROUP_PREFIX = "{start}\[{time_group}\]{ss}".format(
+    start=START_OF_STRING,
     time_group=TIME_GROUP,
+    ss=WHITESPACES,
 )
 
-DATE = """
-\D{3}    # 3 non-digits for month abbreviation (e.g. Jan, Feb, Sep, etc)
-\s       # single whitespace
-\d{1,2}  # 1 or 2 digits for day number (e.g. 8, 08 or 18)
-,        # single comma
-\s       # single whitespace
-\d{4}    # 4 digits for year (e.g. 2013)
-"""
-
+#: Example: "Sep 15, 2013"
+DATE = "\D{3}\s\d{1,2},\s\d{4}"
 DATE_GROUP = named_group('date', DATE)
-
-DATE_TIME_GROUP_PREFIX = """
-# Capture event's datetime stamp prefix. E.g.:
-#
-# "[Sep 15, 2013 8:33:05 PM] foo"
-#
-# "Sep 15, 2013" will be captured into 'date' group,
-# "8:33:05 PM" will be captured into 'time' group.
-^               # beginning of a string
-\[              # opening brackets
-{date_group}    # 'date' group regex placeholder
-\s              # single whitespace
-{time_group}    # 'time' group regex placeholder
-\]              # closing brackets
-\s+             # one or more whitespaces
-                # any ending of a string
-""".format(
+DATE_TIME_GROUP_PREFIX = "{start}\[{date_group}{s}{time_group}\]{ss}".format(
     date_group=DATE_GROUP,
     time_group=TIME_GROUP,
+    start=START_OF_STRING,
+    s=WHITESPACE,
+    ss=WHITESPACES,
 )
 
-POS_GROUP_SUFFIX = """
-# Capture map position of an event. E.g.:
-#
-# "Something has happened at 100.0 200.99"
-#
-# "100.0" will be captured into 'pos_x' group,
-# "200.99" will be captured into 'pos_y' group.
-         # any beginning of a string
-\s       # single whitespace
-at       #
-\s       # single whitespace
-{pos_x}  # 'pos_x' regex placeholder
-\s       # single whitespace
-{pos_y}  # 'pos_y' regex placeholder
-$        # end of a string
-""".format(
+#: Example: " at 100.99 200.99"
+POS_GROUP_SUFFIX = "{s}at{s}{pos_x}{s}{pos_y}{end}".format(
     pos_x=named_group('pos_x', FLOAT),
     pos_y=named_group('pos_y', FLOAT),
+    s=WHITESPACE,
+    end=END_OF_STRING,
 )
 
 TARGET_STATE_GROUP = named_group('state', choices(TARGET_STATES))
