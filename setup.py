@@ -33,7 +33,7 @@ README = open(os.path.join(__here__, 'README.rst')).read()
 
 setup(
     name='il2fb-events-parser',
-    version='1.1.0.dev0',
+    version='1.0.0.dev0',
     description="Parse events from log produced by IL-2 FB Dedicated Server",
     long_description=README,
     keywords=[
