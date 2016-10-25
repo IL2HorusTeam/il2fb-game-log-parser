@@ -933,6 +933,36 @@ class HumanAircraftWasShotDownByHumanAircraftAndAIAircraft(Event):
     )
 
 
+class HumanAircraftWasShotDownByAIAircraftAndHumanAircraft(Event):
+    """
+    Example:
+
+        "[8:33:05 PM] User0:Pe-8 shot down by r01000 and User1:Bf-109G-2 at 100.0 200.99"
+
+    """
+    __slots__ = ['time', 'actor', 'attacker', 'assistant', 'pos', ]
+
+    verbose_name = _("Human aircraft was shot down by AI aircraft and human aircraft")
+    matcher = rx.matcher(
+        "{time}{actor}{s}shot{s}down{s}by{s}{attacker}{s}and{s}{assistant}{pos}"
+        .format(
+            time=rx.TIME_GROUP_PREFIX,
+            actor=rx.HUMAN_AIRCRAFT_ACTOR_GROUP,
+            attacker=rx.AI_AIRCRAFT_ATTACKER_GROUP,
+            assistant=rx.HUMAN_AIRCRAFT_ASSISTANT_GROUP,
+            pos=rx.POS_GROUP_SUFFIX,
+            s=rx.WHITESPACE,
+        )
+    )
+    transformers = (
+        tx.transform_time,
+        tx.human_aircraft_as_actor,
+        tx.ai_aircraft_as_attacker,
+        tx.human_aircraft_as_assistant,
+        tx.transform_pos,
+    )
+
+
 class HumanAircraftCrewMemberHasBailedOut(Event):
     """
     Example:

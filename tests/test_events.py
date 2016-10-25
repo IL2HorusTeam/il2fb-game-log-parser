@@ -1296,6 +1296,53 @@ class HumanAircraftWasShotDownByHumanAircraftAndAIAircraftTestCase(unittest.Test
         )
 
 
+class HumanAircraftWasShotDownByAIAircraftAndHumanAircraftTestCase(unittest.TestCase):
+
+    def test_from_s(self):
+        event = events.HumanAircraftWasShotDownByAIAircraftAndHumanAircraft.from_s(
+            "[8:33:05 PM] User0:Pe-8 shot down by r01000 and User1:Bf-109G-2 at 100.0 200.99"
+        )
+        self.assertIsInstance(event, events.HumanAircraftWasShotDownByAIAircraftAndHumanAircraft)
+        self.assertEqual(event.time, datetime.time(20, 33, 5))
+        self.assertEqual(event.actor, actors.HumanAircraft("User0", "Pe-8"))
+        self.assertEqual(event.attacker, actors.AIAircraft("r0100", 0))
+        self.assertEqual(event.assistant, actors.HumanAircraft("User1", "Bf-109G-2"))
+        self.assertEqual(event.pos, Point2D(100.0, 200.99))
+
+    def test_to_primitive(self):
+        event = events.HumanAircraftWasShotDownByAIAircraftAndHumanAircraft(
+            time=datetime.time(20, 33, 5),
+            actor=actors.HumanAircraft("User0", "Pe-8"),
+            attacker=actors.AIAircraft("r0100", 0),
+            assistant=actors.HumanAircraft("User1", "Bf-109G-2"),
+            pos=Point2D(100.0, 200.99),
+        )
+        self.assertEqual(
+            event.to_primitive(),
+            {
+                'time': "20:33:05",
+                'actor': {
+                    'callsign': "User0",
+                    'aircraft': "Pe-8",
+                },
+                'attacker': {
+                    'flight': "r0100",
+                    'aircraft': 0,
+                },
+                'assistant': {
+                    'callsign': "User1",
+                    'aircraft': "Bf-109G-2",
+                },
+                'pos': {
+                    'x': 100.0,
+                    'y': 200.99,
+                },
+                'name': "HumanAircraftWasShotDownByAIAircraftAndHumanAircraft",
+                'verbose_name': "Human aircraft was shot down by AI aircraft and human aircraft",
+            }
+        )
+
+
 class HumanAircraftCrewMemberHasBailedOutTestCase(unittest.TestCase):
 
     def test_from_s(self):
