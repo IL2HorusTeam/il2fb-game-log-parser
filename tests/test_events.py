@@ -2038,7 +2038,7 @@ class HumanAircraftCrewMemberParachuteWasDestroyedByStationaryUnitTestCase(unitt
     def test_to_primitive(self):
         event = events.HumanAircraftCrewMemberParachuteWasDestroyedByStationaryUnit(
             time=datetime.time(20, 33, 5),
-            actor=actors.AIAircraftCrewMember("r0100", 0, 0),
+            actor=actors.HumanAircraftCrewMember("User0", "Pe-8", 0),
             attacker=actors.StationaryUnit("0_Static"),
             pos=Point2D(100.0, 200.99),
         )
@@ -2047,8 +2047,8 @@ class HumanAircraftCrewMemberParachuteWasDestroyedByStationaryUnitTestCase(unitt
             {
                 'time': "20:33:05",
                 'actor': {
-                    'flight': "r0100",
-                    'aircraft': 0,
+                    'callsign': "User0",
+                    'aircraft': "Pe-8",
                     'index': 0,
                 },
                 'attacker': {
@@ -2079,7 +2079,7 @@ class HumanAircraftCrewMemberParachuteWasDestroyedByMovingUnitMemberTestCase(uni
     def test_to_primitive(self):
         event = events.HumanAircraftCrewMemberParachuteWasDestroyedByMovingUnitMember(
             time=datetime.time(20, 33, 5),
-            actor=actors.AIAircraftCrewMember("r0100", 0, 0),
+            actor=actors.HumanAircraftCrewMember("User0", "Pe-8", 0),
             attacker=actors.MovingUnitMember("0_Chief", 0),
             pos=Point2D(100.0, 200.99),
         )
@@ -2088,8 +2088,8 @@ class HumanAircraftCrewMemberParachuteWasDestroyedByMovingUnitMemberTestCase(uni
             {
                 'time': "20:33:05",
                 'actor': {
-                    'flight': "r0100",
-                    'aircraft': 0,
+                    'callsign': "User0",
+                    'aircraft': "Pe-8",
                     'index': 0,
                 },
                 'attacker': {
@@ -2121,7 +2121,7 @@ class HumanAircraftCrewMemberParachuteWasDestroyedByMovingUnitTestCase(unittest.
     def test_to_primitive(self):
         event = events.HumanAircraftCrewMemberParachuteWasDestroyedByMovingUnit(
             time=datetime.time(20, 33, 5),
-            actor=actors.AIAircraftCrewMember("r0100", 0, 0),
+            actor=actors.HumanAircraftCrewMember("User0", "Pe-8", 0),
             attacker=actors.MovingUnit("0_Chief"),
             pos=Point2D(100.0, 200.99),
         )
@@ -2130,8 +2130,8 @@ class HumanAircraftCrewMemberParachuteWasDestroyedByMovingUnitTestCase(unittest.
             {
                 'time': "20:33:05",
                 'actor': {
-                    'flight': "r0100",
-                    'aircraft': 0,
+                    'callsign': "User0",
+                    'aircraft': "Pe-8",
                     'index': 0,
                 },
                 'attacker': {
@@ -2143,6 +2143,48 @@ class HumanAircraftCrewMemberParachuteWasDestroyedByMovingUnitTestCase(unittest.
                 },
                 'name': "HumanAircraftCrewMemberParachuteWasDestroyedByMovingUnit",
                 'verbose_name': "Human aircraft crew member's parachute was destroyed by moving unit",
+            }
+        )
+
+
+class HumanAircraftCrewMemberParachuteWasDestroyedByHumanAircraftTestCase(unittest.TestCase):
+
+    def test_from_s(self):
+        event = events.HumanAircraftCrewMemberParachuteWasDestroyedByHumanAircraft.from_s(
+            "[8:33:05 PM] User0:Pe-8(0) has chute destroyed by User1:Bf-109G-2 at 100.0 200.99"
+        )
+        self.assertIsInstance(event, events.HumanAircraftCrewMemberParachuteWasDestroyedByHumanAircraft)
+        self.assertEqual(event.time, datetime.time(20, 33, 5))
+        self.assertEqual(event.actor, actors.HumanAircraftCrewMember("User0", "Pe-8", 0))
+        self.assertEqual(event.attacker, actors.HumanAircraft("User1", "Bf-109G-2"))
+        self.assertEqual(event.pos, Point2D(100.0, 200.99))
+
+    def test_to_primitive(self):
+        event = events.HumanAircraftCrewMemberParachuteWasDestroyedByHumanAircraft(
+            time=datetime.time(20, 33, 5),
+            actor=actors.HumanAircraftCrewMember("User0", "Pe-8", 0),
+            attacker=actors.HumanAircraft("User1", "Bf-109G-2"),
+            pos=Point2D(100.0, 200.99),
+        )
+        self.assertEqual(
+            event.to_primitive(),
+            {
+                'time': "20:33:05",
+                'actor': {
+                    'callsign': "User0",
+                    'aircraft': "Pe-8",
+                    'index': 0,
+                },
+                'attacker': {
+                    'callsign': "User1",
+                    'aircraft': "Bf-109G-2",
+                },
+                'pos': {
+                    'x': 100.0,
+                    'y': 200.99,
+                },
+                'name': "HumanAircraftCrewMemberParachuteWasDestroyedByHumanAircraft",
+                'verbose_name': "Human aircraft crew member's parachute was destroyed by human aircraft",
             }
         )
 
