@@ -2310,6 +2310,46 @@ class BuildingWasDestroyedByStationaryUnitTestCase(unittest.TestCase):
         )
 
 
+class BuildingWasDestroyedByMovingUnitMemberTestCase(unittest.TestCase):
+
+    def test_from_s(self):
+        event = events.BuildingWasDestroyedByMovingUnitMember.from_s(
+            "[8:33:05 PM] 3do/Buildings/Finland/CenterHouse1_w/live.sim destroyed by 0_Chief0 at 100.0 200.99"
+        )
+        self.assertIsInstance(event, events.BuildingWasDestroyedByMovingUnitMember)
+        self.assertEqual(event.time, datetime.time(20, 33, 5))
+        self.assertEqual(event.actor, actors.Building("Finland/CenterHouse1_w"))
+        self.assertEqual(event.attacker, actors.MovingUnitMember("0_Chief", 0))
+        self.assertEqual(event.pos, Point2D(100.0, 200.99))
+
+    def test_to_primitive(self):
+        event = events.BuildingWasDestroyedByMovingUnitMember(
+            time=datetime.time(20, 33, 5),
+            actor=actors.Building("Finland/CenterHouse1_w"),
+            attacker=actors.MovingUnitMember("0_Chief", 0),
+            pos=Point2D(100.0, 200.99),
+        )
+        self.assertEqual(
+            event.to_primitive(),
+            {
+                'time': "20:33:05",
+                'actor': {
+                    'name': "Finland/CenterHouse1_w",
+                },
+                'attacker': {
+                    'id': "0_Chief",
+                    'index': 0,
+                },
+                'pos': {
+                    'x': 100.0,
+                    'y': 200.99,
+                },
+                'name': "BuildingWasDestroyedByMovingUnitMember",
+                'verbose_name': "Building was destroyed by moving unit member",
+            }
+        )
+
+
 class BuildingWasDestroyedByMovingUnitTestCase(unittest.TestCase):
 
     def test_from_s(self):
