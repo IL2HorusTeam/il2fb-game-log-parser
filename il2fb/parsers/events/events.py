@@ -1429,6 +1429,34 @@ class HumanAircraftCrewMemberWasKilledInParachuteByAIAircraft(Event):
     )
 
 
+class HumanAircraftCrewMemberParachuteWasDestroyedByStationaryUnit(Event):
+    """
+    Example:
+
+        "[8:33:05 PM] User0:Pe-8(0) has chute destroyed by 0_Static at 100.0 200.99"
+
+    """
+    __slots__ = ['time', 'actor', 'attacker', 'pos', ]
+
+    verbose_name = _("Human aircraft crew member's parachute was destroyed by stationary unit")
+    matcher = rx.matcher(
+        "{time}{actor}{s}has{s}chute{s}destroyed{s}by{s}{attacker}{pos}"
+        .format(
+            time=rx.TIME_GROUP_PREFIX,
+            actor=rx.HUMAN_AIRCRAFT_CREW_MEMBER_ACTOR_GROUP,
+            attacker=rx.STATIONARY_UNIT_ATTACKER_GROUP,
+            pos=rx.POS_GROUP_SUFFIX,
+            s=rx.WHITESPACE,
+        )
+    )
+    transformers = (
+        tx.transform_time,
+        tx.human_aircraft_crew_member_as_actor,
+        tx.stationary_unit_as_attacker,
+        tx.transform_pos,
+    )
+
+
 class BuildingWasDestroyedByHumanAircraft(Event):
     """
     Examples:
