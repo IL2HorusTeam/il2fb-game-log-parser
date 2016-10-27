@@ -3654,6 +3654,46 @@ class AIAircraftWasDamagedByMovingUnitMemberTestCase(unittest.TestCase):
         )
 
 
+class AIAircraftWasDamagedByMovingUnitTestCase(unittest.TestCase):
+
+    def test_from_s(self):
+        event = events.AIAircraftWasDamagedByMovingUnit.from_s(
+            "[8:33:05 PM] r01000 damaged by 0_Chief at 100.0 200.99"
+        )
+        self.assertIsInstance(event, events.AIAircraftWasDamagedByMovingUnit)
+        self.assertEqual(event.time, datetime.time(20, 33, 5))
+        self.assertEqual(event.actor, actors.AIAircraft("r0100", 0))
+        self.assertEqual(event.attacker, actors.MovingUnit("0_Chief"))
+        self.assertEqual(event.pos, Point2D(100.0, 200.99))
+
+    def test_to_primitive(self):
+        event = events.AIAircraftWasDamagedByMovingUnit(
+            time=datetime.time(20, 33, 5),
+            actor=actors.AIAircraft("r0100", 0),
+            attacker=actors.MovingUnit("0_Chief"),
+            pos=Point2D(100.0, 200.99),
+        )
+        self.assertEqual(
+            event.to_primitive(),
+            {
+                'time': "20:33:05",
+                'actor': {
+                    'flight': "r0100",
+                    'aircraft': 0,
+                },
+                'attacker': {
+                    'id': "0_Chief",
+                },
+                'pos': {
+                    'x': 100.0,
+                    'y': 200.99,
+                },
+                'name': "AIAircraftWasDamagedByMovingUnit",
+                'verbose_name': "AI aircraft was damaged by moving unit",
+            }
+        )
+
+
 class AIAircraftWasDamagedByAIAircraftTestCase(unittest.TestCase):
 
     def test_from_s(self):
