@@ -22,7 +22,7 @@ class Event(six.with_metaclass(abc.ABCMeta, BaseStructure)):
 
     def __init__(self, **kwargs):
         for key in self.__slots__:
-            setattr(self, key, kwargs.get(key))
+            setattr(self, key, kwargs[key])
         super(Event, self).__init__()
 
     @property
