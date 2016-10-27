@@ -2270,6 +2270,34 @@ class MovingUnitWasDestroyedByStationaryUnit(Event):
     )
 
 
+class MovingUnitWasDestroyedByHumanAircraft(Event):
+    """
+    Example:
+
+        "[8:33:05 PM] 0_Chief destroyed by User0:Pe-8 at 100.0 200.99"
+
+    """
+    __slots__ = ['time', 'actor', 'attacker', 'pos', ]
+
+    verbose_name = _("Moving unit was destroyed by human aircraft")
+    matcher = rx.matcher(
+        "{time}{actor}{s}destroyed{s}by{s}{attacker}{pos}"
+        .format(
+            time=rx.TIME_GROUP_PREFIX,
+            actor=rx.MOVING_UNIT_ACTOR_GROUP,
+            attacker=rx.HUMAN_AIRCRAFT_ATTACKER_GROUP,
+            pos=rx.POS_GROUP_SUFFIX,
+            s=rx.WHITESPACE,
+        )
+    )
+    transformers = (
+        tx.transform_time,
+        tx.moving_unit_as_actor,
+        tx.human_aircraft_as_attacker,
+        tx.transform_pos,
+    )
+
+
 class MovingUnitMemberWasDestroyedByAIAircraft(Event):
     """
     Example:
