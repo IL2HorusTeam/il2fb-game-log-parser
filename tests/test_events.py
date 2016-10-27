@@ -2982,6 +2982,45 @@ class BridgeWasDestroyedByMovingUnitMemberTestCase(unittest.TestCase):
         )
 
 
+class BridgeWasDestroyedByMovingUnitTestCase(unittest.TestCase):
+
+    def test_from_s(self):
+        event = events.BridgeWasDestroyedByMovingUnit.from_s(
+            "[8:33:05 PM]  Bridge0 destroyed by 0_Chief at 100.0 200.99"
+        )
+        self.assertIsInstance(event, events.BridgeWasDestroyedByMovingUnit)
+        self.assertEqual(event.time, datetime.time(20, 33, 5))
+        self.assertEqual(event.actor, actors.Bridge("Bridge0"))
+        self.assertEqual(event.attacker, actors.MovingUnit("0_Chief"))
+        self.assertEqual(event.pos, Point2D(100.0, 200.99))
+
+    def test_to_primitive(self):
+        event = events.BridgeWasDestroyedByMovingUnit(
+            time=datetime.time(20, 33, 5),
+            actor=actors.Bridge("Bridge0"),
+            attacker=actors.MovingUnit("0_Chief"),
+            pos=Point2D(100.0, 200.99),
+        )
+        self.assertEqual(
+            event.to_primitive(),
+            {
+                'time': "20:33:05",
+                'actor': {
+                    'id': "Bridge0",
+                },
+                'attacker': {
+                    'id': "0_Chief",
+                },
+                'pos': {
+                    'x': 100.0,
+                    'y': 200.99,
+                },
+                'name': "BridgeWasDestroyedByMovingUnit",
+                'verbose_name': "Bridge was destroyed by moving unit",
+            }
+        )
+
+
 class MovingUnitWasDestroyedByMovingUnitTestCase(unittest.TestCase):
 
     def test_from_s(self):
