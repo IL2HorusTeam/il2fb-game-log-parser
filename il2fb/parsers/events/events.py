@@ -1,7 +1,6 @@
 # coding: utf-8
 
 import abc
-import functools
 import six
 
 from il2fb.commons.structures import BaseStructure
@@ -190,7 +189,7 @@ class TargetStateWasChanged(Event):
     )
     transformers = (
         tx.transform_time,
-        functools.partial(tx.transform_int, field_name='index'),
+        tx.get_int_transformer('index'),
     )
 
 
@@ -215,7 +214,7 @@ class HumanHasConnected(Event):
     )
     transformers = (
         tx.transform_time,
-        tx.human_as_actor,
+        tx.transform_human_as_actor,
     )
 
 
@@ -240,7 +239,7 @@ class HumanHasDisconnected(Event):
     )
     transformers = (
         tx.transform_time,
-        tx.human_as_actor,
+        tx.transform_human_as_actor,
     )
 
 
@@ -266,7 +265,7 @@ class HumanHasSelectedAirfield(Event):
     )
     transformers = (
         tx.transform_time,
-        tx.human_as_actor,
+        tx.transform_human_as_actor,
         tx.transform_belligerent,
         tx.transform_pos,
     )
@@ -295,8 +294,8 @@ class HumanAircraftHasSpawned(Event):
     )
     transformers = (
         tx.transform_time,
-        tx.human_aircraft_as_actor,
-        functools.partial(tx.transform_int, field_name='fuel'),
+        tx.transform_human_aircraft_as_actor,
+        tx.get_int_transformer('fuel'),
     )
 
 
@@ -321,7 +320,7 @@ class HumanHasWentToBriefing(Event):
     )
     transformers = (
         tx.transform_time,
-        tx.human_as_actor,
+        tx.transform_human_as_actor,
     )
 
 
@@ -347,7 +346,7 @@ class HumanHasToggledLandingLights(Event):
     )
     transformers = (
         tx.transform_time,
-        tx.human_aircraft_as_actor,
+        tx.transform_human_aircraft_as_actor,
         tx.transform_pos,
     )
 
@@ -374,7 +373,7 @@ class HumanHasToggledWingtipSmokes(Event):
     )
     transformers = (
         tx.transform_time,
-        tx.human_aircraft_as_actor,
+        tx.transform_human_aircraft_as_actor,
         tx.transform_pos,
     )
 
@@ -401,7 +400,7 @@ class HumanHasChangedSeat(Event):
     )
     transformers = (
         tx.transform_time,
-        tx.human_aircraft_crew_member_as_actor,
+        tx.transform_human_aircraft_crew_member_as_actor,
         tx.transform_pos,
     )
 
@@ -428,8 +427,8 @@ class HumanIsTryingToTakeSeat(Event):
     )
     transformers = (
         tx.transform_time,
-        tx.human_as_actor,
-        tx.ai_aircraft_crew_member_as_seat,
+        tx.transform_human_as_actor,
+        tx.transform_ai_aircraft_crew_member_as_seat,
     )
 
 
@@ -454,7 +453,7 @@ class HumanAircraftHasTookOff(Event):
     )
     transformers = (
         tx.transform_time,
-        tx.human_aircraft_as_actor,
+        tx.transform_human_aircraft_as_actor,
         tx.transform_pos,
     )
 
@@ -480,7 +479,7 @@ class HumanAircraftHasLanded(Event):
     )
     transformers = (
         tx.transform_time,
-        tx.human_aircraft_as_actor,
+        tx.transform_human_aircraft_as_actor,
         tx.transform_pos,
     )
 
@@ -506,7 +505,7 @@ class HumanAircraftHasCrashed(Event):
     )
     transformers = (
         tx.transform_time,
-        tx.human_aircraft_as_actor,
+        tx.transform_human_aircraft_as_actor,
         tx.transform_pos,
     )
 
@@ -534,7 +533,7 @@ class HumanHasDestroyedOwnAircraft(Event):
     )
     transformers = (
         tx.transform_time,
-        tx.human_aircraft_as_actor,
+        tx.transform_human_aircraft_as_actor,
         tx.transform_pos,
     )
 
@@ -562,7 +561,7 @@ class HumanHasDamagedOwnAircraft(Event):
     )
     transformers = (
         tx.transform_time,
-        tx.human_aircraft_as_actor,
+        tx.transform_human_aircraft_as_actor,
         tx.transform_pos,
     )
 
@@ -588,7 +587,7 @@ class HumanAircraftWasDamagedOnGround(Event):
     )
     transformers = (
         tx.transform_time,
-        tx.human_aircraft_as_actor,
+        tx.transform_human_aircraft_as_actor,
         tx.transform_pos,
     )
 
@@ -615,8 +614,8 @@ class HumanAircraftWasDamagedByHumanAircraft(Event):
     )
     transformers = (
         tx.transform_time,
-        tx.human_aircraft_as_actor,
-        tx.human_aircraft_as_attacker,
+        tx.transform_human_aircraft_as_actor,
+        tx.transform_human_aircraft_as_attacker,
         tx.transform_pos,
     )
 
@@ -643,8 +642,8 @@ class HumanAircraftWasDamagedByStationaryUnit(Event):
     )
     transformers = (
         tx.transform_time,
-        tx.human_aircraft_as_actor,
-        tx.stationary_unit_as_attacker,
+        tx.transform_human_aircraft_as_actor,
+        tx.transform_stationary_unit_as_attacker,
         tx.transform_pos,
     )
 
@@ -671,8 +670,8 @@ class HumanAircraftWasDamagedByMovingUnitMember(Event):
     )
     transformers = (
         tx.transform_time,
-        tx.human_aircraft_as_actor,
-        tx.moving_unit_member_as_attacker,
+        tx.transform_human_aircraft_as_actor,
+        tx.transform_moving_unit_member_as_attacker,
         tx.transform_pos,
     )
 
@@ -699,8 +698,8 @@ class HumanAircraftWasDamagedByMovingUnit(Event):
     )
     transformers = (
         tx.transform_time,
-        tx.human_aircraft_as_actor,
-        tx.moving_unit_as_attacker,
+        tx.transform_human_aircraft_as_actor,
+        tx.transform_moving_unit_as_attacker,
         tx.transform_pos,
     )
 
@@ -727,8 +726,8 @@ class HumanAircraftWasDamagedByAIAircraft(Event):
     )
     transformers = (
         tx.transform_time,
-        tx.human_aircraft_as_actor,
-        tx.ai_aircraft_as_attacker,
+        tx.transform_human_aircraft_as_actor,
+        tx.transform_ai_aircraft_as_attacker,
         tx.transform_pos,
     )
 
@@ -755,8 +754,8 @@ class HumanAircraftWasShotDownByHumanAircraft(Event):
     )
     transformers = (
         tx.transform_time,
-        tx.human_aircraft_as_actor,
-        tx.human_aircraft_as_attacker,
+        tx.transform_human_aircraft_as_actor,
+        tx.transform_human_aircraft_as_attacker,
         tx.transform_pos,
     )
 
@@ -783,8 +782,8 @@ class HumanAircraftWasShotDownByStationaryUnit(Event):
     )
     transformers = (
         tx.transform_time,
-        tx.human_aircraft_as_actor,
-        tx.stationary_unit_as_attacker,
+        tx.transform_human_aircraft_as_actor,
+        tx.transform_stationary_unit_as_attacker,
         tx.transform_pos,
     )
 
@@ -811,8 +810,8 @@ class HumanAircraftWasShotDownByMovingUnitMember(Event):
     )
     transformers = (
         tx.transform_time,
-        tx.human_aircraft_as_actor,
-        tx.moving_unit_member_as_attacker,
+        tx.transform_human_aircraft_as_actor,
+        tx.transform_moving_unit_member_as_attacker,
         tx.transform_pos,
     )
 
@@ -839,8 +838,8 @@ class HumanAircraftWasShotDownByMovingUnit(Event):
     )
     transformers = (
         tx.transform_time,
-        tx.human_aircraft_as_actor,
-        tx.moving_unit_as_attacker,
+        tx.transform_human_aircraft_as_actor,
+        tx.transform_moving_unit_as_attacker,
         tx.transform_pos,
     )
 
@@ -867,8 +866,8 @@ class HumanAircraftWasShotDownByAIAircraft(Event):
     )
     transformers = (
         tx.transform_time,
-        tx.human_aircraft_as_actor,
-        tx.ai_aircraft_as_attacker,
+        tx.transform_human_aircraft_as_actor,
+        tx.transform_ai_aircraft_as_attacker,
         tx.transform_pos,
     )
 
@@ -896,9 +895,9 @@ class HumanAircraftWasShotDownByHumanAircraftAndHumanAircraft(Event):
     )
     transformers = (
         tx.transform_time,
-        tx.human_aircraft_as_actor,
-        tx.human_aircraft_as_attacker,
-        tx.human_aircraft_as_assistant,
+        tx.transform_human_aircraft_as_actor,
+        tx.transform_human_aircraft_as_attacker,
+        tx.transform_human_aircraft_as_assistant,
         tx.transform_pos,
     )
 
@@ -926,9 +925,9 @@ class HumanAircraftWasShotDownByHumanAircraftAndAIAircraft(Event):
     )
     transformers = (
         tx.transform_time,
-        tx.human_aircraft_as_actor,
-        tx.human_aircraft_as_attacker,
-        tx.ai_aircraft_as_assistant,
+        tx.transform_human_aircraft_as_actor,
+        tx.transform_human_aircraft_as_attacker,
+        tx.transform_ai_aircraft_as_assistant,
         tx.transform_pos,
     )
 
@@ -956,9 +955,9 @@ class HumanAircraftWasShotDownByAIAircraftAndHumanAircraft(Event):
     )
     transformers = (
         tx.transform_time,
-        tx.human_aircraft_as_actor,
-        tx.ai_aircraft_as_attacker,
-        tx.human_aircraft_as_assistant,
+        tx.transform_human_aircraft_as_actor,
+        tx.transform_ai_aircraft_as_attacker,
+        tx.transform_human_aircraft_as_assistant,
         tx.transform_pos,
     )
 
@@ -986,9 +985,9 @@ class HumanAircraftWasShotDownByAIAircraftAndAIAircraft(Event):
     )
     transformers = (
         tx.transform_time,
-        tx.human_aircraft_as_actor,
-        tx.ai_aircraft_as_attacker,
-        tx.ai_aircraft_as_assistant,
+        tx.transform_human_aircraft_as_actor,
+        tx.transform_ai_aircraft_as_attacker,
+        tx.transform_ai_aircraft_as_assistant,
         tx.transform_pos,
     )
 
@@ -1014,7 +1013,7 @@ class HumanAircraftCrewMemberHasBailedOut(Event):
     )
     transformers = (
         tx.transform_time,
-        tx.human_aircraft_crew_member_as_actor,
+        tx.transform_human_aircraft_crew_member_as_actor,
         tx.transform_pos,
     )
 
@@ -1040,7 +1039,7 @@ class HumanAircraftCrewMemberHasLanded(Event):
     )
     transformers = (
         tx.transform_time,
-        tx.human_aircraft_crew_member_as_actor,
+        tx.transform_human_aircraft_crew_member_as_actor,
         tx.transform_pos,
     )
 
@@ -1066,7 +1065,7 @@ class HumanAircraftCrewMemberWasCaptured(Event):
     )
     transformers = (
         tx.transform_time,
-        tx.human_aircraft_crew_member_as_actor,
+        tx.transform_human_aircraft_crew_member_as_actor,
         tx.transform_pos,
     )
 
@@ -1092,7 +1091,7 @@ class HumanAircraftCrewMemberWasWounded(Event):
     )
     transformers = (
         tx.transform_time,
-        tx.human_aircraft_crew_member_as_actor,
+        tx.transform_human_aircraft_crew_member_as_actor,
         tx.transform_pos,
     )
 
@@ -1118,7 +1117,7 @@ class HumanAircraftCrewMemberWasHeavilyWounded(Event):
     )
     transformers = (
         tx.transform_time,
-        tx.human_aircraft_crew_member_as_actor,
+        tx.transform_human_aircraft_crew_member_as_actor,
         tx.transform_pos,
     )
 
@@ -1144,7 +1143,7 @@ class HumanAircraftCrewMemberWasKilled(Event):
     )
     transformers = (
         tx.transform_time,
-        tx.human_aircraft_crew_member_as_actor,
+        tx.transform_human_aircraft_crew_member_as_actor,
         tx.transform_pos,
     )
 
@@ -1171,8 +1170,8 @@ class HumanAircraftCrewMemberWasKilledByHumanAircraft(Event):
     )
     transformers = (
         tx.transform_time,
-        tx.human_aircraft_crew_member_as_actor,
-        tx.human_aircraft_as_attacker,
+        tx.transform_human_aircraft_crew_member_as_actor,
+        tx.transform_human_aircraft_as_attacker,
         tx.transform_pos,
     )
 
@@ -1199,8 +1198,8 @@ class HumanAircraftCrewMemberWasKilledByStationaryUnit(Event):
     )
     transformers = (
         tx.transform_time,
-        tx.human_aircraft_crew_member_as_actor,
-        tx.stationary_unit_as_attacker,
+        tx.transform_human_aircraft_crew_member_as_actor,
+        tx.transform_stationary_unit_as_attacker,
         tx.transform_pos,
     )
 
@@ -1227,8 +1226,8 @@ class HumanAircraftCrewMemberWasKilledByMovingUnitMember(Event):
     )
     transformers = (
         tx.transform_time,
-        tx.human_aircraft_crew_member_as_actor,
-        tx.moving_unit_member_as_attacker,
+        tx.transform_human_aircraft_crew_member_as_actor,
+        tx.transform_moving_unit_member_as_attacker,
         tx.transform_pos,
     )
 
@@ -1255,8 +1254,8 @@ class HumanAircraftCrewMemberWasKilledByMovingUnit(Event):
     )
     transformers = (
         tx.transform_time,
-        tx.human_aircraft_crew_member_as_actor,
-        tx.moving_unit_as_attacker,
+        tx.transform_human_aircraft_crew_member_as_actor,
+        tx.transform_moving_unit_as_attacker,
         tx.transform_pos,
     )
 
@@ -1283,8 +1282,8 @@ class HumanAircraftCrewMemberWasKilledByAIAircraft(Event):
     )
     transformers = (
         tx.transform_time,
-        tx.human_aircraft_crew_member_as_actor,
-        tx.ai_aircraft_as_attacker,
+        tx.transform_human_aircraft_crew_member_as_actor,
+        tx.transform_ai_aircraft_as_attacker,
         tx.transform_pos,
     )
 
@@ -1311,8 +1310,8 @@ class HumanAircraftCrewMemberWasKilledInParachuteByStationaryUnit(Event):
     )
     transformers = (
         tx.transform_time,
-        tx.human_aircraft_crew_member_as_actor,
-        tx.stationary_unit_as_attacker,
+        tx.transform_human_aircraft_crew_member_as_actor,
+        tx.transform_stationary_unit_as_attacker,
         tx.transform_pos,
     )
 
@@ -1339,8 +1338,8 @@ class HumanAircraftCrewMemberWasKilledInParachuteByMovingUnitMember(Event):
     )
     transformers = (
         tx.transform_time,
-        tx.human_aircraft_crew_member_as_actor,
-        tx.moving_unit_member_as_attacker,
+        tx.transform_human_aircraft_crew_member_as_actor,
+        tx.transform_moving_unit_member_as_attacker,
         tx.transform_pos,
     )
 
@@ -1367,8 +1366,8 @@ class HumanAircraftCrewMemberWasKilledInParachuteByMovingUnit(Event):
     )
     transformers = (
         tx.transform_time,
-        tx.human_aircraft_crew_member_as_actor,
-        tx.moving_unit_as_attacker,
+        tx.transform_human_aircraft_crew_member_as_actor,
+        tx.transform_moving_unit_as_attacker,
         tx.transform_pos,
     )
 
@@ -1395,8 +1394,8 @@ class HumanAircraftCrewMemberWasKilledInParachuteByHumanAircraft(Event):
     )
     transformers = (
         tx.transform_time,
-        tx.human_aircraft_crew_member_as_actor,
-        tx.human_aircraft_as_attacker,
+        tx.transform_human_aircraft_crew_member_as_actor,
+        tx.transform_human_aircraft_as_attacker,
         tx.transform_pos,
     )
 
@@ -1423,8 +1422,8 @@ class HumanAircraftCrewMemberWasKilledInParachuteByAIAircraft(Event):
     )
     transformers = (
         tx.transform_time,
-        tx.human_aircraft_crew_member_as_actor,
-        tx.ai_aircraft_as_attacker,
+        tx.transform_human_aircraft_crew_member_as_actor,
+        tx.transform_ai_aircraft_as_attacker,
         tx.transform_pos,
     )
 
@@ -1451,8 +1450,8 @@ class HumanAircraftCrewMemberParachuteWasDestroyedByStationaryUnit(Event):
     )
     transformers = (
         tx.transform_time,
-        tx.human_aircraft_crew_member_as_actor,
-        tx.stationary_unit_as_attacker,
+        tx.transform_human_aircraft_crew_member_as_actor,
+        tx.transform_stationary_unit_as_attacker,
         tx.transform_pos,
     )
 
@@ -1479,8 +1478,8 @@ class HumanAircraftCrewMemberParachuteWasDestroyedByMovingUnitMember(Event):
     )
     transformers = (
         tx.transform_time,
-        tx.human_aircraft_crew_member_as_actor,
-        tx.moving_unit_member_as_attacker,
+        tx.transform_human_aircraft_crew_member_as_actor,
+        tx.transform_moving_unit_member_as_attacker,
         tx.transform_pos,
     )
 
@@ -1507,8 +1506,8 @@ class HumanAircraftCrewMemberParachuteWasDestroyedByMovingUnit(Event):
     )
     transformers = (
         tx.transform_time,
-        tx.human_aircraft_crew_member_as_actor,
-        tx.moving_unit_as_attacker,
+        tx.transform_human_aircraft_crew_member_as_actor,
+        tx.transform_moving_unit_as_attacker,
         tx.transform_pos,
     )
 
@@ -1535,8 +1534,8 @@ class HumanAircraftCrewMemberParachuteWasDestroyedByHumanAircraft(Event):
     )
     transformers = (
         tx.transform_time,
-        tx.human_aircraft_crew_member_as_actor,
-        tx.human_aircraft_as_attacker,
+        tx.transform_human_aircraft_crew_member_as_actor,
+        tx.transform_human_aircraft_as_attacker,
         tx.transform_pos,
     )
 
@@ -1563,8 +1562,8 @@ class HumanAircraftCrewMemberParachuteWasDestroyedByAIAircraft(Event):
     )
     transformers = (
         tx.transform_time,
-        tx.human_aircraft_crew_member_as_actor,
-        tx.ai_aircraft_as_attacker,
+        tx.transform_human_aircraft_crew_member_as_actor,
+        tx.transform_ai_aircraft_as_attacker,
         tx.transform_pos,
     )
 
@@ -1592,8 +1591,8 @@ class BuildingWasDestroyedByHumanAircraft(Event):
     )
     transformers = (
         tx.transform_time,
-        tx.building_as_actor,
-        tx.human_aircraft_as_attacker,
+        tx.transform_building_as_actor,
+        tx.transform_human_aircraft_as_attacker,
         tx.transform_pos,
     )
 
@@ -1621,8 +1620,8 @@ class BuildingWasDestroyedByStationaryUnit(Event):
     )
     transformers = (
         tx.transform_time,
-        tx.building_as_actor,
-        tx.stationary_unit_as_attacker,
+        tx.transform_building_as_actor,
+        tx.transform_stationary_unit_as_attacker,
         tx.transform_pos,
     )
 
@@ -1650,8 +1649,8 @@ class BuildingWasDestroyedByMovingUnitMember(Event):
     )
     transformers = (
         tx.transform_time,
-        tx.building_as_actor,
-        tx.moving_unit_member_as_attacker,
+        tx.transform_building_as_actor,
+        tx.transform_moving_unit_member_as_attacker,
         tx.transform_pos,
     )
 
@@ -1679,8 +1678,8 @@ class BuildingWasDestroyedByMovingUnit(Event):
     )
     transformers = (
         tx.transform_time,
-        tx.building_as_actor,
-        tx.moving_unit_as_attacker,
+        tx.transform_building_as_actor,
+        tx.transform_moving_unit_as_attacker,
         tx.transform_pos,
     )
 
@@ -1708,8 +1707,8 @@ class BuildingWasDestroyedByAIAircraft(Event):
     )
     transformers = (
         tx.transform_time,
-        tx.building_as_actor,
-        tx.ai_aircraft_as_attacker,
+        tx.transform_building_as_actor,
+        tx.transform_ai_aircraft_as_attacker,
         tx.transform_pos,
     )
 
@@ -1737,7 +1736,7 @@ class TreeWasDestroyedByHumanAircraft(Event):
     )
     transformers = (
         tx.transform_time,
-        tx.human_aircraft_as_attacker,
+        tx.transform_human_aircraft_as_attacker,
         tx.transform_pos,
     )
 
@@ -1765,7 +1764,7 @@ class TreeWasDestroyedByStationaryUnit(Event):
     )
     transformers = (
         tx.transform_time,
-        tx.stationary_unit_as_attacker,
+        tx.transform_stationary_unit_as_attacker,
         tx.transform_pos,
     )
 
@@ -1793,7 +1792,7 @@ class TreeWasDestroyedByAIAircraft(Event):
     )
     transformers = (
         tx.transform_time,
-        tx.ai_aircraft_as_attacker,
+        tx.transform_ai_aircraft_as_attacker,
         tx.transform_pos,
     )
 
@@ -1821,7 +1820,7 @@ class TreeWasDestroyedByMovingUnitMember(Event):
     )
     transformers = (
         tx.transform_time,
-        tx.moving_unit_member_as_attacker,
+        tx.transform_moving_unit_member_as_attacker,
         tx.transform_pos,
     )
 
@@ -1849,7 +1848,7 @@ class TreeWasDestroyedByMovingUnit(Event):
     )
     transformers = (
         tx.transform_time,
-        tx.moving_unit_as_attacker,
+        tx.transform_moving_unit_as_attacker,
         tx.transform_pos,
     )
 
@@ -1901,7 +1900,7 @@ class StationaryUnitWasDestroyed(Event):
     )
     transformers = (
         tx.transform_time,
-        tx.stationary_unit_as_actor,
+        tx.transform_stationary_unit_as_actor,
         tx.transform_pos,
     )
 
@@ -1928,8 +1927,8 @@ class StationaryUnitWasDestroyedByStationaryUnit(Event):
     )
     transformers = (
         tx.transform_time,
-        tx.stationary_unit_as_actor,
-        tx.stationary_unit_as_attacker,
+        tx.transform_stationary_unit_as_actor,
+        tx.transform_stationary_unit_as_attacker,
         tx.transform_pos,
     )
 
@@ -1956,8 +1955,8 @@ class StationaryUnitWasDestroyedByMovingUnit(Event):
     )
     transformers = (
         tx.transform_time,
-        tx.stationary_unit_as_actor,
-        tx.moving_unit_as_attacker,
+        tx.transform_stationary_unit_as_actor,
+        tx.transform_moving_unit_as_attacker,
         tx.transform_pos,
     )
 
@@ -1984,8 +1983,8 @@ class StationaryUnitWasDestroyedByMovingUnitMember(Event):
     )
     transformers = (
         tx.transform_time,
-        tx.stationary_unit_as_actor,
-        tx.moving_unit_member_as_attacker,
+        tx.transform_stationary_unit_as_actor,
+        tx.transform_moving_unit_member_as_attacker,
         tx.transform_pos,
     )
 
@@ -2012,8 +2011,8 @@ class StationaryUnitWasDestroyedByHumanAircraft(Event):
     )
     transformers = (
         tx.transform_time,
-        tx.stationary_unit_as_actor,
-        tx.human_aircraft_as_attacker,
+        tx.transform_stationary_unit_as_actor,
+        tx.transform_human_aircraft_as_attacker,
         tx.transform_pos,
     )
 
@@ -2040,8 +2039,8 @@ class StationaryUnitWasDestroyedByAIAircraft(Event):
     )
     transformers = (
         tx.transform_time,
-        tx.stationary_unit_as_actor,
-        tx.ai_aircraft_as_attacker,
+        tx.transform_stationary_unit_as_actor,
+        tx.transform_ai_aircraft_as_attacker,
         tx.transform_pos,
     )
 
@@ -2068,8 +2067,8 @@ class BridgeWasDestroyedByHumanAircraft(Event):
     )
     transformers = (
         tx.transform_time,
-        tx.bridge_as_actor,
-        tx.human_aircraft_as_attacker,
+        tx.transform_bridge_as_actor,
+        tx.transform_human_aircraft_as_attacker,
         tx.transform_pos,
     )
 
@@ -2096,8 +2095,8 @@ class BridgeWasDestroyedByStationaryUnit(Event):
     )
     transformers = (
         tx.transform_time,
-        tx.bridge_as_actor,
-        tx.stationary_unit_as_attacker,
+        tx.transform_bridge_as_actor,
+        tx.transform_stationary_unit_as_attacker,
         tx.transform_pos,
     )
 
@@ -2124,8 +2123,8 @@ class BridgeWasDestroyedByMovingUnitMember(Event):
     )
     transformers = (
         tx.transform_time,
-        tx.bridge_as_actor,
-        tx.moving_unit_member_as_attacker,
+        tx.transform_bridge_as_actor,
+        tx.transform_moving_unit_member_as_attacker,
         tx.transform_pos,
     )
 
@@ -2152,8 +2151,8 @@ class BridgeWasDestroyedByMovingUnit(Event):
     )
     transformers = (
         tx.transform_time,
-        tx.bridge_as_actor,
-        tx.moving_unit_as_attacker,
+        tx.transform_bridge_as_actor,
+        tx.transform_moving_unit_as_attacker,
         tx.transform_pos,
     )
 
@@ -2180,8 +2179,8 @@ class BridgeWasDestroyedByAIAircraft(Event):
     )
     transformers = (
         tx.transform_time,
-        tx.bridge_as_actor,
-        tx.ai_aircraft_as_attacker,
+        tx.transform_bridge_as_actor,
+        tx.transform_ai_aircraft_as_attacker,
         tx.transform_pos,
     )
 
@@ -2208,8 +2207,8 @@ class MovingUnitWasDestroyedByMovingUnit(Event):
     )
     transformers = (
         tx.transform_time,
-        tx.moving_unit_as_actor,
-        tx.moving_unit_as_attacker,
+        tx.transform_moving_unit_as_actor,
+        tx.transform_moving_unit_as_attacker,
         tx.transform_pos,
     )
 
@@ -2236,8 +2235,8 @@ class MovingUnitWasDestroyedByMovingUnitMember(Event):
     )
     transformers = (
         tx.transform_time,
-        tx.moving_unit_as_actor,
-        tx.moving_unit_member_as_attacker,
+        tx.transform_moving_unit_as_actor,
+        tx.transform_moving_unit_member_as_attacker,
         tx.transform_pos,
     )
 
@@ -2264,8 +2263,8 @@ class MovingUnitWasDestroyedByStationaryUnit(Event):
     )
     transformers = (
         tx.transform_time,
-        tx.moving_unit_as_actor,
-        tx.stationary_unit_as_attacker,
+        tx.transform_moving_unit_as_actor,
+        tx.transform_stationary_unit_as_attacker,
         tx.transform_pos,
     )
 
@@ -2292,8 +2291,8 @@ class MovingUnitWasDestroyedByHumanAircraft(Event):
     )
     transformers = (
         tx.transform_time,
-        tx.moving_unit_as_actor,
-        tx.human_aircraft_as_attacker,
+        tx.transform_moving_unit_as_actor,
+        tx.transform_human_aircraft_as_attacker,
         tx.transform_pos,
     )
 
@@ -2320,8 +2319,8 @@ class MovingUnitWasDestroyedByAIAircraft(Event):
     )
     transformers = (
         tx.transform_time,
-        tx.moving_unit_as_actor,
-        tx.ai_aircraft_as_attacker,
+        tx.transform_moving_unit_as_actor,
+        tx.transform_ai_aircraft_as_attacker,
         tx.transform_pos,
     )
 
@@ -2348,8 +2347,8 @@ class MovingUnitMemberWasDestroyedByStationaryUnit(Event):
     )
     transformers = (
         tx.transform_time,
-        tx.moving_unit_member_as_actor,
-        tx.stationary_unit_as_attacker,
+        tx.transform_moving_unit_member_as_actor,
+        tx.transform_stationary_unit_as_attacker,
         tx.transform_pos,
     )
 
@@ -2376,8 +2375,8 @@ class MovingUnitMemberWasDestroyedByAIAircraft(Event):
     )
     transformers = (
         tx.transform_time,
-        tx.moving_unit_member_as_actor,
-        tx.ai_aircraft_as_attacker,
+        tx.transform_moving_unit_member_as_actor,
+        tx.transform_ai_aircraft_as_attacker,
         tx.transform_pos,
     )
 
@@ -2404,8 +2403,8 @@ class MovingUnitMemberWasDestroyedByHumanAircraft(Event):
     )
     transformers = (
         tx.transform_time,
-        tx.moving_unit_member_as_actor,
-        tx.human_aircraft_as_attacker,
+        tx.transform_moving_unit_member_as_actor,
+        tx.transform_human_aircraft_as_attacker,
         tx.transform_pos,
     )
 
@@ -2432,8 +2431,8 @@ class MovingUnitMemberWasDestroyedByMovingUnit(Event):
     )
     transformers = (
         tx.transform_time,
-        tx.moving_unit_member_as_actor,
-        tx.moving_unit_as_attacker,
+        tx.transform_moving_unit_member_as_actor,
+        tx.transform_moving_unit_as_attacker,
         tx.transform_pos,
     )
 
@@ -2460,8 +2459,8 @@ class MovingUnitMemberWasDestroyedByMovingUnitMember(Event):
     )
     transformers = (
         tx.transform_time,
-        tx.moving_unit_member_as_actor,
-        tx.moving_unit_member_as_attacker,
+        tx.transform_moving_unit_member_as_actor,
+        tx.transform_moving_unit_member_as_attacker,
         tx.transform_pos,
     )
 
@@ -2487,7 +2486,7 @@ class AIAircraftHasDespawned(Event):
     )
     transformers = (
         tx.transform_time,
-        tx.ai_aircraft_as_actor,
+        tx.transform_ai_aircraft_as_actor,
         tx.transform_pos,
     )
 
@@ -2513,7 +2512,7 @@ class AIAircraftWasDamagedOnGround(Event):
     )
     transformers = (
         tx.transform_time,
-        tx.ai_aircraft_as_actor,
+        tx.transform_ai_aircraft_as_actor,
         tx.transform_pos,
     )
 
@@ -2540,8 +2539,8 @@ class AIAircraftWasDamagedByHumanAircraft(Event):
     )
     transformers = (
         tx.transform_time,
-        tx.ai_aircraft_as_actor,
-        tx.human_aircraft_as_attacker,
+        tx.transform_ai_aircraft_as_actor,
+        tx.transform_human_aircraft_as_attacker,
         tx.transform_pos,
     )
 
@@ -2568,8 +2567,8 @@ class AIAircraftWasDamagedByStationaryUnit(Event):
     )
     transformers = (
         tx.transform_time,
-        tx.ai_aircraft_as_actor,
-        tx.stationary_unit_as_attacker,
+        tx.transform_ai_aircraft_as_actor,
+        tx.transform_stationary_unit_as_attacker,
         tx.transform_pos,
     )
 
@@ -2596,8 +2595,8 @@ class AIAircraftWasDamagedByMovingUnitMember(Event):
     )
     transformers = (
         tx.transform_time,
-        tx.ai_aircraft_as_actor,
-        tx.moving_unit_member_as_attacker,
+        tx.transform_ai_aircraft_as_actor,
+        tx.transform_moving_unit_member_as_attacker,
         tx.transform_pos,
     )
 
@@ -2624,8 +2623,8 @@ class AIAircraftWasDamagedByMovingUnit(Event):
     )
     transformers = (
         tx.transform_time,
-        tx.ai_aircraft_as_actor,
-        tx.moving_unit_as_attacker,
+        tx.transform_ai_aircraft_as_actor,
+        tx.transform_moving_unit_as_attacker,
         tx.transform_pos,
     )
 
@@ -2652,8 +2651,8 @@ class AIAircraftWasDamagedByAIAircraft(Event):
     )
     transformers = (
         tx.transform_time,
-        tx.ai_aircraft_as_actor,
-        tx.ai_aircraft_as_attacker,
+        tx.transform_ai_aircraft_as_actor,
+        tx.transform_ai_aircraft_as_attacker,
         tx.transform_pos,
     )
 
@@ -2681,7 +2680,7 @@ class AIHasDamagedOwnAircraft(Event):
     )
     transformers = (
         tx.transform_time,
-        tx.ai_aircraft_as_actor,
+        tx.transform_ai_aircraft_as_actor,
         tx.transform_pos,
     )
 
@@ -2709,7 +2708,7 @@ class AIHasDestroyedOwnAircraft(Event):
     )
     transformers = (
         tx.transform_time,
-        tx.ai_aircraft_as_actor,
+        tx.transform_ai_aircraft_as_actor,
         tx.transform_pos,
     )
 
@@ -2735,7 +2734,7 @@ class AIAircraftHasLanded(Event):
     )
     transformers = (
         tx.transform_time,
-        tx.ai_aircraft_as_actor,
+        tx.transform_ai_aircraft_as_actor,
         tx.transform_pos,
     )
 
@@ -2761,7 +2760,7 @@ class AIAircraftHasCrashed(Event):
     )
     transformers = (
         tx.transform_time,
-        tx.ai_aircraft_as_actor,
+        tx.transform_ai_aircraft_as_actor,
         tx.transform_pos,
     )
 
@@ -2788,8 +2787,8 @@ class AIAircraftWasShotDownByHumanAircraft(Event):
     )
     transformers = (
         tx.transform_time,
-        tx.ai_aircraft_as_actor,
-        tx.human_aircraft_as_attacker,
+        tx.transform_ai_aircraft_as_actor,
+        tx.transform_human_aircraft_as_attacker,
         tx.transform_pos,
     )
 
@@ -2816,8 +2815,8 @@ class AIAircraftWasShotDownByAIAircraft(Event):
     )
     transformers = (
         tx.transform_time,
-        tx.ai_aircraft_as_actor,
-        tx.ai_aircraft_as_attacker,
+        tx.transform_ai_aircraft_as_actor,
+        tx.transform_ai_aircraft_as_attacker,
         tx.transform_pos,
     )
 
@@ -2844,8 +2843,8 @@ class AIAircraftWasShotDownByStationaryUnit(Event):
     )
     transformers = (
         tx.transform_time,
-        tx.ai_aircraft_as_actor,
-        tx.stationary_unit_as_attacker,
+        tx.transform_ai_aircraft_as_actor,
+        tx.transform_stationary_unit_as_attacker,
         tx.transform_pos,
     )
 
@@ -2872,8 +2871,8 @@ class AIAircraftWasShotDownByMovingUnitMember(Event):
     )
     transformers = (
         tx.transform_time,
-        tx.ai_aircraft_as_actor,
-        tx.moving_unit_member_as_attacker,
+        tx.transform_ai_aircraft_as_actor,
+        tx.transform_moving_unit_member_as_attacker,
         tx.transform_pos,
     )
 
@@ -2900,8 +2899,8 @@ class AIAircraftWasShotDownByMovingUnit(Event):
     )
     transformers = (
         tx.transform_time,
-        tx.ai_aircraft_as_actor,
-        tx.moving_unit_as_attacker,
+        tx.transform_ai_aircraft_as_actor,
+        tx.transform_moving_unit_as_attacker,
         tx.transform_pos,
     )
 
@@ -2929,9 +2928,9 @@ class AIAircraftWasShotDownByAIAircraftAndAIAircraft(Event):
     )
     transformers = (
         tx.transform_time,
-        tx.ai_aircraft_as_actor,
-        tx.ai_aircraft_as_attacker,
-        tx.ai_aircraft_as_assistant,
+        tx.transform_ai_aircraft_as_actor,
+        tx.transform_ai_aircraft_as_attacker,
+        tx.transform_ai_aircraft_as_assistant,
         tx.transform_pos,
     )
 
@@ -2959,9 +2958,9 @@ class AIAircraftWasShotDownByHumanAircraftAndAIAircraft(Event):
     )
     transformers = (
         tx.transform_time,
-        tx.ai_aircraft_as_actor,
-        tx.human_aircraft_as_attacker,
-        tx.ai_aircraft_as_assistant,
+        tx.transform_ai_aircraft_as_actor,
+        tx.transform_human_aircraft_as_attacker,
+        tx.transform_ai_aircraft_as_assistant,
         tx.transform_pos,
     )
 
@@ -2989,9 +2988,9 @@ class AIAircraftWasShotDownByAIAircraftAndHumanAircraft(Event):
     )
     transformers = (
         tx.transform_time,
-        tx.ai_aircraft_as_actor,
-        tx.ai_aircraft_as_attacker,
-        tx.human_aircraft_as_assistant,
+        tx.transform_ai_aircraft_as_actor,
+        tx.transform_ai_aircraft_as_attacker,
+        tx.transform_human_aircraft_as_assistant,
         tx.transform_pos,
     )
 
@@ -3019,9 +3018,9 @@ class AIAircraftWasShotDownByHumanAircraftAndHumanAircraft(Event):
     )
     transformers = (
         tx.transform_time,
-        tx.ai_aircraft_as_actor,
-        tx.human_aircraft_as_attacker,
-        tx.human_aircraft_as_assistant,
+        tx.transform_ai_aircraft_as_actor,
+        tx.transform_human_aircraft_as_attacker,
+        tx.transform_human_aircraft_as_assistant,
         tx.transform_pos,
     )
 
@@ -3047,7 +3046,7 @@ class AIAircraftCrewMemberWasKilled(Event):
     )
     transformers = (
         tx.transform_time,
-        tx.ai_aircraft_crew_member_as_actor,
+        tx.transform_ai_aircraft_crew_member_as_actor,
         tx.transform_pos,
     )
 
@@ -3074,8 +3073,8 @@ class AIAircraftCrewMemberWasKilledByStationaryUnit(Event):
     )
     transformers = (
         tx.transform_time,
-        tx.ai_aircraft_crew_member_as_actor,
-        tx.stationary_unit_as_attacker,
+        tx.transform_ai_aircraft_crew_member_as_actor,
+        tx.transform_stationary_unit_as_attacker,
         tx.transform_pos,
     )
 
@@ -3102,8 +3101,8 @@ class AIAircraftCrewMemberWasKilledByHumanAircraft(Event):
     )
     transformers = (
         tx.transform_time,
-        tx.ai_aircraft_crew_member_as_actor,
-        tx.human_aircraft_as_attacker,
+        tx.transform_ai_aircraft_crew_member_as_actor,
+        tx.transform_human_aircraft_as_attacker,
         tx.transform_pos,
     )
 
@@ -3130,8 +3129,8 @@ class AIAircraftCrewMemberWasKilledByAIAircraft(Event):
     )
     transformers = (
         tx.transform_time,
-        tx.ai_aircraft_crew_member_as_actor,
-        tx.ai_aircraft_as_attacker,
+        tx.transform_ai_aircraft_crew_member_as_actor,
+        tx.transform_ai_aircraft_as_attacker,
         tx.transform_pos,
     )
 
@@ -3158,8 +3157,8 @@ class AIAircraftCrewMemberWasKilledByMovingUnitMember(Event):
     )
     transformers = (
         tx.transform_time,
-        tx.ai_aircraft_crew_member_as_actor,
-        tx.moving_unit_member_as_attacker,
+        tx.transform_ai_aircraft_crew_member_as_actor,
+        tx.transform_moving_unit_member_as_attacker,
         tx.transform_pos,
     )
 
@@ -3186,8 +3185,8 @@ class AIAircraftCrewMemberWasKilledByMovingUnit(Event):
     )
     transformers = (
         tx.transform_time,
-        tx.ai_aircraft_crew_member_as_actor,
-        tx.moving_unit_as_attacker,
+        tx.transform_ai_aircraft_crew_member_as_actor,
+        tx.transform_moving_unit_as_attacker,
         tx.transform_pos,
     )
 
@@ -3214,8 +3213,8 @@ class AIAircraftCrewMemberWasKilledInParachuteByAIAircraft(Event):
     )
     transformers = (
         tx.transform_time,
-        tx.ai_aircraft_crew_member_as_actor,
-        tx.ai_aircraft_as_attacker,
+        tx.transform_ai_aircraft_crew_member_as_actor,
+        tx.transform_ai_aircraft_as_attacker,
         tx.transform_pos,
     )
 
@@ -3242,8 +3241,8 @@ class AIAircraftCrewMemberWasKilledInParachuteByStationaryUnit(Event):
     )
     transformers = (
         tx.transform_time,
-        tx.ai_aircraft_crew_member_as_actor,
-        tx.stationary_unit_as_attacker,
+        tx.transform_ai_aircraft_crew_member_as_actor,
+        tx.transform_stationary_unit_as_attacker,
         tx.transform_pos,
     )
 
@@ -3270,8 +3269,8 @@ class AIAircraftCrewMemberWasKilledInParachuteByMovingUnitMember(Event):
     )
     transformers = (
         tx.transform_time,
-        tx.ai_aircraft_crew_member_as_actor,
-        tx.moving_unit_member_as_attacker,
+        tx.transform_ai_aircraft_crew_member_as_actor,
+        tx.transform_moving_unit_member_as_attacker,
         tx.transform_pos,
     )
 
@@ -3298,8 +3297,8 @@ class AIAircraftCrewMemberWasKilledInParachuteByMovingUnit(Event):
     )
     transformers = (
         tx.transform_time,
-        tx.ai_aircraft_crew_member_as_actor,
-        tx.moving_unit_as_attacker,
+        tx.transform_ai_aircraft_crew_member_as_actor,
+        tx.transform_moving_unit_as_attacker,
         tx.transform_pos,
     )
 
@@ -3326,8 +3325,8 @@ class AIAircraftCrewMemberWasKilledInParachuteByHumanAircraft(Event):
     )
     transformers = (
         tx.transform_time,
-        tx.ai_aircraft_crew_member_as_actor,
-        tx.human_aircraft_as_attacker,
+        tx.transform_ai_aircraft_crew_member_as_actor,
+        tx.transform_human_aircraft_as_attacker,
         tx.transform_pos,
     )
 
@@ -3354,8 +3353,8 @@ class AIAircraftCrewMemberParachuteWasDestroyedByAIAircraft(Event):
     )
     transformers = (
         tx.transform_time,
-        tx.ai_aircraft_crew_member_as_actor,
-        tx.ai_aircraft_as_attacker,
+        tx.transform_ai_aircraft_crew_member_as_actor,
+        tx.transform_ai_aircraft_as_attacker,
         tx.transform_pos,
     )
 
@@ -3382,8 +3381,8 @@ class AIAircraftCrewMemberParachuteWasDestroyedByStationaryUnit(Event):
     )
     transformers = (
         tx.transform_time,
-        tx.ai_aircraft_crew_member_as_actor,
-        tx.stationary_unit_as_attacker,
+        tx.transform_ai_aircraft_crew_member_as_actor,
+        tx.transform_stationary_unit_as_attacker,
         tx.transform_pos,
     )
 
@@ -3410,8 +3409,8 @@ class AIAircraftCrewMemberParachuteWasDestroyedByMovingUnitMember(Event):
     )
     transformers = (
         tx.transform_time,
-        tx.ai_aircraft_crew_member_as_actor,
-        tx.moving_unit_member_as_attacker,
+        tx.transform_ai_aircraft_crew_member_as_actor,
+        tx.transform_moving_unit_member_as_attacker,
         tx.transform_pos,
     )
 
@@ -3438,8 +3437,8 @@ class AIAircraftCrewMemberParachuteWasDestroyedByMovingUnit(Event):
     )
     transformers = (
         tx.transform_time,
-        tx.ai_aircraft_crew_member_as_actor,
-        tx.moving_unit_as_attacker,
+        tx.transform_ai_aircraft_crew_member_as_actor,
+        tx.transform_moving_unit_as_attacker,
         tx.transform_pos,
     )
 
@@ -3466,8 +3465,8 @@ class AIAircraftCrewMemberParachuteWasDestroyedByHumanAircraft(Event):
     )
     transformers = (
         tx.transform_time,
-        tx.ai_aircraft_crew_member_as_actor,
-        tx.human_aircraft_as_attacker,
+        tx.transform_ai_aircraft_crew_member_as_actor,
+        tx.transform_human_aircraft_as_attacker,
         tx.transform_pos,
     )
 
@@ -3493,7 +3492,7 @@ class AIAircraftCrewMemberParachuteWasDestroyed(Event):
     )
     transformers = (
         tx.transform_time,
-        tx.ai_aircraft_crew_member_as_actor,
+        tx.transform_ai_aircraft_crew_member_as_actor,
         tx.transform_pos,
     )
 
@@ -3519,7 +3518,7 @@ class AIAircraftCrewMemberWasWounded(Event):
     )
     transformers = (
         tx.transform_time,
-        tx.ai_aircraft_crew_member_as_actor,
+        tx.transform_ai_aircraft_crew_member_as_actor,
         tx.transform_pos,
     )
 
@@ -3545,7 +3544,7 @@ class AIAircraftCrewMemberWasHeavilyWounded(Event):
     )
     transformers = (
         tx.transform_time,
-        tx.ai_aircraft_crew_member_as_actor,
+        tx.transform_ai_aircraft_crew_member_as_actor,
         tx.transform_pos,
     )
 
@@ -3571,7 +3570,7 @@ class AIAircraftCrewMemberWasCaptured(Event):
     )
     transformers = (
         tx.transform_time,
-        tx.ai_aircraft_crew_member_as_actor,
+        tx.transform_ai_aircraft_crew_member_as_actor,
         tx.transform_pos,
     )
 
@@ -3597,7 +3596,7 @@ class AIAircraftCrewMemberHasBailedOut(Event):
     )
     transformers = (
         tx.transform_time,
-        tx.ai_aircraft_crew_member_as_actor,
+        tx.transform_ai_aircraft_crew_member_as_actor,
         tx.transform_pos,
     )
 
@@ -3623,6 +3622,6 @@ class AIAircraftCrewMemberHasLanded(Event):
     )
     transformers = (
         tx.transform_time,
-        tx.ai_aircraft_crew_member_as_actor,
+        tx.transform_ai_aircraft_crew_member_as_actor,
         tx.transform_pos,
     )
