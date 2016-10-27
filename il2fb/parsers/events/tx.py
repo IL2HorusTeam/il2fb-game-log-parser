@@ -39,10 +39,6 @@ def transform_int(data, field_name):
     data[field_name] = int(data[field_name])
 
 
-def transform_float(data, field_name):
-    data[field_name] = float(data[field_name])
-
-
 def human_as_actor(data):
     data['actor'] = actors.Human(
         data.pop('actor_callsign'),
