@@ -2074,6 +2074,34 @@ class BridgeWasDestroyedByHumanAircraft(Event):
     )
 
 
+class BridgeWasDestroyedByStationaryUnit(Event):
+    """
+    Example:
+
+        "[8:33:05 PM]  Bridge0 destroyed by 0_Static at 100.0 200.99"
+
+    """
+    __slots__ = ['time', 'actor', 'attacker', 'pos', ]
+
+    verbose_name = _("Bridge was destroyed by stationary unit")
+    matcher = rx.matcher(
+        "{time}{actor}{s}destroyed{s}by{s}{attacker}{pos}"
+        .format(
+            time=rx.TIME_GROUP_PREFIX,
+            actor=rx.BRIDGE_ACTOR_GROUP,
+            attacker=rx.STATIONARY_UNIT_ATTACKER_GROUP,
+            pos=rx.POS_GROUP_SUFFIX,
+            s=rx.WHITESPACE,
+        )
+    )
+    transformers = (
+        tx.transform_time,
+        tx.bridge_as_actor,
+        tx.stationary_unit_as_attacker,
+        tx.transform_pos,
+    )
+
+
 class MovingUnitWasDestroyedByMovingUnit(Event):
     """
     Example:
