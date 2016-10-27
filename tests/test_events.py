@@ -4190,6 +4190,53 @@ class AIAircraftWasShotDownByHumanAircraftAndAIAircraftTestCase(unittest.TestCas
         )
 
 
+class AIAircraftWasShotDownByAIAircraftAndHumanAircraftTestCase(unittest.TestCase):
+
+    def test_from_s(self):
+        event = events.AIAircraftWasShotDownByAIAircraftAndHumanAircraft.from_s(
+            "[8:33:05 PM] r01000 shot down by r01001 and User0:Bf-109G-2 at 100.0 200.99"
+        )
+        self.assertIsInstance(event, events.AIAircraftWasShotDownByAIAircraftAndHumanAircraft)
+        self.assertEqual(event.time, datetime.time(20, 33, 5))
+        self.assertEqual(event.actor, actors.AIAircraft("r0100", 0))
+        self.assertEqual(event.attacker, actors.AIAircraft("r0100", 1))
+        self.assertEqual(event.assistant, actors.HumanAircraft("User0", "Bf-109G-2"))
+        self.assertEqual(event.pos, Point2D(100.0, 200.99))
+
+    def test_to_primitive(self):
+        event = events.AIAircraftWasShotDownByAIAircraftAndHumanAircraft(
+            time=datetime.time(20, 33, 5),
+            actor=actors.AIAircraft("r0100", 0),
+            attacker=actors.AIAircraft("r0100", 1),
+            assistant=actors.HumanAircraft("User0", "Bf-109G-2"),
+            pos=Point2D(100.0, 200.99),
+        )
+        self.assertEqual(
+            event.to_primitive(),
+            {
+                'time': "20:33:05",
+                'actor': {
+                    'flight': "r0100",
+                    'aircraft': 0,
+                },
+                'attacker': {
+                    'flight': "r0100",
+                    'aircraft': 1,
+                },
+                'assistant': {
+                    'callsign': "User0",
+                    'aircraft': "Bf-109G-2",
+                },
+                'pos': {
+                    'x': 100.0,
+                    'y': 200.99,
+                },
+                'name': "AIAircraftWasShotDownByAIAircraftAndHumanAircraft",
+                'verbose_name': "AI aircraft was shot down by AI aircraft and human aircraft",
+            }
+        )
+
+
 class AIAircraftWasShotDownByHumanAircraftAndHumanAircraftTestCase(unittest.TestCase):
 
     def test_from_s(self):
