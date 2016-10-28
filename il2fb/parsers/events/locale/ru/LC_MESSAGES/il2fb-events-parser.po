@@ -1,0 +1,534 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: \n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2016-10-28 21:08+0300\n"
+"PO-Revision-Date: 2016-10-28 22:20+0300\n"
+"Language: ru\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"X-Generator: Poedit 1.8.2\n"
+
+#: events.py:96
+msgid "Mission is playing"
+msgstr "Миссия играет"
+
+#: events.py:121
+msgid "Mission has begun"
+msgstr "Миссия началась"
+
+#: events.py:144
+msgid "Mission has ended"
+msgstr "Миссия закончилась"
+
+#: events.py:167
+msgid "Mission was won"
+msgstr "Миссия была выиграна"
+
+#: events.py:193
+msgid "Target state was changed"
+msgstr "Состояние цели изменилось"
+
+#: events.py:220
+msgid "Human has connected"
+msgstr "Человек присоединился"
+
+#: events.py:245
+msgid "Human has disconnected"
+msgstr "Человек отсоединился"
+
+#: events.py:270
+msgid "Human has selected airfield"
+msgstr "Человека выбрал аэродром"
+
+#: events.py:298
+msgid "Human aircraft has spawned"
+msgstr "Человек появился на карте"
+
+#: events.py:326
+msgid "Human has went to briefing"
+msgstr "Человек вышел в брифинг"
+
+#: events.py:351
+msgid "Human has toggled landing lights"
+msgstr "Человек переключил посадочные огни"
+
+#: events.py:378
+msgid "Human has toggled wingtip smokes"
+msgstr "Человек переключил крыльевые дымы"
+
+#: events.py:405
+msgid "Human has changed seat"
+msgstr "Человек сменил место"
+
+#: events.py:432
+msgid "Human is trying to take seat"
+msgstr "Человек пытается занять место"
+
+#: events.py:459
+msgid "Human aircraft has took off"
+msgstr "Самолет человека взлетел"
+
+#: events.py:485
+msgid "Human aircraft has landed"
+msgstr "Самолет человека приземлился"
+
+#: events.py:511
+msgid "Human aircraft has crashed"
+msgstr "Самолет человека разбился"
+
+#: events.py:538
+msgid "Human has destroyed own aircraft"
+msgstr "Человек уничтожил свой самолет"
+
+#: events.py:566
+msgid "Human has damaged own aircraft"
+msgstr "Человек повредил свой самолет"
+
+#: events.py:593
+msgid "Human aircraft was damaged on the ground"
+msgstr "Самолет человека был поврежден на земле"
+
+#: events.py:619
+msgid "Human aircraft was damaged by human aircraft"
+msgstr "Самолет человека был поврежден самолетом человека"
+
+#: events.py:647
+msgid "Human aircraft was damaged by stationary unit"
+msgstr "Самолет человека был поврежден статическим объектом"
+
+#: events.py:675
+msgid "Human aircraft was damaged by moving unit member"
+msgstr "Самолет человека был поврежден членом группы движущихся объектов"
+
+#: events.py:703
+msgid "Human aircraft was damaged by moving unit"
+msgstr "Самолет человека был поврежден движущимся объектом"
+
+#: events.py:731
+msgid "Human aircraft was damaged by AI aircraft"
+msgstr "Самолет человека был поврежден самолетом ИИ"
+
+#: events.py:759
+msgid "Human aircraft was shot down by human aircraft"
+msgstr "Самолет человека был сбит самолетом человека"
+
+#: events.py:787
+msgid "Human aircraft was shot down by stationary unit"
+msgstr "Самолет человека был сбит статическим объектом"
+
+#: events.py:815
+msgid "Human aircraft was shot down by moving unit member"
+msgstr "Самолет человека был сбит членом группы движущихся объектов"
+
+#: events.py:843
+msgid "Human aircraft was shot down by moving unit"
+msgstr "Самолет человека был сбит движущимся объектом"
+
+#: events.py:871
+msgid "Human aircraft was shot down by AI aircraft"
+msgstr "Самолет человека был сбит самолетом ИИ"
+
+#: events.py:899
+msgid "Human aircraft was shot down by human aircraft and human aircraft"
+msgstr "Самолет человека был сбит самолетом человека и самолетом человека"
+
+#: events.py:929
+msgid "Human aircraft was shot down by human aircraft and AI aircraft"
+msgstr "Самолет человека был сбит самолетом человека и самолетом ИИ"
+
+#: events.py:959
+msgid "Human aircraft was shot down by AI aircraft and human aircraft"
+msgstr "Самолет человека был сбит самолетом ИИ и самолетом человека"
+
+#: events.py:989
+msgid "Human aircraft was shot down by AI aircraft and AI aircraft"
+msgstr "Самолет человека был сбит самолетом ИИ и самолетом ИИ"
+
+#: events.py:1019
+msgid "Human aircraft crew member has bailed out"
+msgstr "Член экипажа самолета человека выпрыгнул с парашютом"
+
+#: events.py:1045
+msgid "Human aircraft crew member has landed"
+msgstr "Член экипажа самолета человека приземлился"
+
+#: events.py:1071
+msgid "Human aircraft crew member was captured"
+msgstr "Член экипажа самолета человека попал в плен"
+
+#: events.py:1097
+msgid "Human aircraft crew member was wounded"
+msgstr "Член экипажа самолета человека был ранен"
+
+#: events.py:1123
+msgid "Human aircraft crew member was heavily wounded"
+msgstr "Член экипажа самолета человека был тяжело ранен"
+
+#: events.py:1149
+msgid "Human aircraft crew member was killed"
+msgstr "Член экипажа самолета человека был убит"
+
+#: events.py:1175
+msgid "Human aircraft crew member was killed by human aircraft"
+msgstr "Член экипажа самолета человека был убит самолетом человека"
+
+#: events.py:1203
+msgid "Human aircraft crew member was killed by stationary unit"
+msgstr "Член экипажа самолета человека был убит статическим объектом"
+
+#: events.py:1231
+msgid "Human aircraft crew member was killed by moving unit member"
+msgstr "Член экипажа самолета человека был убит членом группы движущихся объектов"
+
+#: events.py:1259
+msgid "Human aircraft crew member was killed by moving unit"
+msgstr "Член экипажа самолета человека был убит движущимся объектом"
+
+#: events.py:1287
+msgid "Human aircraft crew member was killed by AI aircraft"
+msgstr "Член экипажа самолета человека был убит самолетом ИИ"
+
+#: events.py:1315
+msgid "Human aircraft crew member was killed in parachute by stationary unit"
+msgstr "Член экипажа самолета человека на парашюте был убит статическим объектом"
+
+#: events.py:1343
+msgid "Human aircraft crew member was killed in parachute by moving unit member"
+msgstr "Член экипажа самолета человека на парашюте был убит членом группы движущихся объектов"
+
+#: events.py:1371
+msgid "Human aircraft crew member was killed in parachute by moving unit"
+msgstr "Член экипажа самолета человека на парашюте был убит движущимся объектом"
+
+#: events.py:1399
+msgid "Human aircraft crew member was killed in parachute by human aircraft"
+msgstr "Член экипажа самолета человека на парашюте был убит самолетом человека"
+
+#: events.py:1427
+msgid "Human aircraft crew member was killed in parachute by AI aircraft"
+msgstr "Член экипажа самолета человека на парашюте был убит самолетом ИИ"
+
+#: events.py:1455
+msgid "Human aircraft crew member's parachute was destroyed by stationary unit"
+msgstr "Парашют члена экипажа самолета человека убит уничтожен статическим объектом"
+
+#: events.py:1483
+msgid "Human aircraft crew member's parachute was destroyed by moving unit member"
+msgstr "Парашют члена экипажа самолета человека убит уничтожен членом группы движущихся объектов"
+
+#: events.py:1511
+msgid "Human aircraft crew member's parachute was destroyed by moving unit"
+msgstr "Парашют члена экипажа самолета человека убит уничтожен движущимся объектом"
+
+#: events.py:1539
+msgid "Human aircraft crew member's parachute was destroyed by human aircraft"
+msgstr "Парашют члена экипажа самолета человека убит уничтожен самолетом человека"
+
+#: events.py:1567
+msgid "Human aircraft crew member's parachute was destroyed by AI aircraft"
+msgstr "Парашют члена экипажа самолета человека убит уничтожен самолетом ИИ"
+
+#: events.py:1596
+msgid "Building was destroyed by human aircraft"
+msgstr "Здание было уничтожено самолетом человека"
+
+#: events.py:1625
+msgid "Building was destroyed by stationary unit"
+msgstr "Здание было уничтожено статическим объектом"
+
+#: events.py:1654
+msgid "Building was destroyed by moving unit member"
+msgstr "Здание было уничтожено членом группы движущихся объектов"
+
+#: events.py:1683
+msgid "Building was destroyed by moving unit"
+msgstr "Здание было уничтожено движущимся объектом"
+
+#: events.py:1712
+msgid "Building was destroyed by AI aircraft"
+msgstr "Здание было уничтожено самолетом ИИ"
+
+#: events.py:1741
+msgid "Tree was destroyed by human aircraft"
+msgstr "Дерево было уничтожено самолетом человека"
+
+#: events.py:1769
+msgid "Tree was destroyed by stationary unit"
+msgstr "Дерево было уничтожено статическим объектом"
+
+#: events.py:1797
+msgid "Tree was destroyed by AI aircraft"
+msgstr "Дерево было уничтожено самолетом ИИ"
+
+#: events.py:1825
+msgid "Tree was destroyed by moving unit member"
+msgstr "Дерево было уничтожено членом группы движущихся объектов"
+
+#: events.py:1853
+msgid "Tree was destroyed by moving unit"
+msgstr "Дерево было уничтожено движущимся объектом"
+
+#: events.py:1881
+msgid "Tree was destroyed"
+msgstr "Дерево было уничтожено"
+
+#: events.py:1906
+msgid "Stationary unit was destroyed"
+msgstr "Статический объект был уничтожен"
+
+#: events.py:1932
+msgid "Stationary unit was destroyed by stationary unit"
+msgstr "Статический объект был уничтожен статическим объектом"
+
+#: events.py:1960
+msgid "Stationary unit was destroyed by moving unit"
+msgstr "Статический объект был уничтожен движущимся объектом"
+
+#: events.py:1988
+msgid "Stationary unit was destroyed by moving unit member"
+msgstr "Статический объект был уничтожен членом группы движущихся объектов"
+
+#: events.py:2016
+msgid "Stationary unit was destroyed by human aircraft"
+msgstr "Статический объект был уничтожен самолетом человека"
+
+#: events.py:2044
+msgid "Stationary unit was destroyed by AI aircraft"
+msgstr "Статический объект был уничтожен самолетом ИИ"
+
+#: events.py:2072
+msgid "Bridge was destroyed by human aircraft"
+msgstr "Мост был уничтожен самолетом человека"
+
+#: events.py:2100
+msgid "Bridge was destroyed by stationary unit"
+msgstr "Мост был уничтожен статическим объектом"
+
+#: events.py:2128
+msgid "Bridge was destroyed by moving unit member"
+msgstr "Мост был уничтожен членом группы движущихся объектов"
+
+#: events.py:2156
+msgid "Bridge was destroyed by moving unit"
+msgstr "Мост был уничтожен движущимся объектом"
+
+#: events.py:2184
+msgid "Bridge was destroyed by AI aircraft"
+msgstr "Мост был уничтожен самолетом ИИ"
+
+#: events.py:2212
+msgid "Moving unit was destroyed by moving unit"
+msgstr "Движущийся объект был уничтожен движущимся объектом"
+
+#: events.py:2240
+msgid "Moving unit was destroyed by moving unit member"
+msgstr "Движущийся объект был уничтожен членом группы движущихся объектов"
+
+#: events.py:2268
+msgid "Moving unit was destroyed by stationary unit"
+msgstr "Движущийся объект был уничтожен статическим объектом"
+
+#: events.py:2296
+msgid "Moving unit was destroyed by human aircraft"
+msgstr "Движущийся объект был уничтожен самолетом человека"
+
+#: events.py:2324
+msgid "Moving unit was destroyed by AI aircraft"
+msgstr "Движущийся объект был уничтожен самолетом ИИ"
+
+#: events.py:2352
+msgid "Moving unit member was destroyed by stationary unit"
+msgstr "Член группы движущихся объектов был уничтожен статическим объектом"
+
+#: events.py:2380
+msgid "Moving unit member was destroyed by AI aircraft"
+msgstr "Член группы движущихся объектов был уничтожен самолетом ИИ"
+
+#: events.py:2408
+msgid "Moving unit member was destroyed by human aircraft"
+msgstr "Член группы движущихся объектов был уничтожен самолетом человека"
+
+#: events.py:2436
+msgid "Moving unit member was destroyed by moving unit"
+msgstr "Член группы движущихся объектов был уничтожен движущимся объектом"
+
+#: events.py:2464
+msgid "Moving unit member was destroyed by moving unit member"
+msgstr "Член группы движущихся объектов был уничтожен членом группы движущихся объектов"
+
+#: events.py:2492
+msgid "AI aircraft has despawned"
+msgstr "Самолет ИИ был убран с карты"
+
+#: events.py:2518
+msgid "AI aircraft was damaged on the ground"
+msgstr "Самолет ИИ был поврежден на земле"
+
+#: events.py:2544
+msgid "AI aircraft was damaged by human aircraft"
+msgstr "Самолет ИИ был поврежден самолетом человека"
+
+#: events.py:2572
+msgid "AI aircraft was damaged by stationary unit"
+msgstr "Самолет ИИ был поврежден статическим объектом"
+
+#: events.py:2600
+msgid "AI aircraft was damaged by moving unit member"
+msgstr "Самолет ИИ был поврежден членом группы движущихся объектов"
+
+#: events.py:2628
+msgid "AI aircraft was damaged by moving unit"
+msgstr "Самолет ИИ был поврежден движущимся объектом"
+
+#: events.py:2656
+msgid "AI aircraft was damaged by AI aircraft"
+msgstr "Самолет ИИ был поврежден самолетом ИИ"
+
+#: events.py:2685
+msgid "AI has damaged own aircraft"
+msgstr "ИИ повредил свой самолет"
+
+#: events.py:2713
+msgid "AI has destroyed own aircraft"
+msgstr "ИИ уничтожил свой самолет"
+
+#: events.py:2740
+msgid "AI aircraft has landed"
+msgstr "Самолет ИИ приземлился"
+
+#: events.py:2766
+msgid "AI aircraft has crashed"
+msgstr "Самолет ИИ разбился"
+
+#: events.py:2792
+msgid "AI aircraft was shot down by human aircraft"
+msgstr "Самолет ИИ был сбит самолетом человека"
+
+#: events.py:2820
+msgid "AI aircraft was shot down by AI aircraft"
+msgstr "Самолет ИИ был сбит самолетом ИИ"
+
+#: events.py:2848
+msgid "AI aircraft was shot down by stationary unit"
+msgstr "Самолет ИИ был сбит статическим объектом"
+
+#: events.py:2876
+msgid "AI aircraft was shot down by moving unit member"
+msgstr "Самолет ИИ был сбит членом группы движущихся объектов"
+
+#: events.py:2904
+msgid "AI aircraft was shot down by moving unit"
+msgstr "Самолет ИИ был сбит движущимся объектом"
+
+#: events.py:2932
+msgid "AI aircraft was shot down by AI aircraft and AI aircraft"
+msgstr "Самолет ИИ был сбит самолетом ИИ и самолетом ИИ"
+
+#: events.py:2962
+msgid "AI aircraft was shot down by human aircraft and AI aircraft"
+msgstr "Самолет ИИ был сбит самолетом человека и самолетом ИИ"
+
+#: events.py:2992
+msgid "AI aircraft was shot down by AI aircraft and human aircraft"
+msgstr "Самолет ИИ был сбит самолетом ИИ и самолетом человека"
+
+#: events.py:3022
+msgid "AI aircraft was shot down by human aircraft and human aircraft"
+msgstr "Самолет ИИ был сбит самолетом человека и самолетом человека"
+
+#: events.py:3052
+msgid "AI aircraft crew member was killed"
+msgstr "Член экипажа самолета ИИ был убит"
+
+#: events.py:3078
+msgid "AI aircraft crew member was killed by stationary unit"
+msgstr "Член экипажа самолета ИИ был убит статическим объектом"
+
+#: events.py:3106
+msgid "AI aircraft crew member was killed by human aircraft"
+msgstr "Член экипажа самолета ИИ был убит самолетом человека"
+
+#: events.py:3134
+msgid "AI aircraft crew member was killed by AI aircraft"
+msgstr "Член экипажа самолета ИИ был убит самолетом ИИ"
+
+#: events.py:3162
+msgid "AI aircraft crew member was killed by moving unit member"
+msgstr "Член экипажа самолета ИИ был убит членом группы движущихся объектов"
+
+#: events.py:3190
+msgid "AI aircraft crew member was killed by moving unit"
+msgstr "Член экипажа самолета ИИ был убит движущимся объектом"
+
+#: events.py:3218
+msgid "AI aircraft crew member was killed in parachute by AI aircraft"
+msgstr "Член экипажа самолета ИИ был убит в парашюте самолетом ИИ"
+
+#: events.py:3246
+msgid "AI aircraft crew member was killed in parachute by stationary unit"
+msgstr "Член экипажа самолета ИИ был убит в парашюте статическим объектом"
+
+#: events.py:3274
+msgid "AI aircraft crew member was killed in parachute by moving unit member"
+msgstr "Член экипажа самолета ИИ был убит в парашюте членом группы движущихся объектов"
+
+#: events.py:3302
+msgid "AI aircraft crew member was killed in parachute by moving unit"
+msgstr "Член экипажа самолета ИИ был убит в парашюте движущимся объектом"
+
+#: events.py:3330
+msgid "AI aircraft crew member was killed in parachute by human aircraft"
+msgstr "Член экипажа самолета ИИ был убит в парашюте самолетом человека"
+
+#: events.py:3358
+msgid "AI aircraft crew member's parachute was destroyed by AI aircraft"
+msgstr "Парашют члена экипажа самолета ИИ был уничтожен самолетом ИИ"
+
+#: events.py:3386
+msgid "AI aircraft crew member's parachute was destroyed by stationary unit"
+msgstr "Парашют члена экипажа самолета ИИ был уничтожен статическим объектом"
+
+#: events.py:3414
+msgid "AI aircraft crew member's parachute was destroyed by moving unit member"
+msgstr "Парашют члена экипажа самолета ИИ был уничтожен членом группы движущихся объектов"
+
+#: events.py:3442
+msgid "AI aircraft crew member's parachute was destroyed by moving unit"
+msgstr "Парашют члена экипажа самолета ИИ был уничтожен движущимся объектом"
+
+#: events.py:3470
+msgid "AI aircraft crew member's parachute was destroyed by human aircraft"
+msgstr "Парашют члена экипажа самолета ИИ был уничтожен самолетом человека"
+
+#: events.py:3498
+msgid "AI aircraft crew member's parachute was destroyed"
+msgstr "Парашют члена экипажа самолета ИИ был уничтожен"
+
+#: events.py:3524
+msgid "AI aircraft crew member was wounded"
+msgstr "Член экипажа самолета ИИ был ранен"
+
+#: events.py:3550
+msgid "AI aircraft crew member was heavily wounded"
+msgstr "Член экипажа самолета ИИ был тяжело ранен"
+
+#: events.py:3576
+msgid "AI aircraft crew member was captured"
+msgstr "Член экипажа самолета ИИ попал в плен"
+
+#: events.py:3602
+msgid "AI aircraft crew member has bailed out"
+msgstr "Член экипажа самолета ИИ выпрыгнул с парашютом"
+
+#: events.py:3628
+msgid "AI aircraft crew member has landed"
+msgstr "Член экипажа самолета ИИ приземлился"
