@@ -33,7 +33,7 @@ README = open(os.path.join(__here__, 'README.rst')).read()
 
 setup(
     name='il2fb-events-parser',
-    version='1.0.0.dev0',
+    version='1.0.0',
     description=(
         "Parse events from log produced by dedicated server of "
         "«IL-2 Forgotten Battles» flight simulator"
@@ -57,7 +57,7 @@ setup(
     install_requires=REQUIREMENTS,
     dependency_links=DEPENDENCIES,
     classifiers=[
-        'Development Status :: 4 - Beta',
+        'Development Status :: 5 - Production/Stable',
         'Intended Audience :: Developers',
         'License :: OSI Approved :: GNU Lesser General Public License v3 (LGPLv3)',
         'Natural Language :: English',
