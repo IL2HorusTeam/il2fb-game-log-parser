@@ -313,6 +313,10 @@ i.show-details:hover {
   border-bottom: 1px solid #EEE;
 }
 
+#supported_events_popup {
+  max-width: 700px;
+}
+
 #supported_events_popup > ol {
   margin-left: 5px;
 }
