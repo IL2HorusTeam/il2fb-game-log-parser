@@ -5,7 +5,9 @@ Data structures for events.
 """
 
 import abc
+import inspect
 import six
+import sys
 
 from il2fb.commons.structures import BaseStructure
 
@@ -71,6 +73,15 @@ class Event(six.with_metaclass(abc.ABCMeta, BaseStructure)):
 
     def __repr__(self):
         return "<Event: {0}>".format(self.name)
+
+
+def get_all_events():
+    module = sys.modules[__name__]
+    members = inspect.getmembers(module, inspect.isclass)
+    return [
+        cls for name, cls in members
+        if issubclass(cls, Event) and cls is not Event
+    ]
 
 
 class MissionIsPlaying(Event):
