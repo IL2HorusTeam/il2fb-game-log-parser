@@ -1,4 +1,8 @@
 # coding: utf-8
+"""
+Data structures for events.
+
+"""
 
 import abc
 import six

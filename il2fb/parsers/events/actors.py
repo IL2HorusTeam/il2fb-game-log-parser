@@ -1,4 +1,8 @@
 # coding: utf-8
+"""
+Data structures for event actors.
+
+"""
 
 from il2fb.commons.structures import BaseStructure
 
