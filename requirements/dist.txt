@@ -1,12 +1,4 @@
-# This file collects all required third-party applications that are needed
-# to run this project. Later you can install all these apps in a row
-# using pip. Example::
-#
-#     pip install -r requirements/dist.txt
-
 candv>=1.2.1
+il2fb-commons>=1.0.0,<1.1.0
 six>=1.6.1
 verboselib>=0.2,<0.3
-
-# il2fb-commons>=0.11.0.dev0
--e git+https://github.com/IL2HorusTeam/il2fb-commons.git#egg=il2fb-commons
