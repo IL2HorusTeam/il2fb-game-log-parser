@@ -105,7 +105,7 @@ class MissionWasWonTestCase(unittest.TestCase):
                 'belligerent': {
                     'value': 1,
                     'name': 'red',
-                    'verbose_name': "allies",
+                    'verbose_name': "red",
                     'help_text': None,
                 },
                 'name': "MissionWasWon",
@@ -260,7 +260,7 @@ class HumanHasSelectedAirfieldTestCase(unittest.TestCase):
                 'belligerent': {
                     'value': 1,
                     'name': 'red',
-                    'verbose_name': "allies",
+                    'verbose_name': "red",
                     'help_text': None,
                 },
                 'pos': {
