@@ -7,11 +7,28 @@ Data structures for events.
 import inspect
 import sys
 
+from il2fb.commons.regex import (
+    WHITESPACE, NON_WHITESPACES, NUMBER, END_OF_STRING,
+    make_matcher, named_group,
+)
 from il2fb.commons.structures import ParsableEvent
 
-from . import rx, tx
+from . import tx
 from .constants import TARGET_STATES
 from .l10n import translations
+from .regex import (
+    DATE_TIME_GROUP_PREFIX, TIME_GROUP_PREFIX, BELLIGERENT_GROUP,
+    TARGET_STATE_GROUP, TOGGLE_VALUE_GROUP, POS_GROUP_SUFFIX,
+    CALLSIGN, HIMSELF, HUMAN_ACTOR_GROUP, HUMAN_AIRCRAFT_ACTOR_GROUP,
+    HUMAN_AIRCRAFT_CREW_MEMBER_ACTOR_GROUP, HUMAN_AIRCRAFT_ATTACKER_GROUP,
+    HUMAN_AIRCRAFT_ASSISTANT_GROUP,
+    STATIONARY_UNIT_ACTOR_GROUP, STATIONARY_UNIT_ATTACKER_GROUP,
+    MOVING_UNIT_ACTOR_GROUP, MOVING_UNIT_ATTACKER_GROUP,
+    MOVING_UNIT_MEMBER_ACTOR_GROUP, MOVING_UNIT_MEMBER_ATTACKER_GROUP,
+    AI_AIRCRAFT_ACTOR_GROUP, AI_AIRCRAFT_CREW_MEMBER_ACTOR_GROUP,
+    AI_AIRCRAFT_ATTACKER_GROUP, AI_AIRCRAFT_ASSISTANT_GROUP,
+    BUILDING_ACTOR_GROUP, BRIDGE_ACTOR_GROUP, TREE,
+)
 
 
 _ = translations.ugettext_lazy
@@ -36,13 +53,13 @@ class MissionIsPlaying(ParsableEvent):
     __slots__ = ['date', 'time', 'mission', ]
 
     verbose_name = _("Mission is playing")
-    matcher = rx.matcher(
+    matcher = make_matcher(
         "{datetime}Mission:{s}{mission}{s}is{s}Playing{end}"
         .format(
-            datetime=rx.DATE_TIME_GROUP_PREFIX,
-            mission=rx.named_group('mission', ".+\.mis"),
-            s=rx.WHITESPACE,
-            end=rx.END_OF_STRING,
+            datetime=DATE_TIME_GROUP_PREFIX,
+            mission=named_group('mission', ".+\.mis"),
+            s=WHITESPACE,
+            end=END_OF_STRING,
         )
     )
     transformers = (
@@ -61,12 +78,12 @@ class MissionHasBegun(ParsableEvent):
     __slots__ = ['time', ]
 
     verbose_name = _("Mission has begun")
-    matcher = rx.matcher(
+    matcher = make_matcher(
         "{time}Mission{s}BEGIN{end}"
         .format(
-            time=rx.TIME_GROUP_PREFIX,
-            s=rx.WHITESPACE,
-            end=rx.END_OF_STRING,
+            time=TIME_GROUP_PREFIX,
+            s=WHITESPACE,
+            end=END_OF_STRING,
         )
     )
     transformers = (
@@ -84,12 +101,12 @@ class MissionHasEnded(ParsableEvent):
     __slots__ = ['time', ]
 
     verbose_name = _("Mission has ended")
-    matcher = rx.matcher(
+    matcher = make_matcher(
         "{time}Mission{s}END{end}"
         .format(
-            time=rx.TIME_GROUP_PREFIX,
-            s=rx.WHITESPACE,
-            end=rx.END_OF_STRING,
+            time=TIME_GROUP_PREFIX,
+            s=WHITESPACE,
+            end=END_OF_STRING,
         )
     )
     transformers = (
@@ -107,13 +124,13 @@ class MissionWasWon(ParsableEvent):
     __slots__ = ['date', 'time', 'belligerent', ]
 
     verbose_name = _("Mission was won")
-    matcher = rx.matcher(
+    matcher = make_matcher(
         "{datetime}Mission:{s}{belligerent}{s}WON{end}"
         .format(
-            datetime=rx.DATE_TIME_GROUP_PREFIX,
-            belligerent=rx.BELLIGERENT_GROUP,
-            s=rx.WHITESPACE,
-            end=rx.END_OF_STRING,
+            datetime=DATE_TIME_GROUP_PREFIX,
+            belligerent=BELLIGERENT_GROUP,
+            s=WHITESPACE,
+            end=END_OF_STRING,
         )
     )
     transformers = (
@@ -134,14 +151,14 @@ class TargetStateWasChanged(ParsableEvent):
 
     verbose_name = _("Target state was changed")
     STATES = TARGET_STATES
-    matcher = rx.matcher(
+    matcher = make_matcher(
         "{time}Target{s}{index}{s}{state}{end}"
         .format(
-            time=rx.TIME_GROUP_PREFIX,
-            index=rx.named_group('index', rx.NUMBER),
-            state=rx.TARGET_STATE_GROUP,
-            s=rx.WHITESPACE,
-            end=rx.END_OF_STRING,
+            time=TIME_GROUP_PREFIX,
+            index=named_group('index', NUMBER),
+            state=TARGET_STATE_GROUP,
+            s=WHITESPACE,
+            end=END_OF_STRING,
         )
     )
     transformers = (
@@ -160,13 +177,13 @@ class HumanHasConnected(ParsableEvent):
     __slots__ = ['time', 'actor', ]
 
     verbose_name = _("Human has connected")
-    matcher = rx.matcher(
+    matcher = make_matcher(
         "{time}{actor}{s}has{s}connected{end}"
         .format(
-            time=rx.TIME_GROUP_PREFIX,
-            actor=rx.HUMAN_ACTOR_GROUP,
-            s=rx.WHITESPACE,
-            end=rx.END_OF_STRING,
+            time=TIME_GROUP_PREFIX,
+            actor=HUMAN_ACTOR_GROUP,
+            s=WHITESPACE,
+            end=END_OF_STRING,
         )
     )
     transformers = (
@@ -185,13 +202,13 @@ class HumanHasDisconnected(ParsableEvent):
     __slots__ = ['time', 'actor', ]
 
     verbose_name = _("Human has disconnected")
-    matcher = rx.matcher(
+    matcher = make_matcher(
         "{time}{actor}{s}has{s}disconnected{end}"
         .format(
-            time=rx.TIME_GROUP_PREFIX,
-            actor=rx.HUMAN_ACTOR_GROUP,
-            s=rx.WHITESPACE,
-            end=rx.END_OF_STRING,
+            time=TIME_GROUP_PREFIX,
+            actor=HUMAN_ACTOR_GROUP,
+            s=WHITESPACE,
+            end=END_OF_STRING,
         )
     )
     transformers = (
@@ -210,14 +227,14 @@ class HumanHasSelectedAirfield(ParsableEvent):
     __slots__ = ['time', 'actor', 'belligerent', 'pos', ]
 
     verbose_name = _("Human has selected airfield")
-    matcher = rx.matcher(
+    matcher = make_matcher(
         "{time}{actor}{s}selected{s}army{s}{belligerent}{pos}"
         .format(
-            time=rx.TIME_GROUP_PREFIX,
-            actor=rx.HUMAN_ACTOR_GROUP,
-            belligerent=rx.BELLIGERENT_GROUP,
-            pos=rx.POS_GROUP_SUFFIX,
-            s=rx.WHITESPACE,
+            time=TIME_GROUP_PREFIX,
+            actor=HUMAN_ACTOR_GROUP,
+            belligerent=BELLIGERENT_GROUP,
+            pos=POS_GROUP_SUFFIX,
+            s=WHITESPACE,
         )
     )
     transformers = (
@@ -238,15 +255,15 @@ class HumanAircraftHasSpawned(ParsableEvent):
     __slots__ = ['time', 'actor', 'weapons', 'fuel', ]
 
     verbose_name = _("Human aircraft has spawned")
-    matcher = rx.matcher(
+    matcher = make_matcher(
         "{time}{actor}{s}loaded{s}weapons{s}\'{weapons}\'{s}fuel{s}{fuel}%{end}"
         .format(
-            time=rx.TIME_GROUP_PREFIX,
-            actor=rx.HUMAN_AIRCRAFT_ACTOR_GROUP,
-            weapons=rx.named_group('weapons', rx.NON_WHITESPACES),
-            fuel=rx.named_group('fuel', "\d{2,3}"),
-            s=rx.WHITESPACE,
-            end=rx.END_OF_STRING,
+            time=TIME_GROUP_PREFIX,
+            actor=HUMAN_AIRCRAFT_ACTOR_GROUP,
+            weapons=named_group('weapons', NON_WHITESPACES),
+            fuel=named_group('fuel', "\d{2,3}"),
+            s=WHITESPACE,
+            end=END_OF_STRING,
         )
     )
     transformers = (
@@ -266,13 +283,13 @@ class HumanHasWentToBriefing(ParsableEvent):
     __slots__ = ['time', 'actor', ]
 
     verbose_name = _("Human has went to briefing")
-    matcher = rx.matcher(
+    matcher = make_matcher(
         "{time}{actor}{s}entered{s}refly{s}menu{end}"
         .format(
-            time=rx.TIME_GROUP_PREFIX,
-            actor=rx.HUMAN_ACTOR_GROUP,
-            s=rx.WHITESPACE,
-            end=rx.END_OF_STRING,
+            time=TIME_GROUP_PREFIX,
+            actor=HUMAN_ACTOR_GROUP,
+            s=WHITESPACE,
+            end=END_OF_STRING,
         )
     )
     transformers = (
@@ -291,14 +308,14 @@ class HumanHasToggledLandingLights(ParsableEvent):
     __slots__ = ['time', 'actor', 'value', 'pos', ]
 
     verbose_name = _("Human has toggled landing lights")
-    matcher = rx.matcher(
+    matcher = make_matcher(
         "{time}{actor}{s}turned{s}landing{s}lights{s}{value}{pos}"
         .format(
-            time=rx.TIME_GROUP_PREFIX,
-            actor=rx.HUMAN_AIRCRAFT_ACTOR_GROUP,
-            value=rx.TOGGLE_VALUE_GROUP,
-            pos=rx.POS_GROUP_SUFFIX,
-            s=rx.WHITESPACE,
+            time=TIME_GROUP_PREFIX,
+            actor=HUMAN_AIRCRAFT_ACTOR_GROUP,
+            value=TOGGLE_VALUE_GROUP,
+            pos=POS_GROUP_SUFFIX,
+            s=WHITESPACE,
         )
     )
     transformers = (
@@ -318,14 +335,14 @@ class HumanHasToggledWingtipSmokes(ParsableEvent):
     __slots__ = ['time', 'actor', 'value', 'pos', ]
 
     verbose_name = _("Human has toggled wingtip smokes")
-    matcher = rx.matcher(
+    matcher = make_matcher(
         "{time}{actor}{s}turned{s}wingtip{s}smokes{s}{value}{pos}"
         .format(
-            time=rx.TIME_GROUP_PREFIX,
-            actor=rx.HUMAN_AIRCRAFT_ACTOR_GROUP,
-            value=rx.TOGGLE_VALUE_GROUP,
-            pos=rx.POS_GROUP_SUFFIX,
-            s=rx.WHITESPACE,
+            time=TIME_GROUP_PREFIX,
+            actor=HUMAN_AIRCRAFT_ACTOR_GROUP,
+            value=TOGGLE_VALUE_GROUP,
+            pos=POS_GROUP_SUFFIX,
+            s=WHITESPACE,
         )
     )
     transformers = (
@@ -345,14 +362,14 @@ class HumanHasChangedSeat(ParsableEvent):
     __slots__ = ['time', 'actor', 'pos', ]
 
     verbose_name = _("Human has changed seat")
-    matcher = rx.matcher(
+    matcher = make_matcher(
         "{time}{actor}{s}seat{s}occupied{s}by{s}{callsign}{pos}"
         .format(
-            time=rx.TIME_GROUP_PREFIX,
-            actor=rx.HUMAN_AIRCRAFT_CREW_MEMBER_ACTOR_GROUP,
-            callsign=rx.CALLSIGN,
-            pos=rx.POS_GROUP_SUFFIX,
-            s=rx.WHITESPACE,
+            time=TIME_GROUP_PREFIX,
+            actor=HUMAN_AIRCRAFT_CREW_MEMBER_ACTOR_GROUP,
+            callsign=CALLSIGN,
+            pos=POS_GROUP_SUFFIX,
+            s=WHITESPACE,
         )
     )
     transformers = (
@@ -372,14 +389,14 @@ class HumanIsTryingToTakeSeat(ParsableEvent):
     __slots__ = ['time', 'actor', 'seat', ]
 
     verbose_name = _("Human is trying to take seat")
-    matcher = rx.matcher(
+    matcher = make_matcher(
         "{time}{actor}{s}is{s}trying{s}to{s}occupy{s}seat{s}{seat}{end}"
         .format(
-            time=rx.TIME_GROUP_PREFIX,
-            actor=rx.HUMAN_ACTOR_GROUP,
-            seat=rx.AI_AIRCRAFT_CREW_MEMBER_ACTOR_GROUP,
-            s=rx.WHITESPACE,
-            end=rx.END_OF_STRING,
+            time=TIME_GROUP_PREFIX,
+            actor=HUMAN_ACTOR_GROUP,
+            seat=AI_AIRCRAFT_CREW_MEMBER_ACTOR_GROUP,
+            s=WHITESPACE,
+            end=END_OF_STRING,
         )
     )
     transformers = (
@@ -399,13 +416,13 @@ class HumanAircraftHasTookOff(ParsableEvent):
     __slots__ = ['time', 'actor', 'pos', ]
 
     verbose_name = _("Human aircraft has took off")
-    matcher = rx.matcher(
+    matcher = make_matcher(
         "{time}{actor}{s}in{s}flight{pos}"
         .format(
-            time=rx.TIME_GROUP_PREFIX,
-            actor=rx.HUMAN_AIRCRAFT_ACTOR_GROUP,
-            pos=rx.POS_GROUP_SUFFIX,
-            s=rx.WHITESPACE,
+            time=TIME_GROUP_PREFIX,
+            actor=HUMAN_AIRCRAFT_ACTOR_GROUP,
+            pos=POS_GROUP_SUFFIX,
+            s=WHITESPACE,
         )
     )
     transformers = (
@@ -425,13 +442,13 @@ class HumanAircraftHasLanded(ParsableEvent):
     __slots__ = ['time', 'actor', 'pos', ]
 
     verbose_name = _("Human aircraft has landed")
-    matcher = rx.matcher(
+    matcher = make_matcher(
         "{time}{actor}{s}landed{pos}"
         .format(
-            time=rx.TIME_GROUP_PREFIX,
-            actor=rx.HUMAN_AIRCRAFT_ACTOR_GROUP,
-            pos=rx.POS_GROUP_SUFFIX,
-            s=rx.WHITESPACE,
+            time=TIME_GROUP_PREFIX,
+            actor=HUMAN_AIRCRAFT_ACTOR_GROUP,
+            pos=POS_GROUP_SUFFIX,
+            s=WHITESPACE,
         )
     )
     transformers = (
@@ -451,13 +468,13 @@ class HumanAircraftHasCrashed(ParsableEvent):
     __slots__ = ['time', 'actor', 'pos', ]
 
     verbose_name = _("Human aircraft has crashed")
-    matcher = rx.matcher(
+    matcher = make_matcher(
         "{time}{actor}{s}crashed{pos}"
         .format(
-            time=rx.TIME_GROUP_PREFIX,
-            actor=rx.HUMAN_AIRCRAFT_ACTOR_GROUP,
-            pos=rx.POS_GROUP_SUFFIX,
-            s=rx.WHITESPACE,
+            time=TIME_GROUP_PREFIX,
+            actor=HUMAN_AIRCRAFT_ACTOR_GROUP,
+            pos=POS_GROUP_SUFFIX,
+            s=WHITESPACE,
         )
     )
     transformers = (
@@ -478,14 +495,14 @@ class HumanHasDestroyedOwnAircraft(ParsableEvent):
     __slots__ = ['time', 'actor', 'pos', ]
 
     verbose_name = _("Human has destroyed own aircraft")
-    matcher = rx.matcher(
+    matcher = make_matcher(
         "{time}{actor}{s}shot{s}down{s}by{s}{himself}{pos}"
         .format(
-            time=rx.TIME_GROUP_PREFIX,
-            actor=rx.HUMAN_AIRCRAFT_ACTOR_GROUP,
-            himself=rx.HIMSELF,
-            pos=rx.POS_GROUP_SUFFIX,
-            s=rx.WHITESPACE,
+            time=TIME_GROUP_PREFIX,
+            actor=HUMAN_AIRCRAFT_ACTOR_GROUP,
+            himself=HIMSELF,
+            pos=POS_GROUP_SUFFIX,
+            s=WHITESPACE,
         )
     )
     transformers = (
@@ -506,14 +523,14 @@ class HumanHasDamagedOwnAircraft(ParsableEvent):
     __slots__ = ['time', 'actor', 'pos', ]
 
     verbose_name = _("Human has damaged own aircraft")
-    matcher = rx.matcher(
+    matcher = make_matcher(
         "{time}{actor}{s}damaged{s}by{s}{himself}{pos}"
         .format(
-            time=rx.TIME_GROUP_PREFIX,
-            actor=rx.HUMAN_AIRCRAFT_ACTOR_GROUP,
-            himself=rx.HIMSELF,
-            pos=rx.POS_GROUP_SUFFIX,
-            s=rx.WHITESPACE,
+            time=TIME_GROUP_PREFIX,
+            actor=HUMAN_AIRCRAFT_ACTOR_GROUP,
+            himself=HIMSELF,
+            pos=POS_GROUP_SUFFIX,
+            s=WHITESPACE,
         )
     )
     transformers = (
@@ -533,13 +550,13 @@ class HumanAircraftWasDamagedOnGround(ParsableEvent):
     __slots__ = ['time', 'actor', 'pos', ]
 
     verbose_name = _("Human aircraft was damaged on the ground")
-    matcher = rx.matcher(
+    matcher = make_matcher(
         "{time}{actor}{s}damaged{s}on{s}the{s}ground{pos}"
         .format(
-            time=rx.TIME_GROUP_PREFIX,
-            actor=rx.HUMAN_AIRCRAFT_ACTOR_GROUP,
-            pos=rx.POS_GROUP_SUFFIX,
-            s=rx.WHITESPACE,
+            time=TIME_GROUP_PREFIX,
+            actor=HUMAN_AIRCRAFT_ACTOR_GROUP,
+            pos=POS_GROUP_SUFFIX,
+            s=WHITESPACE,
         )
     )
     transformers = (
@@ -559,14 +576,14 @@ class HumanAircraftWasDamagedByHumanAircraft(ParsableEvent):
     __slots__ = ['time', 'actor', 'attacker', 'pos', ]
 
     verbose_name = _("Human aircraft was damaged by human aircraft")
-    matcher = rx.matcher(
+    matcher = make_matcher(
         "{time}{actor}{s}damaged{s}by{s}{attacker}{pos}"
         .format(
-            time=rx.TIME_GROUP_PREFIX,
-            actor=rx.HUMAN_AIRCRAFT_ACTOR_GROUP,
-            attacker=rx.HUMAN_AIRCRAFT_ATTACKER_GROUP,
-            pos=rx.POS_GROUP_SUFFIX,
-            s=rx.WHITESPACE,
+            time=TIME_GROUP_PREFIX,
+            actor=HUMAN_AIRCRAFT_ACTOR_GROUP,
+            attacker=HUMAN_AIRCRAFT_ATTACKER_GROUP,
+            pos=POS_GROUP_SUFFIX,
+            s=WHITESPACE,
         )
     )
     transformers = (
@@ -587,14 +604,14 @@ class HumanAircraftWasDamagedByStationaryUnit(ParsableEvent):
     __slots__ = ['time', 'actor', 'attacker', 'pos', ]
 
     verbose_name = _("Human aircraft was damaged by stationary unit")
-    matcher = rx.matcher(
+    matcher = make_matcher(
         "{time}{actor}{s}damaged{s}by{s}{attacker}{pos}"
         .format(
-            time=rx.TIME_GROUP_PREFIX,
-            actor=rx.HUMAN_AIRCRAFT_ACTOR_GROUP,
-            attacker=rx.STATIONARY_UNIT_ATTACKER_GROUP,
-            pos=rx.POS_GROUP_SUFFIX,
-            s=rx.WHITESPACE,
+            time=TIME_GROUP_PREFIX,
+            actor=HUMAN_AIRCRAFT_ACTOR_GROUP,
+            attacker=STATIONARY_UNIT_ATTACKER_GROUP,
+            pos=POS_GROUP_SUFFIX,
+            s=WHITESPACE,
         )
     )
     transformers = (
@@ -615,14 +632,14 @@ class HumanAircraftWasDamagedByMovingUnitMember(ParsableEvent):
     __slots__ = ['time', 'actor', 'attacker', 'pos', ]
 
     verbose_name = _("Human aircraft was damaged by moving unit member")
-    matcher = rx.matcher(
+    matcher = make_matcher(
         "{time}{actor}{s}damaged{s}by{s}{attacker}{pos}"
         .format(
-            time=rx.TIME_GROUP_PREFIX,
-            actor=rx.HUMAN_AIRCRAFT_ACTOR_GROUP,
-            attacker=rx.MOVING_UNIT_MEMBER_ATTACKER_GROUP,
-            pos=rx.POS_GROUP_SUFFIX,
-            s=rx.WHITESPACE,
+            time=TIME_GROUP_PREFIX,
+            actor=HUMAN_AIRCRAFT_ACTOR_GROUP,
+            attacker=MOVING_UNIT_MEMBER_ATTACKER_GROUP,
+            pos=POS_GROUP_SUFFIX,
+            s=WHITESPACE,
         )
     )
     transformers = (
@@ -643,14 +660,14 @@ class HumanAircraftWasDamagedByMovingUnit(ParsableEvent):
     __slots__ = ['time', 'actor', 'attacker', 'pos', ]
 
     verbose_name = _("Human aircraft was damaged by moving unit")
-    matcher = rx.matcher(
+    matcher = make_matcher(
         "{time}{actor}{s}damaged{s}by{s}{attacker}{pos}"
         .format(
-            time=rx.TIME_GROUP_PREFIX,
-            actor=rx.HUMAN_AIRCRAFT_ACTOR_GROUP,
-            attacker=rx.MOVING_UNIT_ATTACKER_GROUP,
-            pos=rx.POS_GROUP_SUFFIX,
-            s=rx.WHITESPACE,
+            time=TIME_GROUP_PREFIX,
+            actor=HUMAN_AIRCRAFT_ACTOR_GROUP,
+            attacker=MOVING_UNIT_ATTACKER_GROUP,
+            pos=POS_GROUP_SUFFIX,
+            s=WHITESPACE,
         )
     )
     transformers = (
@@ -671,14 +688,14 @@ class HumanAircraftWasDamagedByAIAircraft(ParsableEvent):
     __slots__ = ['time', 'actor', 'attacker', 'pos', ]
 
     verbose_name = _("Human aircraft was damaged by AI aircraft")
-    matcher = rx.matcher(
+    matcher = make_matcher(
         "{time}{actor}{s}damaged{s}by{s}{attacker}{pos}"
         .format(
-            time=rx.TIME_GROUP_PREFIX,
-            actor=rx.HUMAN_AIRCRAFT_ACTOR_GROUP,
-            attacker=rx.AI_AIRCRAFT_ATTACKER_GROUP,
-            pos=rx.POS_GROUP_SUFFIX,
-            s=rx.WHITESPACE,
+            time=TIME_GROUP_PREFIX,
+            actor=HUMAN_AIRCRAFT_ACTOR_GROUP,
+            attacker=AI_AIRCRAFT_ATTACKER_GROUP,
+            pos=POS_GROUP_SUFFIX,
+            s=WHITESPACE,
         )
     )
     transformers = (
@@ -699,14 +716,14 @@ class HumanAircraftWasShotDownByHumanAircraft(ParsableEvent):
     __slots__ = ['time', 'actor', 'attacker', 'pos', ]
 
     verbose_name = _("Human aircraft was shot down by human aircraft")
-    matcher = rx.matcher(
+    matcher = make_matcher(
         "{time}{actor}{s}shot{s}down{s}by{s}{attacker}{pos}"
         .format(
-            time=rx.TIME_GROUP_PREFIX,
-            actor=rx.HUMAN_AIRCRAFT_ACTOR_GROUP,
-            attacker=rx.HUMAN_AIRCRAFT_ATTACKER_GROUP,
-            pos=rx.POS_GROUP_SUFFIX,
-            s=rx.WHITESPACE,
+            time=TIME_GROUP_PREFIX,
+            actor=HUMAN_AIRCRAFT_ACTOR_GROUP,
+            attacker=HUMAN_AIRCRAFT_ATTACKER_GROUP,
+            pos=POS_GROUP_SUFFIX,
+            s=WHITESPACE,
         )
     )
     transformers = (
@@ -727,14 +744,14 @@ class HumanAircraftWasShotDownByStationaryUnit(ParsableEvent):
     __slots__ = ['time', 'actor', 'attacker', 'pos', ]
 
     verbose_name = _("Human aircraft was shot down by stationary unit")
-    matcher = rx.matcher(
+    matcher = make_matcher(
         "{time}{actor}{s}shot{s}down{s}by{s}{attacker}{pos}"
         .format(
-            time=rx.TIME_GROUP_PREFIX,
-            actor=rx.HUMAN_AIRCRAFT_ACTOR_GROUP,
-            attacker=rx.STATIONARY_UNIT_ATTACKER_GROUP,
-            pos=rx.POS_GROUP_SUFFIX,
-            s=rx.WHITESPACE,
+            time=TIME_GROUP_PREFIX,
+            actor=HUMAN_AIRCRAFT_ACTOR_GROUP,
+            attacker=STATIONARY_UNIT_ATTACKER_GROUP,
+            pos=POS_GROUP_SUFFIX,
+            s=WHITESPACE,
         )
     )
     transformers = (
@@ -755,14 +772,14 @@ class HumanAircraftWasShotDownByMovingUnitMember(ParsableEvent):
     __slots__ = ['time', 'actor', 'attacker', 'pos', ]
 
     verbose_name = _("Human aircraft was shot down by moving unit member")
-    matcher = rx.matcher(
+    matcher = make_matcher(
         "{time}{actor}{s}shot{s}down{s}by{s}{attacker}{pos}"
         .format(
-            time=rx.TIME_GROUP_PREFIX,
-            actor=rx.HUMAN_AIRCRAFT_ACTOR_GROUP,
-            attacker=rx.MOVING_UNIT_MEMBER_ATTACKER_GROUP,
-            pos=rx.POS_GROUP_SUFFIX,
-            s=rx.WHITESPACE,
+            time=TIME_GROUP_PREFIX,
+            actor=HUMAN_AIRCRAFT_ACTOR_GROUP,
+            attacker=MOVING_UNIT_MEMBER_ATTACKER_GROUP,
+            pos=POS_GROUP_SUFFIX,
+            s=WHITESPACE,
         )
     )
     transformers = (
@@ -783,14 +800,14 @@ class HumanAircraftWasShotDownByMovingUnit(ParsableEvent):
     __slots__ = ['time', 'actor', 'attacker', 'pos', ]
 
     verbose_name = _("Human aircraft was shot down by moving unit")
-    matcher = rx.matcher(
+    matcher = make_matcher(
         "{time}{actor}{s}shot{s}down{s}by{s}{attacker}{pos}"
         .format(
-            time=rx.TIME_GROUP_PREFIX,
-            actor=rx.HUMAN_AIRCRAFT_ACTOR_GROUP,
-            attacker=rx.MOVING_UNIT_ATTACKER_GROUP,
-            pos=rx.POS_GROUP_SUFFIX,
-            s=rx.WHITESPACE,
+            time=TIME_GROUP_PREFIX,
+            actor=HUMAN_AIRCRAFT_ACTOR_GROUP,
+            attacker=MOVING_UNIT_ATTACKER_GROUP,
+            pos=POS_GROUP_SUFFIX,
+            s=WHITESPACE,
         )
     )
     transformers = (
@@ -811,14 +828,14 @@ class HumanAircraftWasShotDownByAIAircraft(ParsableEvent):
     __slots__ = ['time', 'actor', 'attacker', 'pos', ]
 
     verbose_name = _("Human aircraft was shot down by AI aircraft")
-    matcher = rx.matcher(
+    matcher = make_matcher(
         "{time}{actor}{s}shot{s}down{s}by{s}{attacker}{pos}"
         .format(
-            time=rx.TIME_GROUP_PREFIX,
-            actor=rx.HUMAN_AIRCRAFT_ACTOR_GROUP,
-            attacker=rx.AI_AIRCRAFT_ATTACKER_GROUP,
-            pos=rx.POS_GROUP_SUFFIX,
-            s=rx.WHITESPACE,
+            time=TIME_GROUP_PREFIX,
+            actor=HUMAN_AIRCRAFT_ACTOR_GROUP,
+            attacker=AI_AIRCRAFT_ATTACKER_GROUP,
+            pos=POS_GROUP_SUFFIX,
+            s=WHITESPACE,
         )
     )
     transformers = (
@@ -839,15 +856,15 @@ class HumanAircraftWasShotDownByHumanAircraftAndHumanAircraft(ParsableEvent):
     __slots__ = ['time', 'actor', 'attacker', 'assistant', 'pos', ]
 
     verbose_name = _("Human aircraft was shot down by human aircraft and human aircraft")
-    matcher = rx.matcher(
+    matcher = make_matcher(
         "{time}{actor}{s}shot{s}down{s}by{s}{attacker}{s}and{s}{assistant}{pos}"
         .format(
-            time=rx.TIME_GROUP_PREFIX,
-            actor=rx.HUMAN_AIRCRAFT_ACTOR_GROUP,
-            attacker=rx.HUMAN_AIRCRAFT_ATTACKER_GROUP,
-            assistant=rx.HUMAN_AIRCRAFT_ASSISTANT_GROUP,
-            pos=rx.POS_GROUP_SUFFIX,
-            s=rx.WHITESPACE,
+            time=TIME_GROUP_PREFIX,
+            actor=HUMAN_AIRCRAFT_ACTOR_GROUP,
+            attacker=HUMAN_AIRCRAFT_ATTACKER_GROUP,
+            assistant=HUMAN_AIRCRAFT_ASSISTANT_GROUP,
+            pos=POS_GROUP_SUFFIX,
+            s=WHITESPACE,
         )
     )
     transformers = (
@@ -869,15 +886,15 @@ class HumanAircraftWasShotDownByHumanAircraftAndAIAircraft(ParsableEvent):
     __slots__ = ['time', 'actor', 'attacker', 'assistant', 'pos', ]
 
     verbose_name = _("Human aircraft was shot down by human aircraft and AI aircraft")
-    matcher = rx.matcher(
+    matcher = make_matcher(
         "{time}{actor}{s}shot{s}down{s}by{s}{attacker}{s}and{s}{assistant}{pos}"
         .format(
-            time=rx.TIME_GROUP_PREFIX,
-            actor=rx.HUMAN_AIRCRAFT_ACTOR_GROUP,
-            attacker=rx.HUMAN_AIRCRAFT_ATTACKER_GROUP,
-            assistant=rx.AI_AIRCRAFT_ASSISTANT_GROUP,
-            pos=rx.POS_GROUP_SUFFIX,
-            s=rx.WHITESPACE,
+            time=TIME_GROUP_PREFIX,
+            actor=HUMAN_AIRCRAFT_ACTOR_GROUP,
+            attacker=HUMAN_AIRCRAFT_ATTACKER_GROUP,
+            assistant=AI_AIRCRAFT_ASSISTANT_GROUP,
+            pos=POS_GROUP_SUFFIX,
+            s=WHITESPACE,
         )
     )
     transformers = (
@@ -899,15 +916,15 @@ class HumanAircraftWasShotDownByAIAircraftAndHumanAircraft(ParsableEvent):
     __slots__ = ['time', 'actor', 'attacker', 'assistant', 'pos', ]
 
     verbose_name = _("Human aircraft was shot down by AI aircraft and human aircraft")
-    matcher = rx.matcher(
+    matcher = make_matcher(
         "{time}{actor}{s}shot{s}down{s}by{s}{attacker}{s}and{s}{assistant}{pos}"
         .format(
-            time=rx.TIME_GROUP_PREFIX,
-            actor=rx.HUMAN_AIRCRAFT_ACTOR_GROUP,
-            attacker=rx.AI_AIRCRAFT_ATTACKER_GROUP,
-            assistant=rx.HUMAN_AIRCRAFT_ASSISTANT_GROUP,
-            pos=rx.POS_GROUP_SUFFIX,
-            s=rx.WHITESPACE,
+            time=TIME_GROUP_PREFIX,
+            actor=HUMAN_AIRCRAFT_ACTOR_GROUP,
+            attacker=AI_AIRCRAFT_ATTACKER_GROUP,
+            assistant=HUMAN_AIRCRAFT_ASSISTANT_GROUP,
+            pos=POS_GROUP_SUFFIX,
+            s=WHITESPACE,
         )
     )
     transformers = (
@@ -929,15 +946,15 @@ class HumanAircraftWasShotDownByAIAircraftAndAIAircraft(ParsableEvent):
     __slots__ = ['time', 'actor', 'attacker', 'assistant', 'pos', ]
 
     verbose_name = _("Human aircraft was shot down by AI aircraft and AI aircraft")
-    matcher = rx.matcher(
+    matcher = make_matcher(
         "{time}{actor}{s}shot{s}down{s}by{s}{attacker}{s}and{s}{assistant}{pos}"
         .format(
-            time=rx.TIME_GROUP_PREFIX,
-            actor=rx.HUMAN_AIRCRAFT_ACTOR_GROUP,
-            attacker=rx.AI_AIRCRAFT_ATTACKER_GROUP,
-            assistant=rx.AI_AIRCRAFT_ASSISTANT_GROUP,
-            pos=rx.POS_GROUP_SUFFIX,
-            s=rx.WHITESPACE,
+            time=TIME_GROUP_PREFIX,
+            actor=HUMAN_AIRCRAFT_ACTOR_GROUP,
+            attacker=AI_AIRCRAFT_ATTACKER_GROUP,
+            assistant=AI_AIRCRAFT_ASSISTANT_GROUP,
+            pos=POS_GROUP_SUFFIX,
+            s=WHITESPACE,
         )
     )
     transformers = (
@@ -959,13 +976,13 @@ class HumanAircraftCrewMemberHasBailedOut(ParsableEvent):
     __slots__ = ['time', 'actor', 'pos', ]
 
     verbose_name = _("Human aircraft crew member has bailed out")
-    matcher = rx.matcher(
+    matcher = make_matcher(
         "{time}{actor}{s}bailed{s}out{pos}"
         .format(
-            time=rx.TIME_GROUP_PREFIX,
-            actor=rx.HUMAN_AIRCRAFT_CREW_MEMBER_ACTOR_GROUP,
-            pos=rx.POS_GROUP_SUFFIX,
-            s=rx.WHITESPACE,
+            time=TIME_GROUP_PREFIX,
+            actor=HUMAN_AIRCRAFT_CREW_MEMBER_ACTOR_GROUP,
+            pos=POS_GROUP_SUFFIX,
+            s=WHITESPACE,
         )
     )
     transformers = (
@@ -985,13 +1002,13 @@ class HumanAircraftCrewMemberHasLanded(ParsableEvent):
     __slots__ = ['time', 'actor', 'pos', ]
 
     verbose_name = _("Human aircraft crew member has landed")
-    matcher = rx.matcher(
+    matcher = make_matcher(
         "{time}{actor}{s}successfully{s}bailed{s}out{pos}"
         .format(
-            time=rx.TIME_GROUP_PREFIX,
-            actor=rx.HUMAN_AIRCRAFT_CREW_MEMBER_ACTOR_GROUP,
-            pos=rx.POS_GROUP_SUFFIX,
-            s=rx.WHITESPACE,
+            time=TIME_GROUP_PREFIX,
+            actor=HUMAN_AIRCRAFT_CREW_MEMBER_ACTOR_GROUP,
+            pos=POS_GROUP_SUFFIX,
+            s=WHITESPACE,
         )
     )
     transformers = (
@@ -1011,13 +1028,13 @@ class HumanAircraftCrewMemberWasCaptured(ParsableEvent):
     __slots__ = ['time', 'actor', 'pos', ]
 
     verbose_name = _("Human aircraft crew member was captured")
-    matcher = rx.matcher(
+    matcher = make_matcher(
         "{time}{actor}{s}was{s}captured{pos}"
         .format(
-            time=rx.TIME_GROUP_PREFIX,
-            actor=rx.HUMAN_AIRCRAFT_CREW_MEMBER_ACTOR_GROUP,
-            pos=rx.POS_GROUP_SUFFIX,
-            s=rx.WHITESPACE,
+            time=TIME_GROUP_PREFIX,
+            actor=HUMAN_AIRCRAFT_CREW_MEMBER_ACTOR_GROUP,
+            pos=POS_GROUP_SUFFIX,
+            s=WHITESPACE,
         )
     )
     transformers = (
@@ -1037,13 +1054,13 @@ class HumanAircraftCrewMemberWasWounded(ParsableEvent):
     __slots__ = ['time', 'actor', 'pos', ]
 
     verbose_name = _("Human aircraft crew member was wounded")
-    matcher = rx.matcher(
+    matcher = make_matcher(
         "{time}{actor}{s}was{s}wounded{pos}"
         .format(
-            time=rx.TIME_GROUP_PREFIX,
-            actor=rx.HUMAN_AIRCRAFT_CREW_MEMBER_ACTOR_GROUP,
-            pos=rx.POS_GROUP_SUFFIX,
-            s=rx.WHITESPACE,
+            time=TIME_GROUP_PREFIX,
+            actor=HUMAN_AIRCRAFT_CREW_MEMBER_ACTOR_GROUP,
+            pos=POS_GROUP_SUFFIX,
+            s=WHITESPACE,
         )
     )
     transformers = (
@@ -1063,13 +1080,13 @@ class HumanAircraftCrewMemberWasHeavilyWounded(ParsableEvent):
     __slots__ = ['time', 'actor', 'pos', ]
 
     verbose_name = _("Human aircraft crew member was heavily wounded")
-    matcher = rx.matcher(
+    matcher = make_matcher(
         "{time}{actor}{s}was{s}heavily{s}wounded{pos}"
         .format(
-            time=rx.TIME_GROUP_PREFIX,
-            actor=rx.HUMAN_AIRCRAFT_CREW_MEMBER_ACTOR_GROUP,
-            pos=rx.POS_GROUP_SUFFIX,
-            s=rx.WHITESPACE,
+            time=TIME_GROUP_PREFIX,
+            actor=HUMAN_AIRCRAFT_CREW_MEMBER_ACTOR_GROUP,
+            pos=POS_GROUP_SUFFIX,
+            s=WHITESPACE,
         )
     )
     transformers = (
@@ -1089,13 +1106,13 @@ class HumanAircraftCrewMemberWasKilled(ParsableEvent):
     __slots__ = ['time', 'actor', 'pos', ]
 
     verbose_name = _("Human aircraft crew member was killed")
-    matcher = rx.matcher(
+    matcher = make_matcher(
         "{time}{actor}{s}was{s}killed{pos}"
         .format(
-            time=rx.TIME_GROUP_PREFIX,
-            actor=rx.HUMAN_AIRCRAFT_CREW_MEMBER_ACTOR_GROUP,
-            pos=rx.POS_GROUP_SUFFIX,
-            s=rx.WHITESPACE,
+            time=TIME_GROUP_PREFIX,
+            actor=HUMAN_AIRCRAFT_CREW_MEMBER_ACTOR_GROUP,
+            pos=POS_GROUP_SUFFIX,
+            s=WHITESPACE,
         )
     )
     transformers = (
@@ -1115,14 +1132,14 @@ class HumanAircraftCrewMemberWasKilledByHumanAircraft(ParsableEvent):
     __slots__ = ['time', 'actor', 'attacker', 'pos', ]
 
     verbose_name = _("Human aircraft crew member was killed by human aircraft")
-    matcher = rx.matcher(
+    matcher = make_matcher(
         "{time}{actor}{s}was{s}killed{s}by{s}{attacker}{pos}"
         .format(
-            time=rx.TIME_GROUP_PREFIX,
-            actor=rx.HUMAN_AIRCRAFT_CREW_MEMBER_ACTOR_GROUP,
-            attacker=rx.HUMAN_AIRCRAFT_ATTACKER_GROUP,
-            pos=rx.POS_GROUP_SUFFIX,
-            s=rx.WHITESPACE,
+            time=TIME_GROUP_PREFIX,
+            actor=HUMAN_AIRCRAFT_CREW_MEMBER_ACTOR_GROUP,
+            attacker=HUMAN_AIRCRAFT_ATTACKER_GROUP,
+            pos=POS_GROUP_SUFFIX,
+            s=WHITESPACE,
         )
     )
     transformers = (
@@ -1143,14 +1160,14 @@ class HumanAircraftCrewMemberWasKilledByStationaryUnit(ParsableEvent):
     __slots__ = ['time', 'actor', 'attacker', 'pos', ]
 
     verbose_name = _("Human aircraft crew member was killed by stationary unit")
-    matcher = rx.matcher(
+    matcher = make_matcher(
         "{time}{actor}{s}was{s}killed{s}by{s}{attacker}{pos}"
         .format(
-            time=rx.TIME_GROUP_PREFIX,
-            actor=rx.HUMAN_AIRCRAFT_CREW_MEMBER_ACTOR_GROUP,
-            attacker=rx.STATIONARY_UNIT_ATTACKER_GROUP,
-            pos=rx.POS_GROUP_SUFFIX,
-            s=rx.WHITESPACE,
+            time=TIME_GROUP_PREFIX,
+            actor=HUMAN_AIRCRAFT_CREW_MEMBER_ACTOR_GROUP,
+            attacker=STATIONARY_UNIT_ATTACKER_GROUP,
+            pos=POS_GROUP_SUFFIX,
+            s=WHITESPACE,
         )
     )
     transformers = (
@@ -1171,14 +1188,14 @@ class HumanAircraftCrewMemberWasKilledByMovingUnitMember(ParsableEvent):
     __slots__ = ['time', 'actor', 'attacker', 'pos', ]
 
     verbose_name = _("Human aircraft crew member was killed by moving unit member")
-    matcher = rx.matcher(
+    matcher = make_matcher(
         "{time}{actor}{s}was{s}killed{s}by{s}{attacker}{pos}"
         .format(
-            time=rx.TIME_GROUP_PREFIX,
-            actor=rx.HUMAN_AIRCRAFT_CREW_MEMBER_ACTOR_GROUP,
-            attacker=rx.MOVING_UNIT_MEMBER_ATTACKER_GROUP,
-            pos=rx.POS_GROUP_SUFFIX,
-            s=rx.WHITESPACE,
+            time=TIME_GROUP_PREFIX,
+            actor=HUMAN_AIRCRAFT_CREW_MEMBER_ACTOR_GROUP,
+            attacker=MOVING_UNIT_MEMBER_ATTACKER_GROUP,
+            pos=POS_GROUP_SUFFIX,
+            s=WHITESPACE,
         )
     )
     transformers = (
@@ -1199,14 +1216,14 @@ class HumanAircraftCrewMemberWasKilledByMovingUnit(ParsableEvent):
     __slots__ = ['time', 'actor', 'attacker', 'pos', ]
 
     verbose_name = _("Human aircraft crew member was killed by moving unit")
-    matcher = rx.matcher(
+    matcher = make_matcher(
         "{time}{actor}{s}was{s}killed{s}by{s}{attacker}{pos}"
         .format(
-            time=rx.TIME_GROUP_PREFIX,
-            actor=rx.HUMAN_AIRCRAFT_CREW_MEMBER_ACTOR_GROUP,
-            attacker=rx.MOVING_UNIT_ATTACKER_GROUP,
-            pos=rx.POS_GROUP_SUFFIX,
-            s=rx.WHITESPACE,
+            time=TIME_GROUP_PREFIX,
+            actor=HUMAN_AIRCRAFT_CREW_MEMBER_ACTOR_GROUP,
+            attacker=MOVING_UNIT_ATTACKER_GROUP,
+            pos=POS_GROUP_SUFFIX,
+            s=WHITESPACE,
         )
     )
     transformers = (
@@ -1227,14 +1244,14 @@ class HumanAircraftCrewMemberWasKilledByAIAircraft(ParsableEvent):
     __slots__ = ['time', 'actor', 'attacker', 'pos', ]
 
     verbose_name = _("Human aircraft crew member was killed by AI aircraft")
-    matcher = rx.matcher(
+    matcher = make_matcher(
         "{time}{actor}{s}was{s}killed{s}by{s}{attacker}{pos}"
         .format(
-            time=rx.TIME_GROUP_PREFIX,
-            actor=rx.HUMAN_AIRCRAFT_CREW_MEMBER_ACTOR_GROUP,
-            attacker=rx.AI_AIRCRAFT_ATTACKER_GROUP,
-            pos=rx.POS_GROUP_SUFFIX,
-            s=rx.WHITESPACE,
+            time=TIME_GROUP_PREFIX,
+            actor=HUMAN_AIRCRAFT_CREW_MEMBER_ACTOR_GROUP,
+            attacker=AI_AIRCRAFT_ATTACKER_GROUP,
+            pos=POS_GROUP_SUFFIX,
+            s=WHITESPACE,
         )
     )
     transformers = (
@@ -1255,14 +1272,14 @@ class HumanAircraftCrewMemberWasKilledInParachuteByStationaryUnit(ParsableEvent)
     __slots__ = ['time', 'actor', 'attacker', 'pos', ]
 
     verbose_name = _("Human aircraft crew member was killed in parachute by stationary unit")
-    matcher = rx.matcher(
+    matcher = make_matcher(
         "{time}{actor}{s}was{s}killed{s}in{s}his{s}chute{s}by{s}{attacker}{pos}"
         .format(
-            time=rx.TIME_GROUP_PREFIX,
-            actor=rx.HUMAN_AIRCRAFT_CREW_MEMBER_ACTOR_GROUP,
-            attacker=rx.STATIONARY_UNIT_ATTACKER_GROUP,
-            pos=rx.POS_GROUP_SUFFIX,
-            s=rx.WHITESPACE,
+            time=TIME_GROUP_PREFIX,
+            actor=HUMAN_AIRCRAFT_CREW_MEMBER_ACTOR_GROUP,
+            attacker=STATIONARY_UNIT_ATTACKER_GROUP,
+            pos=POS_GROUP_SUFFIX,
+            s=WHITESPACE,
         )
     )
     transformers = (
@@ -1283,14 +1300,14 @@ class HumanAircraftCrewMemberWasKilledInParachuteByMovingUnitMember(ParsableEven
     __slots__ = ['time', 'actor', 'attacker', 'pos', ]
 
     verbose_name = _("Human aircraft crew member was killed in parachute by moving unit member")
-    matcher = rx.matcher(
+    matcher = make_matcher(
         "{time}{actor}{s}was{s}killed{s}in{s}his{s}chute{s}by{s}{attacker}{pos}"
         .format(
-            time=rx.TIME_GROUP_PREFIX,
-            actor=rx.HUMAN_AIRCRAFT_CREW_MEMBER_ACTOR_GROUP,
-            attacker=rx.MOVING_UNIT_MEMBER_ATTACKER_GROUP,
-            pos=rx.POS_GROUP_SUFFIX,
-            s=rx.WHITESPACE,
+            time=TIME_GROUP_PREFIX,
+            actor=HUMAN_AIRCRAFT_CREW_MEMBER_ACTOR_GROUP,
+            attacker=MOVING_UNIT_MEMBER_ATTACKER_GROUP,
+            pos=POS_GROUP_SUFFIX,
+            s=WHITESPACE,
         )
     )
     transformers = (
@@ -1311,14 +1328,14 @@ class HumanAircraftCrewMemberWasKilledInParachuteByMovingUnit(ParsableEvent):
     __slots__ = ['time', 'actor', 'attacker', 'pos', ]
 
     verbose_name = _("Human aircraft crew member was killed in parachute by moving unit")
-    matcher = rx.matcher(
+    matcher = make_matcher(
         "{time}{actor}{s}was{s}killed{s}in{s}his{s}chute{s}by{s}{attacker}{pos}"
         .format(
-            time=rx.TIME_GROUP_PREFIX,
-            actor=rx.HUMAN_AIRCRAFT_CREW_MEMBER_ACTOR_GROUP,
-            attacker=rx.MOVING_UNIT_ATTACKER_GROUP,
-            pos=rx.POS_GROUP_SUFFIX,
-            s=rx.WHITESPACE,
+            time=TIME_GROUP_PREFIX,
+            actor=HUMAN_AIRCRAFT_CREW_MEMBER_ACTOR_GROUP,
+            attacker=MOVING_UNIT_ATTACKER_GROUP,
+            pos=POS_GROUP_SUFFIX,
+            s=WHITESPACE,
         )
     )
     transformers = (
@@ -1339,14 +1356,14 @@ class HumanAircraftCrewMemberWasKilledInParachuteByHumanAircraft(ParsableEvent):
     __slots__ = ['time', 'actor', 'attacker', 'pos', ]
 
     verbose_name = _("Human aircraft crew member was killed in parachute by human aircraft")
-    matcher = rx.matcher(
+    matcher = make_matcher(
         "{time}{actor}{s}was{s}killed{s}in{s}his{s}chute{s}by{s}{attacker}{pos}"
         .format(
-            time=rx.TIME_GROUP_PREFIX,
-            actor=rx.HUMAN_AIRCRAFT_CREW_MEMBER_ACTOR_GROUP,
-            attacker=rx.HUMAN_AIRCRAFT_ATTACKER_GROUP,
-            pos=rx.POS_GROUP_SUFFIX,
-            s=rx.WHITESPACE,
+            time=TIME_GROUP_PREFIX,
+            actor=HUMAN_AIRCRAFT_CREW_MEMBER_ACTOR_GROUP,
+            attacker=HUMAN_AIRCRAFT_ATTACKER_GROUP,
+            pos=POS_GROUP_SUFFIX,
+            s=WHITESPACE,
         )
     )
     transformers = (
@@ -1367,14 +1384,14 @@ class HumanAircraftCrewMemberWasKilledInParachuteByAIAircraft(ParsableEvent):
     __slots__ = ['time', 'actor', 'attacker', 'pos', ]
 
     verbose_name = _("Human aircraft crew member was killed in parachute by AI aircraft")
-    matcher = rx.matcher(
+    matcher = make_matcher(
         "{time}{actor}{s}was{s}killed{s}in{s}his{s}chute{s}by{s}{attacker}{pos}"
         .format(
-            time=rx.TIME_GROUP_PREFIX,
-            actor=rx.HUMAN_AIRCRAFT_CREW_MEMBER_ACTOR_GROUP,
-            attacker=rx.AI_AIRCRAFT_ATTACKER_GROUP,
-            pos=rx.POS_GROUP_SUFFIX,
-            s=rx.WHITESPACE,
+            time=TIME_GROUP_PREFIX,
+            actor=HUMAN_AIRCRAFT_CREW_MEMBER_ACTOR_GROUP,
+            attacker=AI_AIRCRAFT_ATTACKER_GROUP,
+            pos=POS_GROUP_SUFFIX,
+            s=WHITESPACE,
         )
     )
     transformers = (
@@ -1395,14 +1412,14 @@ class HumanAircraftCrewMemberParachuteWasDestroyedByStationaryUnit(ParsableEvent
     __slots__ = ['time', 'actor', 'attacker', 'pos', ]
 
     verbose_name = _("Human aircraft crew member's parachute was destroyed by stationary unit")
-    matcher = rx.matcher(
+    matcher = make_matcher(
         "{time}{actor}{s}has{s}chute{s}destroyed{s}by{s}{attacker}{pos}"
         .format(
-            time=rx.TIME_GROUP_PREFIX,
-            actor=rx.HUMAN_AIRCRAFT_CREW_MEMBER_ACTOR_GROUP,
-            attacker=rx.STATIONARY_UNIT_ATTACKER_GROUP,
-            pos=rx.POS_GROUP_SUFFIX,
-            s=rx.WHITESPACE,
+            time=TIME_GROUP_PREFIX,
+            actor=HUMAN_AIRCRAFT_CREW_MEMBER_ACTOR_GROUP,
+            attacker=STATIONARY_UNIT_ATTACKER_GROUP,
+            pos=POS_GROUP_SUFFIX,
+            s=WHITESPACE,
         )
     )
     transformers = (
@@ -1423,14 +1440,14 @@ class HumanAircraftCrewMemberParachuteWasDestroyedByMovingUnitMember(ParsableEve
     __slots__ = ['time', 'actor', 'attacker', 'pos', ]
 
     verbose_name = _("Human aircraft crew member's parachute was destroyed by moving unit member")
-    matcher = rx.matcher(
+    matcher = make_matcher(
         "{time}{actor}{s}has{s}chute{s}destroyed{s}by{s}{attacker}{pos}"
         .format(
-            time=rx.TIME_GROUP_PREFIX,
-            actor=rx.HUMAN_AIRCRAFT_CREW_MEMBER_ACTOR_GROUP,
-            attacker=rx.MOVING_UNIT_MEMBER_ATTACKER_GROUP,
-            pos=rx.POS_GROUP_SUFFIX,
-            s=rx.WHITESPACE,
+            time=TIME_GROUP_PREFIX,
+            actor=HUMAN_AIRCRAFT_CREW_MEMBER_ACTOR_GROUP,
+            attacker=MOVING_UNIT_MEMBER_ATTACKER_GROUP,
+            pos=POS_GROUP_SUFFIX,
+            s=WHITESPACE,
         )
     )
     transformers = (
@@ -1451,14 +1468,14 @@ class HumanAircraftCrewMemberParachuteWasDestroyedByMovingUnit(ParsableEvent):
     __slots__ = ['time', 'actor', 'attacker', 'pos', ]
 
     verbose_name = _("Human aircraft crew member's parachute was destroyed by moving unit")
-    matcher = rx.matcher(
+    matcher = make_matcher(
         "{time}{actor}{s}has{s}chute{s}destroyed{s}by{s}{attacker}{pos}"
         .format(
-            time=rx.TIME_GROUP_PREFIX,
-            actor=rx.HUMAN_AIRCRAFT_CREW_MEMBER_ACTOR_GROUP,
-            attacker=rx.MOVING_UNIT_ATTACKER_GROUP,
-            pos=rx.POS_GROUP_SUFFIX,
-            s=rx.WHITESPACE,
+            time=TIME_GROUP_PREFIX,
+            actor=HUMAN_AIRCRAFT_CREW_MEMBER_ACTOR_GROUP,
+            attacker=MOVING_UNIT_ATTACKER_GROUP,
+            pos=POS_GROUP_SUFFIX,
+            s=WHITESPACE,
         )
     )
     transformers = (
@@ -1479,14 +1496,14 @@ class HumanAircraftCrewMemberParachuteWasDestroyedByHumanAircraft(ParsableEvent)
     __slots__ = ['time', 'actor', 'attacker', 'pos', ]
 
     verbose_name = _("Human aircraft crew member's parachute was destroyed by human aircraft")
-    matcher = rx.matcher(
+    matcher = make_matcher(
         "{time}{actor}{s}has{s}chute{s}destroyed{s}by{s}{attacker}{pos}"
         .format(
-            time=rx.TIME_GROUP_PREFIX,
-            actor=rx.HUMAN_AIRCRAFT_CREW_MEMBER_ACTOR_GROUP,
-            attacker=rx.HUMAN_AIRCRAFT_ATTACKER_GROUP,
-            pos=rx.POS_GROUP_SUFFIX,
-            s=rx.WHITESPACE,
+            time=TIME_GROUP_PREFIX,
+            actor=HUMAN_AIRCRAFT_CREW_MEMBER_ACTOR_GROUP,
+            attacker=HUMAN_AIRCRAFT_ATTACKER_GROUP,
+            pos=POS_GROUP_SUFFIX,
+            s=WHITESPACE,
         )
     )
     transformers = (
@@ -1507,14 +1524,14 @@ class HumanAircraftCrewMemberParachuteWasDestroyedByAIAircraft(ParsableEvent):
     __slots__ = ['time', 'actor', 'attacker', 'pos', ]
 
     verbose_name = _("Human aircraft crew member's parachute was destroyed by AI aircraft")
-    matcher = rx.matcher(
+    matcher = make_matcher(
         "{time}{actor}{s}has{s}chute{s}destroyed{s}by{s}{attacker}{pos}"
         .format(
-            time=rx.TIME_GROUP_PREFIX,
-            actor=rx.HUMAN_AIRCRAFT_CREW_MEMBER_ACTOR_GROUP,
-            attacker=rx.AI_AIRCRAFT_ATTACKER_GROUP,
-            pos=rx.POS_GROUP_SUFFIX,
-            s=rx.WHITESPACE,
+            time=TIME_GROUP_PREFIX,
+            actor=HUMAN_AIRCRAFT_CREW_MEMBER_ACTOR_GROUP,
+            attacker=AI_AIRCRAFT_ATTACKER_GROUP,
+            pos=POS_GROUP_SUFFIX,
+            s=WHITESPACE,
         )
     )
     transformers = (
@@ -1536,14 +1553,14 @@ class BuildingWasDestroyedByHumanAircraft(ParsableEvent):
     __slots__ = ['time', 'actor', 'attacker', 'pos', ]
 
     verbose_name = _("Building was destroyed by human aircraft")
-    matcher = rx.matcher(
+    matcher = make_matcher(
         "{time}{actor}{s}destroyed{s}by{s}{attacker}{pos}"
         .format(
-            time=rx.TIME_GROUP_PREFIX,
-            actor=rx.BUILDING_ACTOR_GROUP,
-            attacker=rx.HUMAN_AIRCRAFT_ATTACKER_GROUP,
-            pos=rx.POS_GROUP_SUFFIX,
-            s=rx.WHITESPACE,
+            time=TIME_GROUP_PREFIX,
+            actor=BUILDING_ACTOR_GROUP,
+            attacker=HUMAN_AIRCRAFT_ATTACKER_GROUP,
+            pos=POS_GROUP_SUFFIX,
+            s=WHITESPACE,
         )
     )
     transformers = (
@@ -1565,14 +1582,14 @@ class BuildingWasDestroyedByStationaryUnit(ParsableEvent):
     __slots__ = ['time', 'actor', 'attacker', 'pos', ]
 
     verbose_name = _("Building was destroyed by stationary unit")
-    matcher = rx.matcher(
+    matcher = make_matcher(
         "{time}{actor}{s}destroyed{s}by{s}{attacker}{pos}"
         .format(
-            time=rx.TIME_GROUP_PREFIX,
-            actor=rx.BUILDING_ACTOR_GROUP,
-            attacker=rx.STATIONARY_UNIT_ATTACKER_GROUP,
-            pos=rx.POS_GROUP_SUFFIX,
-            s=rx.WHITESPACE,
+            time=TIME_GROUP_PREFIX,
+            actor=BUILDING_ACTOR_GROUP,
+            attacker=STATIONARY_UNIT_ATTACKER_GROUP,
+            pos=POS_GROUP_SUFFIX,
+            s=WHITESPACE,
         )
     )
     transformers = (
@@ -1594,14 +1611,14 @@ class BuildingWasDestroyedByMovingUnitMember(ParsableEvent):
     __slots__ = ['time', 'actor', 'attacker', 'pos', ]
 
     verbose_name = _("Building was destroyed by moving unit member")
-    matcher = rx.matcher(
+    matcher = make_matcher(
         "{time}{actor}{s}destroyed{s}by{s}{attacker}{pos}"
         .format(
-            time=rx.TIME_GROUP_PREFIX,
-            actor=rx.BUILDING_ACTOR_GROUP,
-            attacker=rx.MOVING_UNIT_MEMBER_ATTACKER_GROUP,
-            pos=rx.POS_GROUP_SUFFIX,
-            s=rx.WHITESPACE,
+            time=TIME_GROUP_PREFIX,
+            actor=BUILDING_ACTOR_GROUP,
+            attacker=MOVING_UNIT_MEMBER_ATTACKER_GROUP,
+            pos=POS_GROUP_SUFFIX,
+            s=WHITESPACE,
         )
     )
     transformers = (
@@ -1623,14 +1640,14 @@ class BuildingWasDestroyedByMovingUnit(ParsableEvent):
     __slots__ = ['time', 'actor', 'attacker', 'pos', ]
 
     verbose_name = _("Building was destroyed by moving unit")
-    matcher = rx.matcher(
+    matcher = make_matcher(
         "{time}{actor}{s}destroyed{s}by{s}{attacker}{pos}"
         .format(
-            time=rx.TIME_GROUP_PREFIX,
-            actor=rx.BUILDING_ACTOR_GROUP,
-            attacker=rx.MOVING_UNIT_ATTACKER_GROUP,
-            pos=rx.POS_GROUP_SUFFIX,
-            s=rx.WHITESPACE,
+            time=TIME_GROUP_PREFIX,
+            actor=BUILDING_ACTOR_GROUP,
+            attacker=MOVING_UNIT_ATTACKER_GROUP,
+            pos=POS_GROUP_SUFFIX,
+            s=WHITESPACE,
         )
     )
     transformers = (
@@ -1652,14 +1669,14 @@ class BuildingWasDestroyedByAIAircraft(ParsableEvent):
     __slots__ = ['time', 'actor', 'attacker', 'pos', ]
 
     verbose_name = _("Building was destroyed by AI aircraft")
-    matcher = rx.matcher(
+    matcher = make_matcher(
         "{time}{actor}{s}destroyed{s}by{s}{attacker}{pos}"
         .format(
-            time=rx.TIME_GROUP_PREFIX,
-            actor=rx.BUILDING_ACTOR_GROUP,
-            attacker=rx.AI_AIRCRAFT_ATTACKER_GROUP,
-            pos=rx.POS_GROUP_SUFFIX,
-            s=rx.WHITESPACE,
+            time=TIME_GROUP_PREFIX,
+            actor=BUILDING_ACTOR_GROUP,
+            attacker=AI_AIRCRAFT_ATTACKER_GROUP,
+            pos=POS_GROUP_SUFFIX,
+            s=WHITESPACE,
         )
     )
     transformers = (
@@ -1681,14 +1698,14 @@ class TreeWasDestroyedByHumanAircraft(ParsableEvent):
     __slots__ = ['time', 'attacker', 'pos', ]
 
     verbose_name = _("Tree was destroyed by human aircraft")
-    matcher = rx.matcher(
+    matcher = make_matcher(
         "{time}{tree}{s}destroyed{s}by{s}{attacker}{pos}"
         .format(
-            time=rx.TIME_GROUP_PREFIX,
-            tree=rx.TREE,
-            attacker=rx.HUMAN_AIRCRAFT_ATTACKER_GROUP,
-            pos=rx.POS_GROUP_SUFFIX,
-            s=rx.WHITESPACE,
+            time=TIME_GROUP_PREFIX,
+            tree=TREE,
+            attacker=HUMAN_AIRCRAFT_ATTACKER_GROUP,
+            pos=POS_GROUP_SUFFIX,
+            s=WHITESPACE,
         )
     )
     transformers = (
@@ -1709,14 +1726,14 @@ class TreeWasDestroyedByStationaryUnit(ParsableEvent):
     __slots__ = ['time', 'attacker', 'pos', ]
 
     verbose_name = _("Tree was destroyed by stationary unit")
-    matcher = rx.matcher(
+    matcher = make_matcher(
         "{time}{tree}{s}destroyed{s}by{s}{attacker}{pos}"
         .format(
-            time=rx.TIME_GROUP_PREFIX,
-            tree=rx.TREE,
-            attacker=rx.STATIONARY_UNIT_ATTACKER_GROUP,
-            pos=rx.POS_GROUP_SUFFIX,
-            s=rx.WHITESPACE,
+            time=TIME_GROUP_PREFIX,
+            tree=TREE,
+            attacker=STATIONARY_UNIT_ATTACKER_GROUP,
+            pos=POS_GROUP_SUFFIX,
+            s=WHITESPACE,
         )
     )
     transformers = (
@@ -1737,14 +1754,14 @@ class TreeWasDestroyedByAIAircraft(ParsableEvent):
     __slots__ = ['time', 'attacker', 'pos', ]
 
     verbose_name = _("Tree was destroyed by AI aircraft")
-    matcher = rx.matcher(
+    matcher = make_matcher(
         "{time}{tree}{s}destroyed{s}by{s}{attacker}{pos}"
         .format(
-            time=rx.TIME_GROUP_PREFIX,
-            tree=rx.TREE,
-            attacker=rx.AI_AIRCRAFT_ATTACKER_GROUP,
-            pos=rx.POS_GROUP_SUFFIX,
-            s=rx.WHITESPACE,
+            time=TIME_GROUP_PREFIX,
+            tree=TREE,
+            attacker=AI_AIRCRAFT_ATTACKER_GROUP,
+            pos=POS_GROUP_SUFFIX,
+            s=WHITESPACE,
         )
     )
     transformers = (
@@ -1765,14 +1782,14 @@ class TreeWasDestroyedByMovingUnitMember(ParsableEvent):
     __slots__ = ['time', 'attacker', 'pos', ]
 
     verbose_name = _("Tree was destroyed by moving unit member")
-    matcher = rx.matcher(
+    matcher = make_matcher(
         "{time}{tree}{s}destroyed{s}by{s}{attacker}{pos}"
         .format(
-            time=rx.TIME_GROUP_PREFIX,
-            tree=rx.TREE,
-            attacker=rx.MOVING_UNIT_MEMBER_ATTACKER_GROUP,
-            pos=rx.POS_GROUP_SUFFIX,
-            s=rx.WHITESPACE,
+            time=TIME_GROUP_PREFIX,
+            tree=TREE,
+            attacker=MOVING_UNIT_MEMBER_ATTACKER_GROUP,
+            pos=POS_GROUP_SUFFIX,
+            s=WHITESPACE,
         )
     )
     transformers = (
@@ -1793,14 +1810,14 @@ class TreeWasDestroyedByMovingUnit(ParsableEvent):
     __slots__ = ['time', 'attacker', 'pos', ]
 
     verbose_name = _("Tree was destroyed by moving unit")
-    matcher = rx.matcher(
+    matcher = make_matcher(
         "{time}{tree}{s}destroyed{s}by{s}{attacker}{pos}"
         .format(
-            time=rx.TIME_GROUP_PREFIX,
-            tree=rx.TREE,
-            attacker=rx.MOVING_UNIT_ATTACKER_GROUP,
-            pos=rx.POS_GROUP_SUFFIX,
-            s=rx.WHITESPACE,
+            time=TIME_GROUP_PREFIX,
+            tree=TREE,
+            attacker=MOVING_UNIT_ATTACKER_GROUP,
+            pos=POS_GROUP_SUFFIX,
+            s=WHITESPACE,
         )
     )
     transformers = (
@@ -1821,13 +1838,13 @@ class TreeWasDestroyed(ParsableEvent):
     __slots__ = ['time', 'pos', ]
 
     verbose_name = _("Tree was destroyed")
-    matcher = rx.matcher(
+    matcher = make_matcher(
         "{time}{tree}{s}destroyed{s}by{pos}"
         .format(
-            time=rx.TIME_GROUP_PREFIX,
-            tree=rx.TREE,
-            pos=rx.POS_GROUP_SUFFIX,
-            s=rx.WHITESPACE,
+            time=TIME_GROUP_PREFIX,
+            tree=TREE,
+            pos=POS_GROUP_SUFFIX,
+            s=WHITESPACE,
         )
     )
     transformers = (
@@ -1846,13 +1863,13 @@ class StationaryUnitWasDestroyed(ParsableEvent):
     __slots__ = ['time', 'actor', 'pos', ]
 
     verbose_name = _("Stationary unit was destroyed")
-    matcher = rx.matcher(
+    matcher = make_matcher(
         "{time}{actor}{s}crashed{pos}"
         .format(
-            time=rx.TIME_GROUP_PREFIX,
-            actor=rx.STATIONARY_UNIT_ACTOR_GROUP,
-            pos=rx.POS_GROUP_SUFFIX,
-            s=rx.WHITESPACE,
+            time=TIME_GROUP_PREFIX,
+            actor=STATIONARY_UNIT_ACTOR_GROUP,
+            pos=POS_GROUP_SUFFIX,
+            s=WHITESPACE,
         )
     )
     transformers = (
@@ -1872,14 +1889,14 @@ class StationaryUnitWasDestroyedByStationaryUnit(ParsableEvent):
     __slots__ = ['time', 'actor', 'attacker', 'pos', ]
 
     verbose_name = _("Stationary unit was destroyed by stationary unit")
-    matcher = rx.matcher(
+    matcher = make_matcher(
         "{time}{actor}{s}destroyed{s}by{s}{attacker}{pos}"
         .format(
-            time=rx.TIME_GROUP_PREFIX,
-            actor=rx.STATIONARY_UNIT_ACTOR_GROUP,
-            attacker=rx.STATIONARY_UNIT_ATTACKER_GROUP,
-            pos=rx.POS_GROUP_SUFFIX,
-            s=rx.WHITESPACE,
+            time=TIME_GROUP_PREFIX,
+            actor=STATIONARY_UNIT_ACTOR_GROUP,
+            attacker=STATIONARY_UNIT_ATTACKER_GROUP,
+            pos=POS_GROUP_SUFFIX,
+            s=WHITESPACE,
         )
     )
     transformers = (
@@ -1900,14 +1917,14 @@ class StationaryUnitWasDestroyedByMovingUnit(ParsableEvent):
     __slots__ = ['time', 'actor', 'attacker', 'pos', ]
 
     verbose_name = _("Stationary unit was destroyed by moving unit")
-    matcher = rx.matcher(
+    matcher = make_matcher(
         "{time}{actor}{s}destroyed{s}by{s}{attacker}{pos}"
         .format(
-            time=rx.TIME_GROUP_PREFIX,
-            actor=rx.STATIONARY_UNIT_ACTOR_GROUP,
-            attacker=rx.MOVING_UNIT_ATTACKER_GROUP,
-            pos=rx.POS_GROUP_SUFFIX,
-            s=rx.WHITESPACE,
+            time=TIME_GROUP_PREFIX,
+            actor=STATIONARY_UNIT_ACTOR_GROUP,
+            attacker=MOVING_UNIT_ATTACKER_GROUP,
+            pos=POS_GROUP_SUFFIX,
+            s=WHITESPACE,
         )
     )
     transformers = (
@@ -1928,14 +1945,14 @@ class StationaryUnitWasDestroyedByMovingUnitMember(ParsableEvent):
     __slots__ = ['time', 'actor', 'attacker', 'pos', ]
 
     verbose_name = _("Stationary unit was destroyed by moving unit member")
-    matcher = rx.matcher(
+    matcher = make_matcher(
         "{time}{actor}{s}destroyed{s}by{s}{attacker}{pos}"
         .format(
-            time=rx.TIME_GROUP_PREFIX,
-            actor=rx.STATIONARY_UNIT_ACTOR_GROUP,
-            attacker=rx.MOVING_UNIT_MEMBER_ATTACKER_GROUP,
-            pos=rx.POS_GROUP_SUFFIX,
-            s=rx.WHITESPACE,
+            time=TIME_GROUP_PREFIX,
+            actor=STATIONARY_UNIT_ACTOR_GROUP,
+            attacker=MOVING_UNIT_MEMBER_ATTACKER_GROUP,
+            pos=POS_GROUP_SUFFIX,
+            s=WHITESPACE,
         )
     )
     transformers = (
@@ -1956,14 +1973,14 @@ class StationaryUnitWasDestroyedByHumanAircraft(ParsableEvent):
     __slots__ = ['time', 'actor', 'attacker', 'pos', ]
 
     verbose_name = _("Stationary unit was destroyed by human aircraft")
-    matcher = rx.matcher(
+    matcher = make_matcher(
         "{time}{actor}{s}destroyed{s}by{s}{attacker}{pos}"
         .format(
-            time=rx.TIME_GROUP_PREFIX,
-            actor=rx.STATIONARY_UNIT_ACTOR_GROUP,
-            attacker=rx.HUMAN_AIRCRAFT_ATTACKER_GROUP,
-            pos=rx.POS_GROUP_SUFFIX,
-            s=rx.WHITESPACE,
+            time=TIME_GROUP_PREFIX,
+            actor=STATIONARY_UNIT_ACTOR_GROUP,
+            attacker=HUMAN_AIRCRAFT_ATTACKER_GROUP,
+            pos=POS_GROUP_SUFFIX,
+            s=WHITESPACE,
         )
     )
     transformers = (
@@ -1984,14 +2001,14 @@ class StationaryUnitWasDestroyedByAIAircraft(ParsableEvent):
     __slots__ = ['time', 'actor', 'attacker', 'pos', ]
 
     verbose_name = _("Stationary unit was destroyed by AI aircraft")
-    matcher = rx.matcher(
+    matcher = make_matcher(
         "{time}{actor}{s}destroyed{s}by{s}{attacker}{pos}"
         .format(
-            time=rx.TIME_GROUP_PREFIX,
-            actor=rx.STATIONARY_UNIT_ACTOR_GROUP,
-            attacker=rx.AI_AIRCRAFT_ATTACKER_GROUP,
-            pos=rx.POS_GROUP_SUFFIX,
-            s=rx.WHITESPACE,
+            time=TIME_GROUP_PREFIX,
+            actor=STATIONARY_UNIT_ACTOR_GROUP,
+            attacker=AI_AIRCRAFT_ATTACKER_GROUP,
+            pos=POS_GROUP_SUFFIX,
+            s=WHITESPACE,
         )
     )
     transformers = (
@@ -2012,14 +2029,14 @@ class BridgeWasDestroyedByHumanAircraft(ParsableEvent):
     __slots__ = ['time', 'actor', 'attacker', 'pos', ]
 
     verbose_name = _("Bridge was destroyed by human aircraft")
-    matcher = rx.matcher(
+    matcher = make_matcher(
         "{time}{actor}{s}destroyed{s}by{s}{attacker}{pos}"
         .format(
-            time=rx.TIME_GROUP_PREFIX,
-            actor=rx.BRIDGE_ACTOR_GROUP,
-            attacker=rx.HUMAN_AIRCRAFT_ATTACKER_GROUP,
-            pos=rx.POS_GROUP_SUFFIX,
-            s=rx.WHITESPACE,
+            time=TIME_GROUP_PREFIX,
+            actor=BRIDGE_ACTOR_GROUP,
+            attacker=HUMAN_AIRCRAFT_ATTACKER_GROUP,
+            pos=POS_GROUP_SUFFIX,
+            s=WHITESPACE,
         )
     )
     transformers = (
@@ -2040,14 +2057,14 @@ class BridgeWasDestroyedByStationaryUnit(ParsableEvent):
     __slots__ = ['time', 'actor', 'attacker', 'pos', ]
 
     verbose_name = _("Bridge was destroyed by stationary unit")
-    matcher = rx.matcher(
+    matcher = make_matcher(
         "{time}{actor}{s}destroyed{s}by{s}{attacker}{pos}"
         .format(
-            time=rx.TIME_GROUP_PREFIX,
-            actor=rx.BRIDGE_ACTOR_GROUP,
-            attacker=rx.STATIONARY_UNIT_ATTACKER_GROUP,
-            pos=rx.POS_GROUP_SUFFIX,
-            s=rx.WHITESPACE,
+            time=TIME_GROUP_PREFIX,
+            actor=BRIDGE_ACTOR_GROUP,
+            attacker=STATIONARY_UNIT_ATTACKER_GROUP,
+            pos=POS_GROUP_SUFFIX,
+            s=WHITESPACE,
         )
     )
     transformers = (
@@ -2068,14 +2085,14 @@ class BridgeWasDestroyedByMovingUnitMember(ParsableEvent):
     __slots__ = ['time', 'actor', 'attacker', 'pos', ]
 
     verbose_name = _("Bridge was destroyed by moving unit member")
-    matcher = rx.matcher(
+    matcher = make_matcher(
         "{time}{actor}{s}destroyed{s}by{s}{attacker}{pos}"
         .format(
-            time=rx.TIME_GROUP_PREFIX,
-            actor=rx.BRIDGE_ACTOR_GROUP,
-            attacker=rx.MOVING_UNIT_MEMBER_ATTACKER_GROUP,
-            pos=rx.POS_GROUP_SUFFIX,
-            s=rx.WHITESPACE,
+            time=TIME_GROUP_PREFIX,
+            actor=BRIDGE_ACTOR_GROUP,
+            attacker=MOVING_UNIT_MEMBER_ATTACKER_GROUP,
+            pos=POS_GROUP_SUFFIX,
+            s=WHITESPACE,
         )
     )
     transformers = (
@@ -2096,14 +2113,14 @@ class BridgeWasDestroyedByMovingUnit(ParsableEvent):
     __slots__ = ['time', 'actor', 'attacker', 'pos', ]
 
     verbose_name = _("Bridge was destroyed by moving unit")
-    matcher = rx.matcher(
+    matcher = make_matcher(
         "{time}{actor}{s}destroyed{s}by{s}{attacker}{pos}"
         .format(
-            time=rx.TIME_GROUP_PREFIX,
-            actor=rx.BRIDGE_ACTOR_GROUP,
-            attacker=rx.MOVING_UNIT_ATTACKER_GROUP,
-            pos=rx.POS_GROUP_SUFFIX,
-            s=rx.WHITESPACE,
+            time=TIME_GROUP_PREFIX,
+            actor=BRIDGE_ACTOR_GROUP,
+            attacker=MOVING_UNIT_ATTACKER_GROUP,
+            pos=POS_GROUP_SUFFIX,
+            s=WHITESPACE,
         )
     )
     transformers = (
@@ -2124,14 +2141,14 @@ class BridgeWasDestroyedByAIAircraft(ParsableEvent):
     __slots__ = ['time', 'actor', 'attacker', 'pos', ]
 
     verbose_name = _("Bridge was destroyed by AI aircraft")
-    matcher = rx.matcher(
+    matcher = make_matcher(
         "{time}{actor}{s}destroyed{s}by{s}{attacker}{pos}"
         .format(
-            time=rx.TIME_GROUP_PREFIX,
-            actor=rx.BRIDGE_ACTOR_GROUP,
-            attacker=rx.AI_AIRCRAFT_ATTACKER_GROUP,
-            pos=rx.POS_GROUP_SUFFIX,
-            s=rx.WHITESPACE,
+            time=TIME_GROUP_PREFIX,
+            actor=BRIDGE_ACTOR_GROUP,
+            attacker=AI_AIRCRAFT_ATTACKER_GROUP,
+            pos=POS_GROUP_SUFFIX,
+            s=WHITESPACE,
         )
     )
     transformers = (
@@ -2152,14 +2169,14 @@ class MovingUnitWasDestroyedByMovingUnit(ParsableEvent):
     __slots__ = ['time', 'actor', 'attacker', 'pos', ]
 
     verbose_name = _("Moving unit was destroyed by moving unit")
-    matcher = rx.matcher(
+    matcher = make_matcher(
         "{time}{actor}{s}destroyed{s}by{s}{attacker}{pos}"
         .format(
-            time=rx.TIME_GROUP_PREFIX,
-            actor=rx.MOVING_UNIT_ACTOR_GROUP,
-            attacker=rx.MOVING_UNIT_ATTACKER_GROUP,
-            pos=rx.POS_GROUP_SUFFIX,
-            s=rx.WHITESPACE,
+            time=TIME_GROUP_PREFIX,
+            actor=MOVING_UNIT_ACTOR_GROUP,
+            attacker=MOVING_UNIT_ATTACKER_GROUP,
+            pos=POS_GROUP_SUFFIX,
+            s=WHITESPACE,
         )
     )
     transformers = (
@@ -2180,14 +2197,14 @@ class MovingUnitWasDestroyedByMovingUnitMember(ParsableEvent):
     __slots__ = ['time', 'actor', 'attacker', 'pos', ]
 
     verbose_name = _("Moving unit was destroyed by moving unit member")
-    matcher = rx.matcher(
+    matcher = make_matcher(
         "{time}{actor}{s}destroyed{s}by{s}{attacker}{pos}"
         .format(
-            time=rx.TIME_GROUP_PREFIX,
-            actor=rx.MOVING_UNIT_ACTOR_GROUP,
-            attacker=rx.MOVING_UNIT_MEMBER_ATTACKER_GROUP,
-            pos=rx.POS_GROUP_SUFFIX,
-            s=rx.WHITESPACE,
+            time=TIME_GROUP_PREFIX,
+            actor=MOVING_UNIT_ACTOR_GROUP,
+            attacker=MOVING_UNIT_MEMBER_ATTACKER_GROUP,
+            pos=POS_GROUP_SUFFIX,
+            s=WHITESPACE,
         )
     )
     transformers = (
@@ -2208,14 +2225,14 @@ class MovingUnitWasDestroyedByStationaryUnit(ParsableEvent):
     __slots__ = ['time', 'actor', 'attacker', 'pos', ]
 
     verbose_name = _("Moving unit was destroyed by stationary unit")
-    matcher = rx.matcher(
+    matcher = make_matcher(
         "{time}{actor}{s}destroyed{s}by{s}{attacker}{pos}"
         .format(
-            time=rx.TIME_GROUP_PREFIX,
-            actor=rx.MOVING_UNIT_ACTOR_GROUP,
-            attacker=rx.STATIONARY_UNIT_ATTACKER_GROUP,
-            pos=rx.POS_GROUP_SUFFIX,
-            s=rx.WHITESPACE,
+            time=TIME_GROUP_PREFIX,
+            actor=MOVING_UNIT_ACTOR_GROUP,
+            attacker=STATIONARY_UNIT_ATTACKER_GROUP,
+            pos=POS_GROUP_SUFFIX,
+            s=WHITESPACE,
         )
     )
     transformers = (
@@ -2236,14 +2253,14 @@ class MovingUnitWasDestroyedByHumanAircraft(ParsableEvent):
     __slots__ = ['time', 'actor', 'attacker', 'pos', ]
 
     verbose_name = _("Moving unit was destroyed by human aircraft")
-    matcher = rx.matcher(
+    matcher = make_matcher(
         "{time}{actor}{s}destroyed{s}by{s}{attacker}{pos}"
         .format(
-            time=rx.TIME_GROUP_PREFIX,
-            actor=rx.MOVING_UNIT_ACTOR_GROUP,
-            attacker=rx.HUMAN_AIRCRAFT_ATTACKER_GROUP,
-            pos=rx.POS_GROUP_SUFFIX,
-            s=rx.WHITESPACE,
+            time=TIME_GROUP_PREFIX,
+            actor=MOVING_UNIT_ACTOR_GROUP,
+            attacker=HUMAN_AIRCRAFT_ATTACKER_GROUP,
+            pos=POS_GROUP_SUFFIX,
+            s=WHITESPACE,
         )
     )
     transformers = (
@@ -2264,14 +2281,14 @@ class MovingUnitWasDestroyedByAIAircraft(ParsableEvent):
     __slots__ = ['time', 'actor', 'attacker', 'pos', ]
 
     verbose_name = _("Moving unit was destroyed by AI aircraft")
-    matcher = rx.matcher(
+    matcher = make_matcher(
         "{time}{actor}{s}destroyed{s}by{s}{attacker}{pos}"
         .format(
-            time=rx.TIME_GROUP_PREFIX,
-            actor=rx.MOVING_UNIT_ACTOR_GROUP,
-            attacker=rx.AI_AIRCRAFT_ATTACKER_GROUP,
-            pos=rx.POS_GROUP_SUFFIX,
-            s=rx.WHITESPACE,
+            time=TIME_GROUP_PREFIX,
+            actor=MOVING_UNIT_ACTOR_GROUP,
+            attacker=AI_AIRCRAFT_ATTACKER_GROUP,
+            pos=POS_GROUP_SUFFIX,
+            s=WHITESPACE,
         )
     )
     transformers = (
@@ -2292,14 +2309,14 @@ class MovingUnitMemberWasDestroyedByStationaryUnit(ParsableEvent):
     __slots__ = ['time', 'actor', 'attacker', 'pos', ]
 
     verbose_name = _("Moving unit member was destroyed by stationary unit")
-    matcher = rx.matcher(
+    matcher = make_matcher(
         "{time}{actor}{s}destroyed{s}by{s}{attacker}{pos}"
         .format(
-            time=rx.TIME_GROUP_PREFIX,
-            actor=rx.MOVING_UNIT_MEMBER_ACTOR_GROUP,
-            attacker=rx.STATIONARY_UNIT_ATTACKER_GROUP,
-            pos=rx.POS_GROUP_SUFFIX,
-            s=rx.WHITESPACE,
+            time=TIME_GROUP_PREFIX,
+            actor=MOVING_UNIT_MEMBER_ACTOR_GROUP,
+            attacker=STATIONARY_UNIT_ATTACKER_GROUP,
+            pos=POS_GROUP_SUFFIX,
+            s=WHITESPACE,
         )
     )
     transformers = (
@@ -2320,14 +2337,14 @@ class MovingUnitMemberWasDestroyedByAIAircraft(ParsableEvent):
     __slots__ = ['time', 'actor', 'attacker', 'pos', ]
 
     verbose_name = _("Moving unit member was destroyed by AI aircraft")
-    matcher = rx.matcher(
+    matcher = make_matcher(
         "{time}{actor}{s}destroyed{s}by{s}{attacker}{pos}"
         .format(
-            time=rx.TIME_GROUP_PREFIX,
-            actor=rx.MOVING_UNIT_MEMBER_ACTOR_GROUP,
-            attacker=rx.AI_AIRCRAFT_ATTACKER_GROUP,
-            pos=rx.POS_GROUP_SUFFIX,
-            s=rx.WHITESPACE,
+            time=TIME_GROUP_PREFIX,
+            actor=MOVING_UNIT_MEMBER_ACTOR_GROUP,
+            attacker=AI_AIRCRAFT_ATTACKER_GROUP,
+            pos=POS_GROUP_SUFFIX,
+            s=WHITESPACE,
         )
     )
     transformers = (
@@ -2348,14 +2365,14 @@ class MovingUnitMemberWasDestroyedByHumanAircraft(ParsableEvent):
     __slots__ = ['time', 'actor', 'attacker', 'pos', ]
 
     verbose_name = _("Moving unit member was destroyed by human aircraft")
-    matcher = rx.matcher(
+    matcher = make_matcher(
         "{time}{actor}{s}destroyed{s}by{s}{attacker}{pos}"
         .format(
-            time=rx.TIME_GROUP_PREFIX,
-            actor=rx.MOVING_UNIT_MEMBER_ACTOR_GROUP,
-            attacker=rx.HUMAN_AIRCRAFT_ATTACKER_GROUP,
-            pos=rx.POS_GROUP_SUFFIX,
-            s=rx.WHITESPACE,
+            time=TIME_GROUP_PREFIX,
+            actor=MOVING_UNIT_MEMBER_ACTOR_GROUP,
+            attacker=HUMAN_AIRCRAFT_ATTACKER_GROUP,
+            pos=POS_GROUP_SUFFIX,
+            s=WHITESPACE,
         )
     )
     transformers = (
@@ -2376,14 +2393,14 @@ class MovingUnitMemberWasDestroyedByMovingUnit(ParsableEvent):
     __slots__ = ['time', 'actor', 'attacker', 'pos', ]
 
     verbose_name = _("Moving unit member was destroyed by moving unit")
-    matcher = rx.matcher(
+    matcher = make_matcher(
         "{time}{actor}{s}destroyed{s}by{s}{attacker}{pos}"
         .format(
-            time=rx.TIME_GROUP_PREFIX,
-            actor=rx.MOVING_UNIT_MEMBER_ACTOR_GROUP,
-            attacker=rx.MOVING_UNIT_ATTACKER_GROUP,
-            pos=rx.POS_GROUP_SUFFIX,
-            s=rx.WHITESPACE,
+            time=TIME_GROUP_PREFIX,
+            actor=MOVING_UNIT_MEMBER_ACTOR_GROUP,
+            attacker=MOVING_UNIT_ATTACKER_GROUP,
+            pos=POS_GROUP_SUFFIX,
+            s=WHITESPACE,
         )
     )
     transformers = (
@@ -2404,14 +2421,14 @@ class MovingUnitMemberWasDestroyedByMovingUnitMember(ParsableEvent):
     __slots__ = ['time', 'actor', 'attacker', 'pos', ]
 
     verbose_name = _("Moving unit member was destroyed by moving unit member")
-    matcher = rx.matcher(
+    matcher = make_matcher(
         "{time}{actor}{s}destroyed{s}by{s}{attacker}{pos}"
         .format(
-            time=rx.TIME_GROUP_PREFIX,
-            actor=rx.MOVING_UNIT_MEMBER_ACTOR_GROUP,
-            attacker=rx.MOVING_UNIT_MEMBER_ATTACKER_GROUP,
-            pos=rx.POS_GROUP_SUFFIX,
-            s=rx.WHITESPACE,
+            time=TIME_GROUP_PREFIX,
+            actor=MOVING_UNIT_MEMBER_ACTOR_GROUP,
+            attacker=MOVING_UNIT_MEMBER_ATTACKER_GROUP,
+            pos=POS_GROUP_SUFFIX,
+            s=WHITESPACE,
         )
     )
     transformers = (
@@ -2432,13 +2449,13 @@ class AIAircraftHasDespawned(ParsableEvent):
     __slots__ = ['time', 'actor', 'pos', ]
 
     verbose_name = _("AI aircraft has despawned")
-    matcher = rx.matcher(
+    matcher = make_matcher(
         "{time}{actor}{s}removed{pos}"
         .format(
-            time=rx.TIME_GROUP_PREFIX,
-            actor=rx.AI_AIRCRAFT_ACTOR_GROUP,
-            pos=rx.POS_GROUP_SUFFIX,
-            s=rx.WHITESPACE,
+            time=TIME_GROUP_PREFIX,
+            actor=AI_AIRCRAFT_ACTOR_GROUP,
+            pos=POS_GROUP_SUFFIX,
+            s=WHITESPACE,
         )
     )
     transformers = (
@@ -2458,13 +2475,13 @@ class AIAircraftWasDamagedOnGround(ParsableEvent):
     __slots__ = ['time', 'actor', 'pos', ]
 
     verbose_name = _("AI aircraft was damaged on the ground")
-    matcher = rx.matcher(
+    matcher = make_matcher(
         "{time}{actor}{s}damaged{s}on{s}the{s}ground{pos}"
         .format(
-            time=rx.TIME_GROUP_PREFIX,
-            actor=rx.AI_AIRCRAFT_ACTOR_GROUP,
-            pos=rx.POS_GROUP_SUFFIX,
-            s=rx.WHITESPACE,
+            time=TIME_GROUP_PREFIX,
+            actor=AI_AIRCRAFT_ACTOR_GROUP,
+            pos=POS_GROUP_SUFFIX,
+            s=WHITESPACE,
         )
     )
     transformers = (
@@ -2484,14 +2501,14 @@ class AIAircraftWasDamagedByHumanAircraft(ParsableEvent):
     __slots__ = ['time', 'actor', 'attacker', 'pos', ]
 
     verbose_name = _("AI aircraft was damaged by human aircraft")
-    matcher = rx.matcher(
+    matcher = make_matcher(
         "{time}{actor}{s}damaged{s}by{s}{attacker}{pos}"
         .format(
-            time=rx.TIME_GROUP_PREFIX,
-            actor=rx.AI_AIRCRAFT_ACTOR_GROUP,
-            attacker=rx.HUMAN_AIRCRAFT_ATTACKER_GROUP,
-            pos=rx.POS_GROUP_SUFFIX,
-            s=rx.WHITESPACE,
+            time=TIME_GROUP_PREFIX,
+            actor=AI_AIRCRAFT_ACTOR_GROUP,
+            attacker=HUMAN_AIRCRAFT_ATTACKER_GROUP,
+            pos=POS_GROUP_SUFFIX,
+            s=WHITESPACE,
         )
     )
     transformers = (
@@ -2512,14 +2529,14 @@ class AIAircraftWasDamagedByStationaryUnit(ParsableEvent):
     __slots__ = ['time', 'actor', 'attacker', 'pos', ]
 
     verbose_name = _("AI aircraft was damaged by stationary unit")
-    matcher = rx.matcher(
+    matcher = make_matcher(
         "{time}{actor}{s}damaged{s}by{s}{attacker}{pos}"
         .format(
-            time=rx.TIME_GROUP_PREFIX,
-            actor=rx.AI_AIRCRAFT_ACTOR_GROUP,
-            attacker=rx.STATIONARY_UNIT_ATTACKER_GROUP,
-            pos=rx.POS_GROUP_SUFFIX,
-            s=rx.WHITESPACE,
+            time=TIME_GROUP_PREFIX,
+            actor=AI_AIRCRAFT_ACTOR_GROUP,
+            attacker=STATIONARY_UNIT_ATTACKER_GROUP,
+            pos=POS_GROUP_SUFFIX,
+            s=WHITESPACE,
         )
     )
     transformers = (
@@ -2540,14 +2557,14 @@ class AIAircraftWasDamagedByMovingUnitMember(ParsableEvent):
     __slots__ = ['time', 'actor', 'attacker', 'pos', ]
 
     verbose_name = _("AI aircraft was damaged by moving unit member")
-    matcher = rx.matcher(
+    matcher = make_matcher(
         "{time}{actor}{s}damaged{s}by{s}{attacker}{pos}"
         .format(
-            time=rx.TIME_GROUP_PREFIX,
-            actor=rx.AI_AIRCRAFT_ACTOR_GROUP,
-            attacker=rx.MOVING_UNIT_MEMBER_ATTACKER_GROUP,
-            pos=rx.POS_GROUP_SUFFIX,
-            s=rx.WHITESPACE,
+            time=TIME_GROUP_PREFIX,
+            actor=AI_AIRCRAFT_ACTOR_GROUP,
+            attacker=MOVING_UNIT_MEMBER_ATTACKER_GROUP,
+            pos=POS_GROUP_SUFFIX,
+            s=WHITESPACE,
         )
     )
     transformers = (
@@ -2568,14 +2585,14 @@ class AIAircraftWasDamagedByMovingUnit(ParsableEvent):
     __slots__ = ['time', 'actor', 'attacker', 'pos', ]
 
     verbose_name = _("AI aircraft was damaged by moving unit")
-    matcher = rx.matcher(
+    matcher = make_matcher(
         "{time}{actor}{s}damaged{s}by{s}{attacker}{pos}"
         .format(
-            time=rx.TIME_GROUP_PREFIX,
-            actor=rx.AI_AIRCRAFT_ACTOR_GROUP,
-            attacker=rx.MOVING_UNIT_ATTACKER_GROUP,
-            pos=rx.POS_GROUP_SUFFIX,
-            s=rx.WHITESPACE,
+            time=TIME_GROUP_PREFIX,
+            actor=AI_AIRCRAFT_ACTOR_GROUP,
+            attacker=MOVING_UNIT_ATTACKER_GROUP,
+            pos=POS_GROUP_SUFFIX,
+            s=WHITESPACE,
         )
     )
     transformers = (
@@ -2596,14 +2613,14 @@ class AIAircraftWasDamagedByAIAircraft(ParsableEvent):
     __slots__ = ['time', 'actor', 'attacker', 'pos', ]
 
     verbose_name = _("AI aircraft was damaged by AI aircraft")
-    matcher = rx.matcher(
+    matcher = make_matcher(
         "{time}{actor}{s}damaged{s}by{s}{attacker}{pos}"
         .format(
-            time=rx.TIME_GROUP_PREFIX,
-            actor=rx.AI_AIRCRAFT_ACTOR_GROUP,
-            attacker=rx.AI_AIRCRAFT_ATTACKER_GROUP,
-            pos=rx.POS_GROUP_SUFFIX,
-            s=rx.WHITESPACE,
+            time=TIME_GROUP_PREFIX,
+            actor=AI_AIRCRAFT_ACTOR_GROUP,
+            attacker=AI_AIRCRAFT_ATTACKER_GROUP,
+            pos=POS_GROUP_SUFFIX,
+            s=WHITESPACE,
         )
     )
     transformers = (
@@ -2625,14 +2642,14 @@ class AIHasDamagedOwnAircraft(ParsableEvent):
     __slots__ = ['time', 'actor', 'pos', ]
 
     verbose_name = _("AI has damaged own aircraft")
-    matcher = rx.matcher(
+    matcher = make_matcher(
         "{time}{actor}{s}damaged{s}by{s}{himself}{pos}"
         .format(
-            time=rx.TIME_GROUP_PREFIX,
-            actor=rx.AI_AIRCRAFT_ACTOR_GROUP,
-            himself=rx.HIMSELF,
-            pos=rx.POS_GROUP_SUFFIX,
-            s=rx.WHITESPACE,
+            time=TIME_GROUP_PREFIX,
+            actor=AI_AIRCRAFT_ACTOR_GROUP,
+            himself=HIMSELF,
+            pos=POS_GROUP_SUFFIX,
+            s=WHITESPACE,
         )
     )
     transformers = (
@@ -2653,14 +2670,14 @@ class AIHasDestroyedOwnAircraft(ParsableEvent):
     __slots__ = ['time', 'actor', 'pos', ]
 
     verbose_name = _("AI has destroyed own aircraft")
-    matcher = rx.matcher(
+    matcher = make_matcher(
         "{time}{actor}{s}shot{s}down{s}by{s}{himself}{pos}"
         .format(
-            time=rx.TIME_GROUP_PREFIX,
-            actor=rx.AI_AIRCRAFT_ACTOR_GROUP,
-            himself=rx.HIMSELF,
-            pos=rx.POS_GROUP_SUFFIX,
-            s=rx.WHITESPACE,
+            time=TIME_GROUP_PREFIX,
+            actor=AI_AIRCRAFT_ACTOR_GROUP,
+            himself=HIMSELF,
+            pos=POS_GROUP_SUFFIX,
+            s=WHITESPACE,
         )
     )
     transformers = (
@@ -2680,13 +2697,13 @@ class AIAircraftHasLanded(ParsableEvent):
     __slots__ = ['time', 'actor', 'pos', ]
 
     verbose_name = _("AI aircraft has landed")
-    matcher = rx.matcher(
+    matcher = make_matcher(
         "{time}{actor}{s}landed{pos}"
         .format(
-            time=rx.TIME_GROUP_PREFIX,
-            actor=rx.AI_AIRCRAFT_ACTOR_GROUP,
-            pos=rx.POS_GROUP_SUFFIX,
-            s=rx.WHITESPACE,
+            time=TIME_GROUP_PREFIX,
+            actor=AI_AIRCRAFT_ACTOR_GROUP,
+            pos=POS_GROUP_SUFFIX,
+            s=WHITESPACE,
         )
     )
     transformers = (
@@ -2706,13 +2723,13 @@ class AIAircraftHasCrashed(ParsableEvent):
     __slots__ = ['time', 'actor', 'pos', ]
 
     verbose_name = _("AI aircraft has crashed")
-    matcher = rx.matcher(
+    matcher = make_matcher(
         "{time}{actor}{s}crashed{pos}"
         .format(
-            time=rx.TIME_GROUP_PREFIX,
-            actor=rx.AI_AIRCRAFT_ACTOR_GROUP,
-            pos=rx.POS_GROUP_SUFFIX,
-            s=rx.WHITESPACE,
+            time=TIME_GROUP_PREFIX,
+            actor=AI_AIRCRAFT_ACTOR_GROUP,
+            pos=POS_GROUP_SUFFIX,
+            s=WHITESPACE,
         )
     )
     transformers = (
@@ -2732,14 +2749,14 @@ class AIAircraftWasShotDownByHumanAircraft(ParsableEvent):
     __slots__ = ['time', 'actor', 'attacker', 'pos', ]
 
     verbose_name = _("AI aircraft was shot down by human aircraft")
-    matcher = rx.matcher(
+    matcher = make_matcher(
         "{time}{actor}{s}shot{s}down{s}by{s}{attacker}{pos}"
         .format(
-            time=rx.TIME_GROUP_PREFIX,
-            actor=rx.AI_AIRCRAFT_ACTOR_GROUP,
-            attacker=rx.HUMAN_AIRCRAFT_ATTACKER_GROUP,
-            pos=rx.POS_GROUP_SUFFIX,
-            s=rx.WHITESPACE,
+            time=TIME_GROUP_PREFIX,
+            actor=AI_AIRCRAFT_ACTOR_GROUP,
+            attacker=HUMAN_AIRCRAFT_ATTACKER_GROUP,
+            pos=POS_GROUP_SUFFIX,
+            s=WHITESPACE,
         )
     )
     transformers = (
@@ -2760,14 +2777,14 @@ class AIAircraftWasShotDownByAIAircraft(ParsableEvent):
     __slots__ = ['time', 'actor', 'attacker', 'pos', ]
 
     verbose_name = _("AI aircraft was shot down by AI aircraft")
-    matcher = rx.matcher(
+    matcher = make_matcher(
         "{time}{actor}{s}shot{s}down{s}by{s}{attacker}{pos}"
         .format(
-            time=rx.TIME_GROUP_PREFIX,
-            actor=rx.AI_AIRCRAFT_ACTOR_GROUP,
-            attacker=rx.AI_AIRCRAFT_ATTACKER_GROUP,
-            pos=rx.POS_GROUP_SUFFIX,
-            s=rx.WHITESPACE,
+            time=TIME_GROUP_PREFIX,
+            actor=AI_AIRCRAFT_ACTOR_GROUP,
+            attacker=AI_AIRCRAFT_ATTACKER_GROUP,
+            pos=POS_GROUP_SUFFIX,
+            s=WHITESPACE,
         )
     )
     transformers = (
@@ -2788,14 +2805,14 @@ class AIAircraftWasShotDownByStationaryUnit(ParsableEvent):
     __slots__ = ['time', 'actor', 'attacker', 'pos', ]
 
     verbose_name = _("AI aircraft was shot down by stationary unit")
-    matcher = rx.matcher(
+    matcher = make_matcher(
         "{time}{actor}{s}shot{s}down{s}by{s}{attacker}{pos}"
         .format(
-            time=rx.TIME_GROUP_PREFIX,
-            actor=rx.AI_AIRCRAFT_ACTOR_GROUP,
-            attacker=rx.STATIONARY_UNIT_ATTACKER_GROUP,
-            pos=rx.POS_GROUP_SUFFIX,
-            s=rx.WHITESPACE,
+            time=TIME_GROUP_PREFIX,
+            actor=AI_AIRCRAFT_ACTOR_GROUP,
+            attacker=STATIONARY_UNIT_ATTACKER_GROUP,
+            pos=POS_GROUP_SUFFIX,
+            s=WHITESPACE,
         )
     )
     transformers = (
@@ -2816,14 +2833,14 @@ class AIAircraftWasShotDownByMovingUnitMember(ParsableEvent):
     __slots__ = ['time', 'actor', 'attacker', 'pos', ]
 
     verbose_name = _("AI aircraft was shot down by moving unit member")
-    matcher = rx.matcher(
+    matcher = make_matcher(
         "{time}{actor}{s}shot{s}down{s}by{s}{attacker}{pos}"
         .format(
-            time=rx.TIME_GROUP_PREFIX,
-            actor=rx.AI_AIRCRAFT_ACTOR_GROUP,
-            attacker=rx.MOVING_UNIT_MEMBER_ATTACKER_GROUP,
-            pos=rx.POS_GROUP_SUFFIX,
-            s=rx.WHITESPACE,
+            time=TIME_GROUP_PREFIX,
+            actor=AI_AIRCRAFT_ACTOR_GROUP,
+            attacker=MOVING_UNIT_MEMBER_ATTACKER_GROUP,
+            pos=POS_GROUP_SUFFIX,
+            s=WHITESPACE,
         )
     )
     transformers = (
@@ -2844,14 +2861,14 @@ class AIAircraftWasShotDownByMovingUnit(ParsableEvent):
     __slots__ = ['time', 'actor', 'attacker', 'pos', ]
 
     verbose_name = _("AI aircraft was shot down by moving unit")
-    matcher = rx.matcher(
+    matcher = make_matcher(
         "{time}{actor}{s}shot{s}down{s}by{s}{attacker}{pos}"
         .format(
-            time=rx.TIME_GROUP_PREFIX,
-            actor=rx.AI_AIRCRAFT_ACTOR_GROUP,
-            attacker=rx.MOVING_UNIT_ATTACKER_GROUP,
-            pos=rx.POS_GROUP_SUFFIX,
-            s=rx.WHITESPACE,
+            time=TIME_GROUP_PREFIX,
+            actor=AI_AIRCRAFT_ACTOR_GROUP,
+            attacker=MOVING_UNIT_ATTACKER_GROUP,
+            pos=POS_GROUP_SUFFIX,
+            s=WHITESPACE,
         )
     )
     transformers = (
@@ -2872,15 +2889,15 @@ class AIAircraftWasShotDownByAIAircraftAndAIAircraft(ParsableEvent):
     __slots__ = ['time', 'actor', 'attacker', 'assistant', 'pos', ]
 
     verbose_name = _("AI aircraft was shot down by AI aircraft and AI aircraft")
-    matcher = rx.matcher(
+    matcher = make_matcher(
         "{time}{actor}{s}shot{s}down{s}by{s}{attacker}{s}and{s}{assistant}{pos}"
         .format(
-            time=rx.TIME_GROUP_PREFIX,
-            actor=rx.AI_AIRCRAFT_ACTOR_GROUP,
-            attacker=rx.AI_AIRCRAFT_ATTACKER_GROUP,
-            assistant=rx.AI_AIRCRAFT_ASSISTANT_GROUP,
-            pos=rx.POS_GROUP_SUFFIX,
-            s=rx.WHITESPACE,
+            time=TIME_GROUP_PREFIX,
+            actor=AI_AIRCRAFT_ACTOR_GROUP,
+            attacker=AI_AIRCRAFT_ATTACKER_GROUP,
+            assistant=AI_AIRCRAFT_ASSISTANT_GROUP,
+            pos=POS_GROUP_SUFFIX,
+            s=WHITESPACE,
         )
     )
     transformers = (
@@ -2902,15 +2919,15 @@ class AIAircraftWasShotDownByHumanAircraftAndAIAircraft(ParsableEvent):
     __slots__ = ['time', 'actor', 'attacker', 'assistant', 'pos', ]
 
     verbose_name = _("AI aircraft was shot down by human aircraft and AI aircraft")
-    matcher = rx.matcher(
+    matcher = make_matcher(
         "{time}{actor}{s}shot{s}down{s}by{s}{attacker}{s}and{s}{assistant}{pos}"
         .format(
-            time=rx.TIME_GROUP_PREFIX,
-            actor=rx.AI_AIRCRAFT_ACTOR_GROUP,
-            attacker=rx.HUMAN_AIRCRAFT_ATTACKER_GROUP,
-            assistant=rx.AI_AIRCRAFT_ASSISTANT_GROUP,
-            pos=rx.POS_GROUP_SUFFIX,
-            s=rx.WHITESPACE,
+            time=TIME_GROUP_PREFIX,
+            actor=AI_AIRCRAFT_ACTOR_GROUP,
+            attacker=HUMAN_AIRCRAFT_ATTACKER_GROUP,
+            assistant=AI_AIRCRAFT_ASSISTANT_GROUP,
+            pos=POS_GROUP_SUFFIX,
+            s=WHITESPACE,
         )
     )
     transformers = (
@@ -2932,15 +2949,15 @@ class AIAircraftWasShotDownByAIAircraftAndHumanAircraft(ParsableEvent):
     __slots__ = ['time', 'actor', 'attacker', 'assistant', 'pos', ]
 
     verbose_name = _("AI aircraft was shot down by AI aircraft and human aircraft")
-    matcher = rx.matcher(
+    matcher = make_matcher(
         "{time}{actor}{s}shot{s}down{s}by{s}{attacker}{s}and{s}{assistant}{pos}"
         .format(
-            time=rx.TIME_GROUP_PREFIX,
-            actor=rx.AI_AIRCRAFT_ACTOR_GROUP,
-            attacker=rx.AI_AIRCRAFT_ATTACKER_GROUP,
-            assistant=rx.HUMAN_AIRCRAFT_ASSISTANT_GROUP,
-            pos=rx.POS_GROUP_SUFFIX,
-            s=rx.WHITESPACE,
+            time=TIME_GROUP_PREFIX,
+            actor=AI_AIRCRAFT_ACTOR_GROUP,
+            attacker=AI_AIRCRAFT_ATTACKER_GROUP,
+            assistant=HUMAN_AIRCRAFT_ASSISTANT_GROUP,
+            pos=POS_GROUP_SUFFIX,
+            s=WHITESPACE,
         )
     )
     transformers = (
@@ -2962,15 +2979,15 @@ class AIAircraftWasShotDownByHumanAircraftAndHumanAircraft(ParsableEvent):
     __slots__ = ['time', 'actor', 'attacker', 'assistant', 'pos', ]
 
     verbose_name = _("AI aircraft was shot down by human aircraft and human aircraft")
-    matcher = rx.matcher(
+    matcher = make_matcher(
         "{time}{actor}{s}shot{s}down{s}by{s}{attacker}{s}and{s}{assistant}{pos}"
         .format(
-            time=rx.TIME_GROUP_PREFIX,
-            actor=rx.AI_AIRCRAFT_ACTOR_GROUP,
-            attacker=rx.HUMAN_AIRCRAFT_ATTACKER_GROUP,
-            assistant=rx.HUMAN_AIRCRAFT_ASSISTANT_GROUP,
-            pos=rx.POS_GROUP_SUFFIX,
-            s=rx.WHITESPACE,
+            time=TIME_GROUP_PREFIX,
+            actor=AI_AIRCRAFT_ACTOR_GROUP,
+            attacker=HUMAN_AIRCRAFT_ATTACKER_GROUP,
+            assistant=HUMAN_AIRCRAFT_ASSISTANT_GROUP,
+            pos=POS_GROUP_SUFFIX,
+            s=WHITESPACE,
         )
     )
     transformers = (
@@ -2992,13 +3009,13 @@ class AIAircraftCrewMemberWasKilled(ParsableEvent):
     __slots__ = ['time', 'actor', 'pos', ]
 
     verbose_name = _("AI aircraft crew member was killed")
-    matcher = rx.matcher(
+    matcher = make_matcher(
         "{time}{actor}{s}was{s}killed{pos}"
         .format(
-            time=rx.TIME_GROUP_PREFIX,
-            actor=rx.AI_AIRCRAFT_CREW_MEMBER_ACTOR_GROUP,
-            pos=rx.POS_GROUP_SUFFIX,
-            s=rx.WHITESPACE,
+            time=TIME_GROUP_PREFIX,
+            actor=AI_AIRCRAFT_CREW_MEMBER_ACTOR_GROUP,
+            pos=POS_GROUP_SUFFIX,
+            s=WHITESPACE,
         )
     )
     transformers = (
@@ -3018,14 +3035,14 @@ class AIAircraftCrewMemberWasKilledByStationaryUnit(ParsableEvent):
     __slots__ = ['time', 'actor', 'attacker', 'pos', ]
 
     verbose_name = _("AI aircraft crew member was killed by stationary unit")
-    matcher = rx.matcher(
+    matcher = make_matcher(
         "{time}{actor}{s}was{s}killed{s}by{s}{attacker}{pos}"
         .format(
-            time=rx.TIME_GROUP_PREFIX,
-            actor=rx.AI_AIRCRAFT_CREW_MEMBER_ACTOR_GROUP,
-            attacker=rx.STATIONARY_UNIT_ATTACKER_GROUP,
-            pos=rx.POS_GROUP_SUFFIX,
-            s=rx.WHITESPACE,
+            time=TIME_GROUP_PREFIX,
+            actor=AI_AIRCRAFT_CREW_MEMBER_ACTOR_GROUP,
+            attacker=STATIONARY_UNIT_ATTACKER_GROUP,
+            pos=POS_GROUP_SUFFIX,
+            s=WHITESPACE,
         )
     )
     transformers = (
@@ -3046,14 +3063,14 @@ class AIAircraftCrewMemberWasKilledByHumanAircraft(ParsableEvent):
     __slots__ = ['time', 'actor', 'attacker', 'pos', ]
 
     verbose_name = _("AI aircraft crew member was killed by human aircraft")
-    matcher = rx.matcher(
+    matcher = make_matcher(
         "{time}{actor}{s}was{s}killed{s}by{s}{attacker}{pos}"
         .format(
-            time=rx.TIME_GROUP_PREFIX,
-            actor=rx.AI_AIRCRAFT_CREW_MEMBER_ACTOR_GROUP,
-            attacker=rx.HUMAN_AIRCRAFT_ATTACKER_GROUP,
-            pos=rx.POS_GROUP_SUFFIX,
-            s=rx.WHITESPACE,
+            time=TIME_GROUP_PREFIX,
+            actor=AI_AIRCRAFT_CREW_MEMBER_ACTOR_GROUP,
+            attacker=HUMAN_AIRCRAFT_ATTACKER_GROUP,
+            pos=POS_GROUP_SUFFIX,
+            s=WHITESPACE,
         )
     )
     transformers = (
@@ -3074,14 +3091,14 @@ class AIAircraftCrewMemberWasKilledByAIAircraft(ParsableEvent):
     __slots__ = ['time', 'actor', 'attacker', 'pos', ]
 
     verbose_name = _("AI aircraft crew member was killed by AI aircraft")
-    matcher = rx.matcher(
+    matcher = make_matcher(
         "{time}{actor}{s}was{s}killed{s}by{s}{attacker}{pos}"
         .format(
-            time=rx.TIME_GROUP_PREFIX,
-            actor=rx.AI_AIRCRAFT_CREW_MEMBER_ACTOR_GROUP,
-            attacker=rx.AI_AIRCRAFT_ATTACKER_GROUP,
-            pos=rx.POS_GROUP_SUFFIX,
-            s=rx.WHITESPACE,
+            time=TIME_GROUP_PREFIX,
+            actor=AI_AIRCRAFT_CREW_MEMBER_ACTOR_GROUP,
+            attacker=AI_AIRCRAFT_ATTACKER_GROUP,
+            pos=POS_GROUP_SUFFIX,
+            s=WHITESPACE,
         )
     )
     transformers = (
@@ -3102,14 +3119,14 @@ class AIAircraftCrewMemberWasKilledByMovingUnitMember(ParsableEvent):
     __slots__ = ['time', 'actor', 'attacker', 'pos', ]
 
     verbose_name = _("AI aircraft crew member was killed by moving unit member")
-    matcher = rx.matcher(
+    matcher = make_matcher(
         "{time}{actor}{s}was{s}killed{s}by{s}{attacker}{pos}"
         .format(
-            time=rx.TIME_GROUP_PREFIX,
-            actor=rx.AI_AIRCRAFT_CREW_MEMBER_ACTOR_GROUP,
-            attacker=rx.MOVING_UNIT_MEMBER_ATTACKER_GROUP,
-            pos=rx.POS_GROUP_SUFFIX,
-            s=rx.WHITESPACE,
+            time=TIME_GROUP_PREFIX,
+            actor=AI_AIRCRAFT_CREW_MEMBER_ACTOR_GROUP,
+            attacker=MOVING_UNIT_MEMBER_ATTACKER_GROUP,
+            pos=POS_GROUP_SUFFIX,
+            s=WHITESPACE,
         )
     )
     transformers = (
@@ -3130,14 +3147,14 @@ class AIAircraftCrewMemberWasKilledByMovingUnit(ParsableEvent):
     __slots__ = ['time', 'actor', 'attacker', 'pos', ]
 
     verbose_name = _("AI aircraft crew member was killed by moving unit")
-    matcher = rx.matcher(
+    matcher = make_matcher(
         "{time}{actor}{s}was{s}killed{s}by{s}{attacker}{pos}"
         .format(
-            time=rx.TIME_GROUP_PREFIX,
-            actor=rx.AI_AIRCRAFT_CREW_MEMBER_ACTOR_GROUP,
-            attacker=rx.MOVING_UNIT_ATTACKER_GROUP,
-            pos=rx.POS_GROUP_SUFFIX,
-            s=rx.WHITESPACE,
+            time=TIME_GROUP_PREFIX,
+            actor=AI_AIRCRAFT_CREW_MEMBER_ACTOR_GROUP,
+            attacker=MOVING_UNIT_ATTACKER_GROUP,
+            pos=POS_GROUP_SUFFIX,
+            s=WHITESPACE,
         )
     )
     transformers = (
@@ -3158,14 +3175,14 @@ class AIAircraftCrewMemberWasKilledInParachuteByAIAircraft(ParsableEvent):
     __slots__ = ['time', 'actor', 'attacker', 'pos', ]
 
     verbose_name = _("AI aircraft crew member was killed in parachute by AI aircraft")
-    matcher = rx.matcher(
+    matcher = make_matcher(
         "{time}{actor}{s}was{s}killed{s}in{s}his{s}chute{s}by{s}{attacker}{pos}"
         .format(
-            time=rx.TIME_GROUP_PREFIX,
-            actor=rx.AI_AIRCRAFT_CREW_MEMBER_ACTOR_GROUP,
-            attacker=rx.AI_AIRCRAFT_ATTACKER_GROUP,
-            pos=rx.POS_GROUP_SUFFIX,
-            s=rx.WHITESPACE,
+            time=TIME_GROUP_PREFIX,
+            actor=AI_AIRCRAFT_CREW_MEMBER_ACTOR_GROUP,
+            attacker=AI_AIRCRAFT_ATTACKER_GROUP,
+            pos=POS_GROUP_SUFFIX,
+            s=WHITESPACE,
         )
     )
     transformers = (
@@ -3186,14 +3203,14 @@ class AIAircraftCrewMemberWasKilledInParachuteByStationaryUnit(ParsableEvent):
     __slots__ = ['time', 'actor', 'attacker', 'pos', ]
 
     verbose_name = _("AI aircraft crew member was killed in parachute by stationary unit")
-    matcher = rx.matcher(
+    matcher = make_matcher(
         "{time}{actor}{s}was{s}killed{s}in{s}his{s}chute{s}by{s}{attacker}{pos}"
         .format(
-            time=rx.TIME_GROUP_PREFIX,
-            actor=rx.AI_AIRCRAFT_CREW_MEMBER_ACTOR_GROUP,
-            attacker=rx.STATIONARY_UNIT_ATTACKER_GROUP,
-            pos=rx.POS_GROUP_SUFFIX,
-            s=rx.WHITESPACE,
+            time=TIME_GROUP_PREFIX,
+            actor=AI_AIRCRAFT_CREW_MEMBER_ACTOR_GROUP,
+            attacker=STATIONARY_UNIT_ATTACKER_GROUP,
+            pos=POS_GROUP_SUFFIX,
+            s=WHITESPACE,
         )
     )
     transformers = (
@@ -3214,14 +3231,14 @@ class AIAircraftCrewMemberWasKilledInParachuteByMovingUnitMember(ParsableEvent):
     __slots__ = ['time', 'actor', 'attacker', 'pos', ]
 
     verbose_name = _("AI aircraft crew member was killed in parachute by moving unit member")
-    matcher = rx.matcher(
+    matcher = make_matcher(
         "{time}{actor}{s}was{s}killed{s}in{s}his{s}chute{s}by{s}{attacker}{pos}"
         .format(
-            time=rx.TIME_GROUP_PREFIX,
-            actor=rx.AI_AIRCRAFT_CREW_MEMBER_ACTOR_GROUP,
-            attacker=rx.MOVING_UNIT_MEMBER_ATTACKER_GROUP,
-            pos=rx.POS_GROUP_SUFFIX,
-            s=rx.WHITESPACE,
+            time=TIME_GROUP_PREFIX,
+            actor=AI_AIRCRAFT_CREW_MEMBER_ACTOR_GROUP,
+            attacker=MOVING_UNIT_MEMBER_ATTACKER_GROUP,
+            pos=POS_GROUP_SUFFIX,
+            s=WHITESPACE,
         )
     )
     transformers = (
@@ -3242,14 +3259,14 @@ class AIAircraftCrewMemberWasKilledInParachuteByMovingUnit(ParsableEvent):
     __slots__ = ['time', 'actor', 'attacker', 'pos', ]
 
     verbose_name = _("AI aircraft crew member was killed in parachute by moving unit")
-    matcher = rx.matcher(
+    matcher = make_matcher(
         "{time}{actor}{s}was{s}killed{s}in{s}his{s}chute{s}by{s}{attacker}{pos}"
         .format(
-            time=rx.TIME_GROUP_PREFIX,
-            actor=rx.AI_AIRCRAFT_CREW_MEMBER_ACTOR_GROUP,
-            attacker=rx.MOVING_UNIT_ATTACKER_GROUP,
-            pos=rx.POS_GROUP_SUFFIX,
-            s=rx.WHITESPACE,
+            time=TIME_GROUP_PREFIX,
+            actor=AI_AIRCRAFT_CREW_MEMBER_ACTOR_GROUP,
+            attacker=MOVING_UNIT_ATTACKER_GROUP,
+            pos=POS_GROUP_SUFFIX,
+            s=WHITESPACE,
         )
     )
     transformers = (
@@ -3270,14 +3287,14 @@ class AIAircraftCrewMemberWasKilledInParachuteByHumanAircraft(ParsableEvent):
     __slots__ = ['time', 'actor', 'attacker', 'pos', ]
 
     verbose_name = _("AI aircraft crew member was killed in parachute by human aircraft")
-    matcher = rx.matcher(
+    matcher = make_matcher(
         "{time}{actor}{s}was{s}killed{s}in{s}his{s}chute{s}by{s}{attacker}{pos}"
         .format(
-            time=rx.TIME_GROUP_PREFIX,
-            actor=rx.AI_AIRCRAFT_CREW_MEMBER_ACTOR_GROUP,
-            attacker=rx.HUMAN_AIRCRAFT_ATTACKER_GROUP,
-            pos=rx.POS_GROUP_SUFFIX,
-            s=rx.WHITESPACE,
+            time=TIME_GROUP_PREFIX,
+            actor=AI_AIRCRAFT_CREW_MEMBER_ACTOR_GROUP,
+            attacker=HUMAN_AIRCRAFT_ATTACKER_GROUP,
+            pos=POS_GROUP_SUFFIX,
+            s=WHITESPACE,
         )
     )
     transformers = (
@@ -3298,14 +3315,14 @@ class AIAircraftCrewMemberParachuteWasDestroyedByAIAircraft(ParsableEvent):
     __slots__ = ['time', 'actor', 'attacker', 'pos', ]
 
     verbose_name = _("AI aircraft crew member's parachute was destroyed by AI aircraft")
-    matcher = rx.matcher(
+    matcher = make_matcher(
         "{time}{actor}{s}has{s}chute{s}destroyed{s}by{s}{attacker}{pos}"
         .format(
-            time=rx.TIME_GROUP_PREFIX,
-            actor=rx.AI_AIRCRAFT_CREW_MEMBER_ACTOR_GROUP,
-            attacker=rx.AI_AIRCRAFT_ATTACKER_GROUP,
-            pos=rx.POS_GROUP_SUFFIX,
-            s=rx.WHITESPACE,
+            time=TIME_GROUP_PREFIX,
+            actor=AI_AIRCRAFT_CREW_MEMBER_ACTOR_GROUP,
+            attacker=AI_AIRCRAFT_ATTACKER_GROUP,
+            pos=POS_GROUP_SUFFIX,
+            s=WHITESPACE,
         )
     )
     transformers = (
@@ -3326,14 +3343,14 @@ class AIAircraftCrewMemberParachuteWasDestroyedByStationaryUnit(ParsableEvent):
     __slots__ = ['time', 'actor', 'attacker', 'pos', ]
 
     verbose_name = _("AI aircraft crew member's parachute was destroyed by stationary unit")
-    matcher = rx.matcher(
+    matcher = make_matcher(
         "{time}{actor}{s}has{s}chute{s}destroyed{s}by{s}{attacker}{pos}"
         .format(
-            time=rx.TIME_GROUP_PREFIX,
-            actor=rx.AI_AIRCRAFT_CREW_MEMBER_ACTOR_GROUP,
-            attacker=rx.STATIONARY_UNIT_ATTACKER_GROUP,
-            pos=rx.POS_GROUP_SUFFIX,
-            s=rx.WHITESPACE,
+            time=TIME_GROUP_PREFIX,
+            actor=AI_AIRCRAFT_CREW_MEMBER_ACTOR_GROUP,
+            attacker=STATIONARY_UNIT_ATTACKER_GROUP,
+            pos=POS_GROUP_SUFFIX,
+            s=WHITESPACE,
         )
     )
     transformers = (
@@ -3354,14 +3371,14 @@ class AIAircraftCrewMemberParachuteWasDestroyedByMovingUnitMember(ParsableEvent)
     __slots__ = ['time', 'actor', 'attacker', 'pos', ]
 
     verbose_name = _("AI aircraft crew member's parachute was destroyed by moving unit member")
-    matcher = rx.matcher(
+    matcher = make_matcher(
         "{time}{actor}{s}has{s}chute{s}destroyed{s}by{s}{attacker}{pos}"
         .format(
-            time=rx.TIME_GROUP_PREFIX,
-            actor=rx.AI_AIRCRAFT_CREW_MEMBER_ACTOR_GROUP,
-            attacker=rx.MOVING_UNIT_MEMBER_ATTACKER_GROUP,
-            pos=rx.POS_GROUP_SUFFIX,
-            s=rx.WHITESPACE,
+            time=TIME_GROUP_PREFIX,
+            actor=AI_AIRCRAFT_CREW_MEMBER_ACTOR_GROUP,
+            attacker=MOVING_UNIT_MEMBER_ATTACKER_GROUP,
+            pos=POS_GROUP_SUFFIX,
+            s=WHITESPACE,
         )
     )
     transformers = (
@@ -3382,14 +3399,14 @@ class AIAircraftCrewMemberParachuteWasDestroyedByMovingUnit(ParsableEvent):
     __slots__ = ['time', 'actor', 'attacker', 'pos', ]
 
     verbose_name = _("AI aircraft crew member's parachute was destroyed by moving unit")
-    matcher = rx.matcher(
+    matcher = make_matcher(
         "{time}{actor}{s}has{s}chute{s}destroyed{s}by{s}{attacker}{pos}"
         .format(
-            time=rx.TIME_GROUP_PREFIX,
-            actor=rx.AI_AIRCRAFT_CREW_MEMBER_ACTOR_GROUP,
-            attacker=rx.MOVING_UNIT_ATTACKER_GROUP,
-            pos=rx.POS_GROUP_SUFFIX,
-            s=rx.WHITESPACE,
+            time=TIME_GROUP_PREFIX,
+            actor=AI_AIRCRAFT_CREW_MEMBER_ACTOR_GROUP,
+            attacker=MOVING_UNIT_ATTACKER_GROUP,
+            pos=POS_GROUP_SUFFIX,
+            s=WHITESPACE,
         )
     )
     transformers = (
@@ -3410,14 +3427,14 @@ class AIAircraftCrewMemberParachuteWasDestroyedByHumanAircraft(ParsableEvent):
     __slots__ = ['time', 'actor', 'attacker', 'pos', ]
 
     verbose_name = _("AI aircraft crew member's parachute was destroyed by human aircraft")
-    matcher = rx.matcher(
+    matcher = make_matcher(
         "{time}{actor}{s}has{s}chute{s}destroyed{s}by{s}{attacker}{pos}"
         .format(
-            time=rx.TIME_GROUP_PREFIX,
-            actor=rx.AI_AIRCRAFT_CREW_MEMBER_ACTOR_GROUP,
-            attacker=rx.HUMAN_AIRCRAFT_ATTACKER_GROUP,
-            pos=rx.POS_GROUP_SUFFIX,
-            s=rx.WHITESPACE,
+            time=TIME_GROUP_PREFIX,
+            actor=AI_AIRCRAFT_CREW_MEMBER_ACTOR_GROUP,
+            attacker=HUMAN_AIRCRAFT_ATTACKER_GROUP,
+            pos=POS_GROUP_SUFFIX,
+            s=WHITESPACE,
         )
     )
     transformers = (
@@ -3438,13 +3455,13 @@ class AIAircraftCrewMemberParachuteWasDestroyed(ParsableEvent):
     __slots__ = ['time', 'actor', 'pos', ]
 
     verbose_name = _("AI aircraft crew member's parachute was destroyed")
-    matcher = rx.matcher(
+    matcher = make_matcher(
         "{time}{actor}{s}has{s}chute{s}destroyed{pos}"
         .format(
-            time=rx.TIME_GROUP_PREFIX,
-            actor=rx.AI_AIRCRAFT_CREW_MEMBER_ACTOR_GROUP,
-            pos=rx.POS_GROUP_SUFFIX,
-            s=rx.WHITESPACE,
+            time=TIME_GROUP_PREFIX,
+            actor=AI_AIRCRAFT_CREW_MEMBER_ACTOR_GROUP,
+            pos=POS_GROUP_SUFFIX,
+            s=WHITESPACE,
         )
     )
     transformers = (
@@ -3464,13 +3481,13 @@ class AIAircraftCrewMemberWasWounded(ParsableEvent):
     __slots__ = ['time', 'actor', 'pos', ]
 
     verbose_name = _("AI aircraft crew member was wounded")
-    matcher = rx.matcher(
+    matcher = make_matcher(
         "{time}{actor}{s}was{s}wounded{pos}"
         .format(
-            time=rx.TIME_GROUP_PREFIX,
-            actor=rx.AI_AIRCRAFT_CREW_MEMBER_ACTOR_GROUP,
-            pos=rx.POS_GROUP_SUFFIX,
-            s=rx.WHITESPACE,
+            time=TIME_GROUP_PREFIX,
+            actor=AI_AIRCRAFT_CREW_MEMBER_ACTOR_GROUP,
+            pos=POS_GROUP_SUFFIX,
+            s=WHITESPACE,
         )
     )
     transformers = (
@@ -3490,13 +3507,13 @@ class AIAircraftCrewMemberWasHeavilyWounded(ParsableEvent):
     __slots__ = ['time', 'actor', 'pos', ]
 
     verbose_name = _("AI aircraft crew member was heavily wounded")
-    matcher = rx.matcher(
+    matcher = make_matcher(
         "{time}{actor}{s}was{s}heavily{s}wounded{pos}"
         .format(
-            time=rx.TIME_GROUP_PREFIX,
-            actor=rx.AI_AIRCRAFT_CREW_MEMBER_ACTOR_GROUP,
-            pos=rx.POS_GROUP_SUFFIX,
-            s=rx.WHITESPACE,
+            time=TIME_GROUP_PREFIX,
+            actor=AI_AIRCRAFT_CREW_MEMBER_ACTOR_GROUP,
+            pos=POS_GROUP_SUFFIX,
+            s=WHITESPACE,
         )
     )
     transformers = (
@@ -3516,13 +3533,13 @@ class AIAircraftCrewMemberWasCaptured(ParsableEvent):
     __slots__ = ['time', 'actor', 'pos', ]
 
     verbose_name = _("AI aircraft crew member was captured")
-    matcher = rx.matcher(
+    matcher = make_matcher(
         "{time}{actor}{s}was{s}captured{pos}"
         .format(
-            time=rx.TIME_GROUP_PREFIX,
-            actor=rx.AI_AIRCRAFT_CREW_MEMBER_ACTOR_GROUP,
-            pos=rx.POS_GROUP_SUFFIX,
-            s=rx.WHITESPACE,
+            time=TIME_GROUP_PREFIX,
+            actor=AI_AIRCRAFT_CREW_MEMBER_ACTOR_GROUP,
+            pos=POS_GROUP_SUFFIX,
+            s=WHITESPACE,
         )
     )
     transformers = (
@@ -3542,13 +3559,13 @@ class AIAircraftCrewMemberHasBailedOut(ParsableEvent):
     __slots__ = ['time', 'actor', 'pos', ]
 
     verbose_name = _("AI aircraft crew member has bailed out")
-    matcher = rx.matcher(
+    matcher = make_matcher(
         "{time}{actor}{s}bailed{s}out{pos}"
         .format(
-            time=rx.TIME_GROUP_PREFIX,
-            actor=rx.AI_AIRCRAFT_CREW_MEMBER_ACTOR_GROUP,
-            pos=rx.POS_GROUP_SUFFIX,
-            s=rx.WHITESPACE,
+            time=TIME_GROUP_PREFIX,
+            actor=AI_AIRCRAFT_CREW_MEMBER_ACTOR_GROUP,
+            pos=POS_GROUP_SUFFIX,
+            s=WHITESPACE,
         )
     )
     transformers = (
@@ -3568,13 +3585,13 @@ class AIAircraftCrewMemberHasLanded(ParsableEvent):
     __slots__ = ['time', 'actor', 'pos', ]
 
     verbose_name = _("AI aircraft crew member has landed")
-    matcher = rx.matcher(
+    matcher = make_matcher(
         "{time}{actor}{s}successfully{s}bailed{s}out{pos}"
         .format(
-            time=rx.TIME_GROUP_PREFIX,
-            actor=rx.AI_AIRCRAFT_CREW_MEMBER_ACTOR_GROUP,
-            pos=rx.POS_GROUP_SUFFIX,
-            s=rx.WHITESPACE,
+            time=TIME_GROUP_PREFIX,
+            actor=AI_AIRCRAFT_CREW_MEMBER_ACTOR_GROUP,
+            pos=POS_GROUP_SUFFIX,
+            s=WHITESPACE,
         )
     )
     transformers = (

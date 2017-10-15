@@ -1,40 +1,13 @@
 # coding: utf-8
-"""
-Regex primitives.
 
-"""
-
-import re
+from il2fb.commons.regex import (
+    ANYTHING, WHITESPACE, WHITESPACES, NON_WHITESPACES, NUMBER, FLOAT,
+    START_OF_STRING, END_OF_STRING,
+    group, named_group, choices,
+)
 
 from .constants import TOGGLE_VALUES, TARGET_STATES
 
-
-def matcher(pattern):
-    return re.compile(pattern, re.VERBOSE).match
-
-
-def group(expression):
-    return "({0})".format(expression)
-
-
-def named_group(group_name, expression):
-    return "(?P<{0}>{1})".format(group_name, expression)
-
-
-def choices(values, delimiter="|"):
-    return delimiter.join(values)
-
-
-ANYTHING = ".+"
-WHITESPACE = "\s"
-WHITESPACES = "{0}+".format(WHITESPACE)
-NON_WHITESPACE = "\S"
-NON_WHITESPACES = "{0}+".format(NON_WHITESPACE)
-DIGIT = "\d"
-NUMBER = "{0}+".format(DIGIT)
-FLOAT = "{0}.{0}".format(NUMBER)
-START_OF_STRING = "^"
-END_OF_STRING = "$"
 
 #: Example: "[8:33:05 PM]"
 TIME = "\d{1,2}:\d{2}:\d{2}\s[AP]M"
