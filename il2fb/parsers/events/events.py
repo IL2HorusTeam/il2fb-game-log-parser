@@ -4,12 +4,10 @@ Data structures for events.
 
 """
 
-import abc
 import inspect
-import six
 import sys
 
-from il2fb.commons.structures import BaseStructure
+from il2fb.commons.structures import ParsableEvent
 
 from . import rx, tx
 from .constants import TARGET_STATES
@@ -19,72 +17,16 @@ from .l10n import translations
 _ = translations.ugettext_lazy
 
 
-class Event(six.with_metaclass(abc.ABCMeta, BaseStructure)):
-    """
-    Base event structure.
-
-    """
-    transformers = tuple()
-
-    def __init__(self, **kwargs):
-        for key in self.__slots__:
-            setattr(self, key, kwargs[key])
-        super(Event, self).__init__()
-
-    @property
-    def name(self):
-        return self.__class__.__name__
-
-    @abc.abstractproperty
-    def verbose_name(self):
-        """
-        Human-readable name of event.
-
-        """
-
-    @abc.abstractproperty
-    def matcher(self):
-        """
-        A callable for matching strings.
-
-        """
-
-    def to_primitive(self, context=None):
-        primitive = super(Event, self).to_primitive(context)
-        primitive.update({
-            'name': self.name,
-            'verbose_name': six.text_type(self.verbose_name),
-        })
-        return primitive
-
-    @classmethod
-    def from_s(cls, s):
-        match = cls.matcher(s)
-
-        if match:
-            data = cls.transform(match.groupdict())
-            return cls(**data)
-
-    @classmethod
-    def transform(cls, data):
-        for transformer in cls.transformers:
-            transformer(data)
-        return data
-
-    def __repr__(self):
-        return "<Event: {0}>".format(self.name)
-
-
 def get_all_events():
     module = sys.modules[__name__]
     members = inspect.getmembers(module, inspect.isclass)
     return [
         cls for name, cls in members
-        if issubclass(cls, Event) and cls is not Event
+        if issubclass(cls, ParsableEvent) and cls is not ParsableEvent
     ]
 
 
-class MissionIsPlaying(Event):
+class MissionIsPlaying(ParsableEvent):
     """
     Example:
 
@@ -109,7 +51,7 @@ class MissionIsPlaying(Event):
     )
 
 
-class MissionHasBegun(Event):
+class MissionHasBegun(ParsableEvent):
     """
     Example:
 
@@ -132,7 +74,7 @@ class MissionHasBegun(Event):
     )
 
 
-class MissionHasEnded(Event):
+class MissionHasEnded(ParsableEvent):
     """
     Example:
 
@@ -155,7 +97,7 @@ class MissionHasEnded(Event):
     )
 
 
-class MissionWasWon(Event):
+class MissionWasWon(ParsableEvent):
     """
     Example:
 
@@ -181,7 +123,7 @@ class MissionWasWon(Event):
     )
 
 
-class TargetStateWasChanged(Event):
+class TargetStateWasChanged(ParsableEvent):
     """
     Example:
 
@@ -208,7 +150,7 @@ class TargetStateWasChanged(Event):
     )
 
 
-class HumanHasConnected(Event):
+class HumanHasConnected(ParsableEvent):
     """
     Example:
 
@@ -233,7 +175,7 @@ class HumanHasConnected(Event):
     )
 
 
-class HumanHasDisconnected(Event):
+class HumanHasDisconnected(ParsableEvent):
     """
     Example:
 
@@ -258,7 +200,7 @@ class HumanHasDisconnected(Event):
     )
 
 
-class HumanHasSelectedAirfield(Event):
+class HumanHasSelectedAirfield(ParsableEvent):
     """
     Example:
 
@@ -286,7 +228,7 @@ class HumanHasSelectedAirfield(Event):
     )
 
 
-class HumanAircraftHasSpawned(Event):
+class HumanAircraftHasSpawned(ParsableEvent):
     """
     Example:
 
@@ -314,7 +256,7 @@ class HumanAircraftHasSpawned(Event):
     )
 
 
-class HumanHasWentToBriefing(Event):
+class HumanHasWentToBriefing(ParsableEvent):
     """
     Example:
 
@@ -339,7 +281,7 @@ class HumanHasWentToBriefing(Event):
     )
 
 
-class HumanHasToggledLandingLights(Event):
+class HumanHasToggledLandingLights(ParsableEvent):
     """
     Example:
 
@@ -366,7 +308,7 @@ class HumanHasToggledLandingLights(Event):
     )
 
 
-class HumanHasToggledWingtipSmokes(Event):
+class HumanHasToggledWingtipSmokes(ParsableEvent):
     """
     Example:
 
@@ -393,7 +335,7 @@ class HumanHasToggledWingtipSmokes(Event):
     )
 
 
-class HumanHasChangedSeat(Event):
+class HumanHasChangedSeat(ParsableEvent):
     """
     Example:
 
@@ -420,7 +362,7 @@ class HumanHasChangedSeat(Event):
     )
 
 
-class HumanIsTryingToTakeSeat(Event):
+class HumanIsTryingToTakeSeat(ParsableEvent):
     """
     Example:
 
@@ -447,7 +389,7 @@ class HumanIsTryingToTakeSeat(Event):
     )
 
 
-class HumanAircraftHasTookOff(Event):
+class HumanAircraftHasTookOff(ParsableEvent):
     """
     Example:
 
@@ -473,7 +415,7 @@ class HumanAircraftHasTookOff(Event):
     )
 
 
-class HumanAircraftHasLanded(Event):
+class HumanAircraftHasLanded(ParsableEvent):
     """
     Example:
 
@@ -499,7 +441,7 @@ class HumanAircraftHasLanded(Event):
     )
 
 
-class HumanAircraftHasCrashed(Event):
+class HumanAircraftHasCrashed(ParsableEvent):
     """
     Example:
 
@@ -525,7 +467,7 @@ class HumanAircraftHasCrashed(Event):
     )
 
 
-class HumanHasDestroyedOwnAircraft(Event):
+class HumanHasDestroyedOwnAircraft(ParsableEvent):
     """
     Examples:
 
@@ -553,7 +495,7 @@ class HumanHasDestroyedOwnAircraft(Event):
     )
 
 
-class HumanHasDamagedOwnAircraft(Event):
+class HumanHasDamagedOwnAircraft(ParsableEvent):
     """
     Examples:
 
@@ -581,7 +523,7 @@ class HumanHasDamagedOwnAircraft(Event):
     )
 
 
-class HumanAircraftWasDamagedOnGround(Event):
+class HumanAircraftWasDamagedOnGround(ParsableEvent):
     """
     Example:
 
@@ -607,7 +549,7 @@ class HumanAircraftWasDamagedOnGround(Event):
     )
 
 
-class HumanAircraftWasDamagedByHumanAircraft(Event):
+class HumanAircraftWasDamagedByHumanAircraft(ParsableEvent):
     """
     Example:
 
@@ -635,7 +577,7 @@ class HumanAircraftWasDamagedByHumanAircraft(Event):
     )
 
 
-class HumanAircraftWasDamagedByStationaryUnit(Event):
+class HumanAircraftWasDamagedByStationaryUnit(ParsableEvent):
     """
     Example:
 
@@ -663,7 +605,7 @@ class HumanAircraftWasDamagedByStationaryUnit(Event):
     )
 
 
-class HumanAircraftWasDamagedByMovingUnitMember(Event):
+class HumanAircraftWasDamagedByMovingUnitMember(ParsableEvent):
     """
     Example:
 
@@ -691,7 +633,7 @@ class HumanAircraftWasDamagedByMovingUnitMember(Event):
     )
 
 
-class HumanAircraftWasDamagedByMovingUnit(Event):
+class HumanAircraftWasDamagedByMovingUnit(ParsableEvent):
     """
     Example:
 
@@ -719,7 +661,7 @@ class HumanAircraftWasDamagedByMovingUnit(Event):
     )
 
 
-class HumanAircraftWasDamagedByAIAircraft(Event):
+class HumanAircraftWasDamagedByAIAircraft(ParsableEvent):
     """
     Example:
 
@@ -747,7 +689,7 @@ class HumanAircraftWasDamagedByAIAircraft(Event):
     )
 
 
-class HumanAircraftWasShotDownByHumanAircraft(Event):
+class HumanAircraftWasShotDownByHumanAircraft(ParsableEvent):
     """
     Example:
 
@@ -775,7 +717,7 @@ class HumanAircraftWasShotDownByHumanAircraft(Event):
     )
 
 
-class HumanAircraftWasShotDownByStationaryUnit(Event):
+class HumanAircraftWasShotDownByStationaryUnit(ParsableEvent):
     """
     Example:
 
@@ -803,7 +745,7 @@ class HumanAircraftWasShotDownByStationaryUnit(Event):
     )
 
 
-class HumanAircraftWasShotDownByMovingUnitMember(Event):
+class HumanAircraftWasShotDownByMovingUnitMember(ParsableEvent):
     """
     Example:
 
@@ -831,7 +773,7 @@ class HumanAircraftWasShotDownByMovingUnitMember(Event):
     )
 
 
-class HumanAircraftWasShotDownByMovingUnit(Event):
+class HumanAircraftWasShotDownByMovingUnit(ParsableEvent):
     """
     Example:
 
@@ -859,7 +801,7 @@ class HumanAircraftWasShotDownByMovingUnit(Event):
     )
 
 
-class HumanAircraftWasShotDownByAIAircraft(Event):
+class HumanAircraftWasShotDownByAIAircraft(ParsableEvent):
     """
     Example:
 
@@ -887,7 +829,7 @@ class HumanAircraftWasShotDownByAIAircraft(Event):
     )
 
 
-class HumanAircraftWasShotDownByHumanAircraftAndHumanAircraft(Event):
+class HumanAircraftWasShotDownByHumanAircraftAndHumanAircraft(ParsableEvent):
     """
     Example:
 
@@ -917,7 +859,7 @@ class HumanAircraftWasShotDownByHumanAircraftAndHumanAircraft(Event):
     )
 
 
-class HumanAircraftWasShotDownByHumanAircraftAndAIAircraft(Event):
+class HumanAircraftWasShotDownByHumanAircraftAndAIAircraft(ParsableEvent):
     """
     Example:
 
@@ -947,7 +889,7 @@ class HumanAircraftWasShotDownByHumanAircraftAndAIAircraft(Event):
     )
 
 
-class HumanAircraftWasShotDownByAIAircraftAndHumanAircraft(Event):
+class HumanAircraftWasShotDownByAIAircraftAndHumanAircraft(ParsableEvent):
     """
     Example:
 
@@ -977,7 +919,7 @@ class HumanAircraftWasShotDownByAIAircraftAndHumanAircraft(Event):
     )
 
 
-class HumanAircraftWasShotDownByAIAircraftAndAIAircraft(Event):
+class HumanAircraftWasShotDownByAIAircraftAndAIAircraft(ParsableEvent):
     """
     Example:
 
@@ -1007,7 +949,7 @@ class HumanAircraftWasShotDownByAIAircraftAndAIAircraft(Event):
     )
 
 
-class HumanAircraftCrewMemberHasBailedOut(Event):
+class HumanAircraftCrewMemberHasBailedOut(ParsableEvent):
     """
     Example:
 
@@ -1033,7 +975,7 @@ class HumanAircraftCrewMemberHasBailedOut(Event):
     )
 
 
-class HumanAircraftCrewMemberHasLanded(Event):
+class HumanAircraftCrewMemberHasLanded(ParsableEvent):
     """
     Example:
 
@@ -1059,7 +1001,7 @@ class HumanAircraftCrewMemberHasLanded(Event):
     )
 
 
-class HumanAircraftCrewMemberWasCaptured(Event):
+class HumanAircraftCrewMemberWasCaptured(ParsableEvent):
     """
     Example:
 
@@ -1085,7 +1027,7 @@ class HumanAircraftCrewMemberWasCaptured(Event):
     )
 
 
-class HumanAircraftCrewMemberWasWounded(Event):
+class HumanAircraftCrewMemberWasWounded(ParsableEvent):
     """
     Example:
 
@@ -1111,7 +1053,7 @@ class HumanAircraftCrewMemberWasWounded(Event):
     )
 
 
-class HumanAircraftCrewMemberWasHeavilyWounded(Event):
+class HumanAircraftCrewMemberWasHeavilyWounded(ParsableEvent):
     """
     Example:
 
@@ -1137,7 +1079,7 @@ class HumanAircraftCrewMemberWasHeavilyWounded(Event):
     )
 
 
-class HumanAircraftCrewMemberWasKilled(Event):
+class HumanAircraftCrewMemberWasKilled(ParsableEvent):
     """
     Example:
 
@@ -1163,7 +1105,7 @@ class HumanAircraftCrewMemberWasKilled(Event):
     )
 
 
-class HumanAircraftCrewMemberWasKilledByHumanAircraft(Event):
+class HumanAircraftCrewMemberWasKilledByHumanAircraft(ParsableEvent):
     """
     Example:
 
@@ -1191,7 +1133,7 @@ class HumanAircraftCrewMemberWasKilledByHumanAircraft(Event):
     )
 
 
-class HumanAircraftCrewMemberWasKilledByStationaryUnit(Event):
+class HumanAircraftCrewMemberWasKilledByStationaryUnit(ParsableEvent):
     """
     Example:
 
@@ -1219,7 +1161,7 @@ class HumanAircraftCrewMemberWasKilledByStationaryUnit(Event):
     )
 
 
-class HumanAircraftCrewMemberWasKilledByMovingUnitMember(Event):
+class HumanAircraftCrewMemberWasKilledByMovingUnitMember(ParsableEvent):
     """
     Example:
 
@@ -1247,7 +1189,7 @@ class HumanAircraftCrewMemberWasKilledByMovingUnitMember(Event):
     )
 
 
-class HumanAircraftCrewMemberWasKilledByMovingUnit(Event):
+class HumanAircraftCrewMemberWasKilledByMovingUnit(ParsableEvent):
     """
     Example:
 
@@ -1275,7 +1217,7 @@ class HumanAircraftCrewMemberWasKilledByMovingUnit(Event):
     )
 
 
-class HumanAircraftCrewMemberWasKilledByAIAircraft(Event):
+class HumanAircraftCrewMemberWasKilledByAIAircraft(ParsableEvent):
     """
     Example:
 
@@ -1303,7 +1245,7 @@ class HumanAircraftCrewMemberWasKilledByAIAircraft(Event):
     )
 
 
-class HumanAircraftCrewMemberWasKilledInParachuteByStationaryUnit(Event):
+class HumanAircraftCrewMemberWasKilledInParachuteByStationaryUnit(ParsableEvent):
     """
     Example:
 
@@ -1331,7 +1273,7 @@ class HumanAircraftCrewMemberWasKilledInParachuteByStationaryUnit(Event):
     )
 
 
-class HumanAircraftCrewMemberWasKilledInParachuteByMovingUnitMember(Event):
+class HumanAircraftCrewMemberWasKilledInParachuteByMovingUnitMember(ParsableEvent):
     """
     Example:
 
@@ -1359,7 +1301,7 @@ class HumanAircraftCrewMemberWasKilledInParachuteByMovingUnitMember(Event):
     )
 
 
-class HumanAircraftCrewMemberWasKilledInParachuteByMovingUnit(Event):
+class HumanAircraftCrewMemberWasKilledInParachuteByMovingUnit(ParsableEvent):
     """
     Example:
 
@@ -1387,7 +1329,7 @@ class HumanAircraftCrewMemberWasKilledInParachuteByMovingUnit(Event):
     )
 
 
-class HumanAircraftCrewMemberWasKilledInParachuteByHumanAircraft(Event):
+class HumanAircraftCrewMemberWasKilledInParachuteByHumanAircraft(ParsableEvent):
     """
     Example:
 
@@ -1415,7 +1357,7 @@ class HumanAircraftCrewMemberWasKilledInParachuteByHumanAircraft(Event):
     )
 
 
-class HumanAircraftCrewMemberWasKilledInParachuteByAIAircraft(Event):
+class HumanAircraftCrewMemberWasKilledInParachuteByAIAircraft(ParsableEvent):
     """
     Example:
 
@@ -1443,7 +1385,7 @@ class HumanAircraftCrewMemberWasKilledInParachuteByAIAircraft(Event):
     )
 
 
-class HumanAircraftCrewMemberParachuteWasDestroyedByStationaryUnit(Event):
+class HumanAircraftCrewMemberParachuteWasDestroyedByStationaryUnit(ParsableEvent):
     """
     Example:
 
@@ -1471,7 +1413,7 @@ class HumanAircraftCrewMemberParachuteWasDestroyedByStationaryUnit(Event):
     )
 
 
-class HumanAircraftCrewMemberParachuteWasDestroyedByMovingUnitMember(Event):
+class HumanAircraftCrewMemberParachuteWasDestroyedByMovingUnitMember(ParsableEvent):
     """
     Example:
 
@@ -1499,7 +1441,7 @@ class HumanAircraftCrewMemberParachuteWasDestroyedByMovingUnitMember(Event):
     )
 
 
-class HumanAircraftCrewMemberParachuteWasDestroyedByMovingUnit(Event):
+class HumanAircraftCrewMemberParachuteWasDestroyedByMovingUnit(ParsableEvent):
     """
     Example:
 
@@ -1527,7 +1469,7 @@ class HumanAircraftCrewMemberParachuteWasDestroyedByMovingUnit(Event):
     )
 
 
-class HumanAircraftCrewMemberParachuteWasDestroyedByHumanAircraft(Event):
+class HumanAircraftCrewMemberParachuteWasDestroyedByHumanAircraft(ParsableEvent):
     """
     Example:
 
@@ -1555,7 +1497,7 @@ class HumanAircraftCrewMemberParachuteWasDestroyedByHumanAircraft(Event):
     )
 
 
-class HumanAircraftCrewMemberParachuteWasDestroyedByAIAircraft(Event):
+class HumanAircraftCrewMemberParachuteWasDestroyedByAIAircraft(ParsableEvent):
     """
     Example:
 
@@ -1583,7 +1525,7 @@ class HumanAircraftCrewMemberParachuteWasDestroyedByAIAircraft(Event):
     )
 
 
-class BuildingWasDestroyedByHumanAircraft(Event):
+class BuildingWasDestroyedByHumanAircraft(ParsableEvent):
     """
     Examples:
 
@@ -1612,7 +1554,7 @@ class BuildingWasDestroyedByHumanAircraft(Event):
     )
 
 
-class BuildingWasDestroyedByStationaryUnit(Event):
+class BuildingWasDestroyedByStationaryUnit(ParsableEvent):
     """
     Examples:
 
@@ -1641,7 +1583,7 @@ class BuildingWasDestroyedByStationaryUnit(Event):
     )
 
 
-class BuildingWasDestroyedByMovingUnitMember(Event):
+class BuildingWasDestroyedByMovingUnitMember(ParsableEvent):
     """
     Examples:
 
@@ -1670,7 +1612,7 @@ class BuildingWasDestroyedByMovingUnitMember(Event):
     )
 
 
-class BuildingWasDestroyedByMovingUnit(Event):
+class BuildingWasDestroyedByMovingUnit(ParsableEvent):
     """
     Examples:
 
@@ -1699,7 +1641,7 @@ class BuildingWasDestroyedByMovingUnit(Event):
     )
 
 
-class BuildingWasDestroyedByAIAircraft(Event):
+class BuildingWasDestroyedByAIAircraft(ParsableEvent):
     """
     Examples:
 
@@ -1728,7 +1670,7 @@ class BuildingWasDestroyedByAIAircraft(Event):
     )
 
 
-class TreeWasDestroyedByHumanAircraft(Event):
+class TreeWasDestroyedByHumanAircraft(ParsableEvent):
     """
     Examples:
 
@@ -1756,7 +1698,7 @@ class TreeWasDestroyedByHumanAircraft(Event):
     )
 
 
-class TreeWasDestroyedByStationaryUnit(Event):
+class TreeWasDestroyedByStationaryUnit(ParsableEvent):
     """
     Examples:
 
@@ -1784,7 +1726,7 @@ class TreeWasDestroyedByStationaryUnit(Event):
     )
 
 
-class TreeWasDestroyedByAIAircraft(Event):
+class TreeWasDestroyedByAIAircraft(ParsableEvent):
     """
     Examples:
 
@@ -1812,7 +1754,7 @@ class TreeWasDestroyedByAIAircraft(Event):
     )
 
 
-class TreeWasDestroyedByMovingUnitMember(Event):
+class TreeWasDestroyedByMovingUnitMember(ParsableEvent):
     """
     Examples:
 
@@ -1840,7 +1782,7 @@ class TreeWasDestroyedByMovingUnitMember(Event):
     )
 
 
-class TreeWasDestroyedByMovingUnit(Event):
+class TreeWasDestroyedByMovingUnit(ParsableEvent):
     """
     Examples:
 
@@ -1868,7 +1810,7 @@ class TreeWasDestroyedByMovingUnit(Event):
     )
 
 
-class TreeWasDestroyed(Event):
+class TreeWasDestroyed(ParsableEvent):
     """
     Examples:
 
@@ -1894,7 +1836,7 @@ class TreeWasDestroyed(Event):
     )
 
 
-class StationaryUnitWasDestroyed(Event):
+class StationaryUnitWasDestroyed(ParsableEvent):
     """
     Example:
 
@@ -1920,7 +1862,7 @@ class StationaryUnitWasDestroyed(Event):
     )
 
 
-class StationaryUnitWasDestroyedByStationaryUnit(Event):
+class StationaryUnitWasDestroyedByStationaryUnit(ParsableEvent):
     """
     Example:
 
@@ -1948,7 +1890,7 @@ class StationaryUnitWasDestroyedByStationaryUnit(Event):
     )
 
 
-class StationaryUnitWasDestroyedByMovingUnit(Event):
+class StationaryUnitWasDestroyedByMovingUnit(ParsableEvent):
     """
     Example:
 
@@ -1976,7 +1918,7 @@ class StationaryUnitWasDestroyedByMovingUnit(Event):
     )
 
 
-class StationaryUnitWasDestroyedByMovingUnitMember(Event):
+class StationaryUnitWasDestroyedByMovingUnitMember(ParsableEvent):
     """
     Example:
 
@@ -2004,7 +1946,7 @@ class StationaryUnitWasDestroyedByMovingUnitMember(Event):
     )
 
 
-class StationaryUnitWasDestroyedByHumanAircraft(Event):
+class StationaryUnitWasDestroyedByHumanAircraft(ParsableEvent):
     """
     Example:
 
@@ -2032,7 +1974,7 @@ class StationaryUnitWasDestroyedByHumanAircraft(Event):
     )
 
 
-class StationaryUnitWasDestroyedByAIAircraft(Event):
+class StationaryUnitWasDestroyedByAIAircraft(ParsableEvent):
     """
     Example:
 
@@ -2060,7 +2002,7 @@ class StationaryUnitWasDestroyedByAIAircraft(Event):
     )
 
 
-class BridgeWasDestroyedByHumanAircraft(Event):
+class BridgeWasDestroyedByHumanAircraft(ParsableEvent):
     """
     Example:
 
@@ -2088,7 +2030,7 @@ class BridgeWasDestroyedByHumanAircraft(Event):
     )
 
 
-class BridgeWasDestroyedByStationaryUnit(Event):
+class BridgeWasDestroyedByStationaryUnit(ParsableEvent):
     """
     Example:
 
@@ -2116,7 +2058,7 @@ class BridgeWasDestroyedByStationaryUnit(Event):
     )
 
 
-class BridgeWasDestroyedByMovingUnitMember(Event):
+class BridgeWasDestroyedByMovingUnitMember(ParsableEvent):
     """
     Example:
 
@@ -2144,7 +2086,7 @@ class BridgeWasDestroyedByMovingUnitMember(Event):
     )
 
 
-class BridgeWasDestroyedByMovingUnit(Event):
+class BridgeWasDestroyedByMovingUnit(ParsableEvent):
     """
     Example:
 
@@ -2172,7 +2114,7 @@ class BridgeWasDestroyedByMovingUnit(Event):
     )
 
 
-class BridgeWasDestroyedByAIAircraft(Event):
+class BridgeWasDestroyedByAIAircraft(ParsableEvent):
     """
     Example:
 
@@ -2200,7 +2142,7 @@ class BridgeWasDestroyedByAIAircraft(Event):
     )
 
 
-class MovingUnitWasDestroyedByMovingUnit(Event):
+class MovingUnitWasDestroyedByMovingUnit(ParsableEvent):
     """
     Example:
 
@@ -2228,7 +2170,7 @@ class MovingUnitWasDestroyedByMovingUnit(Event):
     )
 
 
-class MovingUnitWasDestroyedByMovingUnitMember(Event):
+class MovingUnitWasDestroyedByMovingUnitMember(ParsableEvent):
     """
     Example:
 
@@ -2256,7 +2198,7 @@ class MovingUnitWasDestroyedByMovingUnitMember(Event):
     )
 
 
-class MovingUnitWasDestroyedByStationaryUnit(Event):
+class MovingUnitWasDestroyedByStationaryUnit(ParsableEvent):
     """
     Example:
 
@@ -2284,7 +2226,7 @@ class MovingUnitWasDestroyedByStationaryUnit(Event):
     )
 
 
-class MovingUnitWasDestroyedByHumanAircraft(Event):
+class MovingUnitWasDestroyedByHumanAircraft(ParsableEvent):
     """
     Example:
 
@@ -2312,7 +2254,7 @@ class MovingUnitWasDestroyedByHumanAircraft(Event):
     )
 
 
-class MovingUnitWasDestroyedByAIAircraft(Event):
+class MovingUnitWasDestroyedByAIAircraft(ParsableEvent):
     """
     Example:
 
@@ -2340,7 +2282,7 @@ class MovingUnitWasDestroyedByAIAircraft(Event):
     )
 
 
-class MovingUnitMemberWasDestroyedByStationaryUnit(Event):
+class MovingUnitMemberWasDestroyedByStationaryUnit(ParsableEvent):
     """
     Example:
 
@@ -2368,7 +2310,7 @@ class MovingUnitMemberWasDestroyedByStationaryUnit(Event):
     )
 
 
-class MovingUnitMemberWasDestroyedByAIAircraft(Event):
+class MovingUnitMemberWasDestroyedByAIAircraft(ParsableEvent):
     """
     Example:
 
@@ -2396,7 +2338,7 @@ class MovingUnitMemberWasDestroyedByAIAircraft(Event):
     )
 
 
-class MovingUnitMemberWasDestroyedByHumanAircraft(Event):
+class MovingUnitMemberWasDestroyedByHumanAircraft(ParsableEvent):
     """
     Example:
 
@@ -2424,7 +2366,7 @@ class MovingUnitMemberWasDestroyedByHumanAircraft(Event):
     )
 
 
-class MovingUnitMemberWasDestroyedByMovingUnit(Event):
+class MovingUnitMemberWasDestroyedByMovingUnit(ParsableEvent):
     """
     Example:
 
@@ -2452,7 +2394,7 @@ class MovingUnitMemberWasDestroyedByMovingUnit(Event):
     )
 
 
-class MovingUnitMemberWasDestroyedByMovingUnitMember(Event):
+class MovingUnitMemberWasDestroyedByMovingUnitMember(ParsableEvent):
     """
     Example:
 
@@ -2480,7 +2422,7 @@ class MovingUnitMemberWasDestroyedByMovingUnitMember(Event):
     )
 
 
-class AIAircraftHasDespawned(Event):
+class AIAircraftHasDespawned(ParsableEvent):
     """
     Example:
 
@@ -2506,7 +2448,7 @@ class AIAircraftHasDespawned(Event):
     )
 
 
-class AIAircraftWasDamagedOnGround(Event):
+class AIAircraftWasDamagedOnGround(ParsableEvent):
     """
     Example:
 
@@ -2532,7 +2474,7 @@ class AIAircraftWasDamagedOnGround(Event):
     )
 
 
-class AIAircraftWasDamagedByHumanAircraft(Event):
+class AIAircraftWasDamagedByHumanAircraft(ParsableEvent):
     """
     Example:
 
@@ -2560,7 +2502,7 @@ class AIAircraftWasDamagedByHumanAircraft(Event):
     )
 
 
-class AIAircraftWasDamagedByStationaryUnit(Event):
+class AIAircraftWasDamagedByStationaryUnit(ParsableEvent):
     """
     Example:
 
@@ -2588,7 +2530,7 @@ class AIAircraftWasDamagedByStationaryUnit(Event):
     )
 
 
-class AIAircraftWasDamagedByMovingUnitMember(Event):
+class AIAircraftWasDamagedByMovingUnitMember(ParsableEvent):
     """
     Example:
 
@@ -2616,7 +2558,7 @@ class AIAircraftWasDamagedByMovingUnitMember(Event):
     )
 
 
-class AIAircraftWasDamagedByMovingUnit(Event):
+class AIAircraftWasDamagedByMovingUnit(ParsableEvent):
     """
     Example:
 
@@ -2644,7 +2586,7 @@ class AIAircraftWasDamagedByMovingUnit(Event):
     )
 
 
-class AIAircraftWasDamagedByAIAircraft(Event):
+class AIAircraftWasDamagedByAIAircraft(ParsableEvent):
     """
     Example:
 
@@ -2672,7 +2614,7 @@ class AIAircraftWasDamagedByAIAircraft(Event):
     )
 
 
-class AIHasDamagedOwnAircraft(Event):
+class AIHasDamagedOwnAircraft(ParsableEvent):
     """
     Examples:
 
@@ -2700,7 +2642,7 @@ class AIHasDamagedOwnAircraft(Event):
     )
 
 
-class AIHasDestroyedOwnAircraft(Event):
+class AIHasDestroyedOwnAircraft(ParsableEvent):
     """
     Examples:
 
@@ -2728,7 +2670,7 @@ class AIHasDestroyedOwnAircraft(Event):
     )
 
 
-class AIAircraftHasLanded(Event):
+class AIAircraftHasLanded(ParsableEvent):
     """
     Example:
 
@@ -2754,7 +2696,7 @@ class AIAircraftHasLanded(Event):
     )
 
 
-class AIAircraftHasCrashed(Event):
+class AIAircraftHasCrashed(ParsableEvent):
     """
     Example:
 
@@ -2780,7 +2722,7 @@ class AIAircraftHasCrashed(Event):
     )
 
 
-class AIAircraftWasShotDownByHumanAircraft(Event):
+class AIAircraftWasShotDownByHumanAircraft(ParsableEvent):
     """
     Example:
 
@@ -2808,7 +2750,7 @@ class AIAircraftWasShotDownByHumanAircraft(Event):
     )
 
 
-class AIAircraftWasShotDownByAIAircraft(Event):
+class AIAircraftWasShotDownByAIAircraft(ParsableEvent):
     """
     Example:
 
@@ -2836,7 +2778,7 @@ class AIAircraftWasShotDownByAIAircraft(Event):
     )
 
 
-class AIAircraftWasShotDownByStationaryUnit(Event):
+class AIAircraftWasShotDownByStationaryUnit(ParsableEvent):
     """
     Example:
 
@@ -2864,7 +2806,7 @@ class AIAircraftWasShotDownByStationaryUnit(Event):
     )
 
 
-class AIAircraftWasShotDownByMovingUnitMember(Event):
+class AIAircraftWasShotDownByMovingUnitMember(ParsableEvent):
     """
     Example:
 
@@ -2892,7 +2834,7 @@ class AIAircraftWasShotDownByMovingUnitMember(Event):
     )
 
 
-class AIAircraftWasShotDownByMovingUnit(Event):
+class AIAircraftWasShotDownByMovingUnit(ParsableEvent):
     """
     Example:
 
@@ -2920,7 +2862,7 @@ class AIAircraftWasShotDownByMovingUnit(Event):
     )
 
 
-class AIAircraftWasShotDownByAIAircraftAndAIAircraft(Event):
+class AIAircraftWasShotDownByAIAircraftAndAIAircraft(ParsableEvent):
     """
     Example:
 
@@ -2950,7 +2892,7 @@ class AIAircraftWasShotDownByAIAircraftAndAIAircraft(Event):
     )
 
 
-class AIAircraftWasShotDownByHumanAircraftAndAIAircraft(Event):
+class AIAircraftWasShotDownByHumanAircraftAndAIAircraft(ParsableEvent):
     """
     Example:
 
@@ -2980,7 +2922,7 @@ class AIAircraftWasShotDownByHumanAircraftAndAIAircraft(Event):
     )
 
 
-class AIAircraftWasShotDownByAIAircraftAndHumanAircraft(Event):
+class AIAircraftWasShotDownByAIAircraftAndHumanAircraft(ParsableEvent):
     """
     Example:
 
@@ -3010,7 +2952,7 @@ class AIAircraftWasShotDownByAIAircraftAndHumanAircraft(Event):
     )
 
 
-class AIAircraftWasShotDownByHumanAircraftAndHumanAircraft(Event):
+class AIAircraftWasShotDownByHumanAircraftAndHumanAircraft(ParsableEvent):
     """
     Example:
 
@@ -3040,7 +2982,7 @@ class AIAircraftWasShotDownByHumanAircraftAndHumanAircraft(Event):
     )
 
 
-class AIAircraftCrewMemberWasKilled(Event):
+class AIAircraftCrewMemberWasKilled(ParsableEvent):
     """
     Example:
 
@@ -3066,7 +3008,7 @@ class AIAircraftCrewMemberWasKilled(Event):
     )
 
 
-class AIAircraftCrewMemberWasKilledByStationaryUnit(Event):
+class AIAircraftCrewMemberWasKilledByStationaryUnit(ParsableEvent):
     """
     Example:
 
@@ -3094,7 +3036,7 @@ class AIAircraftCrewMemberWasKilledByStationaryUnit(Event):
     )
 
 
-class AIAircraftCrewMemberWasKilledByHumanAircraft(Event):
+class AIAircraftCrewMemberWasKilledByHumanAircraft(ParsableEvent):
     """
     Example:
 
@@ -3122,7 +3064,7 @@ class AIAircraftCrewMemberWasKilledByHumanAircraft(Event):
     )
 
 
-class AIAircraftCrewMemberWasKilledByAIAircraft(Event):
+class AIAircraftCrewMemberWasKilledByAIAircraft(ParsableEvent):
     """
     Example:
 
@@ -3150,7 +3092,7 @@ class AIAircraftCrewMemberWasKilledByAIAircraft(Event):
     )
 
 
-class AIAircraftCrewMemberWasKilledByMovingUnitMember(Event):
+class AIAircraftCrewMemberWasKilledByMovingUnitMember(ParsableEvent):
     """
     Example:
 
@@ -3178,7 +3120,7 @@ class AIAircraftCrewMemberWasKilledByMovingUnitMember(Event):
     )
 
 
-class AIAircraftCrewMemberWasKilledByMovingUnit(Event):
+class AIAircraftCrewMemberWasKilledByMovingUnit(ParsableEvent):
     """
     Example:
 
@@ -3206,7 +3148,7 @@ class AIAircraftCrewMemberWasKilledByMovingUnit(Event):
     )
 
 
-class AIAircraftCrewMemberWasKilledInParachuteByAIAircraft(Event):
+class AIAircraftCrewMemberWasKilledInParachuteByAIAircraft(ParsableEvent):
     """
     Example:
 
@@ -3234,7 +3176,7 @@ class AIAircraftCrewMemberWasKilledInParachuteByAIAircraft(Event):
     )
 
 
-class AIAircraftCrewMemberWasKilledInParachuteByStationaryUnit(Event):
+class AIAircraftCrewMemberWasKilledInParachuteByStationaryUnit(ParsableEvent):
     """
     Example:
 
@@ -3262,7 +3204,7 @@ class AIAircraftCrewMemberWasKilledInParachuteByStationaryUnit(Event):
     )
 
 
-class AIAircraftCrewMemberWasKilledInParachuteByMovingUnitMember(Event):
+class AIAircraftCrewMemberWasKilledInParachuteByMovingUnitMember(ParsableEvent):
     """
     Example:
 
@@ -3290,7 +3232,7 @@ class AIAircraftCrewMemberWasKilledInParachuteByMovingUnitMember(Event):
     )
 
 
-class AIAircraftCrewMemberWasKilledInParachuteByMovingUnit(Event):
+class AIAircraftCrewMemberWasKilledInParachuteByMovingUnit(ParsableEvent):
     """
     Example:
 
@@ -3318,7 +3260,7 @@ class AIAircraftCrewMemberWasKilledInParachuteByMovingUnit(Event):
     )
 
 
-class AIAircraftCrewMemberWasKilledInParachuteByHumanAircraft(Event):
+class AIAircraftCrewMemberWasKilledInParachuteByHumanAircraft(ParsableEvent):
     """
     Example:
 
@@ -3346,7 +3288,7 @@ class AIAircraftCrewMemberWasKilledInParachuteByHumanAircraft(Event):
     )
 
 
-class AIAircraftCrewMemberParachuteWasDestroyedByAIAircraft(Event):
+class AIAircraftCrewMemberParachuteWasDestroyedByAIAircraft(ParsableEvent):
     """
     Example:
 
@@ -3374,7 +3316,7 @@ class AIAircraftCrewMemberParachuteWasDestroyedByAIAircraft(Event):
     )
 
 
-class AIAircraftCrewMemberParachuteWasDestroyedByStationaryUnit(Event):
+class AIAircraftCrewMemberParachuteWasDestroyedByStationaryUnit(ParsableEvent):
     """
     Example:
 
@@ -3402,7 +3344,7 @@ class AIAircraftCrewMemberParachuteWasDestroyedByStationaryUnit(Event):
     )
 
 
-class AIAircraftCrewMemberParachuteWasDestroyedByMovingUnitMember(Event):
+class AIAircraftCrewMemberParachuteWasDestroyedByMovingUnitMember(ParsableEvent):
     """
     Example:
 
@@ -3430,7 +3372,7 @@ class AIAircraftCrewMemberParachuteWasDestroyedByMovingUnitMember(Event):
     )
 
 
-class AIAircraftCrewMemberParachuteWasDestroyedByMovingUnit(Event):
+class AIAircraftCrewMemberParachuteWasDestroyedByMovingUnit(ParsableEvent):
     """
     Example:
 
@@ -3458,7 +3400,7 @@ class AIAircraftCrewMemberParachuteWasDestroyedByMovingUnit(Event):
     )
 
 
-class AIAircraftCrewMemberParachuteWasDestroyedByHumanAircraft(Event):
+class AIAircraftCrewMemberParachuteWasDestroyedByHumanAircraft(ParsableEvent):
     """
     Example:
 
@@ -3486,7 +3428,7 @@ class AIAircraftCrewMemberParachuteWasDestroyedByHumanAircraft(Event):
     )
 
 
-class AIAircraftCrewMemberParachuteWasDestroyed(Event):
+class AIAircraftCrewMemberParachuteWasDestroyed(ParsableEvent):
     """
     Example:
 
@@ -3512,7 +3454,7 @@ class AIAircraftCrewMemberParachuteWasDestroyed(Event):
     )
 
 
-class AIAircraftCrewMemberWasWounded(Event):
+class AIAircraftCrewMemberWasWounded(ParsableEvent):
     """
     Example:
 
@@ -3538,7 +3480,7 @@ class AIAircraftCrewMemberWasWounded(Event):
     )
 
 
-class AIAircraftCrewMemberWasHeavilyWounded(Event):
+class AIAircraftCrewMemberWasHeavilyWounded(ParsableEvent):
     """
     Example:
 
@@ -3564,7 +3506,7 @@ class AIAircraftCrewMemberWasHeavilyWounded(Event):
     )
 
 
-class AIAircraftCrewMemberWasCaptured(Event):
+class AIAircraftCrewMemberWasCaptured(ParsableEvent):
     """
     Example:
 
@@ -3590,7 +3532,7 @@ class AIAircraftCrewMemberWasCaptured(Event):
     )
 
 
-class AIAircraftCrewMemberHasBailedOut(Event):
+class AIAircraftCrewMemberHasBailedOut(ParsableEvent):
     """
     Example:
 
@@ -3616,7 +3558,7 @@ class AIAircraftCrewMemberHasBailedOut(Event):
     )
 
 
-class AIAircraftCrewMemberHasLanded(Event):
+class AIAircraftCrewMemberHasLanded(ParsableEvent):
     """
     Example:
 
