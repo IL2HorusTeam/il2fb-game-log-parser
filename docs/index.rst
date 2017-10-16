@@ -5,7 +5,7 @@ IL-2 FB Game Log Parser
 
 |unix_build| |windows_build| |coverage_status|
 
-|codeclimate| |codacy| |quality| |health| |requirements|
+|maintainability| |codacy| |quality| |health| |requirements|
 
 Synopsis
 --------
@@ -35,9 +35,9 @@ Indices and tables
     :target: http://codecov.io/github/IL2HorusTeam/il2fb-game-log-parser?branch=master
     :alt: Test coverage
 
-.. |codeclimate| image:: https://codeclimate.com/github/IL2HorusTeam/il2fb-game-log-parser/badges/gpa.svg
-   :target: https://codeclimate.com/github/IL2HorusTeam/il2fb-game-log-parser
-   :alt: Code Climate
+.. |maintainability| image:: https://api.codeclimate.com/v1/badges/fc51e9e01ee8f1045274/maintainability
+   :target: https://codeclimate.com/github/IL2HorusTeam/il2fb-game-log-parser/maintainability
+   :alt: Maintainability
 
 .. |codacy| image:: https://api.codacy.com/project/badge/c0385f01ffa545dea3a52a51cfc53221
     :target: https://www.codacy.com/app/oblalex/il2fb-game-log-parser
