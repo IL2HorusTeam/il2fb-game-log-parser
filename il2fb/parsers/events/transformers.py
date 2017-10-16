@@ -6,9 +6,6 @@ Data transformers.
 
 import datetime
 
-from il2fb.commons.organization import Belligerents
-from il2fb.commons.spatial import Point2D
-
 from . import actors
 from .constants import LOG_TIME_FORMAT, LOG_DATE_FORMAT
 
@@ -21,28 +18,6 @@ def transform_time(data):
 def transform_date(data):
     value = data['date']
     data['date'] = datetime.datetime.strptime(value, LOG_DATE_FORMAT).date()
-
-
-def transform_pos(data):
-    data['pos'] = Point2D(
-        float(data.pop('pos_x')),
-        float(data.pop('pos_y')),
-    )
-
-
-def transform_belligerent(data):
-    value = data['belligerent']
-    data['belligerent'] = Belligerents[value.lower()]
-
-
-def get_int_transformer(dst_field_name, src_field_name=None):
-    if not src_field_name:
-        src_field_name = dst_field_name
-
-    def transform_int(data):
-        data[dst_field_name] = int(data[src_field_name])
-
-    return transform_int
 
 
 def get_human_transformer(dst_field_name, src_field_prefix=None):

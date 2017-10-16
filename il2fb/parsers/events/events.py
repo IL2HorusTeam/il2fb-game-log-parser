@@ -12,8 +12,10 @@ from il2fb.commons.regex import (
     make_matcher, named_group,
 )
 from il2fb.commons.structures import ParsableEvent
+from il2fb.commons.transformers import (
+    get_int_transformer, transform_belligerent, transform_2d_pos,
+)
 
-from . import tx
 from .constants import TARGET_STATES
 from .l10n import translations
 from .regex import (
@@ -28,6 +30,27 @@ from .regex import (
     AI_AIRCRAFT_ACTOR_GROUP, AI_AIRCRAFT_CREW_MEMBER_ACTOR_GROUP,
     AI_AIRCRAFT_ATTACKER_GROUP, AI_AIRCRAFT_ASSISTANT_GROUP,
     BUILDING_ACTOR_GROUP, BRIDGE_ACTOR_GROUP, TREE,
+)
+from .transformers import (
+    transform_date, transform_time,
+    transform_human_as_actor,
+    transform_human_aircraft_as_actor,
+    transform_human_aircraft_as_attacker,
+    transform_human_aircraft_as_assistant,
+    transform_human_aircraft_crew_member_as_actor,
+    transform_ai_aircraft_as_actor,
+    transform_ai_aircraft_as_attacker,
+    transform_ai_aircraft_as_assistant,
+    transform_ai_aircraft_crew_member_as_seat,
+    transform_ai_aircraft_crew_member_as_actor,
+    transform_moving_unit_as_actor,
+    transform_moving_unit_as_attacker,
+    transform_moving_unit_member_as_actor,
+    transform_moving_unit_member_as_attacker,
+    transform_stationary_unit_as_actor,
+    transform_stationary_unit_as_attacker,
+    transform_building_as_actor,
+    transform_bridge_as_actor,
 )
 
 
@@ -63,8 +86,8 @@ class MissionIsPlaying(ParsableEvent):
         )
     )
     transformers = (
-        tx.transform_date,
-        tx.transform_time,
+        transform_date,
+        transform_time,
     )
 
 
@@ -87,7 +110,7 @@ class MissionHasBegun(ParsableEvent):
         )
     )
     transformers = (
-        tx.transform_time,
+        transform_time,
     )
 
 
@@ -110,7 +133,7 @@ class MissionHasEnded(ParsableEvent):
         )
     )
     transformers = (
-        tx.transform_time,
+        transform_time,
     )
 
 
@@ -134,9 +157,9 @@ class MissionWasWon(ParsableEvent):
         )
     )
     transformers = (
-        tx.transform_date,
-        tx.transform_time,
-        tx.transform_belligerent,
+        transform_date,
+        transform_time,
+        transform_belligerent,
     )
 
 
@@ -162,8 +185,8 @@ class TargetStateWasChanged(ParsableEvent):
         )
     )
     transformers = (
-        tx.transform_time,
-        tx.get_int_transformer('index'),
+        transform_time,
+        get_int_transformer('index'),
     )
 
 
@@ -187,8 +210,8 @@ class HumanHasConnected(ParsableEvent):
         )
     )
     transformers = (
-        tx.transform_time,
-        tx.transform_human_as_actor,
+        transform_time,
+        transform_human_as_actor,
     )
 
 
@@ -212,8 +235,8 @@ class HumanHasDisconnected(ParsableEvent):
         )
     )
     transformers = (
-        tx.transform_time,
-        tx.transform_human_as_actor,
+        transform_time,
+        transform_human_as_actor,
     )
 
 
@@ -238,10 +261,10 @@ class HumanHasSelectedAirfield(ParsableEvent):
         )
     )
     transformers = (
-        tx.transform_time,
-        tx.transform_human_as_actor,
-        tx.transform_belligerent,
-        tx.transform_pos,
+        transform_time,
+        transform_human_as_actor,
+        transform_belligerent,
+        transform_2d_pos,
     )
 
 
@@ -267,9 +290,9 @@ class HumanAircraftHasSpawned(ParsableEvent):
         )
     )
     transformers = (
-        tx.transform_time,
-        tx.transform_human_aircraft_as_actor,
-        tx.get_int_transformer('fuel'),
+        transform_time,
+        transform_human_aircraft_as_actor,
+        get_int_transformer('fuel'),
     )
 
 
@@ -293,8 +316,8 @@ class HumanHasWentToBriefing(ParsableEvent):
         )
     )
     transformers = (
-        tx.transform_time,
-        tx.transform_human_as_actor,
+        transform_time,
+        transform_human_as_actor,
     )
 
 
@@ -319,9 +342,9 @@ class HumanHasToggledLandingLights(ParsableEvent):
         )
     )
     transformers = (
-        tx.transform_time,
-        tx.transform_human_aircraft_as_actor,
-        tx.transform_pos,
+        transform_time,
+        transform_human_aircraft_as_actor,
+        transform_2d_pos,
     )
 
 
@@ -346,9 +369,9 @@ class HumanHasToggledWingtipSmokes(ParsableEvent):
         )
     )
     transformers = (
-        tx.transform_time,
-        tx.transform_human_aircraft_as_actor,
-        tx.transform_pos,
+        transform_time,
+        transform_human_aircraft_as_actor,
+        transform_2d_pos,
     )
 
 
@@ -373,9 +396,9 @@ class HumanHasChangedSeat(ParsableEvent):
         )
     )
     transformers = (
-        tx.transform_time,
-        tx.transform_human_aircraft_crew_member_as_actor,
-        tx.transform_pos,
+        transform_time,
+        transform_human_aircraft_crew_member_as_actor,
+        transform_2d_pos,
     )
 
 
@@ -400,9 +423,9 @@ class HumanIsTryingToTakeSeat(ParsableEvent):
         )
     )
     transformers = (
-        tx.transform_time,
-        tx.transform_human_as_actor,
-        tx.transform_ai_aircraft_crew_member_as_seat,
+        transform_time,
+        transform_human_as_actor,
+        transform_ai_aircraft_crew_member_as_seat,
     )
 
 
@@ -426,9 +449,9 @@ class HumanAircraftHasTookOff(ParsableEvent):
         )
     )
     transformers = (
-        tx.transform_time,
-        tx.transform_human_aircraft_as_actor,
-        tx.transform_pos,
+        transform_time,
+        transform_human_aircraft_as_actor,
+        transform_2d_pos,
     )
 
 
@@ -452,9 +475,9 @@ class HumanAircraftHasLanded(ParsableEvent):
         )
     )
     transformers = (
-        tx.transform_time,
-        tx.transform_human_aircraft_as_actor,
-        tx.transform_pos,
+        transform_time,
+        transform_human_aircraft_as_actor,
+        transform_2d_pos,
     )
 
 
@@ -478,9 +501,9 @@ class HumanAircraftHasCrashed(ParsableEvent):
         )
     )
     transformers = (
-        tx.transform_time,
-        tx.transform_human_aircraft_as_actor,
-        tx.transform_pos,
+        transform_time,
+        transform_human_aircraft_as_actor,
+        transform_2d_pos,
     )
 
 
@@ -506,9 +529,9 @@ class HumanHasDestroyedOwnAircraft(ParsableEvent):
         )
     )
     transformers = (
-        tx.transform_time,
-        tx.transform_human_aircraft_as_actor,
-        tx.transform_pos,
+        transform_time,
+        transform_human_aircraft_as_actor,
+        transform_2d_pos,
     )
 
 
@@ -534,9 +557,9 @@ class HumanHasDamagedOwnAircraft(ParsableEvent):
         )
     )
     transformers = (
-        tx.transform_time,
-        tx.transform_human_aircraft_as_actor,
-        tx.transform_pos,
+        transform_time,
+        transform_human_aircraft_as_actor,
+        transform_2d_pos,
     )
 
 
@@ -560,9 +583,9 @@ class HumanAircraftWasDamagedOnGround(ParsableEvent):
         )
     )
     transformers = (
-        tx.transform_time,
-        tx.transform_human_aircraft_as_actor,
-        tx.transform_pos,
+        transform_time,
+        transform_human_aircraft_as_actor,
+        transform_2d_pos,
     )
 
 
@@ -587,10 +610,10 @@ class HumanAircraftWasDamagedByHumanAircraft(ParsableEvent):
         )
     )
     transformers = (
-        tx.transform_time,
-        tx.transform_human_aircraft_as_actor,
-        tx.transform_human_aircraft_as_attacker,
-        tx.transform_pos,
+        transform_time,
+        transform_human_aircraft_as_actor,
+        transform_human_aircraft_as_attacker,
+        transform_2d_pos,
     )
 
 
@@ -615,10 +638,10 @@ class HumanAircraftWasDamagedByStationaryUnit(ParsableEvent):
         )
     )
     transformers = (
-        tx.transform_time,
-        tx.transform_human_aircraft_as_actor,
-        tx.transform_stationary_unit_as_attacker,
-        tx.transform_pos,
+        transform_time,
+        transform_human_aircraft_as_actor,
+        transform_stationary_unit_as_attacker,
+        transform_2d_pos,
     )
 
 
@@ -643,10 +666,10 @@ class HumanAircraftWasDamagedByMovingUnitMember(ParsableEvent):
         )
     )
     transformers = (
-        tx.transform_time,
-        tx.transform_human_aircraft_as_actor,
-        tx.transform_moving_unit_member_as_attacker,
-        tx.transform_pos,
+        transform_time,
+        transform_human_aircraft_as_actor,
+        transform_moving_unit_member_as_attacker,
+        transform_2d_pos,
     )
 
 
@@ -671,10 +694,10 @@ class HumanAircraftWasDamagedByMovingUnit(ParsableEvent):
         )
     )
     transformers = (
-        tx.transform_time,
-        tx.transform_human_aircraft_as_actor,
-        tx.transform_moving_unit_as_attacker,
-        tx.transform_pos,
+        transform_time,
+        transform_human_aircraft_as_actor,
+        transform_moving_unit_as_attacker,
+        transform_2d_pos,
     )
 
 
@@ -699,10 +722,10 @@ class HumanAircraftWasDamagedByAIAircraft(ParsableEvent):
         )
     )
     transformers = (
-        tx.transform_time,
-        tx.transform_human_aircraft_as_actor,
-        tx.transform_ai_aircraft_as_attacker,
-        tx.transform_pos,
+        transform_time,
+        transform_human_aircraft_as_actor,
+        transform_ai_aircraft_as_attacker,
+        transform_2d_pos,
     )
 
 
@@ -727,10 +750,10 @@ class HumanAircraftWasShotDownByHumanAircraft(ParsableEvent):
         )
     )
     transformers = (
-        tx.transform_time,
-        tx.transform_human_aircraft_as_actor,
-        tx.transform_human_aircraft_as_attacker,
-        tx.transform_pos,
+        transform_time,
+        transform_human_aircraft_as_actor,
+        transform_human_aircraft_as_attacker,
+        transform_2d_pos,
     )
 
 
@@ -755,10 +778,10 @@ class HumanAircraftWasShotDownByStationaryUnit(ParsableEvent):
         )
     )
     transformers = (
-        tx.transform_time,
-        tx.transform_human_aircraft_as_actor,
-        tx.transform_stationary_unit_as_attacker,
-        tx.transform_pos,
+        transform_time,
+        transform_human_aircraft_as_actor,
+        transform_stationary_unit_as_attacker,
+        transform_2d_pos,
     )
 
 
@@ -783,10 +806,10 @@ class HumanAircraftWasShotDownByMovingUnitMember(ParsableEvent):
         )
     )
     transformers = (
-        tx.transform_time,
-        tx.transform_human_aircraft_as_actor,
-        tx.transform_moving_unit_member_as_attacker,
-        tx.transform_pos,
+        transform_time,
+        transform_human_aircraft_as_actor,
+        transform_moving_unit_member_as_attacker,
+        transform_2d_pos,
     )
 
 
@@ -811,10 +834,10 @@ class HumanAircraftWasShotDownByMovingUnit(ParsableEvent):
         )
     )
     transformers = (
-        tx.transform_time,
-        tx.transform_human_aircraft_as_actor,
-        tx.transform_moving_unit_as_attacker,
-        tx.transform_pos,
+        transform_time,
+        transform_human_aircraft_as_actor,
+        transform_moving_unit_as_attacker,
+        transform_2d_pos,
     )
 
 
@@ -839,10 +862,10 @@ class HumanAircraftWasShotDownByAIAircraft(ParsableEvent):
         )
     )
     transformers = (
-        tx.transform_time,
-        tx.transform_human_aircraft_as_actor,
-        tx.transform_ai_aircraft_as_attacker,
-        tx.transform_pos,
+        transform_time,
+        transform_human_aircraft_as_actor,
+        transform_ai_aircraft_as_attacker,
+        transform_2d_pos,
     )
 
 
@@ -868,11 +891,11 @@ class HumanAircraftWasShotDownByHumanAircraftAndHumanAircraft(ParsableEvent):
         )
     )
     transformers = (
-        tx.transform_time,
-        tx.transform_human_aircraft_as_actor,
-        tx.transform_human_aircraft_as_attacker,
-        tx.transform_human_aircraft_as_assistant,
-        tx.transform_pos,
+        transform_time,
+        transform_human_aircraft_as_actor,
+        transform_human_aircraft_as_attacker,
+        transform_human_aircraft_as_assistant,
+        transform_2d_pos,
     )
 
 
@@ -898,11 +921,11 @@ class HumanAircraftWasShotDownByHumanAircraftAndAIAircraft(ParsableEvent):
         )
     )
     transformers = (
-        tx.transform_time,
-        tx.transform_human_aircraft_as_actor,
-        tx.transform_human_aircraft_as_attacker,
-        tx.transform_ai_aircraft_as_assistant,
-        tx.transform_pos,
+        transform_time,
+        transform_human_aircraft_as_actor,
+        transform_human_aircraft_as_attacker,
+        transform_ai_aircraft_as_assistant,
+        transform_2d_pos,
     )
 
 
@@ -928,11 +951,11 @@ class HumanAircraftWasShotDownByAIAircraftAndHumanAircraft(ParsableEvent):
         )
     )
     transformers = (
-        tx.transform_time,
-        tx.transform_human_aircraft_as_actor,
-        tx.transform_ai_aircraft_as_attacker,
-        tx.transform_human_aircraft_as_assistant,
-        tx.transform_pos,
+        transform_time,
+        transform_human_aircraft_as_actor,
+        transform_ai_aircraft_as_attacker,
+        transform_human_aircraft_as_assistant,
+        transform_2d_pos,
     )
 
 
@@ -958,11 +981,11 @@ class HumanAircraftWasShotDownByAIAircraftAndAIAircraft(ParsableEvent):
         )
     )
     transformers = (
-        tx.transform_time,
-        tx.transform_human_aircraft_as_actor,
-        tx.transform_ai_aircraft_as_attacker,
-        tx.transform_ai_aircraft_as_assistant,
-        tx.transform_pos,
+        transform_time,
+        transform_human_aircraft_as_actor,
+        transform_ai_aircraft_as_attacker,
+        transform_ai_aircraft_as_assistant,
+        transform_2d_pos,
     )
 
 
@@ -986,9 +1009,9 @@ class HumanAircraftCrewMemberHasBailedOut(ParsableEvent):
         )
     )
     transformers = (
-        tx.transform_time,
-        tx.transform_human_aircraft_crew_member_as_actor,
-        tx.transform_pos,
+        transform_time,
+        transform_human_aircraft_crew_member_as_actor,
+        transform_2d_pos,
     )
 
 
@@ -1012,9 +1035,9 @@ class HumanAircraftCrewMemberHasLanded(ParsableEvent):
         )
     )
     transformers = (
-        tx.transform_time,
-        tx.transform_human_aircraft_crew_member_as_actor,
-        tx.transform_pos,
+        transform_time,
+        transform_human_aircraft_crew_member_as_actor,
+        transform_2d_pos,
     )
 
 
@@ -1038,9 +1061,9 @@ class HumanAircraftCrewMemberWasCaptured(ParsableEvent):
         )
     )
     transformers = (
-        tx.transform_time,
-        tx.transform_human_aircraft_crew_member_as_actor,
-        tx.transform_pos,
+        transform_time,
+        transform_human_aircraft_crew_member_as_actor,
+        transform_2d_pos,
     )
 
 
@@ -1064,9 +1087,9 @@ class HumanAircraftCrewMemberWasWounded(ParsableEvent):
         )
     )
     transformers = (
-        tx.transform_time,
-        tx.transform_human_aircraft_crew_member_as_actor,
-        tx.transform_pos,
+        transform_time,
+        transform_human_aircraft_crew_member_as_actor,
+        transform_2d_pos,
     )
 
 
@@ -1090,9 +1113,9 @@ class HumanAircraftCrewMemberWasHeavilyWounded(ParsableEvent):
         )
     )
     transformers = (
-        tx.transform_time,
-        tx.transform_human_aircraft_crew_member_as_actor,
-        tx.transform_pos,
+        transform_time,
+        transform_human_aircraft_crew_member_as_actor,
+        transform_2d_pos,
     )
 
 
@@ -1116,9 +1139,9 @@ class HumanAircraftCrewMemberWasKilled(ParsableEvent):
         )
     )
     transformers = (
-        tx.transform_time,
-        tx.transform_human_aircraft_crew_member_as_actor,
-        tx.transform_pos,
+        transform_time,
+        transform_human_aircraft_crew_member_as_actor,
+        transform_2d_pos,
     )
 
 
@@ -1143,10 +1166,10 @@ class HumanAircraftCrewMemberWasKilledByHumanAircraft(ParsableEvent):
         )
     )
     transformers = (
-        tx.transform_time,
-        tx.transform_human_aircraft_crew_member_as_actor,
-        tx.transform_human_aircraft_as_attacker,
-        tx.transform_pos,
+        transform_time,
+        transform_human_aircraft_crew_member_as_actor,
+        transform_human_aircraft_as_attacker,
+        transform_2d_pos,
     )
 
 
@@ -1171,10 +1194,10 @@ class HumanAircraftCrewMemberWasKilledByStationaryUnit(ParsableEvent):
         )
     )
     transformers = (
-        tx.transform_time,
-        tx.transform_human_aircraft_crew_member_as_actor,
-        tx.transform_stationary_unit_as_attacker,
-        tx.transform_pos,
+        transform_time,
+        transform_human_aircraft_crew_member_as_actor,
+        transform_stationary_unit_as_attacker,
+        transform_2d_pos,
     )
 
 
@@ -1199,10 +1222,10 @@ class HumanAircraftCrewMemberWasKilledByMovingUnitMember(ParsableEvent):
         )
     )
     transformers = (
-        tx.transform_time,
-        tx.transform_human_aircraft_crew_member_as_actor,
-        tx.transform_moving_unit_member_as_attacker,
-        tx.transform_pos,
+        transform_time,
+        transform_human_aircraft_crew_member_as_actor,
+        transform_moving_unit_member_as_attacker,
+        transform_2d_pos,
     )
 
 
@@ -1227,10 +1250,10 @@ class HumanAircraftCrewMemberWasKilledByMovingUnit(ParsableEvent):
         )
     )
     transformers = (
-        tx.transform_time,
-        tx.transform_human_aircraft_crew_member_as_actor,
-        tx.transform_moving_unit_as_attacker,
-        tx.transform_pos,
+        transform_time,
+        transform_human_aircraft_crew_member_as_actor,
+        transform_moving_unit_as_attacker,
+        transform_2d_pos,
     )
 
 
@@ -1255,10 +1278,10 @@ class HumanAircraftCrewMemberWasKilledByAIAircraft(ParsableEvent):
         )
     )
     transformers = (
-        tx.transform_time,
-        tx.transform_human_aircraft_crew_member_as_actor,
-        tx.transform_ai_aircraft_as_attacker,
-        tx.transform_pos,
+        transform_time,
+        transform_human_aircraft_crew_member_as_actor,
+        transform_ai_aircraft_as_attacker,
+        transform_2d_pos,
     )
 
 
@@ -1283,10 +1306,10 @@ class HumanAircraftCrewMemberWasKilledInParachuteByStationaryUnit(ParsableEvent)
         )
     )
     transformers = (
-        tx.transform_time,
-        tx.transform_human_aircraft_crew_member_as_actor,
-        tx.transform_stationary_unit_as_attacker,
-        tx.transform_pos,
+        transform_time,
+        transform_human_aircraft_crew_member_as_actor,
+        transform_stationary_unit_as_attacker,
+        transform_2d_pos,
     )
 
 
@@ -1311,10 +1334,10 @@ class HumanAircraftCrewMemberWasKilledInParachuteByMovingUnitMember(ParsableEven
         )
     )
     transformers = (
-        tx.transform_time,
-        tx.transform_human_aircraft_crew_member_as_actor,
-        tx.transform_moving_unit_member_as_attacker,
-        tx.transform_pos,
+        transform_time,
+        transform_human_aircraft_crew_member_as_actor,
+        transform_moving_unit_member_as_attacker,
+        transform_2d_pos,
     )
 
 
@@ -1339,10 +1362,10 @@ class HumanAircraftCrewMemberWasKilledInParachuteByMovingUnit(ParsableEvent):
         )
     )
     transformers = (
-        tx.transform_time,
-        tx.transform_human_aircraft_crew_member_as_actor,
-        tx.transform_moving_unit_as_attacker,
-        tx.transform_pos,
+        transform_time,
+        transform_human_aircraft_crew_member_as_actor,
+        transform_moving_unit_as_attacker,
+        transform_2d_pos,
     )
 
 
@@ -1367,10 +1390,10 @@ class HumanAircraftCrewMemberWasKilledInParachuteByHumanAircraft(ParsableEvent):
         )
     )
     transformers = (
-        tx.transform_time,
-        tx.transform_human_aircraft_crew_member_as_actor,
-        tx.transform_human_aircraft_as_attacker,
-        tx.transform_pos,
+        transform_time,
+        transform_human_aircraft_crew_member_as_actor,
+        transform_human_aircraft_as_attacker,
+        transform_2d_pos,
     )
 
 
@@ -1395,10 +1418,10 @@ class HumanAircraftCrewMemberWasKilledInParachuteByAIAircraft(ParsableEvent):
         )
     )
     transformers = (
-        tx.transform_time,
-        tx.transform_human_aircraft_crew_member_as_actor,
-        tx.transform_ai_aircraft_as_attacker,
-        tx.transform_pos,
+        transform_time,
+        transform_human_aircraft_crew_member_as_actor,
+        transform_ai_aircraft_as_attacker,
+        transform_2d_pos,
     )
 
 
@@ -1423,10 +1446,10 @@ class HumanAircraftCrewMemberParachuteWasDestroyedByStationaryUnit(ParsableEvent
         )
     )
     transformers = (
-        tx.transform_time,
-        tx.transform_human_aircraft_crew_member_as_actor,
-        tx.transform_stationary_unit_as_attacker,
-        tx.transform_pos,
+        transform_time,
+        transform_human_aircraft_crew_member_as_actor,
+        transform_stationary_unit_as_attacker,
+        transform_2d_pos,
     )
 
 
@@ -1451,10 +1474,10 @@ class HumanAircraftCrewMemberParachuteWasDestroyedByMovingUnitMember(ParsableEve
         )
     )
     transformers = (
-        tx.transform_time,
-        tx.transform_human_aircraft_crew_member_as_actor,
-        tx.transform_moving_unit_member_as_attacker,
-        tx.transform_pos,
+        transform_time,
+        transform_human_aircraft_crew_member_as_actor,
+        transform_moving_unit_member_as_attacker,
+        transform_2d_pos,
     )
 
 
@@ -1479,10 +1502,10 @@ class HumanAircraftCrewMemberParachuteWasDestroyedByMovingUnit(ParsableEvent):
         )
     )
     transformers = (
-        tx.transform_time,
-        tx.transform_human_aircraft_crew_member_as_actor,
-        tx.transform_moving_unit_as_attacker,
-        tx.transform_pos,
+        transform_time,
+        transform_human_aircraft_crew_member_as_actor,
+        transform_moving_unit_as_attacker,
+        transform_2d_pos,
     )
 
 
@@ -1507,10 +1530,10 @@ class HumanAircraftCrewMemberParachuteWasDestroyedByHumanAircraft(ParsableEvent)
         )
     )
     transformers = (
-        tx.transform_time,
-        tx.transform_human_aircraft_crew_member_as_actor,
-        tx.transform_human_aircraft_as_attacker,
-        tx.transform_pos,
+        transform_time,
+        transform_human_aircraft_crew_member_as_actor,
+        transform_human_aircraft_as_attacker,
+        transform_2d_pos,
     )
 
 
@@ -1535,10 +1558,10 @@ class HumanAircraftCrewMemberParachuteWasDestroyedByAIAircraft(ParsableEvent):
         )
     )
     transformers = (
-        tx.transform_time,
-        tx.transform_human_aircraft_crew_member_as_actor,
-        tx.transform_ai_aircraft_as_attacker,
-        tx.transform_pos,
+        transform_time,
+        transform_human_aircraft_crew_member_as_actor,
+        transform_ai_aircraft_as_attacker,
+        transform_2d_pos,
     )
 
 
@@ -1564,10 +1587,10 @@ class BuildingWasDestroyedByHumanAircraft(ParsableEvent):
         )
     )
     transformers = (
-        tx.transform_time,
-        tx.transform_building_as_actor,
-        tx.transform_human_aircraft_as_attacker,
-        tx.transform_pos,
+        transform_time,
+        transform_building_as_actor,
+        transform_human_aircraft_as_attacker,
+        transform_2d_pos,
     )
 
 
@@ -1593,10 +1616,10 @@ class BuildingWasDestroyedByStationaryUnit(ParsableEvent):
         )
     )
     transformers = (
-        tx.transform_time,
-        tx.transform_building_as_actor,
-        tx.transform_stationary_unit_as_attacker,
-        tx.transform_pos,
+        transform_time,
+        transform_building_as_actor,
+        transform_stationary_unit_as_attacker,
+        transform_2d_pos,
     )
 
 
@@ -1622,10 +1645,10 @@ class BuildingWasDestroyedByMovingUnitMember(ParsableEvent):
         )
     )
     transformers = (
-        tx.transform_time,
-        tx.transform_building_as_actor,
-        tx.transform_moving_unit_member_as_attacker,
-        tx.transform_pos,
+        transform_time,
+        transform_building_as_actor,
+        transform_moving_unit_member_as_attacker,
+        transform_2d_pos,
     )
 
 
@@ -1651,10 +1674,10 @@ class BuildingWasDestroyedByMovingUnit(ParsableEvent):
         )
     )
     transformers = (
-        tx.transform_time,
-        tx.transform_building_as_actor,
-        tx.transform_moving_unit_as_attacker,
-        tx.transform_pos,
+        transform_time,
+        transform_building_as_actor,
+        transform_moving_unit_as_attacker,
+        transform_2d_pos,
     )
 
 
@@ -1680,10 +1703,10 @@ class BuildingWasDestroyedByAIAircraft(ParsableEvent):
         )
     )
     transformers = (
-        tx.transform_time,
-        tx.transform_building_as_actor,
-        tx.transform_ai_aircraft_as_attacker,
-        tx.transform_pos,
+        transform_time,
+        transform_building_as_actor,
+        transform_ai_aircraft_as_attacker,
+        transform_2d_pos,
     )
 
 
@@ -1709,9 +1732,9 @@ class TreeWasDestroyedByHumanAircraft(ParsableEvent):
         )
     )
     transformers = (
-        tx.transform_time,
-        tx.transform_human_aircraft_as_attacker,
-        tx.transform_pos,
+        transform_time,
+        transform_human_aircraft_as_attacker,
+        transform_2d_pos,
     )
 
 
@@ -1737,9 +1760,9 @@ class TreeWasDestroyedByStationaryUnit(ParsableEvent):
         )
     )
     transformers = (
-        tx.transform_time,
-        tx.transform_stationary_unit_as_attacker,
-        tx.transform_pos,
+        transform_time,
+        transform_stationary_unit_as_attacker,
+        transform_2d_pos,
     )
 
 
@@ -1765,9 +1788,9 @@ class TreeWasDestroyedByAIAircraft(ParsableEvent):
         )
     )
     transformers = (
-        tx.transform_time,
-        tx.transform_ai_aircraft_as_attacker,
-        tx.transform_pos,
+        transform_time,
+        transform_ai_aircraft_as_attacker,
+        transform_2d_pos,
     )
 
 
@@ -1793,9 +1816,9 @@ class TreeWasDestroyedByMovingUnitMember(ParsableEvent):
         )
     )
     transformers = (
-        tx.transform_time,
-        tx.transform_moving_unit_member_as_attacker,
-        tx.transform_pos,
+        transform_time,
+        transform_moving_unit_member_as_attacker,
+        transform_2d_pos,
     )
 
 
@@ -1821,9 +1844,9 @@ class TreeWasDestroyedByMovingUnit(ParsableEvent):
         )
     )
     transformers = (
-        tx.transform_time,
-        tx.transform_moving_unit_as_attacker,
-        tx.transform_pos,
+        transform_time,
+        transform_moving_unit_as_attacker,
+        transform_2d_pos,
     )
 
 
@@ -1848,8 +1871,8 @@ class TreeWasDestroyed(ParsableEvent):
         )
     )
     transformers = (
-        tx.transform_time,
-        tx.transform_pos,
+        transform_time,
+        transform_2d_pos,
     )
 
 
@@ -1873,9 +1896,9 @@ class StationaryUnitWasDestroyed(ParsableEvent):
         )
     )
     transformers = (
-        tx.transform_time,
-        tx.transform_stationary_unit_as_actor,
-        tx.transform_pos,
+        transform_time,
+        transform_stationary_unit_as_actor,
+        transform_2d_pos,
     )
 
 
@@ -1900,10 +1923,10 @@ class StationaryUnitWasDestroyedByStationaryUnit(ParsableEvent):
         )
     )
     transformers = (
-        tx.transform_time,
-        tx.transform_stationary_unit_as_actor,
-        tx.transform_stationary_unit_as_attacker,
-        tx.transform_pos,
+        transform_time,
+        transform_stationary_unit_as_actor,
+        transform_stationary_unit_as_attacker,
+        transform_2d_pos,
     )
 
 
@@ -1928,10 +1951,10 @@ class StationaryUnitWasDestroyedByMovingUnit(ParsableEvent):
         )
     )
     transformers = (
-        tx.transform_time,
-        tx.transform_stationary_unit_as_actor,
-        tx.transform_moving_unit_as_attacker,
-        tx.transform_pos,
+        transform_time,
+        transform_stationary_unit_as_actor,
+        transform_moving_unit_as_attacker,
+        transform_2d_pos,
     )
 
 
@@ -1956,10 +1979,10 @@ class StationaryUnitWasDestroyedByMovingUnitMember(ParsableEvent):
         )
     )
     transformers = (
-        tx.transform_time,
-        tx.transform_stationary_unit_as_actor,
-        tx.transform_moving_unit_member_as_attacker,
-        tx.transform_pos,
+        transform_time,
+        transform_stationary_unit_as_actor,
+        transform_moving_unit_member_as_attacker,
+        transform_2d_pos,
     )
 
 
@@ -1984,10 +2007,10 @@ class StationaryUnitWasDestroyedByHumanAircraft(ParsableEvent):
         )
     )
     transformers = (
-        tx.transform_time,
-        tx.transform_stationary_unit_as_actor,
-        tx.transform_human_aircraft_as_attacker,
-        tx.transform_pos,
+        transform_time,
+        transform_stationary_unit_as_actor,
+        transform_human_aircraft_as_attacker,
+        transform_2d_pos,
     )
 
 
@@ -2012,10 +2035,10 @@ class StationaryUnitWasDestroyedByAIAircraft(ParsableEvent):
         )
     )
     transformers = (
-        tx.transform_time,
-        tx.transform_stationary_unit_as_actor,
-        tx.transform_ai_aircraft_as_attacker,
-        tx.transform_pos,
+        transform_time,
+        transform_stationary_unit_as_actor,
+        transform_ai_aircraft_as_attacker,
+        transform_2d_pos,
     )
 
 
@@ -2040,10 +2063,10 @@ class BridgeWasDestroyedByHumanAircraft(ParsableEvent):
         )
     )
     transformers = (
-        tx.transform_time,
-        tx.transform_bridge_as_actor,
-        tx.transform_human_aircraft_as_attacker,
-        tx.transform_pos,
+        transform_time,
+        transform_bridge_as_actor,
+        transform_human_aircraft_as_attacker,
+        transform_2d_pos,
     )
 
 
@@ -2068,10 +2091,10 @@ class BridgeWasDestroyedByStationaryUnit(ParsableEvent):
         )
     )
     transformers = (
-        tx.transform_time,
-        tx.transform_bridge_as_actor,
-        tx.transform_stationary_unit_as_attacker,
-        tx.transform_pos,
+        transform_time,
+        transform_bridge_as_actor,
+        transform_stationary_unit_as_attacker,
+        transform_2d_pos,
     )
 
 
@@ -2096,10 +2119,10 @@ class BridgeWasDestroyedByMovingUnitMember(ParsableEvent):
         )
     )
     transformers = (
-        tx.transform_time,
-        tx.transform_bridge_as_actor,
-        tx.transform_moving_unit_member_as_attacker,
-        tx.transform_pos,
+        transform_time,
+        transform_bridge_as_actor,
+        transform_moving_unit_member_as_attacker,
+        transform_2d_pos,
     )
 
 
@@ -2124,10 +2147,10 @@ class BridgeWasDestroyedByMovingUnit(ParsableEvent):
         )
     )
     transformers = (
-        tx.transform_time,
-        tx.transform_bridge_as_actor,
-        tx.transform_moving_unit_as_attacker,
-        tx.transform_pos,
+        transform_time,
+        transform_bridge_as_actor,
+        transform_moving_unit_as_attacker,
+        transform_2d_pos,
     )
 
 
@@ -2152,10 +2175,10 @@ class BridgeWasDestroyedByAIAircraft(ParsableEvent):
         )
     )
     transformers = (
-        tx.transform_time,
-        tx.transform_bridge_as_actor,
-        tx.transform_ai_aircraft_as_attacker,
-        tx.transform_pos,
+        transform_time,
+        transform_bridge_as_actor,
+        transform_ai_aircraft_as_attacker,
+        transform_2d_pos,
     )
 
 
@@ -2180,10 +2203,10 @@ class MovingUnitWasDestroyedByMovingUnit(ParsableEvent):
         )
     )
     transformers = (
-        tx.transform_time,
-        tx.transform_moving_unit_as_actor,
-        tx.transform_moving_unit_as_attacker,
-        tx.transform_pos,
+        transform_time,
+        transform_moving_unit_as_actor,
+        transform_moving_unit_as_attacker,
+        transform_2d_pos,
     )
 
 
@@ -2208,10 +2231,10 @@ class MovingUnitWasDestroyedByMovingUnitMember(ParsableEvent):
         )
     )
     transformers = (
-        tx.transform_time,
-        tx.transform_moving_unit_as_actor,
-        tx.transform_moving_unit_member_as_attacker,
-        tx.transform_pos,
+        transform_time,
+        transform_moving_unit_as_actor,
+        transform_moving_unit_member_as_attacker,
+        transform_2d_pos,
     )
 
 
@@ -2236,10 +2259,10 @@ class MovingUnitWasDestroyedByStationaryUnit(ParsableEvent):
         )
     )
     transformers = (
-        tx.transform_time,
-        tx.transform_moving_unit_as_actor,
-        tx.transform_stationary_unit_as_attacker,
-        tx.transform_pos,
+        transform_time,
+        transform_moving_unit_as_actor,
+        transform_stationary_unit_as_attacker,
+        transform_2d_pos,
     )
 
 
@@ -2264,10 +2287,10 @@ class MovingUnitWasDestroyedByHumanAircraft(ParsableEvent):
         )
     )
     transformers = (
-        tx.transform_time,
-        tx.transform_moving_unit_as_actor,
-        tx.transform_human_aircraft_as_attacker,
-        tx.transform_pos,
+        transform_time,
+        transform_moving_unit_as_actor,
+        transform_human_aircraft_as_attacker,
+        transform_2d_pos,
     )
 
 
@@ -2292,10 +2315,10 @@ class MovingUnitWasDestroyedByAIAircraft(ParsableEvent):
         )
     )
     transformers = (
-        tx.transform_time,
-        tx.transform_moving_unit_as_actor,
-        tx.transform_ai_aircraft_as_attacker,
-        tx.transform_pos,
+        transform_time,
+        transform_moving_unit_as_actor,
+        transform_ai_aircraft_as_attacker,
+        transform_2d_pos,
     )
 
 
@@ -2320,10 +2343,10 @@ class MovingUnitMemberWasDestroyedByStationaryUnit(ParsableEvent):
         )
     )
     transformers = (
-        tx.transform_time,
-        tx.transform_moving_unit_member_as_actor,
-        tx.transform_stationary_unit_as_attacker,
-        tx.transform_pos,
+        transform_time,
+        transform_moving_unit_member_as_actor,
+        transform_stationary_unit_as_attacker,
+        transform_2d_pos,
     )
 
 
@@ -2348,10 +2371,10 @@ class MovingUnitMemberWasDestroyedByAIAircraft(ParsableEvent):
         )
     )
     transformers = (
-        tx.transform_time,
-        tx.transform_moving_unit_member_as_actor,
-        tx.transform_ai_aircraft_as_attacker,
-        tx.transform_pos,
+        transform_time,
+        transform_moving_unit_member_as_actor,
+        transform_ai_aircraft_as_attacker,
+        transform_2d_pos,
     )
 
 
@@ -2376,10 +2399,10 @@ class MovingUnitMemberWasDestroyedByHumanAircraft(ParsableEvent):
         )
     )
     transformers = (
-        tx.transform_time,
-        tx.transform_moving_unit_member_as_actor,
-        tx.transform_human_aircraft_as_attacker,
-        tx.transform_pos,
+        transform_time,
+        transform_moving_unit_member_as_actor,
+        transform_human_aircraft_as_attacker,
+        transform_2d_pos,
     )
 
 
@@ -2404,10 +2427,10 @@ class MovingUnitMemberWasDestroyedByMovingUnit(ParsableEvent):
         )
     )
     transformers = (
-        tx.transform_time,
-        tx.transform_moving_unit_member_as_actor,
-        tx.transform_moving_unit_as_attacker,
-        tx.transform_pos,
+        transform_time,
+        transform_moving_unit_member_as_actor,
+        transform_moving_unit_as_attacker,
+        transform_2d_pos,
     )
 
 
@@ -2432,10 +2455,10 @@ class MovingUnitMemberWasDestroyedByMovingUnitMember(ParsableEvent):
         )
     )
     transformers = (
-        tx.transform_time,
-        tx.transform_moving_unit_member_as_actor,
-        tx.transform_moving_unit_member_as_attacker,
-        tx.transform_pos,
+        transform_time,
+        transform_moving_unit_member_as_actor,
+        transform_moving_unit_member_as_attacker,
+        transform_2d_pos,
     )
 
 
@@ -2459,9 +2482,9 @@ class AIAircraftHasDespawned(ParsableEvent):
         )
     )
     transformers = (
-        tx.transform_time,
-        tx.transform_ai_aircraft_as_actor,
-        tx.transform_pos,
+        transform_time,
+        transform_ai_aircraft_as_actor,
+        transform_2d_pos,
     )
 
 
@@ -2485,9 +2508,9 @@ class AIAircraftWasDamagedOnGround(ParsableEvent):
         )
     )
     transformers = (
-        tx.transform_time,
-        tx.transform_ai_aircraft_as_actor,
-        tx.transform_pos,
+        transform_time,
+        transform_ai_aircraft_as_actor,
+        transform_2d_pos,
     )
 
 
@@ -2512,10 +2535,10 @@ class AIAircraftWasDamagedByHumanAircraft(ParsableEvent):
         )
     )
     transformers = (
-        tx.transform_time,
-        tx.transform_ai_aircraft_as_actor,
-        tx.transform_human_aircraft_as_attacker,
-        tx.transform_pos,
+        transform_time,
+        transform_ai_aircraft_as_actor,
+        transform_human_aircraft_as_attacker,
+        transform_2d_pos,
     )
 
 
@@ -2540,10 +2563,10 @@ class AIAircraftWasDamagedByStationaryUnit(ParsableEvent):
         )
     )
     transformers = (
-        tx.transform_time,
-        tx.transform_ai_aircraft_as_actor,
-        tx.transform_stationary_unit_as_attacker,
-        tx.transform_pos,
+        transform_time,
+        transform_ai_aircraft_as_actor,
+        transform_stationary_unit_as_attacker,
+        transform_2d_pos,
     )
 
 
@@ -2568,10 +2591,10 @@ class AIAircraftWasDamagedByMovingUnitMember(ParsableEvent):
         )
     )
     transformers = (
-        tx.transform_time,
-        tx.transform_ai_aircraft_as_actor,
-        tx.transform_moving_unit_member_as_attacker,
-        tx.transform_pos,
+        transform_time,
+        transform_ai_aircraft_as_actor,
+        transform_moving_unit_member_as_attacker,
+        transform_2d_pos,
     )
 
 
@@ -2596,10 +2619,10 @@ class AIAircraftWasDamagedByMovingUnit(ParsableEvent):
         )
     )
     transformers = (
-        tx.transform_time,
-        tx.transform_ai_aircraft_as_actor,
-        tx.transform_moving_unit_as_attacker,
-        tx.transform_pos,
+        transform_time,
+        transform_ai_aircraft_as_actor,
+        transform_moving_unit_as_attacker,
+        transform_2d_pos,
     )
 
 
@@ -2624,10 +2647,10 @@ class AIAircraftWasDamagedByAIAircraft(ParsableEvent):
         )
     )
     transformers = (
-        tx.transform_time,
-        tx.transform_ai_aircraft_as_actor,
-        tx.transform_ai_aircraft_as_attacker,
-        tx.transform_pos,
+        transform_time,
+        transform_ai_aircraft_as_actor,
+        transform_ai_aircraft_as_attacker,
+        transform_2d_pos,
     )
 
 
@@ -2653,9 +2676,9 @@ class AIHasDamagedOwnAircraft(ParsableEvent):
         )
     )
     transformers = (
-        tx.transform_time,
-        tx.transform_ai_aircraft_as_actor,
-        tx.transform_pos,
+        transform_time,
+        transform_ai_aircraft_as_actor,
+        transform_2d_pos,
     )
 
 
@@ -2681,9 +2704,9 @@ class AIHasDestroyedOwnAircraft(ParsableEvent):
         )
     )
     transformers = (
-        tx.transform_time,
-        tx.transform_ai_aircraft_as_actor,
-        tx.transform_pos,
+        transform_time,
+        transform_ai_aircraft_as_actor,
+        transform_2d_pos,
     )
 
 
@@ -2707,9 +2730,9 @@ class AIAircraftHasLanded(ParsableEvent):
         )
     )
     transformers = (
-        tx.transform_time,
-        tx.transform_ai_aircraft_as_actor,
-        tx.transform_pos,
+        transform_time,
+        transform_ai_aircraft_as_actor,
+        transform_2d_pos,
     )
 
 
@@ -2733,9 +2756,9 @@ class AIAircraftHasCrashed(ParsableEvent):
         )
     )
     transformers = (
-        tx.transform_time,
-        tx.transform_ai_aircraft_as_actor,
-        tx.transform_pos,
+        transform_time,
+        transform_ai_aircraft_as_actor,
+        transform_2d_pos,
     )
 
 
@@ -2760,10 +2783,10 @@ class AIAircraftWasShotDownByHumanAircraft(ParsableEvent):
         )
     )
     transformers = (
-        tx.transform_time,
-        tx.transform_ai_aircraft_as_actor,
-        tx.transform_human_aircraft_as_attacker,
-        tx.transform_pos,
+        transform_time,
+        transform_ai_aircraft_as_actor,
+        transform_human_aircraft_as_attacker,
+        transform_2d_pos,
     )
 
 
@@ -2788,10 +2811,10 @@ class AIAircraftWasShotDownByAIAircraft(ParsableEvent):
         )
     )
     transformers = (
-        tx.transform_time,
-        tx.transform_ai_aircraft_as_actor,
-        tx.transform_ai_aircraft_as_attacker,
-        tx.transform_pos,
+        transform_time,
+        transform_ai_aircraft_as_actor,
+        transform_ai_aircraft_as_attacker,
+        transform_2d_pos,
     )
 
 
@@ -2816,10 +2839,10 @@ class AIAircraftWasShotDownByStationaryUnit(ParsableEvent):
         )
     )
     transformers = (
-        tx.transform_time,
-        tx.transform_ai_aircraft_as_actor,
-        tx.transform_stationary_unit_as_attacker,
-        tx.transform_pos,
+        transform_time,
+        transform_ai_aircraft_as_actor,
+        transform_stationary_unit_as_attacker,
+        transform_2d_pos,
     )
 
 
@@ -2844,10 +2867,10 @@ class AIAircraftWasShotDownByMovingUnitMember(ParsableEvent):
         )
     )
     transformers = (
-        tx.transform_time,
-        tx.transform_ai_aircraft_as_actor,
-        tx.transform_moving_unit_member_as_attacker,
-        tx.transform_pos,
+        transform_time,
+        transform_ai_aircraft_as_actor,
+        transform_moving_unit_member_as_attacker,
+        transform_2d_pos,
     )
 
 
@@ -2872,10 +2895,10 @@ class AIAircraftWasShotDownByMovingUnit(ParsableEvent):
         )
     )
     transformers = (
-        tx.transform_time,
-        tx.transform_ai_aircraft_as_actor,
-        tx.transform_moving_unit_as_attacker,
-        tx.transform_pos,
+        transform_time,
+        transform_ai_aircraft_as_actor,
+        transform_moving_unit_as_attacker,
+        transform_2d_pos,
     )
 
 
@@ -2901,11 +2924,11 @@ class AIAircraftWasShotDownByAIAircraftAndAIAircraft(ParsableEvent):
         )
     )
     transformers = (
-        tx.transform_time,
-        tx.transform_ai_aircraft_as_actor,
-        tx.transform_ai_aircraft_as_attacker,
-        tx.transform_ai_aircraft_as_assistant,
-        tx.transform_pos,
+        transform_time,
+        transform_ai_aircraft_as_actor,
+        transform_ai_aircraft_as_attacker,
+        transform_ai_aircraft_as_assistant,
+        transform_2d_pos,
     )
 
 
@@ -2931,11 +2954,11 @@ class AIAircraftWasShotDownByHumanAircraftAndAIAircraft(ParsableEvent):
         )
     )
     transformers = (
-        tx.transform_time,
-        tx.transform_ai_aircraft_as_actor,
-        tx.transform_human_aircraft_as_attacker,
-        tx.transform_ai_aircraft_as_assistant,
-        tx.transform_pos,
+        transform_time,
+        transform_ai_aircraft_as_actor,
+        transform_human_aircraft_as_attacker,
+        transform_ai_aircraft_as_assistant,
+        transform_2d_pos,
     )
 
 
@@ -2961,11 +2984,11 @@ class AIAircraftWasShotDownByAIAircraftAndHumanAircraft(ParsableEvent):
         )
     )
     transformers = (
-        tx.transform_time,
-        tx.transform_ai_aircraft_as_actor,
-        tx.transform_ai_aircraft_as_attacker,
-        tx.transform_human_aircraft_as_assistant,
-        tx.transform_pos,
+        transform_time,
+        transform_ai_aircraft_as_actor,
+        transform_ai_aircraft_as_attacker,
+        transform_human_aircraft_as_assistant,
+        transform_2d_pos,
     )
 
 
@@ -2991,11 +3014,11 @@ class AIAircraftWasShotDownByHumanAircraftAndHumanAircraft(ParsableEvent):
         )
     )
     transformers = (
-        tx.transform_time,
-        tx.transform_ai_aircraft_as_actor,
-        tx.transform_human_aircraft_as_attacker,
-        tx.transform_human_aircraft_as_assistant,
-        tx.transform_pos,
+        transform_time,
+        transform_ai_aircraft_as_actor,
+        transform_human_aircraft_as_attacker,
+        transform_human_aircraft_as_assistant,
+        transform_2d_pos,
     )
 
 
@@ -3019,9 +3042,9 @@ class AIAircraftCrewMemberWasKilled(ParsableEvent):
         )
     )
     transformers = (
-        tx.transform_time,
-        tx.transform_ai_aircraft_crew_member_as_actor,
-        tx.transform_pos,
+        transform_time,
+        transform_ai_aircraft_crew_member_as_actor,
+        transform_2d_pos,
     )
 
 
@@ -3046,10 +3069,10 @@ class AIAircraftCrewMemberWasKilledByStationaryUnit(ParsableEvent):
         )
     )
     transformers = (
-        tx.transform_time,
-        tx.transform_ai_aircraft_crew_member_as_actor,
-        tx.transform_stationary_unit_as_attacker,
-        tx.transform_pos,
+        transform_time,
+        transform_ai_aircraft_crew_member_as_actor,
+        transform_stationary_unit_as_attacker,
+        transform_2d_pos,
     )
 
 
@@ -3074,10 +3097,10 @@ class AIAircraftCrewMemberWasKilledByHumanAircraft(ParsableEvent):
         )
     )
     transformers = (
-        tx.transform_time,
-        tx.transform_ai_aircraft_crew_member_as_actor,
-        tx.transform_human_aircraft_as_attacker,
-        tx.transform_pos,
+        transform_time,
+        transform_ai_aircraft_crew_member_as_actor,
+        transform_human_aircraft_as_attacker,
+        transform_2d_pos,
     )
 
 
@@ -3102,10 +3125,10 @@ class AIAircraftCrewMemberWasKilledByAIAircraft(ParsableEvent):
         )
     )
     transformers = (
-        tx.transform_time,
-        tx.transform_ai_aircraft_crew_member_as_actor,
-        tx.transform_ai_aircraft_as_attacker,
-        tx.transform_pos,
+        transform_time,
+        transform_ai_aircraft_crew_member_as_actor,
+        transform_ai_aircraft_as_attacker,
+        transform_2d_pos,
     )
 
 
@@ -3130,10 +3153,10 @@ class AIAircraftCrewMemberWasKilledByMovingUnitMember(ParsableEvent):
         )
     )
     transformers = (
-        tx.transform_time,
-        tx.transform_ai_aircraft_crew_member_as_actor,
-        tx.transform_moving_unit_member_as_attacker,
-        tx.transform_pos,
+        transform_time,
+        transform_ai_aircraft_crew_member_as_actor,
+        transform_moving_unit_member_as_attacker,
+        transform_2d_pos,
     )
 
 
@@ -3158,10 +3181,10 @@ class AIAircraftCrewMemberWasKilledByMovingUnit(ParsableEvent):
         )
     )
     transformers = (
-        tx.transform_time,
-        tx.transform_ai_aircraft_crew_member_as_actor,
-        tx.transform_moving_unit_as_attacker,
-        tx.transform_pos,
+        transform_time,
+        transform_ai_aircraft_crew_member_as_actor,
+        transform_moving_unit_as_attacker,
+        transform_2d_pos,
     )
 
 
@@ -3186,10 +3209,10 @@ class AIAircraftCrewMemberWasKilledInParachuteByAIAircraft(ParsableEvent):
         )
     )
     transformers = (
-        tx.transform_time,
-        tx.transform_ai_aircraft_crew_member_as_actor,
-        tx.transform_ai_aircraft_as_attacker,
-        tx.transform_pos,
+        transform_time,
+        transform_ai_aircraft_crew_member_as_actor,
+        transform_ai_aircraft_as_attacker,
+        transform_2d_pos,
     )
 
 
@@ -3214,10 +3237,10 @@ class AIAircraftCrewMemberWasKilledInParachuteByStationaryUnit(ParsableEvent):
         )
     )
     transformers = (
-        tx.transform_time,
-        tx.transform_ai_aircraft_crew_member_as_actor,
-        tx.transform_stationary_unit_as_attacker,
-        tx.transform_pos,
+        transform_time,
+        transform_ai_aircraft_crew_member_as_actor,
+        transform_stationary_unit_as_attacker,
+        transform_2d_pos,
     )
 
 
@@ -3242,10 +3265,10 @@ class AIAircraftCrewMemberWasKilledInParachuteByMovingUnitMember(ParsableEvent):
         )
     )
     transformers = (
-        tx.transform_time,
-        tx.transform_ai_aircraft_crew_member_as_actor,
-        tx.transform_moving_unit_member_as_attacker,
-        tx.transform_pos,
+        transform_time,
+        transform_ai_aircraft_crew_member_as_actor,
+        transform_moving_unit_member_as_attacker,
+        transform_2d_pos,
     )
 
 
@@ -3270,10 +3293,10 @@ class AIAircraftCrewMemberWasKilledInParachuteByMovingUnit(ParsableEvent):
         )
     )
     transformers = (
-        tx.transform_time,
-        tx.transform_ai_aircraft_crew_member_as_actor,
-        tx.transform_moving_unit_as_attacker,
-        tx.transform_pos,
+        transform_time,
+        transform_ai_aircraft_crew_member_as_actor,
+        transform_moving_unit_as_attacker,
+        transform_2d_pos,
     )
 
 
@@ -3298,10 +3321,10 @@ class AIAircraftCrewMemberWasKilledInParachuteByHumanAircraft(ParsableEvent):
         )
     )
     transformers = (
-        tx.transform_time,
-        tx.transform_ai_aircraft_crew_member_as_actor,
-        tx.transform_human_aircraft_as_attacker,
-        tx.transform_pos,
+        transform_time,
+        transform_ai_aircraft_crew_member_as_actor,
+        transform_human_aircraft_as_attacker,
+        transform_2d_pos,
     )
 
 
@@ -3326,10 +3349,10 @@ class AIAircraftCrewMemberParachuteWasDestroyedByAIAircraft(ParsableEvent):
         )
     )
     transformers = (
-        tx.transform_time,
-        tx.transform_ai_aircraft_crew_member_as_actor,
-        tx.transform_ai_aircraft_as_attacker,
-        tx.transform_pos,
+        transform_time,
+        transform_ai_aircraft_crew_member_as_actor,
+        transform_ai_aircraft_as_attacker,
+        transform_2d_pos,
     )
 
 
@@ -3354,10 +3377,10 @@ class AIAircraftCrewMemberParachuteWasDestroyedByStationaryUnit(ParsableEvent):
         )
     )
     transformers = (
-        tx.transform_time,
-        tx.transform_ai_aircraft_crew_member_as_actor,
-        tx.transform_stationary_unit_as_attacker,
-        tx.transform_pos,
+        transform_time,
+        transform_ai_aircraft_crew_member_as_actor,
+        transform_stationary_unit_as_attacker,
+        transform_2d_pos,
     )
 
 
@@ -3382,10 +3405,10 @@ class AIAircraftCrewMemberParachuteWasDestroyedByMovingUnitMember(ParsableEvent)
         )
     )
     transformers = (
-        tx.transform_time,
-        tx.transform_ai_aircraft_crew_member_as_actor,
-        tx.transform_moving_unit_member_as_attacker,
-        tx.transform_pos,
+        transform_time,
+        transform_ai_aircraft_crew_member_as_actor,
+        transform_moving_unit_member_as_attacker,
+        transform_2d_pos,
     )
 
 
@@ -3410,10 +3433,10 @@ class AIAircraftCrewMemberParachuteWasDestroyedByMovingUnit(ParsableEvent):
         )
     )
     transformers = (
-        tx.transform_time,
-        tx.transform_ai_aircraft_crew_member_as_actor,
-        tx.transform_moving_unit_as_attacker,
-        tx.transform_pos,
+        transform_time,
+        transform_ai_aircraft_crew_member_as_actor,
+        transform_moving_unit_as_attacker,
+        transform_2d_pos,
     )
 
 
@@ -3438,10 +3461,10 @@ class AIAircraftCrewMemberParachuteWasDestroyedByHumanAircraft(ParsableEvent):
         )
     )
     transformers = (
-        tx.transform_time,
-        tx.transform_ai_aircraft_crew_member_as_actor,
-        tx.transform_human_aircraft_as_attacker,
-        tx.transform_pos,
+        transform_time,
+        transform_ai_aircraft_crew_member_as_actor,
+        transform_human_aircraft_as_attacker,
+        transform_2d_pos,
     )
 
 
@@ -3465,9 +3488,9 @@ class AIAircraftCrewMemberParachuteWasDestroyed(ParsableEvent):
         )
     )
     transformers = (
-        tx.transform_time,
-        tx.transform_ai_aircraft_crew_member_as_actor,
-        tx.transform_pos,
+        transform_time,
+        transform_ai_aircraft_crew_member_as_actor,
+        transform_2d_pos,
     )
 
 
@@ -3491,9 +3514,9 @@ class AIAircraftCrewMemberWasWounded(ParsableEvent):
         )
     )
     transformers = (
-        tx.transform_time,
-        tx.transform_ai_aircraft_crew_member_as_actor,
-        tx.transform_pos,
+        transform_time,
+        transform_ai_aircraft_crew_member_as_actor,
+        transform_2d_pos,
     )
 
 
@@ -3517,9 +3540,9 @@ class AIAircraftCrewMemberWasHeavilyWounded(ParsableEvent):
         )
     )
     transformers = (
-        tx.transform_time,
-        tx.transform_ai_aircraft_crew_member_as_actor,
-        tx.transform_pos,
+        transform_time,
+        transform_ai_aircraft_crew_member_as_actor,
+        transform_2d_pos,
     )
 
 
@@ -3543,9 +3566,9 @@ class AIAircraftCrewMemberWasCaptured(ParsableEvent):
         )
     )
     transformers = (
-        tx.transform_time,
-        tx.transform_ai_aircraft_crew_member_as_actor,
-        tx.transform_pos,
+        transform_time,
+        transform_ai_aircraft_crew_member_as_actor,
+        transform_2d_pos,
     )
 
 
@@ -3569,9 +3592,9 @@ class AIAircraftCrewMemberHasBailedOut(ParsableEvent):
         )
     )
     transformers = (
-        tx.transform_time,
-        tx.transform_ai_aircraft_crew_member_as_actor,
-        tx.transform_pos,
+        transform_time,
+        transform_ai_aircraft_crew_member_as_actor,
+        transform_2d_pos,
     )
 
 
@@ -3595,7 +3618,7 @@ class AIAircraftCrewMemberHasLanded(ParsableEvent):
         )
     )
     transformers = (
-        tx.transform_time,
-        tx.transform_ai_aircraft_crew_member_as_actor,
-        tx.transform_pos,
+        transform_time,
+        transform_ai_aircraft_crew_member_as_actor,
+        transform_2d_pos,
     )
