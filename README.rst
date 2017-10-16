@@ -2,11 +2,11 @@
 IL-2 FB Events Parser
 =====================
 
-|pypi_package| |pypi_downloads| |python_versions| |license|
+|pypi_package| |python_versions| |license|
 
 |unix_build| |windows_build| |coverage_status|
 
-|code_issues| |codeclimate| |codacy| |quality| |health| |requirements|
+|codeclimate| |codacy| |quality| |health| |requirements|
 
 
 **Table of contents**
@@ -178,15 +178,8 @@ Any error (except ``SystemExit`` and ``KeyboardInterrupt``) will be muted and
    :target: https://landscape.io/github/IL2HorusTeam/il2fb-events-parser/master
    :alt: Code Health
 
-.. |code_issues| image:: https://www.quantifiedcode.com/api/v1/project/49c826961bd54c14a5ca1959e07d05c1/badge.svg
-     :target: https://www.quantifiedcode.com/app/project/49c826961bd54c14a5ca1959e07d05c1
-     :alt: Code issues
-
 .. |pypi_package| image:: http://img.shields.io/pypi/v/il2fb-events-parser.svg?style=flat
    :target: http://badge.fury.io/py/il2fb-events-parser/
-
-.. |pypi_downloads| image:: http://img.shields.io/pypi/dm/il2fb-events-parser.svg?style=flat
-   :target: https://crate.io/packages/il2fb-events-parser/
 
 .. |python_versions| image:: https://img.shields.io/badge/Python-2.7,3.4,3.5,3.6-brightgreen.svg?style=flat
    :alt: Supported versions of Python
