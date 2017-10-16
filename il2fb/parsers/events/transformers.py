@@ -6,7 +6,8 @@ Data transformers.
 
 import datetime
 
-from . import actors
+from il2fb.commons import actors
+
 from .constants import LOG_TIME_FORMAT, LOG_DATE_FORMAT
 
 
