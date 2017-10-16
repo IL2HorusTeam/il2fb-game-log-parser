@@ -187,8 +187,8 @@ Any error (except ``SystemExit`` and ``KeyboardInterrupt``) will be muted and
    :target: https://github.com/IL2HorusTeam/il2fb-game-log-parser/blob/master/LICENSE
 
 .. |requirements| image:: https://requires.io/github/IL2HorusTeam/il2fb-game-log-parser/requirements.svg?branch=master
-     :target: https://requires.io/github/IL2HorusTeam/il2fb-game-log-parser/requirements/?branch=master
-     :alt: Requirements Status
+   :target: https://requires.io/github/IL2HorusTeam/il2fb-game-log-parser/requirements/?branch=master
+   :alt: Requirements Status
 
 
 .. _demo page: http://il2horusteam.github.io/il2fb-game-log-parser/

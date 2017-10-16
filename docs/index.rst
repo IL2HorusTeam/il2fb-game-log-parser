@@ -61,5 +61,5 @@ Indices and tables
    :target: https://github.com/IL2HorusTeam/il2fb-game-log-parser/blob/master/LICENSE
 
 .. |requirements| image:: https://requires.io/github/IL2HorusTeam/il2fb-game-log-parser/requirements.svg?branch=master
-     :target: https://requires.io/github/IL2HorusTeam/il2fb-game-log-parser/requirements/?branch=master
-     :alt: Requirements Status
+   :target: https://requires.io/github/IL2HorusTeam/il2fb-game-log-parser/requirements/?branch=master
+   :alt: Requirements Status
