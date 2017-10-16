@@ -1,4 +1,4 @@
 include LICENSE
 include README.rst
 include requirements/dist.txt
-recursive-include il2fb/parsers/events/locale *
+recursive-include il2fb/parsers/game_log/locale *

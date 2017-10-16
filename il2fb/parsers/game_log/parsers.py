@@ -6,7 +6,7 @@ from .events import get_all_events
 from .priority import get_event_priority
 
 
-class EventsParser(object):
+class GameLogEventParser(object):
 
     def __init__(self, events=None):
         events = events if events is not None else get_all_events()

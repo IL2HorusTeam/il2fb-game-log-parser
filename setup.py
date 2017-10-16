@@ -32,22 +32,23 @@ README = open(os.path.join(__here__, 'README.rst')).read()
 
 
 setup(
-    name='il2fb-events-parser',
+    name='il2fb-game-log-parser',
     version='1.0.2',
     description=(
-        "Parse events from log produced by dedicated server of "
+        "Parse events from game log produced by dedicated server of "
         "«IL-2 Forgotten Battles» flight simulator"
     ),
     long_description=README,
     keywords=[
         'il2', 'il-2', 'fb', 'forgotten battles', 'parser', 'events', 'server',
+        'game', 'log',
     ],
     license='LGPLv3',
-    url='https://github.com/IL2HorusTeam/il2fb-events-parser',
+    url='https://github.com/IL2HorusTeam/il2fb-game-log-parser',
     author='Alexander Oblovatniy',
     author_email='oblovatniy@gmail.com',
     packages=[
-        'il2fb.parsers.events',
+        'il2fb.parsers.game_log',
     ],
     namespace_packages=[
         'il2fb',
@@ -61,14 +62,12 @@ setup(
         'Intended Audience :: Developers',
         'License :: OSI Approved :: GNU Lesser General Public License v3 (LGPLv3)',
         'Natural Language :: English',
-        'Operating System :: OS Independent',
+        "Operating System :: Unix",
+        "Operating System :: Microsoft :: Windows",
         'Programming Language :: Python :: 2.7',
         'Programming Language :: Python :: 3.4',
         'Programming Language :: Python :: 3.5',
         'Programming Language :: Python :: 3.6',
         'Topic :: Software Development :: Libraries',
-    ],
-    platforms=[
-        'any',
     ],
 )

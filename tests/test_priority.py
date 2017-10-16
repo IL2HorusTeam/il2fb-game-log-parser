@@ -2,8 +2,8 @@
 
 import unittest
 
-from il2fb.parsers.events import events
-from il2fb.parsers.events.priority import get_event_priority
+from il2fb.parsers.game_log import events
+from il2fb.parsers.game_log.priority import get_event_priority
 
 
 class PriorityTestCase(unittest.TestCase):

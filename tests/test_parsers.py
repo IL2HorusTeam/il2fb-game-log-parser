@@ -1,10 +1,12 @@
 # coding: utf-8
 
-import six
 import unittest
 
+import six
+
 from il2fb.commons.events import EventParsingException
-from il2fb.parsers.events import EventsParser, get_all_events
+
+from il2fb.parsers.game_log import GameLogEventParser, get_all_events
 
 
 class EventsParserTestCase(unittest.TestCase):
@@ -20,7 +22,7 @@ class EventsParserTestCase(unittest.TestCase):
     def setUp(self):
         super(EventsParserTestCase, self).setUp()
         self.structures = get_all_events()
-        self.parser = EventsParser(self.structures)
+        self.parser = GameLogEventParser(self.structures)
 
     def test_parse(self):
         for structure in self.structures:

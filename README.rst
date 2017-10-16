@@ -1,6 +1,5 @@
-=====================
-IL-2 FB Events Parser
-=====================
+IL-2 FB Game Log Parser
+=======================
 
 |pypi_package| |python_versions| |license|
 
@@ -20,9 +19,9 @@ IL-2 FB Events Parser
 Synopsis
 --------
 
-This is a Python library which parses events from log produced by dedicated
-server of «IL-2 Forgotten Battles» flight simulator. Resulting information
-about events is stored in special data structures.
+This is a Python library which parses events from game log produced by
+dedicated server of «IL-2 Forgotten Battles» flight simulator. Resulting
+information about events is stored in special data structures.
 
 
 Demo
@@ -38,7 +37,7 @@ and parse it.
 
 If something goes wrong, you will be prompted to confirm automatic creation of
 bug report which will be
-`listed on this page <https://github.com/IL2HorusTeam/il2fb-events-parser/issues>`_.
+`listed on this page <https://github.com/IL2HorusTeam/il2fb-game-log-parser/issues>`_.
 
 
 Known events
@@ -58,22 +57,22 @@ Get Python package from PyPI:
 
 .. code-block:: bash
 
-  pip install il2fb-events-parser
+  pip install il2fb-game-log-parser
 
 
 Usage
 -----
 
 If you need to be able to parse all events this library knows about, use
-``EventsParser.parse_string()``:
+``GameLogEventParser.parse_string()``:
 
-Import ``EventsParser`` and create its instance:
+Import ``GameLogEventParser`` and create its instance:
 
 .. code-block:: python
 
-    from il2fb.parsers.events import EventsParser
+    from il2fb.parsers.game_log import GameLogEventParser
 
-    parser = EventsParser()
+    parser = GameLogEventParser()
 
 
 Parse a string to get an instance of event:
@@ -116,21 +115,21 @@ Convert event into a dictionary:
 Exceptions
 ----------
 
-If you try to parse unknown event, ``EventParsingError`` will be raised:
+If you try to parse unknown event, ``EventParsingException`` will be raised:
 
 .. code-block:: python
 
     parser.parse("foo bar")
     # Traceback (most recent call last):
     # …
-    # EventParsingError: No event was found for string "foo bar"
+    # EventParsingException: No event was found for string "foo bar"
 
-Current list of supported events is rather full, but ``EventParsingError`` is
-quite possible, because server's events are undocumented and this library may
-do not know about all of them.
+Current list of supported events is rather full, but ``EventParsingException``
+is quite possible, because server's events are undocumented and this library
+may do not know about all of them.
 
 In case you need to catch this error, its full name is
-``il2fb.parsers.events.exceptions.EventParsingError``.
+``il2fb.commons.events.EventParsingException``.
 
 
 Safe usage
@@ -140,9 +139,9 @@ You can set flag ``ignore_errors=True`` if you don't care about any exceptions:
 
 .. code-block:: python
 
-    from il2fb.parsers.events import EventsParser
+    from il2fb.parsers.game_log import GameLogEventParser
 
-    parser = EventsParser()
+    parser = GameLogEventParser()
     event = parser.parse("foo bar", ignore_errors=True)
     print(event is None)
     # True
@@ -151,46 +150,46 @@ Any error (except ``SystemExit`` and ``KeyboardInterrupt``) will be muted and
 ``None`` will be returned.
 
 
-.. |unix_build| image:: https://travis-ci.org/IL2HorusTeam/il2fb-events-parser.svg?branch=master
-   :target: https://travis-ci.org/IL2HorusTeam/il2fb-events-parser
+.. |unix_build| image:: https://travis-ci.org/IL2HorusTeam/il2fb-game-log-parser.svg?branch=master
+   :target: https://travis-ci.org/IL2HorusTeam/il2fb-game-log-parser
 
 .. |windows_build| image:: https://ci.appveyor.com/api/projects/status/a47k677tr59bd5wg/branch/master?svg=true
-    :target: https://ci.appveyor.com/project/oblalex/il2fb-events-parser
+    :target: https://ci.appveyor.com/project/oblalex/il2fb-game-log-parser
     :alt: Build status of the master branch on Windows
 
-.. |coverage_status| image:: http://codecov.io/github/IL2HorusTeam/il2fb-events-parser/coverage.svg?branch=master
-    :target: http://codecov.io/github/IL2HorusTeam/il2fb-events-parser?branch=master
+.. |coverage_status| image:: http://codecov.io/github/IL2HorusTeam/il2fb-game-log-parser/coverage.svg?branch=master
+    :target: http://codecov.io/github/IL2HorusTeam/il2fb-game-log-parser?branch=master
     :alt: Test coverage
 
-.. |codeclimate| image:: https://codeclimate.com/github/IL2HorusTeam/il2fb-events-parser/badges/gpa.svg
-   :target: https://codeclimate.com/github/IL2HorusTeam/il2fb-events-parser
+.. |codeclimate| image:: https://codeclimate.com/github/IL2HorusTeam/il2fb-game-log-parser/badges/gpa.svg
+   :target: https://codeclimate.com/github/IL2HorusTeam/il2fb-game-log-parser
    :alt: Code Climate
 
 .. |codacy| image:: https://api.codacy.com/project/badge/c0385f01ffa545dea3a52a51cfc53221
-    :target: https://www.codacy.com/app/oblalex/il2fb-events-parser
+    :target: https://www.codacy.com/app/oblalex/il2fb-game-log-parser
     :alt: Codacy Code Review
 
-.. |quality| image:: https://scrutinizer-ci.com/g/IL2HorusTeam/il2fb-events-parser/badges/quality-score.png?b=master
-   :target: https://scrutinizer-ci.com/g/IL2HorusTeam/il2fb-events-parser/?branch=master
+.. |quality| image:: https://scrutinizer-ci.com/g/IL2HorusTeam/il2fb-game-log-parser/badges/quality-score.png?b=master
+   :target: https://scrutinizer-ci.com/g/IL2HorusTeam/il2fb-game-log-parser/?branch=master
    :alt: Scrutinizer Code Quality
 
-.. |health| image:: https://landscape.io/github/IL2HorusTeam/il2fb-events-parser/master/landscape.svg?style=flat
-   :target: https://landscape.io/github/IL2HorusTeam/il2fb-events-parser/master
+.. |health| image:: https://landscape.io/github/IL2HorusTeam/il2fb-game-log-parser/master/landscape.svg?style=flat
+   :target: https://landscape.io/github/IL2HorusTeam/il2fb-game-log-parser/master
    :alt: Code Health
 
-.. |pypi_package| image:: http://img.shields.io/pypi/v/il2fb-events-parser.svg?style=flat
-   :target: http://badge.fury.io/py/il2fb-events-parser/
+.. |pypi_package| image:: http://img.shields.io/pypi/v/il2fb-game-log-parser.svg?style=flat
+   :target: http://badge.fury.io/py/il2fb-game-log-parser/
 
 .. |python_versions| image:: https://img.shields.io/badge/Python-2.7,3.4,3.5,3.6-brightgreen.svg?style=flat
    :alt: Supported versions of Python
 
 .. |license| image:: https://img.shields.io/badge/license-LGPLv3-blue.svg?style=flat
-   :target: https://github.com/IL2HorusTeam/il2fb-events-parser/blob/master/LICENSE
+   :target: https://github.com/IL2HorusTeam/il2fb-game-log-parser/blob/master/LICENSE
 
-.. |requirements| image:: https://requires.io/github/IL2HorusTeam/il2fb-events-parser/requirements.svg?branch=master
-     :target: https://requires.io/github/IL2HorusTeam/il2fb-events-parser/requirements/?branch=master
+.. |requirements| image:: https://requires.io/github/IL2HorusTeam/il2fb-game-log-parser/requirements.svg?branch=master
+     :target: https://requires.io/github/IL2HorusTeam/il2fb-game-log-parser/requirements/?branch=master
      :alt: Requirements Status
 
 
-.. _demo page: http://il2horusteam.github.io/il2fb-events-parser/
+.. _demo page: http://il2horusteam.github.io/il2fb-game-log-parser/
 .. _visit project's demo page: `demo page`_

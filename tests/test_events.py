@@ -7,7 +7,7 @@ from il2fb.commons import actors
 from il2fb.commons.organization import Belligerents
 from il2fb.commons.spatial import Point2D
 
-from il2fb.parsers.events import events
+from il2fb.parsers.game_log import events
 
 
 class MissionIsPlayingTestCase(unittest.TestCase):
