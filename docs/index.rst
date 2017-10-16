@@ -1,41 +1,65 @@
-IL-2 FB Events Parser
-=====================
+IL-2 FB Game Log Parser
+=======================
 
-|PyPi package| |PyPi downloads| |License|
+|pypi_package| |python_versions| |license|
 
-|Build Status| |Coverage Status| |Code Review| |Health| |Quality| |Requirements|
+|unix_build| |windows_build| |coverage_status|
 
-Parse log file (or single line) from IL-2 FB dedicated server and produce
-information about events.
+|codeclimate| |codacy| |quality| |health| |requirements|
+
+Synopsis
+--------
+
+This is a Python library which parses events from game log produced by
+dedicated server of «IL-2 Forgotten Battles» flight simulator. Resulting
+information about events is stored in special data structures.
+
 
 
 Indices and tables
-==================
+------------------
 
 * :ref:`genindex`
 * :ref:`modindex`
 * :ref:`search`
 
 
-.. |Build Status| image:: http://img.shields.io/travis/IL2HorusTeam/il2fb-events-parser.svg?style=flat&branch=master
-   :target: https://travis-ci.org/IL2HorusTeam/il2fb-events-parser
-.. |Coverage Status| image:: http://img.shields.io/coveralls/IL2HorusTeam/il2fb-events-parser.svg?style=flat&branch=master
-   :target: https://coveralls.io/r/IL2HorusTeam/il2fb-events-parser?branch=master
-.. |PyPi package| image:: http://img.shields.io/pypi/v/il2fb-events-parser.svg?style=flat
-   :target: http://badge.fury.io/py/il2fb-events-parser/
-.. |PyPi downloads| image:: http://img.shields.io/pypi/dm/il2fb-events-parser.svg?style=flat
-   :target: https://crate.io/packages/il2fb-events-parser/
-.. |License| image:: https://img.shields.io/badge/license-LGPLv3-brightgreen.svg?style=flat
-   :target: https://github.com/IL2HorusTeam/il2fb-events-parser/blob/master/LICENSE
-.. |Code Review| image:: https://www.codacy.com/project/badge/4c79f2cb39234620bce5d4c49a54be52
-    :target: https://www.codacy.com/public/IL2HorusTeam/il2fbmissionparser/dashboard
+.. |unix_build| image:: https://travis-ci.org/IL2HorusTeam/il2fb-game-log-parser.svg?branch=master
+   :target: https://travis-ci.org/IL2HorusTeam/il2fb-game-log-parser
+
+.. |windows_build| image:: https://ci.appveyor.com/api/projects/status/a47k677tr59bd5wg/branch/master?svg=true
+    :target: https://ci.appveyor.com/project/oblalex/il2fb-game-log-parser
+    :alt: Build status of the master branch on Windows
+
+.. |coverage_status| image:: http://codecov.io/github/IL2HorusTeam/il2fb-game-log-parser/coverage.svg?branch=master
+    :target: http://codecov.io/github/IL2HorusTeam/il2fb-game-log-parser?branch=master
+    :alt: Test coverage
+
+.. |codeclimate| image:: https://codeclimate.com/github/IL2HorusTeam/il2fb-game-log-parser/badges/gpa.svg
+   :target: https://codeclimate.com/github/IL2HorusTeam/il2fb-game-log-parser
+   :alt: Code Climate
+
+.. |codacy| image:: https://api.codacy.com/project/badge/c0385f01ffa545dea3a52a51cfc53221
+    :target: https://www.codacy.com/app/oblalex/il2fb-game-log-parser
     :alt: Codacy Code Review
-.. |Health| image:: https://landscape.io/github/IL2HorusTeam/il2fb-events-parser/master/landscape.png?style=flat
-   :target: https://landscape.io/github/IL2HorusTeam/il2fb-events-parser/master
-   :alt: Code Health
-.. |Quality| image:: https://scrutinizer-ci.com/g/IL2HorusTeam/il2fb-events-parser/badges/quality-score.png?b=master&style=flat
-   :target: https://scrutinizer-ci.com/g/IL2HorusTeam/il2fb-events-parser/?branch=master
+
+.. |quality| image:: https://scrutinizer-ci.com/g/IL2HorusTeam/il2fb-game-log-parser/badges/quality-score.png?b=master
+   :target: https://scrutinizer-ci.com/g/IL2HorusTeam/il2fb-game-log-parser/?branch=master
    :alt: Scrutinizer Code Quality
-.. |Requirements| image:: https://requires.io/github/IL2HorusTeam/il2fb-events-parser/requirements.svg?branch=master&style=flat
-    :target: https://requires.io/github/IL2HorusTeam/il2fb-events-parser/requirements/?branch=master
-    :alt: Requirements Status
+
+.. |health| image:: https://landscape.io/github/IL2HorusTeam/il2fb-game-log-parser/master/landscape.svg?style=flat
+   :target: https://landscape.io/github/IL2HorusTeam/il2fb-game-log-parser/master
+   :alt: Code Health
+
+.. |pypi_package| image:: http://img.shields.io/pypi/v/il2fb-game-log-parser.svg?style=flat
+   :target: http://badge.fury.io/py/il2fb-game-log-parser/
+
+.. |python_versions| image:: https://img.shields.io/badge/Python-2.7,3.4,3.5,3.6-brightgreen.svg?style=flat
+   :alt: Supported versions of Python
+
+.. |license| image:: https://img.shields.io/badge/license-LGPLv3-blue.svg?style=flat
+   :target: https://github.com/IL2HorusTeam/il2fb-game-log-parser/blob/master/LICENSE
+
+.. |requirements| image:: https://requires.io/github/IL2HorusTeam/il2fb-game-log-parser/requirements.svg?branch=master
+     :target: https://requires.io/github/IL2HorusTeam/il2fb-game-log-parser/requirements/?branch=master
+     :alt: Requirements Status

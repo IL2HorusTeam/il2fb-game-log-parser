@@ -1,4 +1,4 @@
-# https://ci.appveyor.com/project/oblalex/il2fb-events-parser
+# https://ci.appveyor.com/project/oblalex/il2fb-game-log-parser
 
 build: false # Not a C# project, build stuff at the test step instead.
 environment:
