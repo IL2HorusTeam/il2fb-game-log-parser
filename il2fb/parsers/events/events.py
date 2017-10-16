@@ -7,11 +7,11 @@ Data structures for events.
 import inspect
 import sys
 
+from il2fb.commons.events import ParsableEvent
 from il2fb.commons.regex import (
     WHITESPACE, NON_WHITESPACES, NUMBER, END_OF_STRING,
     make_matcher, named_group,
 )
-from il2fb.commons.structures import ParsableEvent
 from il2fb.commons.transformers import (
     get_int_transformer, transform_belligerent, transform_2d_pos,
 )

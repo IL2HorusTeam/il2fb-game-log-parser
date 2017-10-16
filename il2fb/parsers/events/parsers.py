@@ -1,7 +1,8 @@
 # coding: utf-8
 
+from il2fb.commons.events import EventParsingException
+
 from .events import get_all_events
-from .exceptions import EventParsingError
 from .priority import get_event_priority
 
 
@@ -20,7 +21,7 @@ class EventsParser(object):
                 break
 
         if not result and not ignore_errors:
-            raise EventParsingError(
+            raise EventParsingException(
                 "No event was found for string \"{0}\""
                 .format(string)
             )

@@ -3,8 +3,8 @@
 import six
 import unittest
 
+from il2fb.commons.events import EventParsingException
 from il2fb.parsers.events import EventsParser, get_all_events
-from il2fb.parsers.events.exceptions import EventParsingError
 
 
 class EventsParserTestCase(unittest.TestCase):
@@ -29,7 +29,7 @@ class EventsParserTestCase(unittest.TestCase):
                 self.assertIsInstance(event, structure)
 
     def test_parse_invalid_string(self):
-        with self.assertRaises(EventParsingError) as cm:
+        with self.assertRaises(EventParsingException) as cm:
             self.parser.parse("[99:99:99 PM] foo bar")
 
         self.assertEqual(
