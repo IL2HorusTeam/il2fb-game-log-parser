@@ -28,7 +28,7 @@ Indices and tables
    :target: https://travis-ci.org/IL2HorusTeam/il2fb-game-log-parser
 
 .. |windows_build| image:: https://ci.appveyor.com/api/projects/status/a47k677tr59bd5wg/branch/master?svg=true
-    :target: https://ci.appveyor.com/project/oblalex/il2fb-game-log-parser
+    :target: https://ci.appveyor.com/project/oblalex/il2fb-events-parser
     :alt: Build status of the master branch on Windows
 
 .. |coverage_status| image:: http://codecov.io/github/IL2HorusTeam/il2fb-game-log-parser/coverage.svg?branch=master
