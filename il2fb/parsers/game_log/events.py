@@ -1716,6 +1716,7 @@ class TreeWasDestroyedByHumanAircraft(ParsableEvent):
 
         "[8:33:05 PM] 3do/Tree/Line_W/live.sim destroyed by User0:Pe-8 at 100.0 200.99"
         "[8:33:05 PM] 3do/Tree/Line_W/mono.sim destroyed by User0:Pe-8 at 100.0 200.99"
+        "[8:33:05 PM] 3do/Tree/Line/live.sim destroyed by User0:Pe-8 at 100.0 200.99"
 
     """
     __slots__ = ['time', 'attacker', 'pos', ]
@@ -1744,6 +1745,7 @@ class TreeWasDestroyedByStationaryUnit(ParsableEvent):
 
         "[8:33:05 PM] 3do/Tree/Line_W/live.sim destroyed by 0_Static at 100.0 200.99"
         "[8:33:05 PM] 3do/Tree/Line_W/mono.sim destroyed by 0_Static at 100.0 200.99"
+        "[8:33:05 PM] 3do/Tree/Line/live.sim destroyed by 0_Static at 100.0 200.99"
 
     """
     __slots__ = ['time', 'attacker', 'pos', ]
@@ -1772,6 +1774,7 @@ class TreeWasDestroyedByAIAircraft(ParsableEvent):
 
         "[8:33:05 PM] 3do/Tree/Line_W/live.sim destroyed by r01000 at 100.0 200.99"
         "[8:33:05 PM] 3do/Tree/Line_W/mono.sim destroyed by r01001 at 100.0 200.99"
+        "[8:33:05 PM] 3do/Tree/Line/live.sim destroyed by r01001 at 100.0 200.99"
 
     """
     __slots__ = ['time', 'attacker', 'pos', ]
@@ -1800,6 +1803,7 @@ class TreeWasDestroyedByMovingUnitMember(ParsableEvent):
 
         "[8:33:05 PM] 3do/Tree/Line_W/live.sim destroyed by 0_Chief0 at 100.0 200.99"
         "[8:33:05 PM] 3do/Tree/Line_W/mono.sim destroyed by 0_Chief1 at 100.0 200.99"
+        "[8:33:05 PM] 3do/Tree/Line/live.sim destroyed by 0_Chief1 at 100.0 200.99"
 
     """
     __slots__ = ['time', 'attacker', 'pos', ]
@@ -1828,6 +1832,7 @@ class TreeWasDestroyedByMovingUnit(ParsableEvent):
 
         "[8:33:05 PM] 3do/Tree/Line_W/live.sim destroyed by 0_Chief at 100.0 200.99"
         "[8:33:05 PM] 3do/Tree/Line_W/mono.sim destroyed by 1_Chief at 100.0 200.99"
+        "[8:33:05 PM] 3do/Tree/Line/live.sim destroyed by 2_Chief at 100.0 200.99"
 
     """
     __slots__ = ['time', 'attacker', 'pos', ]
@@ -1856,6 +1861,7 @@ class TreeWasDestroyed(ParsableEvent):
 
         "[8:33:05 PM] 3do/Tree/Line_W/live.sim destroyed by at 100.0 200.99"
         "[8:33:05 PM] 3do/Tree/Line_W/mono.sim destroyed by at 100.0 200.99"
+        "[8:33:05 PM] 3do/Tree/Line/live.sim destroyed by at 100.0 200.99"
 
     """
     __slots__ = ['time', 'pos', ]

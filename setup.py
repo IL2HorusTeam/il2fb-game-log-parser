@@ -33,7 +33,7 @@ README = open(os.path.join(__here__, 'README.rst')).read()
 
 setup(
     name='il2fb-game-log-parser',
-    version='1.0.2',
+    version='1.0.3',
     description=(
         "Parse events from game log produced by dedicated server of "
         "«IL-2 Forgotten Battles» flight simulator"

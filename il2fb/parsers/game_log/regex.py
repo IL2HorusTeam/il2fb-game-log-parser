@@ -133,11 +133,14 @@ OBJECT_NAMES = group(choices(['live', 'mono']))
 
 BUILDING = ANYTHING
 BUILDING_GROUP_TEMPLATE = (
-    "3do/Buildings/{{building}}/{names}.sim"
-    .format(names=OBJECT_NAMES)
+    "3do/Buildings/{{building}}/{object_names}.sim"
+    .format(object_names=OBJECT_NAMES)
 )
 BUILDING_ACTOR_GROUP = BUILDING_GROUP_TEMPLATE.format(
     building=named_group('actor_building', BUILDING),
 )
 
-TREE = "3do/Tree/Line_W/{names}.sim".format(names=OBJECT_NAMES)
+TREE = (
+    "3do/Tree/{any}/{object_names}.sim"
+    .format(any=ANYTHING, object_names=OBJECT_NAMES)
+)
