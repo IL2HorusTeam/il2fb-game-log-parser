@@ -238,65 +238,8 @@ i.show-details:hover {
   font-weight: bold;
 }
 
-.event-details.warning {
-  border-left: 5px solid #EC9422;
-  background-color: #FFF7E4;
-  color: #69420E;
-}
-
-.event-details.warning > h4 {
-  border-bottom: 1px solid #E9D9B3;
-}
-
-.event-details.warning > pre > code {
-  background: none repeat scroll 0% 0% #FFFDF7;
-  border: 1px solid #F8ECE0;
-}
-
-.event-details.warning > p a,
-.event-details.warning > p a:hover,
-.event-details.warning > p a:active,
-.event-details.warning > p a:hover {
-  color: #905200;
-  font-weight: bold;
-}
-
 .event-details span > i:after {
   content: "\00a0";
-}
-
-.issue-controls {
-  text-align: center;
-}
-
-.issue-controls button + button {
-  margin-left: 15px;
-}
-
-.issue-controls button[name="confirm"] {
-  color: #FFF;
-  background-color: #EA3C3C;
-  border-color: #EA3C3C;
-}
-.issue-controls button[name="confirm"]:hover,
-.issue-controls button[name="confirm"]:focus {
-  color: #FFF;
-  background-color: #D22F2F;
-  border-color: #D22F2F;
-}
-
-.issue-controls button[name="skip"] {
-  background-color: rgb(255, 253, 247);
-  border-color: #E4CBB4;
-  color: #894E01;
-}
-.issue-controls button[name="skip"]:hover,
-.issue-controls button[name="skip"]:focus {
-  border-color: #BC9C80;
-}
-
-.skipped .string {
-  text-decoration: line-through;
 }
 
 .white-popup {

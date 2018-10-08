@@ -27,27 +27,13 @@
       <p>
         This is a demo page of
         <a href="https://github.com/IL2HorusTeam/il2fb-game-log-parser" target="_blank">il2fb-game-log-parser</a>
-        library.
+        library. It is used to check library's ability to parse events log file
+        produced by dedicated server of «IL-2&nbsp;Sturmovik:&nbsp;Forgotten&nbsp;Battles»
+        flight simulator.
       </p>
       <p>
-        The library is used by
-        <a href="https://github.com/IL2HorusTeam" target="_blank">IL-2 Horus Team</a>
-        for parsing events in game log produced by dedicated server of
-        «IL-2 Forgotten Battles».
-      </p>
-      <p>
-        <a id="supported_events_link" href="#supported_events_popup">See the list of events</a>
-        supported by
-        <a href="https://pypi.python.org/pypi/il2fb-game-log-parser" target="_blank">the latest version of library</a>.
-      </p>
-      <p>
-        This page is used for checking the library's ability to parse events from server's game log file.
-        Also, it shows parsing result.
-      </p>
-      <p>
-        If something goes wrong during parsing, then you will be asked to
-        confirm automatical bug report
-        (<a href="https://github.com/IL2HorusTeam/il2fb-game-log-parser/issues" target="_blank">see open issues</a>).
+        <a id="supported_events_link" href="#supported_events_popup">Click to see the list of events</a>
+        supported by the latest version of the library.
       </p>
     </div>
     <div class="u-cf"></div>
@@ -58,7 +44,7 @@
     <div class="row form-container">
       <form action="post">
         <label for="exampleMessage" class='u-pull-left'>
-          Past below events you want to parse:
+          Insert events you want to parse below:
         </label>
         <a id='clear_data_link' class='u-pull-right' href="javascript:void(0);">
           Clear
@@ -67,7 +53,7 @@
           Insert test data
         </a>
         <textarea name="stream" class="u-full-width" placeholder="[8:33:05 PM] User0:Pe-8 loaded weapons '40fab100' fuel 40%" rows="1" autofocus></textarea>
-        <input class="button-primary u-full-width" value="Parse!" type="submit">
+        <input class="button-primary u-full-width" value="Parse" type="submit">
       </form>
     </div>
 
@@ -84,6 +70,10 @@
   <ol>
   <!-- list placeholder -->
   </ol>
+</div>
+
+<div id="processing_request_popup" class="white-popup mfp-hide">
+  Processing…
 </div>
 
 <a href="https://github.com/IL2HorusTeam/il2fb-game-log-parser/" class="github-corner" aria-label="View source on Github" title="View source on Github"><svg width="80" height="80" viewBox="0 0 250 250" style="fill:#151513; color:#fff; position: absolute; top: 0; border: 0; right: 0;" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></a><style>.github-corner:hover .octo-arm{animation:octocat-wave 560ms ease-in-out}@keyframes octocat-wave{0%,100%{transform:rotate(0)}20%,60%{transform:rotate(-25deg)}40%,80%{transform:rotate(10deg)}}@media (max-width:500px){.github-corner:hover .octo-arm{animation:none}.github-corner .octo-arm{animation:octocat-wave 560ms ease-in-out}}</style>
@@ -157,31 +147,8 @@ $(document).ready(function() {
   }
 
   /* Renderers --------------------------------------------------------------*/
-  function render_issue(issue) {
-    return "<a href='" + issue.url + "' target='_blank'>issue #" + issue.number + "</a>";
-  }
-
   function render_traceback(traceback) {
-    return "<p>See the traceback:</p><pre><code>" + traceback + "</code></pre>";
-  }
-
-  function render_similar(similar) {
-    if (similar.length == 1) {
-      return [
-          "<p>"
-        , "There is a similar "
-        , render_issue(similar[0])
-        , ".</p>"
-      ].join("");
-    } else if (similar.length > 1) {
-      return [
-          "<p>There are similar issues: "
-        , similar.map(render_issue).join(", ")
-        , ".</p>"
-      ].join("");
-    } else {
-      return "";
-    }
+    return "<pre><code>" + traceback + "</code></pre>";
   }
 
   function render_event(event) {
@@ -316,198 +283,67 @@ $(document).ready(function() {
     return fields.add($("<div>", {class: "u-cf"}));
   }
 
-  /* API IO -----------------------------------------------------------------*/
-  var ws_api = new WebSocket("wss://api.il2.oblalex.space/game-log-parser/parse")
-    , rest_api = "https://api.il2.oblalex.space/game-log-parser/data"
-  // var ws_api = new WebSocket("ws://127.0.0.1:5000/parse")
-  //   , rest_api = "http://127.0.0.1:5000/data"
+  function render_results(items) {
+    for (var i = 0; i < items.length; i++) {
+      var item = items[i]
+        , row = $("<div>", {class: "row event"})
+        , icon_container = $("<div>", {class: "one column"})
+        , status = $("<i>", {
+            class: "fa fa-lg u-pull-left parsing-status"
+        })
+        , show_details = $("<i>", {
+            class: "fa fa-lg fa-eye u-pull-right show-details"
+          , title: "Show details"
+        })
+        , details = $("<div>", {class: "event-details"});
 
-  window.onbeforeunload = function() {
-    ws_api.onclose = function() {};  // disable onclose handler first
-    ws_api.close();
-  }
+      icon_container.append(status);
+      icon_container.append(show_details);
 
-  function api_send(value) {
-    ws_api.send(JSON.stringify(value));
-  }
+      status.show();
+      show_details.show();
 
-  function parse_event(item) {
-    var status = item.find('i.parsing-status')
-      , show_details = item.find('i.show-details')
-      , details = item.find('div.event-details');
+      row.append($("<div>", {class: "one column", text: i + 1}));
+      row.append($("<div>", {
+          class: "ten columns string"
+        , text: item.line
+        , title: item.line
+      }));
+      row.append(icon_container);
+      row.append($("<div>", {class: "u-cf"}));
+      row.append(details);
 
-    function parse_next() {
-      var next = item.next();
-      if (next.length) {
-        parse_event(next);
-      } else {
-        form_container.show();
-        scroll_to_element(item);
-      }
-    }
-
-    ws_api.onmessage = function(message) {
-      var data = JSON.parse(message.data);
-
-      status.removeClass('fa-spin fa-refresh');
-      item.removeClass('active');
-
-      if (data.status == 'success') {
+      if (item.status == 'ok') {
         status.addClass('fa-check-circle success').attr('title', "Success");
-        details.append(render_event(data.event));
-        show_details.show();
-        parse_next();
+        details.append(render_event(item.event));
       } else {
-
-        function on_error(message) {
-          status.attr('title', "Error");
-          details.empty().append($("<p>", {html: message}));
-        }
-
-        details.append($("<h4>", {text: "Oops! We failed to parse this!"}));
-
-        if (data.status == 'warning') {
-          details.addClass('warning');
-          status.addClass('fa-exclamation-triangle warning')
-                .attr('title', "Warning");
-
-          function confirm_action() {
-            status.removeClass('fa-exclamation-triangle warning')
-                  .addClass(('fa-spin fa-refresh'));
-            item.addClass('active');
-
-            show_details.show();
-            issue_controls.remove();
-            details.hide();
-
-            api_send({'confirm': true});
-          }
-
-          function on_confirmed() {
-            details.removeClass('warning').addClass('error');
-            status.removeClass('fa-spin fa-refresh')
-                  .addClass('fa-minus-circle error');
-            item.removeClass('active');
-            parse_next();
-          }
-
-          var issue_controls = $("<div>", {class: 'issue-controls'});
-
-          if (data.issue === undefined) {
-            var confirm = $("<button name='confirm'><i class='fa fa-bug fa-lg'></i> Yes, report new issue</button>")
-              , skip = $("<button name='skip'>No, skip this</button>");
-
-            issue_controls.append($("<h5>", {text: "Do you want to report a new issue?"}));
-            issue_controls.append(confirm);
-            issue_controls.append(skip);
-
-            confirm.on('click', function() {
-              ws_api.onmessage = function(message) {
-                var data = JSON.parse(message.data);
-
-                if (data.status == 'success') {
-                  status.attr('title', "New issue");
-
-                  var description = "New " + render_issue(data.issue) + " was reported.";
-                  details.find('h4').after($("<p>", {html: description}));
-                } else {
-                  on_error(data.detail);
-                }
-
-                on_confirmed();
-              }
-              confirm_action();
-            })
-
-          } else {
-            var confirm = $("<button name='confirm'><i class='fa fa-bug fa-lg'></i> Yes, reopen issue</button>")
-              , skip = $("<button name='skip'>No, keep it closed</button>");
-
-            issue_controls.append($("<h5>", {text: "Do you want to reopen existing issue?"}));
-            issue_controls.append(confirm);
-            issue_controls.append(skip);
-
-            var description = [
-                "This is a known case which was already reported and fixed in the "
-              , render_issue(data.issue)
-              , "."
-            ];
-            details.append($("<p>", {html: description.join("")}));
-
-            confirm.on('click', function() {
-              ws_api.onmessage = function(message) {
-                var data = JSON.parse(message.data);
-
-                if (data.status == 'success') {
-                  status.attr('title', "Reopened issue");
-
-                  var description = details.find('p:first');
-                  description.html(description.html() + " We have reopened it just now.");
-                } else {
-                  on_error(data.detail);
-                }
-
-                on_confirmed();
-              }
-              confirm_action();
-            })
-          }
-
-          details.append($(render_similar(data.similar)));
-          details.append($(render_traceback(data.traceback)));
-          details.append(issue_controls);
-          details.show();
-
-          skip.on('click', function() {
-            item.addClass('skipped');
-            status.removeClass('fa-exclamation-triangle warning')
-                  .addClass('fa-minus-circle error')
-                  .attr('title', "Skipped");
-            show_details.show();
-            issue_controls.remove();
-            details.removeClass('warning').addClass('error');
-            details.hide();
-            api_send({'confirm': false});
-            parse_next();
-          })
-
-        } else {
-          status.addClass('fa-minus-circle error');
-          details.addClass('error');
-
-          if (data.issue !== undefined) {
-            status.attr('title', "Issue duplicate");
-
-            var description = [
-                "This is a known case which was already reported in the "
-              , render_issue(data.issue)
-              , "."
-            ];
-
-            if (data.issue.is_valid == false) {
-              description.push(" However, it's marked as invalid and it will not be fixed.");
-            }
-
-            details.append($("<p>", {html: description.join("")}));
-            details.append($(render_similar(data.similar)));
-            details.append($(render_traceback(data.traceback)));
-          } else {
-            on_error(data.detail);
-          }
-
-          show_details.show();
-          parse_next();
-        }
+        status.addClass('fa-minus-circle error').attr('title', "Error");
+        details.addClass('error');
+        details.append($("<p>", {text: "Event was not parsed"}));
+        details.append($(render_traceback(item.traceback)));
       }
-    }
 
-    scroll_to_element(item);
-    item.addClass('active');
-    item.removeClass('disabled');
-    // Do not use 'show' because animation will not work
-    status.addClass('fa-spin').css('display', 'inline-block');
-    api_send({'string': item.find('.string').text()});
+      show_details.on('click', function() {
+        var details = $(this).closest('div.event').find('div.event-details');
+
+        if ($(this).hasClass('fa-eye')){
+          $(this).attr("title", "Hide details");
+          details.show();
+        } else {
+          $(this).attr("title", "Show details");
+          details.hide();
+        }
+
+        $(this).toggleClass('fa-eye fa-eye-slash');
+      });
+
+      events.append(row);
+    }
   }
+
+  /* API IO -----------------------------------------------------------------*/
+  var API_URL_BASE = "https://europe-west1-il2-horus-demo-services.cloudfunctions.net"
+  // var API_URL_BASE = "http://127.0.0.1:5000"
 
   function parse_stream() {
     $('.hero p').remove();
@@ -523,54 +359,39 @@ $(document).ready(function() {
                   .map($.trim)
                   .filter(function (x) {return x && x.length > 0});
 
-    if (strings.length > 0) {
-      form_container.hide();
-      results_container.show();
-
-      for (var i = 0; i < strings.length; i++) {
-        var row = $("<div>", {class: "row event disabled"})
-          , icon_container = $("<div>", {class: "one column"});
-
-        icon_container.append($("<i>", {
-            class: "fa fa-lg fa-refresh u-pull-left parsing-status"
-          , title: "Processing…"
-        }));
-
-        icon_container.append($("<i>", {
-            class: "fa fa-lg fa-eye u-pull-right show-details"
-          , title: "Show details"
-        }).on('click', function() {
-          var details = $(this).closest('div.event').find('div.event-details');
-
-          if ($(this).hasClass('fa-eye')){
-            $(this).attr("title", "Hide details");
-            details.show();
-          } else {
-            $(this).attr("title", "Show details");
-            details.hide();
-          }
-
-          $(this).toggleClass('fa-eye fa-eye-slash');
-        }))
-
-        row.append($("<div>", {class: "one column", text: i + 1}));
-        row.append($("<div>", {
-            class: "ten columns string"
-          , text: strings[i]
-          , title: strings[i]
-        }));
-        row.append(icon_container);
-        row.append($("<div>", {class: "u-cf"}));
-        row.append($("<div>", {class: "event-details"}));
-
-        events.append(row);
-      }
-
-      parse_event(events.find('.event:first'));
-    } else {
+    if (strings.length == 0) {
       messages.show();
-      global_error("Your data is empty. Please, enter some data. ");
+      global_error("Input data is empty. Please, insert events to parse");
+      return false;
     }
+
+    form_container.hide();
+
+    $.magnificPopup.open({
+      items: {
+        src: '#processing_request_popup',
+        type: 'inline'
+      }
+      , modal: true
+      , cursor: 'mfp-ajax-cur'
+    });
+
+    $.ajax({
+      url: API_URL_BASE + "/events-parse",
+      type: "POST",
+      data: JSON.stringify(strings),
+      dataType: "json",
+      contentType: "application/json;charset=utf-8",
+      success: function(data) {
+        results_container.show();
+        render_results(data.data);
+      },
+      complete: function(jqXhr, textStatus) {
+        form_container.show();
+        $.magnificPopup.close();
+        scroll_to_element(results_container);
+      }
+    })
 
     return false;
   }
@@ -578,7 +399,7 @@ $(document).ready(function() {
   /* Load initial data ------------------------------------------------------*/
   $.magnificPopup.open({
     items: {
-      src: rest_api
+      src: API_URL_BASE + "/events-parser-data"
     }
     , type: 'ajax'
     , modal: true
